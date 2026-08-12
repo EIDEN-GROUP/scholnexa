@@ -9,7 +9,8 @@ const __dirname = path.dirname(__filename);
 
 // Try common locations for .env / .env.production
 const candidates = [
-  path.resolve(__dirname, "..", "..", ".env"),
+  path.resolve(__dirname, "..", "..", ".env"),        // backend/.env
+  path.resolve(__dirname, "..", "..", "..", ".env"),  // merged monorepo-root .env
   path.resolve(process.cwd(), ".env"),
 ];
 for (const c of candidates) {
@@ -48,12 +49,12 @@ const envSchema = z.object({
 
   REDIS_URL: z.string().default("redis://localhost:6379"),
 
-  MINIO_ENDPOINT: z.string().default("localhost"),
-  MINIO_PORT: z.coerce.number().default(9000),
-  MINIO_ACCESS_KEY: z.string().default("minioadmin"),
-  MINIO_SECRET_KEY: z.string().default("minioadmin"),
-  MINIO_BUCKET: z.string().default("school-crm"),
-  MINIO_USE_SSL: z.coerce.boolean().default(false),
+  // Supabase (PostgreSQL + Storage). DATABASE_URL points at the Supabase
+  // Postgres (pooler :6543 recommended for the API, direct :5432 for
+  // migrations); SUPABASE_URL/SERVICE_ROLE_KEY power document storage.
+  SUPABASE_URL: z.string().default("http://localhost:54321"),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().default(""),
+  SUPABASE_STORAGE_BUCKET: z.string().default("examens"),
 
   SMTP_HOST: z.string().default(""),
   SMTP_PORT: z.coerce.number().default(587),
@@ -96,7 +97,6 @@ const WEAK_SECRETS = new Set([
   "change-me-in-production",
   "superadmin-secret-key-change-me",
   "change-me-to-a-random-secret",
-  "minioadmin",
 ]);
 
 /**
@@ -113,8 +113,10 @@ function assertStrongProductionSecrets(env: Env): void {
   if (WEAK_SECRETS.has(env.ADMIN_API_KEY)) {
     problems.push("ADMIN_API_KEY must be a strong random value");
   }
-  if (env.MINIO_ACCESS_KEY === "minioadmin" || env.MINIO_SECRET_KEY === "minioadmin") {
-    problems.push("MINIO credentials must be changed from the defaults");
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) {
+    problems.push(
+      "SUPABASE_SERVICE_ROLE_KEY must be set (required for document storage)",
+    );
   }
   if (problems.length > 0) {
     console.error(

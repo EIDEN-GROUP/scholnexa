@@ -25,11 +25,11 @@ Reference for every environment variable used by Scholnexa. Example files:
 | `HOST` | `0.0.0.0` | Bind address |
 | `LOG_LEVEL` | `info` | Pino log level |
 
-### Database
+### Database (Supabase PostgreSQL)
 
 | Variable | Default | Description |
 |---|---|---|
-| `DATABASE_URL` | `postgres://postgres:postgres@localhost:5432/school_crm` | PostgreSQL connection string |
+| `DATABASE_URL` | `postgres://postgres:postgres@localhost:5432/school_crm` | Supabase PostgreSQL connection string. Use the **transaction pooler** for the API (`postgresql://postgres.<ref>:<pw>@aws-0-<region>.pooler.supabase.com:6543/postgres`) and the **session pooler** (`:5432`, same host) for migrations. **Password must be percent-encoded** — e.g. `y.brox95@gmail.com` becomes `y.brox95%40gmail.com` — or the `@` is parsed as the host separator. SSL is enabled automatically for `*.supabase.com` hosts. New Supabase projects expose the `db.<ref>.supabase.co` direct host on IPv6 only; use the pooler host for IPv4 reachability. |
 
 ### Authentication
 
@@ -44,16 +44,13 @@ Reference for every environment variable used by Scholnexa. Example files:
 |---|---|---|
 | `REDIS_URL` | `redis://localhost:6379` | Redis connection string |
 
-### MinIO (S3-compatible storage)
+### Supabase Storage (exam documents)
 
 | Variable | Default | Description |
 |---|---|---|
-| `MINIO_ENDPOINT` | `localhost` | MinIO host |
-| `MINIO_PORT` | `9000` | MinIO API port |
-| `MINIO_ACCESS_KEY` | `minioadmin` | Access key |
-| `MINIO_SECRET_KEY` | `minioadmin` | **Override in production** |
-| `MINIO_BUCKET` | `school-crm` | Bucket name |
-| `MINIO_USE_SSL` | `false` | `true` when MinIO is behind TLS |
+| `SUPABASE_URL` | `http://localhost:54321` | Supabase project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` | *(empty)* | **Required in production** — document storage fails without it |
+| `SUPABASE_STORAGE_BUCKET` | `examens` | Storage bucket (created automatically on startup) |
 
 ### Email (SMTP)
 
@@ -124,6 +121,7 @@ browser bundle.
 |---|---|---|
 | `VITE_API_URL` | `http://localhost:3000/api` | Backend API base URL. **Baked at build time** — set it on the hosting platform and redeploy after changing it. |
 | `VITE_ADMIN_EMAIL` | `admin@scholnexa.com` | Contact email shown in the admin/support UI |
+| `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON` | *(empty)* | Supabase project URL + anon key. **Optional** — the app logs in with its own JWT against the backend; these are only needed if you later add direct Supabase client calls. |
 
 ---
 

@@ -3,8 +3,16 @@ import pg from "pg";
 import crypto from "crypto";
 import "dotenv/config";
 
+const connectionString =
+  process.env.DATABASE_URL ?? "postgres://postgres:postgres@localhost:5432/school_crm";
+
 const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL ?? "postgres://postgres:postgres@localhost:5432/school_crm",
+  connectionString,
+  // Supabase requires TLS; auto-inject the non-verifying SSL config when the
+  // connection points at a supabase host (mirrors src/db/index.ts).
+  ...(connectionString.includes("supabase")
+    ? { ssl: { rejectUnauthorized: false } }
+    : {}),
 });
 
 const ID = {

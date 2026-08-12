@@ -94,10 +94,10 @@ platform's TypeScript compiler does not resolve the `@/*` path alias used in
 
 | Component | Why it cannot be serverless | Options |
 |---|---|---|
-| PostgreSQL | persistent database | VPS Postgres, Neon, Supabase, RDS |
+| PostgreSQL (Supabase) | persistent database | **Supabase Postgres** (recommended), VPS Postgres, Neon, RDS |
 | Redis (BullMQ) | the queue lives here; the API can still *enqueue* jobs | VPS Redis, Upstash |
 | BullMQ worker (`npm run worker`) | long-lived consumer process | VPS container, or any always-on host |
-| MinIO / S3 storage | persistent object storage | VPS MinIO, Cloudflare R2, AWS S3 |
+| Document storage | persistent object storage | **Supabase Storage** (recommended, replaces MinIO), VPS MinIO, R2, S3 |
 | Scheduled jobs / email & WhatsApp sends | run in the worker | keep the worker running on the VPS |
 
 > If you deploy **only** to Vercel with no worker running anywhere, request/

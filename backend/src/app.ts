@@ -39,7 +39,7 @@ import { reminderRoutes } from "@/routes/reminders";
 import { reportRoutes } from "@/routes/reports";
 import { noteRoutes } from "@/routes/notes";
 import { agentRoutes } from "@/routes/agent";
-import { ensureBucket } from "@/lib/minio";
+import { ensureBucket } from "@/lib/storage";
 
 export async function buildApp() {
   const env = getEnv();
@@ -58,8 +58,24 @@ export async function buildApp() {
     },
   });
 
+  // Origin list supports `*` wildcards (e.g. `https://app-*.vercel.app` for
+  // Vercel preview deployments). Exact entries are matched literally;
+  // wildcard entries are converted to RegExp.
+  const corsOrigins: (string | RegExp)[] = env.CORS_ORIGIN.split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((origin) =>
+      origin.includes("*")
+        ? new RegExp(
+            "^" +
+              origin.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*") +
+              "$",
+          )
+        : origin,
+    );
+
   await app.register(cors, {
-    origin: env.CORS_ORIGIN.split(",").map((s) => s.trim()),
+    origin: corsOrigins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   });

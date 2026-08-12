@@ -8,7 +8,7 @@ import { etudiants } from "@/db/schema/etudiants";
 import { notesEtudiant } from "@/db/schema/notes-etudiant";
 import { formateurs } from "@/db/schema/formateurs";
 import { eq, desc, sql } from "drizzle-orm";
-import { uploadDocument, getDocument, deleteDocument } from "@/lib/minio";
+import { uploadDocument, getDocument, deleteDocument } from "@/lib/storage";
 
 const examenSchema = z.object({
   module: z.string().min(1, "Module requis"),

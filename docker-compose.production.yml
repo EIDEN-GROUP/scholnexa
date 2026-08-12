@@ -118,13 +118,11 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
-      DATABASE_URL: postgres://postgres:${DB_PASSWORD}@postgres:5432/school_crm
+      DATABASE_URL: ${DATABASE_URL:-postgres://postgres:${DB_PASSWORD}@postgres:5432/school_crm}
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
-      MINIO_ENDPOINT: minio
-      MINIO_PORT: 9000
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-      MINIO_BUCKET: school-crm
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-examens}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: 24h
       CORS_ORIGIN: https://${DOMAIN}
@@ -175,13 +173,11 @@ services:
     command: ["node", "--import", "tsx/esm", "dist/jobs/worker.js"]
     environment:
       NODE_ENV: production
-      DATABASE_URL: postgres://postgres:${DB_PASSWORD}@postgres:5432/school_crm
+      DATABASE_URL: ${DATABASE_URL:-postgres://postgres:${DB_PASSWORD}@postgres:5432/school_crm}
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
-      MINIO_ENDPOINT: minio
-      MINIO_PORT: 9000
-      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-      MINIO_BUCKET: school-crm
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-examens}
       JWT_SECRET: ${JWT_SECRET}
       AI_API_KEY: ${AI_API_KEY}
       AI_BASE_URL: ${AI_BASE_URL}
