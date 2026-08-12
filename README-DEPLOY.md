@@ -1,7 +1,7 @@
 # Scholnexa — Deployment Guide
 
 > **Version:** 1.0.0
-> **Stack:** Fastify 5 + React 19 + PostgreSQL 16 + Redis 7 + MinIO
+> **Stack:** Fastify 5 + React 19 + PostgreSQL 16 (Supabase) + Redis 7 + Supabase Storage
 > **Deployment:** Vercel / Netlify (frontend) + VPS Docker Swarm (backend & infrastructure)
 
 ---
@@ -16,19 +16,20 @@
   persistent Node.js hosting.
 - All modes below are fully supported and tested configurations. With
   Supabase (Postgres + Storage), the whole app can also run on **Vercel alone**
-  via a single multi-service project (Mode C).
+  using two separate Vercel projects (Mode C): one for the SPA, one for the
+  Fastify serverless functions.
 
 ```
 Browser
   │
   ├── Mode A: https://app.example.com        (Vercel/Netlify/static host)
   ├── Mode B: https://example.com            (nginx on the VPS, Docker Swarm)
-  └── Mode C: https://app.vercel.app         (single Vercel project, multi-service)
+  └── Mode C: https://<frontend>.vercel.app  (Vercel — two projects)
 
                         │
                         ▼
-              https://api.example.com/api/*   (Fastify on the VPS)
-              https://app.vercel.app/api/*    (Fastify on Vercel, Mode C)
+              https://api.example.com/api/*        (Fastify on the VPS)
+              https://<backend>.vercel.app/api/*   (Fastify on Vercel, Mode C)
                         │
          ┌──────────────┼──────────────┐
          ▼              ▼              ▼
@@ -51,11 +52,8 @@ Browser
 | Install command | `npm ci` |
 | Node version | 22.x |
 
-> **Note:** if you deploy the frontend as a *standalone* project (Mode A), the
-> Vercel project settings are: Framework preset **Vite**, Root directory
-> `frontend`, Build command `npm run build`, Output directory `dist`.
-> The SPA fallback rewrite is defined in the root `vercel.json` (Mode C) — for
-> a standalone project, add it as `frontend/vercel.json` or in the dashboard.
+> **Note:** for a standalone frontend project, the SPA fallback rewrite is
+> defined in `frontend/vercel.json` (or as a rewrite rule in the dashboard).
 
 ### A.2 Vercel environment variables
 
@@ -105,10 +103,9 @@ platform's TypeScript compiler does not resolve the `@/*` path alias used in
 
 **Known serverless limitations (do not fake these away):**
 
-- **Function duration:** `maxDuration` is set to 60s for the catch-all in the
-  root `vercel.json` → `services.backend.functions` (Hobby plan default;
-  300s on Pro). Slow requests (large AI agent turns, heavy reports) can time
-  out.
+- **Function duration:** `maxDuration` is set to 60s for the catch-all in
+  `backend/vercel.json` (Hobby plan default; 300s on Pro). Slow requests
+  (large AI agent turns, heavy reports) can time out.
 - **Request body limit:** 4.5 MB (Hobby/Pro). Exam documents are uploaded as
   base64 JSON, so PDFs/Word files must stay under that limit; larger files
   need direct-to-S3 uploads or the VPS backend.
@@ -129,10 +126,10 @@ platform's TypeScript compiler does not resolve the `@/*` path alias used in
 | Install command | `npm ci` |
 | Node version | 22.x |
 
-> **Note:** in the multi-service setup (Mode C) the two functions are
-> configured in the root `vercel.json` under `services.backend.functions`
+> **Note:** the two functions are configured in `backend/vercel.json`
 > (`api/[...path].js` catch-all + `api/health.ts`). The generated
-> `api/[...path].js` is gitignored and recreated on every build.
+> `api/[...path].js` is gitignored and recreated on every build by
+> `npm run vercel-build`.
 
 > **Local `vercel dev`:** run `npm run vercel-build` once before `vercel dev`
 > so the catch-all function file exists.
@@ -153,80 +150,91 @@ Point the frontend at it with `VITE_API_URL=https://<backend-project>.vercel.app
 
 ---
 
-## Mode C — Everything on Vercel (single multi-service project)
+## Mode C — Everything on Vercel (two projects)
 
-With Supabase providing PostgreSQL and Storage, the whole application can
-run on a **single Vercel project** using the multi-service feature: the
-frontend SPA and the Fastify serverless functions are declared as two
-services in one root `vercel.json`, and both share the same domain.
+With Supabase providing PostgreSQL and Storage, the whole application can run
+on Vercel alone using **two separate Vercel projects** (the classic monorepo
+pattern): one project serves the frontend SPA, the other deploys the backend
+`api/` serverless functions.
 
-### C.1 Root `vercel.json`
+> **Why two projects and not the multi-service (`services`) feature?** Vercel's
+> multi-service config only supports framework presets that run the backend as
+> a single monolithic app (`@vercel/fastify`, `@vercel/backends`, …). None of
+> them deploy classic `api/`-directory `@vercel/node` functions — which is the
+> architecture this backend uses (`api/[...path].js` + `api/health.ts`, pre-
+> bundled by `vercel-build`). The two-project model uses exactly that
+> battle-tested functions pipeline, so it is the supported way to run this
+> backend on Vercel.
 
-The repository root already contains the multi-service config:
-
-```json
-{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "services": {
-    "frontend": {
-      "root": "frontend",
-      "framework": "vite",
-      "buildCommand": "npm run build",
-      "outputDirectory": "dist",
-      "rewrites": [
-        { "source": "/((?!api/).*)", "destination": "/index.html" }
-      ]
-    },
-    "backend": {
-      "root": "backend",
-      "framework": "node",
-      "buildCommand": "npm run vercel-build",
-      "functions": {
-        "api/[...path].js": { "maxDuration": 60, "memory": 1024 },
-        "api/health.ts": { "maxDuration": 10 }
-      }
-    }
-  },
-  "rewrites": [
-    { "source": "/api(/.*)?", "destination": { "type": "service", "service": "backend" } },
-    { "source": "/(.*)", "destination": { "type": "service", "service": "frontend" } }
-  ]
-}
-```
-
-Routing: `/api/*` → backend service, everything else → frontend SPA. Both
-services live on the same domain, so the frontend calls the API with the
-**same-origin relative URL** `VITE_API_URL=/api` (works on production and
-preview deployments alike — no CORS needed).
-
-> `"framework": "node"` on the backend service is **required**: Vercel would
-> otherwise auto-detect the `fastify` framework from `backend/package.json`
-> and fail with *"must specify an entrypoint"*. The `node` slug is the generic
-> Node preset — it disables framework detection and lets the `api/` functions
-> be discovered automatically. (The services schema only accepts strings, so
-> the classic `framework: null` "Other" value is invalid here.)
-
-### C.2 Vercel project settings
+### C.1 Project 1 — Frontend
 
 | Setting | Value |
 |---|---|
-| Root directory | `.` (repo root — the `vercel.json` declares the services) |
-| Framework preset | *(multi-service — set by `vercel.json`)* |
-| Build command | `npm run vercel-build` for the backend service, `npm run build` for the frontend (both in `vercel.json`) |
+| Project name | `scholnexa` (URL `https://scholnexa.vercel.app`) |
+| Framework preset | **Vite** |
+| Root directory | `frontend` |
+| Build command | `npm run build` (from `frontend/vercel.json`) |
+| Output directory | `dist` |
+| Install command | `npm ci` |
+| Node version | 22.x |
 
-1. Create one project from the repo root.
-2. Import `.env.production` into the project (or set the variables in the
-   dashboard).
-3. Deploy. `/api/*` reaches the backend functions; `/` serves the SPA.
+`frontend/vercel.json` contains the SPA fallback rewrite so deep links like
+`/dashboard` serve `index.html`:
 
-### C.3 Env notes
+```json
+{
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
+```
 
-- `VITE_API_URL=/api` — relative, same-origin, baked at build time.
-- `CORS_ORIGIN` can keep the production origin (`https://<project>.vercel.app`
-  and a `-*.vercel.app` preview wildcard); with same-origin calls it is
-  effectively moot but harmless.
-- Everything else (Supabase, JWT, SMTP, AI) is identical to the backend
-  variable set in `backend/.env.example`.
+### C.2 Project 2 — Backend
+
+| Setting | Value |
+|---|---|
+| Project name | `scholnexa-api` (URL `https://scholnexa-api.vercel.app`) |
+| Framework preset | **Other** |
+| Root directory | `backend` |
+| Build command | `npm run vercel-build` (from `backend/vercel.json`) |
+| Install command | `npm ci` |
+| Node version | 22.x |
+
+`backend/vercel.json` pins the "Other" preset (`"framework": null`), which
+**disables the fastify auto-detection** and lets Vercel discover the `api/`
+functions:
+
+```json
+{
+  "framework": null,
+  "buildCommand": "npm run vercel-build",
+  "functions": {
+    "api/[...path].js": { "maxDuration": 60, "memory": 1024 },
+    "api/health.ts": { "maxDuration": 10 }
+  }
+}
+```
+
+Routing: every request to `https://scholnexa-api.vercel.app/*` hits the
+catch-all function, which drives the full Fastify router
+(`/api/auth/login`, `/api/etudiants`, `/health`, …). `api/health.ts`
+additionally serves `/health` directly.
+
+### C.3 Environment variables
+
+Import the same `.env.production` file into **both** projects:
+
+- **Frontend project** reads the `VITE_*` variables. `VITE_API_URL` must be the
+  **absolute backend URL** (`https://scholnexa-api.vercel.app/api`) — it is
+  baked at build time, so change + redeploy the frontend if the backend URL
+  differs.
+- **Backend project** reads everything else (Supabase, JWT, SMTP, CORS, AI).
+
+`CORS_ORIGIN` on the backend must include the frontend origin:
+`https://scholnexa.vercel.app,https://scholnexa-*.vercel.app`. The `-*.vercel.app`
+wildcard covers preview deployments (`*` entries are compiled to RegExp in
+`backend/src/app.ts`).
 
 ### C.4 What still needs an always-on host
 

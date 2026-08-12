@@ -8,10 +8,11 @@ const get = (k) => {
 };
 
 const FE_URL = "https://scholnexa.vercel.app";
-// Multi-service deployment: the frontend and backend share the same domain
-// (Vercel routes /api/* to the backend service), so VITE_API_URL is a
-// same-origin relative path.
-const API_URL = ""; // resolved as VITE_API_URL=/api below
+// Two separate Vercel projects (classic monorepo model): the frontend
+// project serves the SPA from frontend/, the backend project serves the
+// api/ serverless functions from backend/. Each project imports this same
+// env file and reads the variables it needs.
+const API_URL = "https://scholnexa-api.vercel.app";
 
 const lines = [
   "# ═══════════════════════════════════════════════════════════════",
@@ -72,9 +73,9 @@ const lines = [
   "AI_MODEL=" + (get("AI_MODEL") || "meta/llama-3.1-8b-instruct"),
   "",
   "# ═══ FRONTEND (VITE_* — used by the frontend Vercel project) ═══",
-  "# Same-origin: Vercel routes /api/* to the backend service, so a relative",
-  "# path works on production and preview deployments alike.",
-  "VITE_API_URL=/api",
+  "# Absolute URL of the backend Vercel project. Update it if Vercel assigns",
+  "# the backend project a different subdomain, then redeploy the frontend.",
+  "VITE_API_URL=" + API_URL + "/api",
   "VITE_ADMIN_EMAIL=" + (get("VITE_ADMIN_EMAIL") || "admin@scholnexa.com"),
   "VITE_SUPABASE_URL=" + get("VITE_SUPABASE_URL"),
   "VITE_SUPABASE_ANON=" + get("VITE_SUPABASE_ANON"),
