@@ -213,6 +213,9 @@ picked up automatically from `package.json`:
 ```json
 {
   "framework": null,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/[...path].js" }
+  ],
   "functions": {
     "api/[...path].js": { "maxDuration": 60, "memory": 1024 },
     "api/health.ts": { "maxDuration": 10 }
@@ -223,6 +226,15 @@ picked up automatically from `package.json`:
 The `backend/public/` directory (a small landing page + `robots.txt`) exists
 to satisfy Vercel's static-output check for framework-null projects — the
 `api/` functions deploy alongside it.
+
+> **Why the `rewrites` entry is required:** Vercel CLI 58.x generates routing
+> for classic `api/[...path].js` catch-alls that only forwards **single-
+> segment** `/api/*` paths to the function; multi-segment paths like
+> `/api/auth/login` are 404'd at the routing layer (the browser then reports
+> a misleading CORS error, since the 404 carries no CORS headers). The
+> explicit rewrite forces every `/api/*` path to the catch-all. Verified with
+> `vercel build` locally (the generated route is `^/api(?:/(.*))$` →
+> `/api/[...path].js`).
 
 Routing: every request to `https://scholnexa-api.vercel.app/*` hits the
 catch-all function, which drives the full Fastify router

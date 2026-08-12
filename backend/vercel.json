@@ -1,6 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/[...path].js" }
+  ],
   "functions": {
     "api/[...path].js": { "maxDuration": 60, "memory": 1024 },
     "api/health.ts": { "maxDuration": 10 }
