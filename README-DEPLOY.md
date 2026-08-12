@@ -199,24 +199,30 @@ pattern): one project serves the frontend SPA, the other deploys the backend
 | Project name | `scholnexa-api` (URL `https://scholnexa-api.vercel.app`) |
 | Framework preset | **Other** |
 | Root directory | `backend` |
-| Build command | `npm run vercel-build` (from `backend/vercel.json`) |
+| Build command | *(none set — Vercel auto-runs `npm run vercel-build`, which takes precedence over `build`)* |
 | Install command | `npm ci` |
 | Node version | 22.x |
 
 `backend/vercel.json` pins the "Other" preset (`"framework": null`), which
 **disables the fastify auto-detection** and lets Vercel discover the `api/`
-functions:
+functions. Note that `buildCommand` must **not** be set: on a framework-null
+project Vercel treats an explicit build command as a static-site build and
+fails with *"No Output Directory named public"*. `vercel-build` is still
+picked up automatically from `package.json`:
 
 ```json
 {
   "framework": null,
-  "buildCommand": "npm run vercel-build",
   "functions": {
     "api/[...path].js": { "maxDuration": 60, "memory": 1024 },
     "api/health.ts": { "maxDuration": 10 }
   }
 }
 ```
+
+The `backend/public/` directory (a small landing page + `robots.txt`) exists
+to satisfy Vercel's static-output check for framework-null projects — the
+`api/` functions deploy alongside it.
 
 Routing: every request to `https://scholnexa-api.vercel.app/*` hits the
 catch-all function, which drives the full Fastify router
