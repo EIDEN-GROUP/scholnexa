@@ -127,9 +127,11 @@ platform's TypeScript compiler does not resolve the `@/*` path alias used in
 | Node version | 22.x |
 
 > **Note:** the two functions are configured in `backend/vercel.json`
-> (`api/[...path].js` catch-all + `api/health.ts`). The generated
-> `api/[...path].js` is gitignored and recreated on every build by
-> `npm run vercel-build`.
+> (`api/[...path].js` catch-all + `api/health.ts`). The catch-all bundle is
+> **committed** on purpose — Vercel validates `functions` patterns and
+> discovers `api/` functions *before* the build command runs, so the file
+> must exist in the repo at clone time. `npm run vercel-build` regenerates it
+> deterministically on every deploy.
 
 > **Local `vercel dev`:** run `npm run vercel-build` once before `vercel dev`
 > so the catch-all function file exists.

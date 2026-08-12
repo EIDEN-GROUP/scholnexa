@@ -15,8 +15,10 @@ dist-ssr/
 .vinxi
 .tanstack/
 .nitro
-# Generated Vercel function bundle (produced by backend/scripts/build-vercel-function.mjs)
-backend/api/\[...path\].js
+# NOTE: backend/api/[...path].js (the Vercel function bundle) is intentionally
+# COMMITTED — Vercel validates api/ functions and the vercel.json `functions`
+# patterns BEFORE the build command runs, so the catch-all must exist in the
+# repo. npm run vercel-build regenerates it deterministically on every deploy.
 
 # ==============================
 # TypeScript build info
