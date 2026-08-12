@@ -221,7 +221,7 @@ export async function invoiceRoutes(app: FastifyInstance) {
       });
     }
 
-    page.drawText("Document genere par la plateforme ISTEPM Agadir - usage interne.", {
+    page.drawText("Document genere par la plateforme Scholnexa - usage interne.", {
       x: 50, y: 60, size: 8, font, color: rgb(0.4, 0.4, 0.4),
     });
     page.drawText(`Edite le ${new Date().toLocaleDateString("fr-FR")}`, {

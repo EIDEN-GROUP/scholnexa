@@ -12,8 +12,8 @@
  */
 import { useEffect, useState } from "react";
 
-const STAMP_KEY = "istpm:stamp";
-const EVT = "istpm:stamp-changed";
+const STAMP_KEY = "scholnexa:stamp";
+const EVT = "scholnexa:stamp-changed";
 
 /** Cachet courant (data URL) ou `null` si aucun n'a été téléversé. */
 export function getStamp(): string | null {

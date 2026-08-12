@@ -132,7 +132,7 @@ function isValidEmail(email: string): boolean {
 
 function isValidPhone(phone: string): boolean {
   if (!phone) return true;
-  return /^[\d\s\-\+\(\)]{6,20}$/.test(phone);
+  return /^[\d\s\-+()]{6,20}$/.test(phone);
 }
 
 export async function etudiantImportRoutes(app: FastifyInstance) {

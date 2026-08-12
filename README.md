@@ -1,20 +1,30 @@
-# school-CRM
+# Scholnexa — School Management System
 
-Gestion scolaire   application de gestion d'établissement scolaire (facturation, paiements, employés, planning, support). Architecture full-stack avec backend Fastify + frontend React SPA.
+**Scholnexa** is a production-grade, white-label school management platform:
+students, teachers, groups, exams, grade reports (bulletins), monthly payments,
+internships (stages), planning and documents — in one application.
+
+It ships as a reusable **demo / white-label product**: the identity (name,
+logo, colours, contact details) is centralized in `frontend/src/lib/brand.ts`
+and `frontend/public/` so any school can rebrand it in minutes (see
+[WHITELABEL.md](./WHITELABEL.md)).
+
+> This project was white-labeled from a single-institute system into a generic,
+> reusable platform. No institute-specific identity remains in the codebase.
 
 ## Architecture
 
 ```
                     ┌──────────────┐
                     │  Vercel /    │
-                    │  Netlify     │
-                    │  (SPA)       │
+                    │  Netlify /   │
+                    │  nginx (SPA) │
                     └──────┬───────┘
                            │ HTTPS
                     ┌──────▼───────┐       ┌───────────┐
-                    │  Traefik     │───────│  MinIO    │
-                    │  (reverse    │       │  (S3)     │
-                    │   proxy)     │       └───────────┘
+                    │  nginx /     │───────│  MinIO    │
+                    │  reverse     │       │  (S3)     │
+                    │  proxy       │       └───────────┘
                     └──────┬───────┘
           ┌────────────────┼────────────────┐
           │                │                │
@@ -39,192 +49,127 @@ Gestion scolaire   application de gestion d'établissement scolaire (facturation
 | **Cache / Queue** | Redis 7 + BullMQ |
 | **Storage** | MinIO (S3-compatible) |
 | **Auth** | Self-managed JWT + bcrypt |
-| **Deployment** | Docker Compose (dev) / Docker Swarm (prod) + Traefik + Let's Encrypt |
+| **Deployment** | Docker Compose (dev) / Docker Swarm (prod) · Vercel (frontend) |
 
-## Frontend (`frontend/`)
+## Features
 
-Pure Vite + React SPA. No SSR. TanStack Router file-based routing with auth guards.
+- **Students** — full CRUD, import/export CSV, search/filter, statuses, risk flags
+- **Teachers (formateurs)** — profiles, grades, archives, group assignment
+- **Academic organisation** — filières, semesters, groups/classes, modules, rooms, time slots
+- **Exams & grade reports** — exam types, note entry, bulletins with mentions and decisions, publishing
+- **Payments** — monthly tuition tracking, receipts (stamped PDFs), recovery rates
+- **Internships (stages)** — partner structures, conventions and reports (stamped PDFs), validation
+- **Planning & calendar** — sessions, holidays, vacations, teacher availability
+- **Dashboard** — KPIs, charts, risk lists, action items
+- **AI assistant** — natural-language queries over the platform data
+- **Admin API** — `/api/admin/*` for multi-product integrations (X-API-Key protected)
+- **WhatsApp / email / n8n integrations**, notifications, reminders, support
+- **i18n** — French & Arabic UI
 
-### Pages
+## Repository layout
 
-| Route | Page |
-|---|---|
-| `/` | Redirects to `/login` |
-| `/login` | Login form |
-| `/dashboard` | Dashboard (auth required) |
-| `/dashboard/` | Dashboard home   stats, charts, recent payments |
-| `/dashboard/familles` | Client management |
-| `/dashboard/paiements` | Payment tracking |
-| `/dashboard/calendar` | Calendar with holidays/vacations |
-| `/dashboard/affiches` | Employee management |
-| `/dashboard/planifications` | Academic planning |
-| `/dashboard/rapports` | Reports |
-| `/dashboard/settings` | Centre settings |
-
-### Dev
-
-```bash
-cd frontend
-cp .env.example .env
-npm run dev        # → http://localhost:5173
+```
+├── frontend/          # Vite + React SPA (Vercel/Netlify-ready)
+├── backend/           # Fastify API + BullMQ worker + Drizzle schema/migrations
+├── docker/            # Backup service image
+├── monitoring/        # Prometheus / Loki / Promtail configs
+├── .github/workflows/ # CI/CD (build, push images, deploy to VPS)
+├── deploy.sh          # VPS Docker Swarm deploy script
+└── docker-compose*.yml
 ```
 
-### Build
+## Local development
+
+### 1. Infrastructure (PostgreSQL + Redis + MinIO)
 
 ```bash
-VITE_API_URL=https://api.example.com/api npm run build
-# output: frontend/dist/
+docker compose up -d
 ```
 
-## Backend (`backend/`)
-
-Fastify REST API with 15 route modules (~96 endpoints). All data access via Drizzle ORM.
-
-### Dev
+### 2. Backend
 
 ```bash
 cd backend
 cp .env.example .env
-npm run dev        # → http://localhost:3000
+npm ci
+npm run dev            # → http://localhost:3000 (health: /health)
 ```
 
-### Database
+### 3. Frontend
 
 ```bash
-# Generate migrations after schema changes
-npm run db:generate
+cd frontend
+cp .env.example .env
+npm ci
+npm run dev            # → http://localhost:5173
+```
 
-# Apply pending migrations
+### 4. Demo data
+
+```bash
+cd backend
 npm run db:migrate
-
-# Open Drizzle Studio (GUI)
-npm run db:studio
+npm run seed           # creates demo users + sample records
 ```
 
-## Docker
+Demo accounts (see `backend/scripts/seed-demo.ts`):
 
-### Development
-
-```bash
-# Start all services (PostgreSQL + Redis + MinIO + backend)
-docker compose up -d
-
-# Backend auto-reloads via tsx watch (src/ bind mount)
-# Frontend runs separately: cd frontend && npm run dev
-```
-
-### Production (Docker Swarm)
-
-```bash
-# 1. Copy and fill production env
-cp .env.production.example .env.production
-
-# 2. Deploy
-./deploy.sh
-
-# 3. Verify
-docker stack ps school-crm
-```
-
-Or manually:
-
-```bash
-docker build -t school-crm-api:latest -f backend/Dockerfile --target production backend/
-docker stack deploy -c docker-compose.production.yml school-crm
-```
-
-### Services
-
-| Service | Port | Description |
+| Role | Email | Password |
 |---|---|---|
-| `postgres` | 5432 | Database |
-| `redis` | 6379 | Cache + BullMQ |
-| `minio` | 9000 (API), 9001 (Console) | S3 storage |
-| `backend` | 3000 | Fastify API |
-| `backend-worker` |   | BullMQ background jobs |
-| `traefik` (prod) | 80, 443 | Reverse proxy + SSL |
-
-## Data migration (Supabase → self-hosted)
-
-```bash
-export SOURCE_DATABASE_URL="postgres://user:pass@supabase-host:5432/postgres?sslmode=require"
-export DATABASE_URL="postgres://postgres:postgres@localhost:5432/school_crm"
-npx tsx backend/scripts/migrate-from-supabase.ts
-```
-
-Migrates all 19 tables in dependency order. Batched inserts with `ON CONFLICT DO NOTHING`   safe to re-run.
-
-## Admin API (multi-product integration)
-
-School-CRM exposes a standard Admin API at `/api/admin/*`, protected by an `X-API-Key` header. This lets external platforms (like SuperAdmin CRM) integrate without sharing user databases.
-
-| Endpoint | Description |
-|---|---|
-| `GET /api/admin/health` | Health check |
-| `GET /api/admin/info` | Product name, version, environment |
-| `GET /api/admin/stats` | Platform statistics (centers, revenue, etc.) |
-| `GET /api/admin/tenants` | All centers with admin details |
-| `GET /api/admin/users` | All user accounts |
-| `GET /api/admin/demo-requests` | Pending demo requests |
-| `GET /api/admin/revenue-history` | Monthly revenue (last 7 months) |
-
-Set the `ADMIN_API_KEY` environment variable on the backend and provide it to the integrating platform.
+| Directeur | `direction@demo.scholnexa.ma` | `directeur123` |
+| Enseignant | `enseignant@demo.scholnexa.ma` | `enseignant123` |
+| Responsable | `responsable@demo.scholnexa.ma` | `responsable123` |
 
 ## Environment variables
 
-### Backend (`backend/.env`)
+See [ENVIRONMENT.md](./ENVIRONMENT.md) for the complete reference, and the
+`.env.example` files:
 
-| Variable | Default | Description |
+- `backend/.env.example` — backend (local)
+- `frontend/.env.example` — frontend (local)
+- `.env.production.example` — VPS production stack
+
+Key variables:
+
+| Variable | Where | Purpose |
 |---|---|---|
-| `PORT` | 3000 | API port |
-| `DATABASE_URL` | `postgres://postgres:postgres@localhost:5432/school_crm` | PostgreSQL connection |
-| `REDIS_URL` | `redis://localhost:6379` | Redis connection |
-| `JWT_SECRET` |   | JWT signing key |
-| `JWT_EXPIRES_IN` | `7d` | Token lifetime |
-| `MINIO_ENDPOINT` | `localhost` | MinIO host |
-| `MINIO_PORT` | 9000 | MinIO port |
-| `MINIO_ACCESS_KEY` | `minioadmin` | MinIO user |
-| `MINIO_SECRET_KEY` | `minioadmin` | MinIO password |
-| `CORS_ORIGIN` | `http://localhost:5173` | Allowed CORS origin |
-| `ADMIN_API_KEY` |   | API key for multi-product Admin API access |
-| `SMTP_HOST` |   | SMTP server (email) |
-| `WHATSAPP_PHONE_NUMBER_ID` |   | WhatsApp Cloud API |
-| `N8N_WEBHOOK_URL` |   | n8n automation webhook |
-| `LOG_LEVEL` | `info` | Pino log level |
-
-### Frontend (`frontend/.env`)
-
-| Variable | Default | Description |
-|---|---|---|
-| `VITE_API_URL` | `http://localhost:3000/api` | Backend API base URL |
+| `VITE_API_URL` | frontend | Backend API base URL (`https://api.example.com/api`) |
+| `DATABASE_URL` | backend | PostgreSQL connection string |
+| `REDIS_URL` | backend | Redis connection string |
+| `JWT_SECRET` | backend | JWT signing key (mandatory override in prod) |
+| `ADMIN_API_KEY` | backend | Admin API key (mandatory override in prod) |
+| `CORS_ORIGIN` | backend | Comma-separated allowed frontend origins |
+| `DOMAIN` | VPS/CI | Production domain |
 
 ## Deployment
 
-### Frontend → Vercel
+Two supported modes (details in [README-DEPLOY.md](./README-DEPLOY.md)):
+
+### Mode A — Vercel frontend + VPS backend (recommended)
+
+1. Deploy `frontend/` to Vercel (framework preset: Vite, output `dist`, SPA rewrites included in `vercel.json`).
+2. Set `VITE_API_URL=https://api.yourdomain.com/api` on Vercel.
+3. Deploy the backend stack to a VPS (`./deploy.sh`).
+4. Point the backend's `CORS_ORIGIN` at the Vercel domain.
+
+### Mode B — Full VPS (frontend + backend in Docker Swarm)
 
 ```bash
-cd frontend
-VITE_API_URL=https://api.example.com/api npm run build
-npx vercel --prod
+cp .env.production.example .env.production   # fill in values
+./deploy.sh                                   # builds/pulls images, deploys stack, migrates DB
 ```
 
-### Frontend → Netlify
+Both modes keep the persistent infrastructure (PostgreSQL, Redis, BullMQ
+worker, MinIO, backups) on the VPS — the backend is **not** serverless and
+should not be deployed to function-as-a-service runtimes.
 
-```bash
-cd frontend
-VITE_API_URL=https://api.example.com/api npm run build
-npx netlify deploy --prod --dir=dist
-```
+## Documentation
 
-### Backend → VPS (Docker Swarm)
-
-1. Provision a VPS with Docker Engine 24+
-2. `docker swarm init`
-3. Clone repo, populate `.env.production`
-4. `./deploy.sh`
-
-Traefik auto-provisions Let's Encrypt TLS certificates for `API_DOMAIN`.
-
-## Project structure
-
-See `frontend/STRUCTURE.md` and `backend/STRUCTURE.md` for detailed file-by-file breakdown.
+| File | Contents |
+|---|---|
+| `README-DEPLOY.md` | Full deployment guide (Vercel + VPS, HTTPS, updates, rollback, troubleshooting) |
+| `ENVIRONMENT.md` | Environment variable reference |
+| `WHITELABEL.md` | Rebranding guide (name, logo, colours, contact, demo data) |
+| `backend/STRUCTURE.md` | Backend file-by-file breakdown |
+| `frontend/STRUCTURE.md` | Frontend file-by-file breakdown |
+| `AGENTS.md` | CI/CD secrets & variables setup |

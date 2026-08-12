@@ -16,7 +16,7 @@ const buttonVariants = cva(
         outline:
           "border-2 border-[color-mix(in_srgb,var(--ring)_55%,var(--border)_45%)] bg-card/90 text-foreground shadow-sm backdrop-blur-sm hover:border-primary hover:bg-[color-mix(in_srgb,var(--accent)_55%,var(--background)_45%)] hover:text-foreground",
         secondary:
-          "border border-[color-mix(in_srgb,var(--border)_90%,var(--primary)_10%)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--secondary)_96%,var(--eiden-gold)_4%)_0%,var(--secondary)_100%)] text-secondary-foreground shadow-sm hover:border-[color-mix(in_srgb,var(--primary)_35%,var(--border)_65%)] hover:brightness-[1.02]",
+          "border border-[color-mix(in_srgb,var(--border)_90%,var(--primary)_10%)] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--secondary)_96%,var(--legacy-gold)_4%)_0%,var(--secondary)_100%)] text-secondary-foreground shadow-sm hover:border-[color-mix(in_srgb,var(--primary)_35%,var(--border)_65%)] hover:brightness-[1.02]",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },

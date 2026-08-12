@@ -17,7 +17,7 @@ import {
   type StructureAccueil,
   type AnneeEtude,
   type Filiere,
-} from "@/lib/istpm-data";
+} from "@/lib/scholnexa-data";
 import {
   Dialog,
   DialogContent,

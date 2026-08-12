@@ -35,7 +35,7 @@ function genererRecu(): string {
   return `R-${recuCounter.toString(36).toUpperCase()}`;
 }
 
-export async function paiementIstpmRoutes(app: FastifyInstance) {
+export async function monthlyPaymentRoutes(app: FastifyInstance) {
   app.get("/", { preHandler: [authenticate] }, async (request) => {
     const db = getDb();
     const query = request.query as { etudiantId?: string };

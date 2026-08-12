@@ -8,7 +8,7 @@ import {
   confirmAction,
   type ChatMessage,
   type ProposedAction,
-} from "@/lib/istpm-api";
+} from "@/lib/scholnexa-api";
 
 function formatActionResult(actionName: string, data: unknown): string {
   const label = actionName.replace(/_/g, " ");
@@ -161,7 +161,7 @@ function FloatingButton({ onClick, open }: { onClick: () => void; open: boolean 
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className={cn(
-        "fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-[0_16px_40px_-12px_rgb(var(--istpm-shadow)/0.5)] transition-shadow hover:shadow-[0_20px_50px_-12px_rgb(var(--istpm-shadow)/0.6)]",
+        "fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-[0_16px_40px_-12px_rgb(var(--scholnexa-shadow)/0.5)] transition-shadow hover:shadow-[0_20px_50px_-12px_rgb(var(--scholnexa-shadow)/0.6)]",
         open
           ? "bg-muted text-foreground ring-1 ring-brand/20"
           : "bg-gradient-to-b from-brand to-brand-dk text-white",
@@ -182,7 +182,7 @@ function FloatingButton({ onClick, open }: { onClick: () => void; open: boolean 
   );
 }
 
-const CHAT_STORAGE_KEY = "istpm-ai-chat";
+const CHAT_STORAGE_KEY = "scholnexa-ai-chat";
 
 function loadChatHistory(): ChatMessage[] {
   try {
@@ -362,7 +362,7 @@ export function AiChatFloating() {
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
               softCard,
-              "fixed bottom-24 right-6 z-50 flex w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden shadow-[0_32px_80px_-20px_rgb(var(--istpm-shadow)/0.5)]",
+              "fixed bottom-24 right-6 z-50 flex w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden shadow-[0_32px_80px_-20px_rgb(var(--scholnexa-shadow)/0.5)]",
             )}
             style={{ height: 560, maxHeight: "calc(100vh - 8rem)" }}
           >

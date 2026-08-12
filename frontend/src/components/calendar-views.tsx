@@ -19,7 +19,7 @@ import {
   type Seance,
   type JourChome,
   type Creneau,
-} from "@/lib/istpm-data";
+} from "@/lib/scholnexa-data";
 import { cn } from "@/lib/utils";
 
 export type VueCalendrier = "jour" | "semaine" | "mois";
@@ -339,7 +339,7 @@ function GrilleHoraire({
                 ...(chome
                   ? {
                       backgroundImage:
-                        "repeating-linear-gradient(45deg, rgb(var(--istpm-shadow) / 0.05) 0 6px, transparent 6px 12px)",
+                        "repeating-linear-gradient(45deg, rgb(var(--scholnexa-shadow) / 0.05) 0 6px, transparent 6px 12px)",
                     }
                   : null),
               }}

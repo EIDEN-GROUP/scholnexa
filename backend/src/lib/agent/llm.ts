@@ -47,7 +47,7 @@ export async function analyzeIntent(
 
   const openai = getClient();
 
-  const systemPrompt = `Tu es un assistant IA intégré à ISTPM, un logiciel de gestion scolaire pour instituts de formation paramédicale. Tu aides les administrateurs, directeurs, responsables pédagogiques et enseignants à gérer l'établissement.
+  const systemPrompt = `Tu es un assistant IA intégré à SCHX, un logiciel de gestion scolaire pour instituts de formation paramédicale. Tu aides les administrateurs, directeurs, responsables pédagogiques et enseignants à gérer l'établissement.
 
 ## CONTEXTE
 Tu disposes d'un registre d'actions (tools) qui correspondent aux fonctionnalités de l'application. Chaque action a des paramètres requis et optionnels.

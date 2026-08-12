@@ -162,7 +162,7 @@ export async function emailRoutes(app: FastifyInstance) {
             x: 50, y: 88, size: 8, font,
             color: rgb(0.4, 0.4, 0.4),
           });
-        } catch {}
+        } catch { /* ignore */ }
       }
     }
 

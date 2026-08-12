@@ -41,34 +41,33 @@
   --color-chart-5: var(--chart-5);
   --color-chart-6: var(--chart-6);
   --color-chart-7: var(--chart-7);
-  /* ISTPM brand utilities   bg-brand, border-brand/15, text-alert, ... */
-  --color-brand: var(--istpm-teal);
-  --color-brand-dk: var(--istpm-teal-dk);
-  --color-brand-md: var(--istpm-teal-md);
-  --color-brand-lt: var(--istpm-teal-lt);
-  --color-brand-pale: var(--istpm-teal-pale);
-  --color-brand-wash: var(--istpm-teal-wash);
-  --color-alert: var(--istpm-red);
-  --color-alert-dk: var(--istpm-red-dk);
-  --color-alert-pale: var(--istpm-red-pale);
-  /* Medical accent   healing green (pharmacy / paramedical cross). Replaces the
-     old red brand accent on active nav, primary CTAs and the lead KPI, so red is
-     now reserved strictly for errors and negative states. */
-  --color-med: var(--istpm-med);
-  --color-med-dk: var(--istpm-med-dk);
-  --color-med-lt: var(--istpm-med-lt);
-  --color-med-pale: var(--istpm-med-pale);
-  --color-warn: var(--istpm-amber);
-  --color-warn-pale: var(--istpm-amber-pale);
-  --color-info: var(--istpm-blue);
-  --color-info-pale: var(--istpm-blue-pale);
+  /* SCHX brand utilities   bg-brand, border-brand/15, text-alert, ... */
+  --color-brand: var(--scholnexa-blue);
+  --color-brand-dk: var(--scholnexa-blue-dk);
+  --color-brand-md: var(--scholnexa-blue-md);
+  --color-brand-lt: var(--scholnexa-blue-lt);
+  --color-brand-pale: var(--scholnexa-blue-pale);
+  --color-brand-wash: var(--scholnexa-blue-wash);
+  --color-alert: var(--scholnexa-red);
+  --color-alert-dk: var(--scholnexa-red-dk);
+  --color-alert-pale: var(--scholnexa-red-pale);
+  /* Brand accent — royal blue, used on active nav, primary CTAs and the
+     lead KPI, so red stays reserved strictly for errors and negative states. */
+  --color-med: var(--scholnexa-accent);
+  --color-med-dk: var(--scholnexa-accent-dk);
+  --color-med-lt: var(--scholnexa-accent-lt);
+  --color-med-pale: var(--scholnexa-accent-pale);
+  --color-warn: var(--scholnexa-amber);
+  --color-warn-pale: var(--scholnexa-amber-pale);
+  --color-info: var(--scholnexa-sky);
+  --color-info-pale: var(--scholnexa-sky-pale);
   /* Secondary accent   refined indigo/violet ("technology · innovation"),
      used sparingly next to the teal brand for highlights and charts. */
-  --color-accent2: var(--istpm-violet);
-  --color-accent2-dk: var(--istpm-violet-dk);
-  --color-accent2-lt: var(--istpm-violet-lt);
-  --color-accent2-pale: var(--istpm-violet-pale);
-  --color-ink: var(--istpm-ink);
+  --color-accent2: var(--scholnexa-violet);
+  --color-accent2-dk: var(--scholnexa-violet-dk);
+  --color-accent2-lt: var(--scholnexa-violet-lt);
+  --color-accent2-pale: var(--scholnexa-violet-pale);
+  --color-ink: var(--scholnexa-ink);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -77,7 +76,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  /* EIDEN Group   Brand Identity System v2 (Outfit / DM Serif / Cormorant / Inter) */
+  /* Scholnexa   Brand Identity System v2 (Outfit / DM Serif / Cormorant / Inter) */
   --font-display: "Outfit", system-ui, sans-serif;
   --font-sans: "Inter", system-ui, sans-serif;
   --animate-brand-progress: brand-progress 1.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
@@ -87,49 +86,49 @@
   --radius: 0.875rem;
 
   /* ------------------------------------------------------------------
-   * ISTEPM Agadir  brand palette.
-   * Teal is the dominant brand colour (nav, CTAs, headers, positive
+   * Scholnexa brand palette.
+   * Royal blue is the dominant brand colour (nav, CTAs, headers, positive
    * states); red is reserved for alerts and negative states only.
    * ------------------------------------------------------------------ */
-  --istpm-teal: #029994;
-  --istpm-teal-dk: #017a76;
-  --istpm-teal-md: #02807c;
-  --istpm-teal-lt: #4db8b4;
-  --istpm-teal-pale: #d6efee;
-  --istpm-teal-wash: #f1f9f9;
+  --scholnexa-blue: #2563eb;
+  --scholnexa-blue-dk: #1e40af;
+  --scholnexa-blue-md: #1d4ed8;
+  --scholnexa-blue-lt: #60a5fa;
+  --scholnexa-blue-pale: #dbeafe;
+  --scholnexa-blue-wash: #eff6ff;
 
-  --istpm-red: #e51e26;
-  --istpm-red-dk: #b3141b;
-  --istpm-red-lt: #f4626a;
-  --istpm-red-pale: #fbdcdd;
+  --scholnexa-red: #e51e26;
+  --scholnexa-red-dk: #b3141b;
+  --scholnexa-red-lt: #f4626a;
+  --scholnexa-red-pale: #fbdcdd;
 
-  /* Medical accent   the teal brand family, used as a gradient on the active nav
+  /* Brand accent   the blue brand family, used as a gradient on the active nav
      tile, the lead KPI and other accent surfaces. Red stays reserved for errors. */
-  --istpm-med: #029994;
-  --istpm-med-dk: #017a76;
-  --istpm-med-lt: #4db8b4;
-  --istpm-med-pale: #d6efee;
+  --scholnexa-accent: #2563eb;
+  --scholnexa-accent-dk: #1e40af;
+  --scholnexa-accent-lt: #60a5fa;
+  --scholnexa-accent-pale: #dbeafe;
 
-  --istpm-amber: #d98324;
-  --istpm-amber-pale: #fbebd6;
-  --istpm-blue: #2f6fb0;
-  --istpm-blue-pale: #dfeaf6;
+  --scholnexa-amber: #d98324;
+  --scholnexa-amber-pale: #fbebd6;
+  --scholnexa-sky: #2f6fb0;
+  --scholnexa-sky-pale: #dfeaf6;
 
   /* Extra categorical chart hues   muted, earthy companions to the teal brand
      so multi-series charts read as a cohesive premium set on the cream canvas. */
-  --istpm-sage: #7ea262;
-  --istpm-coral: #e07a5f;
-  --istpm-gold: #e6b23a;
+  --scholnexa-sage: #7ea262;
+  --scholnexa-coral: #e07a5f;
+  --scholnexa-gold: #e6b23a;
 
   /* Secondary accent   Stripe-style indigo/violet. Reserved for accents,
      never a second brand: teal stays dominant. */
-  --istpm-violet: #635bff;
-  --istpm-violet-dk: #4b45d6;
-  --istpm-violet-lt: #8f8bff;
-  --istpm-violet-pale: #ececff;
+  --scholnexa-violet: #635bff;
+  --scholnexa-violet-dk: #4b45d6;
+  --scholnexa-violet-lt: #8f8bff;
+  --scholnexa-violet-pale: #ececff;
 
-  --istpm-ink: #123b3a;
-  --istpm-white: #ffffff;
+  --scholnexa-ink: #14213d;
+  --scholnexa-white: #ffffff;
 
   /* Warm cream canvas (reference dashboard backdrop). Neutral, faintly warm   the
      white cards lift off it without competing colour. */
@@ -140,99 +139,99 @@
      soft-card shadow language. Kept NEUTRAL grey on purpose: coloured (teal)
      shadows read as artificial, so elevation stays a plain, human drop shadow.
      NB: must stay space-separated   the older comma form `2, 153, 148` makes
-     every `rgb(var(--istpm-shadow) / a)` shadow invalid (renders as `none`). */
-  --istpm-shadow: 23 23 26;
+     every `rgb(var(--scholnexa-shadow) / a)` shadow invalid (renders as `none`). */
+  --scholnexa-shadow: 23 23 26;
   /* Neutral ink channels for crisp, colour-neutral elevation on white. */
-  --istpm-ink-rgb: 23 23 26;
+  --scholnexa-ink-rgb: 20 33 61;
 
-  /* Legacy --eiden-* names kept as aliases: the landing-page utility
-   * classes further down still reference them. Re-pointed at the ISTPM
-   * palette so nothing renders in the old navy/brass scheme. */
-  --eiden-brass: var(--istpm-teal);
-  --eiden-canvas: var(--istpm-white);
-  --eiden-beige: var(--istpm-teal-pale);
-  --eiden-beige-dk: var(--istpm-teal-lt);
-  --eiden-forest: var(--istpm-teal-dk);
-  --eiden-forest-md: var(--istpm-teal-md);
-  --eiden-deep: var(--istpm-teal-dk);
-  --eiden-teal: var(--istpm-teal);
-  --eiden-teal-lt: var(--istpm-teal-lt);
-  --eiden-gold: var(--istpm-amber);
-  --eiden-gold-dk: var(--istpm-teal-md);
-  --eiden-mint: var(--istpm-teal-pale);
-  --eiden-cream: var(--istpm-teal-wash);
-  --eiden-ink: var(--istpm-ink);
-  --eiden-white: var(--istpm-white);
-  --eiden-red: var(--istpm-red);
-  --eiden-blue: var(--istpm-blue);
+  /* Legacy alias variables kept for compatibility: the landing-page
+   * utility classes further down still reference them. Re-pointed at the
+   * Scholnexa palette so nothing renders in the old scheme. */
+  --legacy-brass: var(--scholnexa-blue);
+  --legacy-canvas: var(--scholnexa-white);
+  --legacy-beige: var(--scholnexa-blue-pale);
+  --legacy-beige-dk: var(--scholnexa-blue-lt);
+  --legacy-forest: var(--scholnexa-blue-dk);
+  --legacy-forest-md: var(--scholnexa-blue-md);
+  --legacy-deep: var(--scholnexa-blue-dk);
+  --legacy-teal: var(--scholnexa-blue);
+  --legacy-teal-lt: var(--scholnexa-blue-lt);
+  --legacy-gold: var(--scholnexa-amber);
+  --legacy-gold-dk: var(--scholnexa-blue-md);
+  --legacy-mint: var(--scholnexa-blue-pale);
+  --legacy-cream: var(--scholnexa-blue-wash);
+  --legacy-ink: var(--scholnexa-ink);
+  --legacy-white: var(--scholnexa-white);
+  --legacy-red: var(--scholnexa-red);
+  --legacy-blue: var(--scholnexa-sky);
 
   /* Landing */
-  --landing-hero-bg: color-mix(in srgb, var(--istpm-teal-dk) 30%, #04201f 70%);
-  --landing-cta-primary: var(--istpm-teal);
-  --landing-cta-primary-hover: var(--istpm-teal-dk);
-  --landing-cta-on-primary: var(--istpm-white);
+  --landing-hero-bg: color-mix(in srgb, var(--scholnexa-blue-dk) 30%, #050d1f 70%);
+  --landing-cta-primary: var(--scholnexa-blue);
+  --landing-cta-primary-hover: var(--scholnexa-blue-dk);
+  --landing-cta-on-primary: var(--scholnexa-white);
 
-  --background: var(--istpm-white);
-  --foreground: var(--istpm-ink);
-  --hover-menu-foreground: var(--istpm-teal-dk);
+  --background: var(--scholnexa-white);
+  --foreground: var(--scholnexa-ink);
+  --hover-menu-foreground: var(--scholnexa-blue-dk);
 
-  --card: var(--istpm-white);
-  --card-foreground: var(--istpm-ink);
-  --popover: var(--istpm-white);
-  --popover-foreground: var(--istpm-ink);
+  --card: var(--scholnexa-white);
+  --card-foreground: var(--scholnexa-ink);
+  --popover: var(--scholnexa-white);
+  --popover-foreground: var(--scholnexa-ink);
 
   /* Brand accent / CTA   solid teal with white text */
-  --primary: var(--istpm-teal);
-  --primary-foreground: var(--istpm-white);
+  --primary: var(--scholnexa-blue);
+  --primary-foreground: var(--scholnexa-white);
 
-  --secondary: var(--istpm-teal-pale);
-  --secondary-foreground: var(--istpm-teal-dk);
+  --secondary: var(--scholnexa-blue-pale);
+  --secondary-foreground: var(--scholnexa-blue-dk);
 
-  --muted: var(--istpm-teal-wash);
-  --muted-foreground: color-mix(in srgb, var(--istpm-ink) 62%, var(--istpm-teal) 38%);
+  --muted: var(--scholnexa-blue-wash);
+  --muted-foreground: color-mix(in srgb, var(--scholnexa-ink) 62%, var(--scholnexa-blue) 38%);
 
-  --accent: var(--istpm-teal-pale);
-  --accent-foreground: var(--istpm-teal-dk);
+  --accent: var(--scholnexa-blue-pale);
+  --accent-foreground: var(--scholnexa-blue-dk);
 
-  --destructive: var(--istpm-red);
-  --destructive-foreground: var(--istpm-white);
+  --destructive: var(--scholnexa-red);
+  --destructive-foreground: var(--scholnexa-white);
 
-  --border: color-mix(in srgb, var(--istpm-teal) 22%, var(--istpm-white) 78%);
-  --input: color-mix(in srgb, var(--istpm-teal) 28%, var(--istpm-white) 72%);
-  --ring: var(--istpm-teal);
+  --border: color-mix(in srgb, var(--scholnexa-blue) 22%, var(--scholnexa-white) 78%);
+  --input: color-mix(in srgb, var(--scholnexa-blue) 28%, var(--scholnexa-white) 72%);
+  --ring: var(--scholnexa-blue);
 
   /* Supporting accents (charts, badges, utilities) */
-  --sun: var(--istpm-amber);
-  --sky: var(--istpm-blue);
-  --leaf: var(--istpm-teal-lt);
-  --coral: var(--istpm-red);
+  --sun: var(--scholnexa-amber);
+  --sky: var(--scholnexa-sky);
+  --leaf: var(--scholnexa-blue-lt);
+  --coral: var(--scholnexa-red);
 
-  /* Monochrome brand ramp   shades of the teal brand (#029994), deep → light.
-     All charts/graphs stay teal per the brand; the red (#e51e26) accent is
+  /* Monochrome brand ramp   shades of the royal blue brand (#2563eb), deep → light.
+     All charts/graphs stay blue per the brand; the red (#e51e26) accent is
      reserved for UI (active nav tile, lead KPI card, primary CTAs), not graphs. */
-  --chart-1: #015d5a;
-  --chart-2: #017a76;
-  --chart-3: #029994;
-  --chart-4: #22a9a3;
-  --chart-5: #46b7b2;
-  --chart-6: #6bc6c1;
-  --chart-7: #8fd4d0;
+  --chart-1: #1e3a8a;
+  --chart-2: #1d4ed8;
+  --chart-3: #2563eb;
+  --chart-4: #3b82f6;
+  --chart-5: #60a5fa;
+  --chart-6: #93c5fd;
+  --chart-7: #bfdbfe;
 
-  --sidebar: var(--istpm-white);
-  --sidebar-foreground: var(--istpm-ink);
-  --sidebar-primary: var(--istpm-teal);
-  --sidebar-primary-foreground: var(--istpm-white);
-  --sidebar-accent: var(--istpm-teal-pale);
-  --sidebar-accent-foreground: var(--istpm-teal-dk);
-  --sidebar-border: color-mix(in srgb, var(--istpm-teal) 22%, var(--istpm-white) 78%);
-  --sidebar-ring: var(--istpm-teal);
+  --sidebar: var(--scholnexa-white);
+  --sidebar-foreground: var(--scholnexa-ink);
+  --sidebar-primary: var(--scholnexa-blue);
+  --sidebar-primary-foreground: var(--scholnexa-white);
+  --sidebar-accent: var(--scholnexa-blue-pale);
+  --sidebar-accent-foreground: var(--scholnexa-blue-dk);
+  --sidebar-border: color-mix(in srgb, var(--scholnexa-blue) 22%, var(--scholnexa-white) 78%);
+  --sidebar-ring: var(--scholnexa-blue);
 
-  --scrollbar-thumb: color-mix(in srgb, var(--istpm-teal) 40%, transparent);
-  --scrollbar-thumb-hover: color-mix(in srgb, var(--istpm-teal) 62%, transparent);
+  --scrollbar-thumb: color-mix(in srgb, var(--scholnexa-blue) 40%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--scholnexa-blue) 62%, transparent);
 
-  --gradient-hero: linear-gradient(135deg, var(--istpm-teal-dk) 0%, var(--istpm-teal) 55%, var(--istpm-teal-lt) 100%);
-  --shadow-elegant: 0 20px 60px -20px rgb(var(--istpm-shadow) / 0.34);
-  --shadow-soft: 0 8px 30px -10px rgb(var(--istpm-shadow) / 0.22);
+  --gradient-hero: linear-gradient(135deg, var(--scholnexa-blue-dk) 0%, var(--scholnexa-blue) 55%, var(--scholnexa-blue-lt) 100%);
+  --shadow-elegant: 0 20px 60px -20px rgb(var(--scholnexa-shadow) / 0.34);
+  --shadow-soft: 0 8px 30px -10px rgb(var(--scholnexa-shadow) / 0.22);
 
   /* ------------------------------------------------------------------
    * Refined elevation ladder   layered, colour-neutral shadows in the
@@ -241,75 +240,75 @@
    * read as physically lifted rather than blurred.
    * ------------------------------------------------------------------ */
   --elevation-1:
-    0 1px 2px -1px rgb(var(--istpm-ink-rgb) / 0.08),
-    0 1px 3px 0 rgb(var(--istpm-ink-rgb) / 0.06);
+    0 1px 2px -1px rgb(var(--scholnexa-ink-rgb) / 0.08),
+    0 1px 3px 0 rgb(var(--scholnexa-ink-rgb) / 0.06);
   --elevation-2:
-    0 1px 2px -1px rgb(var(--istpm-ink-rgb) / 0.06),
-    0 6px 16px -8px rgb(var(--istpm-ink-rgb) / 0.10);
+    0 1px 2px -1px rgb(var(--scholnexa-ink-rgb) / 0.06),
+    0 6px 16px -8px rgb(var(--scholnexa-ink-rgb) / 0.10);
   --elevation-3:
-    0 4px 10px -6px rgb(var(--istpm-ink-rgb) / 0.09),
-    0 14px 28px -14px rgb(var(--istpm-ink-rgb) / 0.13);
+    0 4px 10px -6px rgb(var(--scholnexa-ink-rgb) / 0.09),
+    0 14px 28px -14px rgb(var(--scholnexa-ink-rgb) / 0.13);
   --elevation-4:
-    0 8px 18px -10px rgb(var(--istpm-ink-rgb) / 0.10),
-    0 26px 50px -22px rgb(var(--istpm-ink-rgb) / 0.18);
+    0 8px 18px -10px rgb(var(--scholnexa-ink-rgb) / 0.10),
+    0 26px 50px -22px rgb(var(--scholnexa-ink-rgb) / 0.18);
   /* Highlight applied inset at a card's top edge for a "lit from above" feel. */
   --edge-highlight: inset 0 1px 0 rgb(255 255 255 / 0.7);
 }
 
 .dark {
-  --background: var(--eiden-forest-md);
-  --foreground: var(--eiden-canvas);
-  --card: var(--eiden-forest);
-  --card-foreground: var(--eiden-canvas);
-  --popover: var(--eiden-forest);
-  --popover-foreground: var(--eiden-canvas);
-  --primary: var(--eiden-gold);
-  --primary-foreground: var(--eiden-forest);
-  --secondary: color-mix(in srgb, var(--eiden-forest) 86%, var(--eiden-deep) 14%);
-  --secondary-foreground: var(--eiden-canvas);
-  --muted: color-mix(in srgb, var(--eiden-forest) 78%, var(--eiden-deep) 22%);
-  --muted-foreground: color-mix(in srgb, var(--eiden-beige) 58%, transparent);
-  --accent: color-mix(in srgb, var(--eiden-brass) 28%, var(--eiden-forest) 72%);
-  --accent-foreground: var(--eiden-canvas);
-  --destructive: color-mix(in srgb, var(--eiden-red) 92%, white 8%);
-  --destructive-foreground: var(--eiden-ink);
-  --border: color-mix(in srgb, var(--eiden-canvas) 14%, transparent);
-  --input: color-mix(in srgb, var(--eiden-canvas) 16%, transparent);
-  --ring: var(--eiden-gold);
-  --sidebar: var(--eiden-ink);
-  --sidebar-foreground: var(--eiden-canvas);
-  --sidebar-primary: var(--eiden-gold);
-  --sidebar-primary-foreground: var(--eiden-forest);
-  --sidebar-accent: var(--eiden-forest);
-  --sidebar-accent-foreground: var(--eiden-canvas);
-  --sidebar-border: color-mix(in srgb, var(--eiden-canvas) 12%, transparent);
-  --sidebar-ring: var(--eiden-gold);
+  --background: var(--legacy-forest-md);
+  --foreground: var(--legacy-canvas);
+  --card: var(--legacy-forest);
+  --card-foreground: var(--legacy-canvas);
+  --popover: var(--legacy-forest);
+  --popover-foreground: var(--legacy-canvas);
+  --primary: var(--legacy-gold);
+  --primary-foreground: var(--legacy-forest);
+  --secondary: color-mix(in srgb, var(--legacy-forest) 86%, var(--legacy-deep) 14%);
+  --secondary-foreground: var(--legacy-canvas);
+  --muted: color-mix(in srgb, var(--legacy-forest) 78%, var(--legacy-deep) 22%);
+  --muted-foreground: color-mix(in srgb, var(--legacy-beige) 58%, transparent);
+  --accent: color-mix(in srgb, var(--legacy-brass) 28%, var(--legacy-forest) 72%);
+  --accent-foreground: var(--legacy-canvas);
+  --destructive: color-mix(in srgb, var(--legacy-red) 92%, white 8%);
+  --destructive-foreground: var(--legacy-ink);
+  --border: color-mix(in srgb, var(--legacy-canvas) 14%, transparent);
+  --input: color-mix(in srgb, var(--legacy-canvas) 16%, transparent);
+  --ring: var(--legacy-gold);
+  --sidebar: var(--legacy-ink);
+  --sidebar-foreground: var(--legacy-canvas);
+  --sidebar-primary: var(--legacy-gold);
+  --sidebar-primary-foreground: var(--legacy-forest);
+  --sidebar-accent: var(--legacy-forest);
+  --sidebar-accent-foreground: var(--legacy-canvas);
+  --sidebar-border: color-mix(in srgb, var(--legacy-canvas) 12%, transparent);
+  --sidebar-ring: var(--legacy-gold);
 
-  --sun: var(--eiden-gold);
-  --sky: var(--eiden-teal-lt);
-  --leaf: var(--eiden-mint);
-  --coral: var(--eiden-gold-dk);
+  --sun: var(--legacy-gold);
+  --sky: var(--legacy-teal-lt);
+  --leaf: var(--legacy-mint);
+  --coral: var(--legacy-gold-dk);
 
-  --chart-1: var(--eiden-gold);
-  --chart-2: var(--eiden-brass);
-  --chart-3: var(--eiden-canvas);
-  --chart-4: var(--eiden-mint);
-  --chart-5: var(--istpm-violet-lt);
-  --chart-6: var(--eiden-blue);
-  --chart-7: var(--eiden-red);
+  --chart-1: var(--legacy-gold);
+  --chart-2: var(--legacy-brass);
+  --chart-3: var(--legacy-canvas);
+  --chart-4: var(--legacy-mint);
+  --chart-5: var(--scholnexa-violet-lt);
+  --chart-6: var(--legacy-blue);
+  --chart-7: var(--legacy-red);
 
   /* Secondary accent reads lighter on dark surfaces to keep contrast. */
-  --istpm-violet: #8f8bff;
-  --istpm-violet-dk: #635bff;
-  --istpm-violet-lt: #b3b0ff;
-  --istpm-violet-pale: color-mix(in srgb, #8f8bff 22%, transparent);
+  --scholnexa-violet: #8f8bff;
+  --scholnexa-violet-dk: #635bff;
+  --scholnexa-violet-lt: #b3b0ff;
+  --scholnexa-violet-pale: color-mix(in srgb, #8f8bff 22%, transparent);
 
-  --scrollbar-thumb: color-mix(in srgb, var(--eiden-gold) 42%, transparent);
-  --scrollbar-thumb-hover: color-mix(in srgb, var(--eiden-brass) 52%, transparent);
+  --scrollbar-thumb: color-mix(in srgb, var(--legacy-gold) 42%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--legacy-brass) 52%, transparent);
 
-  --gradient-hero: linear-gradient(135deg, var(--eiden-ink) 0%, var(--eiden-deep) 45%, color-mix(in srgb, var(--eiden-brass) 40%, var(--eiden-forest) 60%) 100%);
+  --gradient-hero: linear-gradient(135deg, var(--legacy-ink) 0%, var(--legacy-deep) 45%, color-mix(in srgb, var(--legacy-brass) 40%, var(--legacy-forest) 60%) 100%);
   --shadow-elegant: 0 20px 60px -20px color-mix(in srgb, black 55%, transparent);
-  --shadow-soft: 0 8px 30px -10px color-mix(in srgb, var(--eiden-brass) 28%, transparent);
+  --shadow-soft: 0 8px 30px -10px color-mix(in srgb, var(--legacy-brass) 28%, transparent);
 
   /* Dark elevation leans on black ambient + a faint light top edge. */
   --elevation-1: 0 1px 2px -1px rgb(0 0 0 / 0.5), 0 1px 3px rgb(0 0 0 / 0.4);
@@ -443,14 +442,14 @@ html #root {
      A whisper of teal sits in the top corners to keep the brand present. */
   .app-canvas {
     background:
-      radial-gradient(1000px 480px at 100% -10%, color-mix(in srgb, var(--istpm-teal) 6%, transparent) 0%, transparent 60%),
-      radial-gradient(900px 460px at -6% 0%, color-mix(in srgb, var(--istpm-teal) 5%, transparent) 0%, transparent 55%),
+      radial-gradient(1000px 480px at 100% -10%, color-mix(in srgb, var(--scholnexa-blue) 6%, transparent) 0%, transparent 60%),
+      radial-gradient(900px 460px at -6% 0%, color-mix(in srgb, var(--scholnexa-blue) 5%, transparent) 0%, transparent 55%),
       linear-gradient(180deg, var(--app-cream-top) 0%, var(--app-cream-bottom) 100%);
   }
   :is(.dark) .app-canvas {
     background:
-      radial-gradient(1100px 520px at 100% -8%, color-mix(in srgb, var(--istpm-violet) 16%, transparent) 0%, transparent 58%),
-      radial-gradient(1000px 500px at -8% 0%, color-mix(in srgb, var(--eiden-brass) 12%, transparent) 0%, transparent 55%),
+      radial-gradient(1100px 520px at 100% -8%, color-mix(in srgb, var(--scholnexa-violet) 16%, transparent) 0%, transparent 58%),
+      radial-gradient(1000px 500px at -8% 0%, color-mix(in srgb, var(--legacy-brass) 12%, transparent) 0%, transparent 55%),
       var(--background);
   }
 
@@ -464,8 +463,8 @@ html #root {
   /* Subtle brand aura   a soft radial wash used behind hero KPIs / headers. */
   .brand-aura {
     background:
-      radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--istpm-teal) 10%, transparent) 0%, transparent 45%),
-      radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--istpm-violet) 9%, transparent) 0%, transparent 45%),
+      radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--scholnexa-blue) 10%, transparent) 0%, transparent 45%),
+      radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--scholnexa-violet) 9%, transparent) 0%, transparent 45%),
       var(--card);
   }
 
@@ -533,11 +532,11 @@ html #root {
   .text-shimmer-neon {
     background: linear-gradient(
       90deg,
-      var(--istpm-teal-lt) 0%,
+      var(--scholnexa-blue-lt) 0%,
       var(--landing-cta-primary) 35%,
-      var(--istpm-teal-pale) 52%,
+      var(--scholnexa-blue-pale) 52%,
       var(--landing-cta-primary) 70%,
-      var(--istpm-teal-lt) 100%
+      var(--scholnexa-blue-lt) 100%
     );
     background-size: 200% auto;
     -webkit-background-clip: text;
@@ -551,9 +550,9 @@ html #root {
   .landing-cta-primary {
     background-color: var(--landing-cta-primary);
     color: var(--landing-cta-on-primary);
-    border: 1px solid color-mix(in srgb, var(--landing-cta-primary) 78%, var(--istpm-teal-dk) 22%);
+    border: 1px solid color-mix(in srgb, var(--landing-cta-primary) 78%, var(--scholnexa-blue-dk) 22%);
     border-radius: 9999px !important;
-    box-shadow: 0 16px 36px -14px color-mix(in srgb, var(--landing-cta-primary) 65%, var(--istpm-teal-dk) 35%);
+    box-shadow: 0 16px 36px -14px color-mix(in srgb, var(--landing-cta-primary) 65%, var(--scholnexa-blue-dk) 35%);
   }
 
   .landing-cta-primary:hover {
@@ -587,7 +586,7 @@ html #root {
     border: 1px solid rgb(255 255 255 / 0.65);
     border-radius: 1.4rem;
     box-shadow:
-      0 24px 48px -20px rgb(var(--istpm-shadow) / 0.28),
+      0 24px 48px -20px rgb(var(--scholnexa-shadow) / 0.28),
       inset 0 1px 0 rgb(255 255 255 / 0.8);
   }
 
@@ -912,46 +911,46 @@ html[dir="rtl"] [data-dashboard-main] {
  * Tout est désactivé si l'utilisateur a demandé moins d'animations.
  * ================================================================== */
 
-@keyframes istpm-rise {
+@keyframes scholnexa-rise {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: none; }
 }
-@keyframes istpm-rise-sm {
+@keyframes scholnexa-rise-sm {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: none; }
 }
-@keyframes istpm-fade {
+@keyframes scholnexa-fade {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-@keyframes istpm-scale {
+@keyframes scholnexa-scale {
   from { opacity: 0; transform: scale(0.96); }
   to   { opacity: 1; transform: none; }
 }
-@keyframes istpm-shake {
+@keyframes scholnexa-shake {
   10%, 90% { transform: translateX(-1px); }
   20%, 80% { transform: translateX(2px); }
   30%, 50%, 70% { transform: translateX(-4px); }
   40%, 60% { transform: translateX(4px); }
 }
-@keyframes istpm-drift {
+@keyframes scholnexa-drift {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
   50%      { transform: translate3d(0, -20px, 0) rotate(3deg); }
 }
-@keyframes istpm-pop {
+@keyframes scholnexa-pop {
   0%   { transform: scale(1); }
   40%  { transform: scale(1.14); }
   100% { transform: scale(1); }
 }
 
-.anim-rise     { animation: istpm-rise .55s cubic-bezier(.16, 1, .3, 1) both; }
-.anim-rise-sm  { animation: istpm-rise-sm .5s cubic-bezier(.16, 1, .3, 1) .08s both; }
-.anim-fade     { animation: istpm-fade .6s ease both; }
-.anim-scale    { animation: istpm-scale .4s cubic-bezier(.16, 1, .3, 1) both; }
-.anim-shake    { animation: istpm-shake .5s both; }
-.anim-pop      { animation: istpm-pop .45s cubic-bezier(.16, 1, .3, 1); }
-.anim-drift      { animation: istpm-drift 18s ease-in-out infinite; }
-.anim-drift-slow { animation: istpm-drift 26s ease-in-out infinite reverse; }
+.anim-rise     { animation: scholnexa-rise .55s cubic-bezier(.16, 1, .3, 1) both; }
+.anim-rise-sm  { animation: scholnexa-rise-sm .5s cubic-bezier(.16, 1, .3, 1) .08s both; }
+.anim-fade     { animation: scholnexa-fade .6s ease both; }
+.anim-scale    { animation: scholnexa-scale .4s cubic-bezier(.16, 1, .3, 1) both; }
+.anim-shake    { animation: scholnexa-shake .5s both; }
+.anim-pop      { animation: scholnexa-pop .45s cubic-bezier(.16, 1, .3, 1); }
+.anim-drift      { animation: scholnexa-drift 18s ease-in-out infinite; }
+.anim-drift-slow { animation: scholnexa-drift 26s ease-in-out infinite reverse; }
 
 /* Note : à l'intérieur du CRM, l'entrée des en-têtes, panneaux, tableaux et
  * lignes est animée par framer-motion (voir dash-page.tsx et les pages). Les

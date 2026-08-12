@@ -1,4 +1,4 @@
-# Frontend   school-CRM
+# Frontend   Scholnexa
 
 ```
 frontend/

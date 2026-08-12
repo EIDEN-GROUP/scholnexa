@@ -40,7 +40,7 @@ export function SupportChat() {
   const loadMessages = useCallback(async (sid: string) => {
     try {
       setMessages(await api.get<any[]>(`/support/sessions/${sid}/messages`));
-    } catch {}
+    } catch { /* ignore */ }
   }, []);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export function SupportChat() {
       });
       setInput("");
       loadMessages(sessionId);
-    } catch {}
+    } catch { /* ignore */ }
   };
 
   return (

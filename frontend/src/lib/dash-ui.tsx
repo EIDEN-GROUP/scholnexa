@@ -1,6 +1,6 @@
 /**
  * Shared dashboard UI tokens   soft, rounded, professional look
- * expressed in the ISTPM palette (teal #029994 · red #e51e26 · white #ffffff).
+ * expressed in the SCHX palette (teal #029994 · red #e51e26 · white #ffffff).
  *
  * Import these instead of re-declaring per-page magic strings so every dashboard
  * page shares one consistent surface / input / badge language.
@@ -9,7 +9,7 @@
  * `warn`, `info`, registered in `styles.css` under `@theme inline`) rather than
  * hex literals, so a future palette change is a one-file edit.
  */
-import type { BadgeTone } from "./istpm-data";
+import type { BadgeTone } from "./scholnexa-data";
 
 /** Primary surface   airy rounded card with a near-invisible hairline + soft,
  *  lit elevation (reference dashboard look). */
@@ -50,12 +50,12 @@ const focusRing =
 
 /** Primary pill button   solid teal, one colour, with a light shadow. Main CTA. */
 export const primaryPill =
-  "inline-flex items-center gap-2 rounded-full bg-med px-5 py-2.5 text-sm font-bold text-white shadow-[0_4px_12px_-4px_rgb(var(--istpm-shadow)/0.3)] transition-all duration-200 hover:bg-med-dk active:scale-[0.98] " +
+  "inline-flex items-center gap-2 rounded-full bg-med px-5 py-2.5 text-sm font-bold text-white shadow-[0_4px_12px_-4px_rgb(var(--scholnexa-shadow)/0.3)] transition-all duration-200 hover:bg-med-dk active:scale-[0.98] " +
   focusRing;
 
 /** Solid dark-teal pill button (secondary emphasis). */
 export const navyPill =
-  "inline-flex items-center gap-2 rounded-full bg-brand-dk px-5 py-2.5 text-sm font-medium text-white shadow-[0_4px_12px_-4px_rgb(var(--istpm-shadow)/0.28)] transition-all duration-200 hover:bg-brand-md active:scale-[0.98] " +
+  "inline-flex items-center gap-2 rounded-full bg-brand-dk px-5 py-2.5 text-sm font-medium text-white shadow-[0_4px_12px_-4px_rgb(var(--scholnexa-shadow)/0.28)] transition-all duration-200 hover:bg-brand-md active:scale-[0.98] " +
   focusRing;
 
 /** Destructive pill button   solid red, reserved for irreversible actions. */
@@ -106,7 +106,7 @@ export const dashTooltip = {
   background: "color-mix(in srgb, var(--card) 88%, transparent)",
   backdropFilter: "blur(8px)",
   WebkitBackdropFilter: "blur(8px)",
-  border: "1px solid rgb(var(--istpm-shadow) / 0.16)",
+  border: "1px solid rgb(var(--scholnexa-shadow) / 0.16)",
   borderRadius: 14,
   boxShadow: "var(--elevation-3)",
   color: "var(--foreground)",
@@ -114,7 +114,7 @@ export const dashTooltip = {
 } as const;
 
 /** Shared Recharts cursor fill for hovered bars/areas   faint teal wash. */
-export const dashCursor = { fill: "rgb(var(--istpm-shadow) / 0.06)" } as const;
+export const dashCursor = { fill: "rgb(var(--scholnexa-shadow) / 0.06)" } as const;
 
 /** Ordered chart palette   teal family first, red last so it stays meaningful. */
 export const CHART_COLORS = [
@@ -129,18 +129,18 @@ export const CHART_COLORS = [
 
 /**
  * Multi-tone brand palette   teal + blue + amber + violet + sage + coral + red.
- * Unlike the monochrome teal `CHART_COLORS` ramp, this spans the full ISTEPM
+ * Unlike the monochrome teal `CHART_COLORS` ramp, this spans the full Scholnexa
  * brand family so a chart reads as colourful/categorical. Opt-in per chart via
  * the `palette` prop   used on the director "Analyse" dashboard.
  */
 export const BRAND_CHART_COLORS = [
-  "var(--istpm-teal)",
-  "var(--istpm-blue)",
-  "var(--istpm-amber)",
-  "var(--istpm-violet)",
-  "var(--istpm-sage)",
-  "var(--istpm-coral)",
-  "var(--istpm-red)",
+  "var(--scholnexa-blue)",
+  "var(--scholnexa-sky)",
+  "var(--scholnexa-amber)",
+  "var(--scholnexa-violet)",
+  "var(--scholnexa-sage)",
+  "var(--scholnexa-coral)",
+  "var(--scholnexa-red)",
 ] as const;
 
 /**
@@ -148,23 +148,23 @@ export const BRAND_CHART_COLORS = [
  * where a class name will not do.
  */
 export const TONE_COLORS: Record<BadgeTone, string> = {
-  teal: "var(--istpm-teal)",
-  red: "var(--istpm-red)",
-  amber: "var(--istpm-amber)",
-  blue: "var(--istpm-blue)",
-  neutral: "var(--istpm-teal-lt)",
+  teal: "var(--scholnexa-blue)",
+  red: "var(--scholnexa-red)",
+  amber: "var(--scholnexa-amber)",
+  blue: "var(--scholnexa-sky)",
+  neutral: "var(--scholnexa-blue-lt)",
 };
 
 /** Status colours   payé / en attente / retard / impayé (shared across pages). */
 export const STATUS_COLORS = {
-  paye: "var(--istpm-teal)",
-  en_attente: "var(--istpm-amber)",
-  retard: "var(--istpm-red)",
-  impaye: "var(--istpm-red-dk)",
+  paye: "var(--scholnexa-blue)",
+  en_attente: "var(--scholnexa-amber)",
+  retard: "var(--scholnexa-red)",
+  impaye: "var(--scholnexa-red-dk)",
 } as const;
 
 /**
- * Rounded status badge keyed to the `BadgeTone` union exported by `istpm-data`.
+ * Rounded status badge keyed to the `BadgeTone` union exported by `scholnexa-data`.
  *
  * teal   = positive   payé · admis · validé · inscrit · publié
  * red    = negative   impayé · retard · ajourné · abandon · à risque

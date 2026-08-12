@@ -26,7 +26,7 @@ import {
   type LucideProps,
 } from "lucide-react";
 import { useAuth, ROLE_META } from "@/lib/auth";
-import { useIstpm, useCurrentFormateur } from "@/lib/istpm-store";
+import { useScholnexa, useCurrentFormateur } from "@/lib/scholnexa-store";
 import {
   fmtMAD,
   fmtDate,
@@ -39,7 +39,7 @@ import {
   TYPE_EXAMEN_LABEL,
   minutesDepuisMinuit,
   SALLES,
-} from "@/lib/istpm-data";
+} from "@/lib/scholnexa-data";
 import {
   softCard,
   toneBadge,
@@ -294,7 +294,7 @@ function KpiCard({
       className={cn(
         "group relative overflow-hidden p-4 sm:p-5",
         accent
-          ? "rounded-3xl bg-gradient-to-br from-med to-med-dk text-white shadow-[0_18px_40px_-18px_rgb(var(--istpm-shadow)/0.6)]"
+          ? "rounded-3xl bg-gradient-to-br from-med to-med-dk text-white shadow-[0_18px_40px_-18px_rgb(var(--scholnexa-shadow)/0.6)]"
           : cn(softCard, "transition-shadow duration-300 hover:[box-shadow:var(--edge-highlight),var(--elevation-4)]"),
       )}
     >
@@ -493,7 +493,7 @@ function MetricSwitchChart({
                 className={cn(
                   "rounded-full px-3 py-1.5 text-xs font-semibold transition-colors",
                   active
-                    ? "bg-brand text-white shadow-[0_2px_8px_-3px_rgb(var(--istpm-shadow)/0.5)]"
+                    ? "bg-brand text-white shadow-[0_2px_8px_-3px_rgb(var(--scholnexa-shadow)/0.5)]"
                     : "text-muted-foreground hover:text-brand-dk",
                 )}
               >
@@ -621,7 +621,7 @@ const ACTIVITE_ICON: Record<ActiviteItem["type"], typeof UserPlus> = {
 };
 
 function ActiviteFeed() {
-  const { activite } = useIstpm();
+  const { activite } = useScholnexa();
   return (
     <div className={cn(softCard, "divide-y divide-brand/8 overflow-hidden")}>
       {activite.slice(0, 8).map((a, i) => {
@@ -708,7 +708,7 @@ const TH = "border-b border-brand/15 bg-muted text-[11px] font-semibold uppercas
 /* ------------------------------------------------------------------ */
 
 function AujourdhuiTable({ seances }: { seances: Seance[] }) {
-  const { formateurs } = useIstpm();
+  const { formateurs } = useScholnexa();
   if (!seances.length) return <EmptyState icon={Calendar}>Aucune séance prévue aujourd&rsquo;hui.</EmptyState>;
   const tri = seances.slice().sort((a, b) => (a.debut < b.debut ? -1 : 1));
   return (
@@ -895,7 +895,7 @@ const DIRECTOR_TABS: DashTab[] = [
 
 function DashboardDirecteur() {
   const { tab, setTab, direction } = useTabs();
-  const { dashboard, financier, reussiteFiliere, formateurs, seances, examens, etudiants, aTraiter, repartitionFiliere, repartitionNiveau } = useIstpm();
+  const { dashboard, financier, reussiteFiliere, formateurs, seances, examens, etudiants, aTraiter, repartitionFiliere, repartitionNiveau } = useScholnexa();
 
   // Décomposition du « reste à recouvrer » par statut de paiement, pour le graphe.
   const recouvrementData = useMemo<ChartDatum[]>(() => [
@@ -1019,8 +1019,8 @@ function DashboardDirecteur() {
               <div className="grid gap-4 xl:grid-cols-2">
                 <DonutChart title="Répartition par filière" data={repartitionFiliere} palette={BRAND_CHART_COLORS} />
                 <BarSeries title="Répartition par niveau" data={repartitionNiveau} colorful palette={BRAND_CHART_COLORS} />
-                <AreaTrend title="Examens par mois" data={examensParMois} color="var(--istpm-blue)" />
-                <LineTrend title="Séances par jour de la semaine" data={sessionsParJour} color="var(--istpm-amber)" />
+                <AreaTrend title="Examens par mois" data={examensParMois} color="var(--scholnexa-sky)" />
+                <LineTrend title="Séances par jour de la semaine" data={sessionsParJour} color="var(--scholnexa-amber)" />
               </div>
             </Section>
             <Section
@@ -1104,7 +1104,7 @@ function DashboardDirecteur() {
 
 function DashboardEnseignant() {
   const { tab, setTab, direction } = useTabs();
-  const { seances, examens, bulletins, etudiants } = useIstpm();
+  const { seances, examens, bulletins, etudiants } = useScholnexa();
   const moi = useCurrentFormateur();
   const mesExamens = useMemo(() => (moi ? examens.filter((x) => moi.modules.includes(x.module)) : []), [examens, moi]);
   const seancesAujourdhui = useMemo(() => seances.filter((s) => s.date === today && s.professeurId === moi?.id), [seances, moi?.id]);
@@ -1159,7 +1159,7 @@ function DashboardEnseignant() {
                       </span>
                       <span className={toneBadge("blue")}>{TYPE_SEANCE_LABEL[s.type]}</span>
                     </div>
-                  )) : <p className="px-5 py-8 text-center text-sm text-muted-foreground">Aucune séance À  venir.</p>}
+                  )) : <p className="px-5 py-8 text-center text-sm text-muted-foreground">Aucune séance à venir.</p>}
                 </div>
               </Section>
             </div>
@@ -1211,7 +1211,7 @@ function conflitsGlobaux(seances: Seance[]) {
 
 function DashboardResponsable() {
   const { tab, setTab, direction } = useTabs();
-  const { formateurs, seances, aTraiter, dashboard } = useIstpm();
+  const { formateurs, seances, aTraiter, dashboard } = useScholnexa();
   const seancesAujourdhui = useMemo(() => seances.filter((s) => s.date === today), [seances]);
   const sallesOccupees = useMemo(() => [...new Set(seancesAujourdhui.map((s) => s.salle))], [seancesAujourdhui]);
   const conflits = useMemo(() => conflitsGlobaux(seances), [seances]);

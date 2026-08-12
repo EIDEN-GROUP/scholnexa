@@ -4,9 +4,10 @@ import { Plus, Pencil, Eye, Download, Archive, RotateCcw, Upload, ListFilter, Ch
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
-import { useIstpm, useCurrentFormateur, type NouvelEtudiant } from "@/lib/istpm-store";
+import { BRAND } from "@/lib/brand";
+import { useScholnexa, useCurrentFormateur, type NouvelEtudiant } from "@/lib/scholnexa-store";
 import { ImportEtudiantsDialog, downloadExempleEtudiantsCsv } from "@/components/import-etudiants-dialog";
-import { fetchStudentSemestres, exportEtudiantsCsv } from "@/lib/istpm-api";
+import { fetchStudentSemestres, exportEtudiantsCsv } from "@/lib/scholnexa-api";
 import {
   FILIERES,
   NIVEAUX,
@@ -22,7 +23,7 @@ import {
   type Niveau,
   type StatutEtudiant,
   type StatutPaiement,
-} from "@/lib/istpm-data";
+} from "@/lib/scholnexa-data";
 import {
   primaryPill,
   ghostPill,
@@ -82,7 +83,7 @@ const STATUTS_PAIEMENT: StatutPaiement[] = [
 
 function EtudiantsPage() {
   const { role, selectedFormateurId } = useAuth();
-  const { etudiants, addEtudiant, updateEtudiant, deleteEtudiant, restoreEtudiant } = useIstpm();
+  const { etudiants, addEtudiant, updateEtudiant, deleteEtudiant, restoreEtudiant } = useScholnexa();
   // Teachers get a read-only view; student administration is the responsable's
   // and the directeur's job.
   const canEdit = role === "directeur" || role === "responsable";
@@ -739,7 +740,7 @@ function EtudiantForm({
     // Suggest a matricule in the house format for new records.
     matricule:
       initial?.matricule ??
-      `ISTPM-${new Date().getFullYear().toString().slice(2)}-${String(
+      `${BRAND.matriculePrefix}-${new Date().getFullYear().toString().slice(2)}-${String(
         Math.floor(Math.random() * 900) + 100,
       )}`,
     prenom: initial?.prenom ?? "",

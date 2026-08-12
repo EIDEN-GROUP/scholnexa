@@ -8,7 +8,9 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  DOMAIN: ${{ vars.DOMAIN || 'istepm-agadir.eiden-group.com' }}
+  # GitHub owner/organisation that owns the container packages.
+  IMAGE_NAMESPACE: ${{ vars.IMAGE_NAMESPACE || 'scholnexa' }}
+  DOMAIN: ${{ vars.DOMAIN || 'scholnexa.example.com' }}
 
 jobs:
   backend:
@@ -84,8 +86,8 @@ jobs:
           target: production
           push: true
           tags: |
-            ${{ env.REGISTRY }}/eiden-group/istepm-agadir/school-crm-api:latest
-            ${{ env.REGISTRY }}/eiden-group/istepm-agadir/school-crm-api:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/school-crm-api:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/school-crm-api:${{ github.sha }}
 
       - name: Build frontend SPA
         run: |
@@ -101,8 +103,8 @@ jobs:
           context: ./frontend
           push: true
           tags: |
-            ${{ env.REGISTRY }}/eiden-group/istepm-agadir/school-crm-frontend:latest
-            ${{ env.REGISTRY }}/eiden-group/istepm-agadir/school-crm-frontend:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/school-crm-frontend:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/school-crm-frontend:${{ github.sha }}
 
       - name: Build and push backup image
         uses: docker/build-push-action@v6
@@ -111,8 +113,8 @@ jobs:
           file: ./docker/Dockerfile.backup
           push: true
           tags: |
-            ${{ env.REGISTRY }}/eiden-group/istepm-agadir/school-crm-backup:latest
-            ${{ env.REGISTRY }}/eiden-group/istepm-agadir/school-crm-backup:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/school-crm-backup:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/school-crm-backup:${{ github.sha }}
 
   deploy:
     needs: [docker-build]
@@ -131,7 +133,7 @@ jobs:
           script: |
             set -e
 
-            REPO_DIR="/home/istepm-agadir/istepm-agadir"
+            REPO_DIR="/home/scholnexa/scholnexa"
 
             cd "$REPO_DIR"
 
@@ -144,17 +146,17 @@ jobs:
             ENVEOF
 
             # Authenticate with GHCR for pulling images
-            echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u eiden-group --password-stdin
+            echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ vars.GHCR_USERNAME || 'scholnexa' }} --password-stdin
 
             # Pull the latest images
-            docker pull ghcr.io/eiden-group/istepm-agadir/school-crm-api:${{ github.sha }}
-            docker pull ghcr.io/eiden-group/istepm-agadir/school-crm-frontend:${{ github.sha }}
-            docker pull ghcr.io/eiden-group/istepm-agadir/school-crm-backup:${{ github.sha }}
+            docker pull ghcr.io/${{ env.IMAGE_NAMESPACE }}/school-crm-api:${{ github.sha }}
+            docker pull ghcr.io/${{ env.IMAGE_NAMESPACE }}/school-crm-frontend:${{ github.sha }}
+            docker pull ghcr.io/${{ env.IMAGE_NAMESPACE }}/school-crm-backup:${{ github.sha }}
 
             # Retag as latest for convenience
-            docker tag ghcr.io/eiden-group/istepm-agadir/school-crm-api:${{ github.sha }} ghcr.io/eiden-group/istepm-agadir/school-crm-api:latest
-            docker tag ghcr.io/eiden-group/istepm-agadir/school-crm-frontend:${{ github.sha }} ghcr.io/eiden-group/istepm-agadir/school-crm-frontend:latest
-            docker tag ghcr.io/eiden-group/istepm-agadir/school-crm-backup:${{ github.sha }} ghcr.io/eiden-group/istepm-agadir/school-crm-backup:latest
+            docker tag ghcr.io/${{ env.IMAGE_NAMESPACE }}/school-crm-api:${{ github.sha }} ghcr.io/${{ env.IMAGE_NAMESPACE }}/school-crm-api:latest
+            docker tag ghcr.io/${{ env.IMAGE_NAMESPACE }}/school-crm-frontend:${{ github.sha }} ghcr.io/${{ env.IMAGE_NAMESPACE }}/school-crm-frontend:latest
+            docker tag ghcr.io/${{ env.IMAGE_NAMESPACE }}/school-crm-backup:${{ github.sha }} ghcr.io/${{ env.IMAGE_NAMESPACE }}/school-crm-backup:latest
 
             # Export env vars from .env.production for docker stack deploy
             set -a
@@ -181,7 +183,7 @@ jobs:
               --network school-crm_school-crm \
               --restart-condition none \
               -e DATABASE_URL="postgres://postgres:${DB_PASSWORD}@postgres:5432/school_crm" \
-              ghcr.io/eiden-group/istepm-agadir/school-crm-api:${{ github.sha }} \
+              ghcr.io/${{ env.IMAGE_NAMESPACE }}/school-crm-api:${{ github.sha }} \
               node --import tsx/esm dist/db/migrate.js
 
             # Wait for migration task to complete

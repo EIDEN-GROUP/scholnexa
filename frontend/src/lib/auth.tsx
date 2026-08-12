@@ -6,7 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { FORMATEURS } from "@/lib/istpm-data";
+import { FORMATEURS } from "@/lib/scholnexa-data";
 
 export type UserRole = "directeur" | "enseignant" | "responsable";
 
@@ -38,20 +38,20 @@ export const DEMO_FORMATEUR_ID = "fo-1";
 const demoFormateur = FORMATEURS.find((f) => f.id === DEMO_FORMATEUR_ID);
 
 const ROLE_USER: Record<UserRole, { name: string; email: string }> = {
-  directeur: { name: "Dr. Youssef Benali", email: "direction@istpm-agadir.ma" },
+  directeur: { name: "Dr. Youssef Benali", email: "direction@demo.scholnexa.ma" },
   enseignant: {
     name: demoFormateur
       ? `${demoFormateur.prenom} ${demoFormateur.nom}`
       : "Formateur",
-    email: demoFormateur?.email ?? "formateur@istpm-agadir.ma",
+    email: demoFormateur?.email ?? "formateur@demo.scholnexa.ma",
   },
-  responsable: { name: "M. Rachid El Ouafi", email: "scolarite@istpm-agadir.ma" },
+  responsable: { name: "M. Rachid El Ouafi", email: "scolarite@demo.scholnexa.ma" },
 };
 
-const ROLE_STORAGE_KEY = "istpm-role";
-const TOKEN_STORAGE_KEY = "istpm-token";
-const USER_STORAGE_KEY = "istpm-user";
-export const FORMATEUR_STORAGE_KEY = "istpm-selected-formateur";
+const ROLE_STORAGE_KEY = "scholnexa-role";
+const TOKEN_STORAGE_KEY = "scholnexa-token";
+const USER_STORAGE_KEY = "scholnexa-user";
+export const FORMATEUR_STORAGE_KEY = "scholnexa-selected-formateur";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
@@ -68,7 +68,7 @@ function readStoredRole(): UserRole | null {
     try {
       const u = JSON.parse(userData);
       if (isRole(u.role)) return u.role;
-    } catch {}
+    } catch { /* ignore malformed stored session */ }
   }
   return null;
 }

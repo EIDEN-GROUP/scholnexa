@@ -5,15 +5,15 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ghostPill, primaryPill, dialogSurfaceWide } from "@/lib/dash-ui";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { previewImportEtudiants, executeImportEtudiants, type ImportPreviewResponse, type ImportPreviewRow } from "@/lib/istpm-api";
+import { previewImportEtudiants, executeImportEtudiants, type ImportPreviewResponse, type ImportPreviewRow } from "@/lib/scholnexa-api";
 
 type Step = "upload" | "preview" | "confirming" | "result";
 
 /** Modèle CSV d'exemple pour l'import d'étudiants (entêtes + lignes types). */
 const EXEMPLE_ETUDIANTS_CSV = `cne,matricule,prenom,nom,filiere,niveau,annee,groupe,statut,paiement,telephone,email,dateNaissance,ville,fraisMensuels
-G134567890,ISTPM-23-0142,Salma,El Amrani,Infirmier polyvalent,S5,3e annee,G1,inscrit,paye,+212 6 61 24 55 018,salma.elamrani@istpm.ma,2003-04-12,Agadir,3400
-J138245017,ISTPM-23-0155,Youssef,Ait Taleb,Infirmier en anesthesie-reanimation,S5,3e annee,G1,inscrit,retard,+212 6 70 11 42 88,y.aittaleb@istpm.ma,2002-11-30,Inezgane,3800
-F145908712,ISTPM-24-0203,Imane,Benkirane,Sage-femme,S3,2e annee,G2,inscrit,paye,+212 6 55 78 90 12,i.benkirane@istpm.ma,2004-02-18,Agadir,3200`;
+G134567890,SCHX-23-0142,Salma,El Amrani,Infirmier polyvalent,S5,3e annee,G1,inscrit,paye,+212 6 61 24 55 018,salma.elamrani@demo.scholnexa.ma,2003-04-12,Agadir,3400
+J138245017,SCHX-23-0155,Youssef,Ait Taleb,Infirmier en anesthesie-reanimation,S5,3e annee,G1,inscrit,retard,+212 6 70 11 42 88,y.aittaleb@demo.scholnexa.ma,2002-11-30,Inezgane,3800
+F145908712,SCHX-24-0203,Imane,Benkirane,Sage-femme,S3,2e annee,G2,inscrit,paye,+212 6 55 78 90 12,i.benkirane@demo.scholnexa.ma,2004-02-18,Agadir,3200`;
 
 /** Télécharge le modèle CSV d'exemple d'import étudiants (réutilisé par la page). */
 export function downloadExempleEtudiantsCsv() {
@@ -334,7 +334,7 @@ export function ImportEtudiantsDialog({
                       if (issues.length === 0) return null;
                       return (
                         <div key={row.index} className="flex gap-2 text-[11px] leading-relaxed">
-                          <span className="shrink-0 font-mono font-semibold text-muted-foreground">Ligne {row.index} :</span>
+                          <span className="shrink-0 font-mono font-semibold text-muted-foreground">Ligne {row.index}&nbsp;:</span>
                           <div className="flex flex-wrap gap-x-3 gap-y-0.5">
                             {issues.map((iss, j) => (
                               <span key={j} className={cn(iss.type === "error" ? "text-red-600" : "text-amber-600")}>
@@ -427,7 +427,7 @@ export function ImportEtudiantsDialog({
                     </p>
                     {result.errors.map((err, i) => (
                       <div key={i} className="flex gap-2 text-[11px]">
-                        <span className="shrink-0 font-mono font-semibold text-red-600">Ligne {err.index} :</span>
+                        <span className="shrink-0 font-mono font-semibold text-red-600">Ligne {err.index}&nbsp;:</span>
                         <span className="text-red-700">{err.message}</span>
                       </div>
                     ))}

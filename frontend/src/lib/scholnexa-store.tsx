@@ -1,7 +1,7 @@
 /**
- * Mutable, frontend-only data store for the ISTPM CRM.
+ * Mutable, frontend-only data store for the SCHX CRM.
  *
- * `istpm-data.ts` provides the immutable seed (sample records + reference
+ * `scholnexa-data.ts` provides the immutable seed (sample records + reference
  * lists). This provider copies that seed into React state so the UI can
  * actually create, edit and delete records, and recomputes every dashboard
  * aggregate from the live state   so adding a student immediately moves the
@@ -64,7 +64,7 @@ import {
   type Decision,
   type ExamDocument,
   type StructureAccueil,
-} from "@/lib/istpm-data";
+} from "@/lib/scholnexa-data";
 import {
   deleteDoc,
   ensureSeedDocuments,
@@ -125,7 +125,7 @@ import {
   createSeance as apiCreateSeance,
   updateSeance as apiUpdateSeance,
   deleteSeance as apiDeleteSeance,
-} from "@/lib/istpm-api";
+} from "@/lib/scholnexa-api";
 import { useAuth, DEMO_FORMATEUR_ID } from "@/lib/auth";
 
 /* ------------------------------------------------------------------ */
@@ -134,7 +134,7 @@ import { useAuth, DEMO_FORMATEUR_ID } from "@/lib/auth";
 
 /** Bump when the record shape changes: stored data on an old version is
  *  discarded rather than loaded into a UI that no longer understands it. */
-const STORAGE_KEY = "istpm-data-v9";
+const STORAGE_KEY = "scholnexa-data-v1";
 
 type Snapshot = {
   etudiants: Etudiant[];
@@ -362,7 +362,7 @@ export type ConflitCandidate = Pick<
   'date' | 'debut' | 'fin' | 'professeurId' | 'salle' | 'groupe'
 >;
 
-type IstpmCtx = {
+type ScholnexaCtx = {
   etudiants: Etudiant[];
   formateurs: Formateur[];
   examens: Examen[];
@@ -490,9 +490,9 @@ type IstpmCtx = {
   reset: () => void;
 };
 
-const Ctx = createContext<IstpmCtx | null>(null);
+const Ctx = createContext<ScholnexaCtx | null>(null);
 
-export function IstpmProvider({ children }: { children: ReactNode }) {
+export function ScholnexaProvider({ children }: { children: ReactNode }) {
   // Initialise straight from storage via lazy state rather than in an effect.
   //
   // The effect-based variant loses data: on the first commit the persist effect
@@ -529,12 +529,11 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
       cancelled = true;
     };
     // Une seule passe au montage : les dépôts ultérieurs gèrent leur fichier.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Sync from the backend API on mount   **localStorage/seed-first**.
   //
-  // The store is the source of truth (see istpm-store-is-localstorage-first):
+  // The store is the source of truth (see scholnexa-store-is-localstorage-first):
   // a collection is only taken from the backend when the local one is *empty*,
   // never replacing seed data or the user's optimistic edits. A blind replace
   // was the root cause of two bugs: exams created here (which the backend
@@ -604,7 +603,6 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
     return () => {
       mounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Skip the write triggered by the initial state, which would only rewrite
@@ -1641,7 +1639,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
     [snap.etudiants],
   );
 
-  const value: IstpmCtx = {
+  const value: ScholnexaCtx = {
     ...snap,
     // `snap.creneaux` porte les libellés bruts ; le contexte expose en plus la
     // version analysée, d'où l'écrasement après le spread.
@@ -1703,9 +1701,9 @@ addSeance,
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
-export function useIstpm() {
+export function useScholnexa() {
   const ctx = useContext(Ctx);
-  if (!ctx) throw new Error("useIstpm must be used within an IstpmProvider");
+  if (!ctx) throw new Error("useScholnexa must be used within an ScholnexaProvider");
   return ctx;
 }
 
@@ -1717,7 +1715,7 @@ export function useIstpm() {
  * Repli sur le formateur de démonstration puis sur le premier de la liste.
  */
 export function useCurrentFormateur(): Formateur | null {
-  const { formateurs } = useIstpm();
+  const { formateurs } = useScholnexa();
   const { selectedFormateurId } = useAuth();
   return useMemo(() => {
     if (formateurs.length === 0) return null;

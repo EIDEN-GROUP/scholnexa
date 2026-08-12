@@ -16,7 +16,7 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
-import { useIstpm } from "@/lib/istpm-store";
+import { useScholnexa } from "@/lib/scholnexa-store";
 import {
   makeStageDocPdf,
   buildStageEmailHtml,
@@ -34,8 +34,8 @@ import {
   type Filiere,
   type Niveau,
   type StatutStage,
-} from "@/lib/istpm-data";
-import { sendEmailApi } from "@/lib/istpm-api";
+} from "@/lib/scholnexa-data";
+import { sendEmailApi } from "@/lib/scholnexa-api";
 import {
   softCard,
   eyebrowClass,
@@ -177,7 +177,7 @@ function ChartSwitch<T extends string>({
             className={cn(
               "rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors",
               active
-                ? "bg-brand text-white shadow-[0_2px_8px_-3px_rgb(var(--istpm-shadow)/0.5)]"
+                ? "bg-brand text-white shadow-[0_2px_8px_-3px_rgb(var(--scholnexa-shadow)/0.5)]"
                 : "text-muted-foreground hover:text-brand-dk",
             )}
           >
@@ -424,7 +424,7 @@ function StagesAnalytics({
 
 function StagesPage() {
   const { role } = useAuth();
-  const { stages, etudiants, structuresAccueil, addStage, updateStage, deleteStage } = useIstpm();
+  const { stages, etudiants, structuresAccueil, addStage, updateStage, deleteStage } = useScholnexa();
   // Conventions are handled by student administration.
   const canManage = role === "directeur" || role === "responsable";
 
@@ -919,7 +919,7 @@ function StageForm({
   onCancel,
 }: {
   initial: Stage | null;
-  etudiants: ReturnType<typeof useIstpm>["etudiants"];
+  etudiants: ReturnType<typeof useScholnexa>["etudiants"];
   structuresAccueil: string[];
   onSubmit: (data: Omit<Stage, "id">) => void;
   onCancel: () => void;

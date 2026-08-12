@@ -2,7 +2,7 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
 import rateLimit from "@fastify/rate-limit";
-import { getEnv } from "@/config/env";
+import { getEnv, IS_SERVERLESS } from "@/config/env";
 import { errorHandler } from "@/middleware/error-handler";
 import { authRoutes } from "@/routes/auth";
 import { clientRoutes } from "@/routes/clients";
@@ -27,7 +27,7 @@ import { formateurRoutes } from "@/routes/formateurs";
 import { examenRoutes } from "@/routes/examens";
 import { bulletinRoutes } from "@/routes/bulletins";
 import { stageRoutes } from "@/routes/stages";
-import { paiementIstpmRoutes } from "@/routes/paiements-istpm";
+import { monthlyPaymentRoutes } from "@/routes/monthly-payments";
 import { roleRoutes } from "@/routes/roles";
 import { eventRoutes } from "@/routes/events";
 import { notificationRoutes } from "@/routes/notifications";
@@ -44,11 +44,17 @@ import { ensureBucket } from "@/lib/minio";
 export async function buildApp() {
   const env = getEnv();
 
+  // The pino-pretty transport spawns a worker thread (thread-stream), which
+  // does not work inside the bundled Vercel function — even in local
+  // `vercel dev`. Disable it in any serverless context; plain JSON logs are
+  // used instead.
   const app = Fastify({
     logger: {
       level: env.LOG_LEVEL,
       transport:
-        env.NODE_ENV === "development" ? { target: "pino-pretty" } : undefined,
+        env.NODE_ENV === "development" && !IS_SERVERLESS
+          ? { target: "pino-pretty" }
+          : undefined,
     },
   });
 
@@ -66,6 +72,20 @@ export async function buildApp() {
   await app.register(rateLimit, {
     max: 100,
     timeWindow: "1 minute",
+  });
+
+  // Security headers on every response (defence-in-depth behind the proxy).
+  app.addHook("onSend", async (_request, reply) => {
+    reply.header("X-Content-Type-Options", "nosniff");
+    reply.header("X-Frame-Options", "DENY");
+    reply.header("Referrer-Policy", "strict-origin-when-cross-origin");
+    reply.header("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    if (env.NODE_ENV === "production") {
+      reply.header(
+        "Strict-Transport-Security",
+        "max-age=31536000; includeSubDomains",
+      );
+    }
   });
 
   // Ensure MinIO bucket exists (non-blocking; app works without it)
@@ -105,7 +125,7 @@ export async function buildApp() {
   await app.register(examenRoutes, { prefix: "/api/examens" });
   await app.register(bulletinRoutes, { prefix: "/api/bulletins" });
   await app.register(stageRoutes, { prefix: "/api/stages" });
-  await app.register(paiementIstpmRoutes, { prefix: "/api/paiements-istpm" });
+  await app.register(monthlyPaymentRoutes, { prefix: "/api/monthly-payments" });
   await app.register(roleRoutes, { prefix: "/api/roles" });
   await app.register(eventRoutes, { prefix: "/api/events" });
   await app.register(notificationRoutes, { prefix: "/api/notifications" });

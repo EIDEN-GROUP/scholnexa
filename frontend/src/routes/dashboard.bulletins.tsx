@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import { getStamp } from "@/lib/stamp";
-import { useIstpm, mentionFor, decisionFor } from "@/lib/istpm-store";
+import { useScholnexa, mentionFor, decisionFor } from "@/lib/scholnexa-store";
 import {
   FILIERES,
   NIVEAUX,
@@ -20,7 +20,7 @@ import {
   type Decision,
   type SessionType,
   type StatutBulletin,
-} from "@/lib/istpm-data";
+} from "@/lib/scholnexa-data";
 import {
   primaryPill,
   ghostPill,
@@ -130,7 +130,7 @@ function printBulletin(b: Bulletin, groupe?: string) {
   .cachet .lbl{color:#556;font-size:10px;margin-top:2px;
                text-transform:uppercase;letter-spacing:.06em;}
 </style></head><body>
-<h1>ISTEPM Agadir    Bulletin de notes</h1>
+<h1>Scholnexa — Bulletin de notes</h1>
 <div class="sub">Institut spécialisé des techniques paramédicales</div>
 <div class="sum">
   <div><span>Étudiant</span><strong>${b.prenom} ${b.nom}</strong></div>
@@ -180,7 +180,7 @@ ${cachet}
 function BulletinsPage() {
   const { role } = useAuth();
   const { bulletins, etudiants, formateurs, updateBulletin, publierBulletin, publierTousBulletins } =
-    useIstpm();
+    useScholnexa();
   // Publishing transcripts is a student-administration act.
   const canPublish = role === "directeur" || role === "responsable";
 

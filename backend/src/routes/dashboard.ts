@@ -100,7 +100,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     return results;
   });
 
-  app.get("/istpm-stats", { preHandler: [authenticate] }, async () => {
+  app.get("/academic-stats", { preHandler: [authenticate] }, async () => {
     const db = getDb();
 
     const [totalInscrits] = await db
@@ -139,7 +139,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     };
   });
 
-  app.get("/istpm-repartition-filiere", { preHandler: [authenticate] }, async () => {
+  app.get("/repartition-filiere", { preHandler: [authenticate] }, async () => {
     const db = getDb();
     const rows = await db
       .select({
@@ -152,7 +152,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     return rows;
   });
 
-  app.get("/istpm-repartition-niveau", { preHandler: [authenticate] }, async () => {
+  app.get("/repartition-niveau", { preHandler: [authenticate] }, async () => {
     const db = getDb();
     const rows = await db
       .select({
@@ -165,7 +165,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     return rows;
   });
 
-  app.get("/istpm-reussite-filiere", { preHandler: [authenticate] }, async () => {
+  app.get("/reussite-filiere", { preHandler: [authenticate] }, async () => {
     const db = getDb();
     const rows = await db
       .select({
@@ -183,7 +183,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     }));
   });
 
-  app.get("/istpm-financier", { preHandler: [authenticate] }, async () => {
+  app.get("/financier", { preHandler: [authenticate] }, async () => {
     const db = getDb();
     const now = new Date();
     const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
@@ -227,7 +227,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     return { encaisse, encaisseCeMois, enAttente, impaye, retard, tauxRecouvrement };
   });
 
-  app.get("/istpm-a-traiter", { preHandler: [authenticate] }, async () => {
+  app.get("/a-traiter", { preHandler: [authenticate] }, async () => {
     const db = getDb();
 
     const [examensAVenir] = await db
@@ -254,7 +254,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     };
   });
 
-  app.get("/istpm-etudiants-a-risque", { preHandler: [authenticate] }, async () => {
+  app.get("/etudiants-a-risque", { preHandler: [authenticate] }, async () => {
     const db = getDb();
     const rows = await db
       .select()
@@ -266,7 +266,7 @@ export async function dashboardRoutes(app: FastifyInstance) {
     return rows;
   });
 
-  app.get("/istpm-a-relancer", { preHandler: [authenticate] }, async () => {
+  app.get("/a-relancer", { preHandler: [authenticate] }, async () => {
     const db = getDb();
     const rows = await db
       .select()

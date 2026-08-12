@@ -15,7 +15,9 @@ echo "╚═══════════════════════�
 echo ""
 
 # ── 0. Registry config ──────────────────────────────────────
-REGISTRY="ghcr.io/eiden-group/istepm-agadir"
+# Override with REGISTRY=ghcr.io/your-org ./deploy.sh if you host the
+# images under a different GitHub organisation.
+REGISTRY="${REGISTRY:-ghcr.io/scholnexa}"
 
 # ── 1. Build or pull frontend image ──────────────────────────
 if docker pull "$REGISTRY/school-crm-frontend:latest" >/dev/null 2>&1; then

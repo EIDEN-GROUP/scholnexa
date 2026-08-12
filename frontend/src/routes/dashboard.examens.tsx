@@ -16,8 +16,8 @@ import {
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth, DEMO_FORMATEUR_ID } from "@/lib/auth";
-import { deleteNote } from "@/lib/istpm-api";
-import { useIstpm, useCurrentFormateur, moyennePonderee } from "@/lib/istpm-store";
+import { deleteNote } from "@/lib/scholnexa-api";
+import { useScholnexa, useCurrentFormateur, moyennePonderee } from "@/lib/scholnexa-store";
 import {
   FILIERES,
   NIVEAUX,
@@ -37,7 +37,7 @@ import {
   type TypeExamen,
   type StatutExamen,
   type Formateur,
-} from "@/lib/istpm-data";
+} from "@/lib/scholnexa-data";
 import {
   ACCEPTED_DOC_TYPES,
   downloadDoc,
@@ -370,7 +370,7 @@ function EspaceFormateur() {
     deleteExamen,
     attachDocument,
     removeDocument,
-  } = useIstpm();
+  } = useScholnexa();
 
   // Le formateur connecté : ses examens seulement. Résolu depuis le profil
   // sélectionné (référentiel hydraté), avec repli sur le formateur de démo.
@@ -677,7 +677,7 @@ function EspaceFormateur() {
 /* ------------------------------------------------------------------ */
 
 function EspaceDirecteur() {
-  const { examens, formateurs } = useIstpm();
+  const { examens, formateurs } = useScholnexa();
 
   const [search, setSearch] = useState("");
   const [prof, setProf] = useState<string>(ALL);
@@ -913,7 +913,7 @@ function ExamenDetailFormateur({
   onPreview: (e: Examen) => void;
   onClose?: () => void;
 }) {
-  const { formateurs } = useIstpm();
+  const { formateurs } = useScholnexa();
 
   return (
     <DetailShell
@@ -994,7 +994,7 @@ function ExamenForm({
 
   /* Référentiel des modules (Paramètres › Modules) : chaque module connaît sa
      filière, ce qui permet de la pré-remplir à la sélection. */
-  const { modules: modulesReg } = useIstpm();
+  const { modules: modulesReg } = useScholnexa();
 
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => {
     setF((prev) => ({ ...prev, [k]: v }));
@@ -1238,7 +1238,7 @@ function ExamenForm({
  * en dessous et peuvent être retirées.
  */
 function SaisieNotesPanel({ examens }: { examens: Examen[] }) {
-  const { etudiants, addNote, updateExamen, updateEtudiant } = useIstpm();
+  const { etudiants, addNote, updateExamen, updateEtudiant } = useScholnexa();
   const [examenId, setExamenId] = useState("");
   const [notes, setNotes] = useState<Record<string, string>>({});
 

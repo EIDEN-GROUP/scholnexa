@@ -376,7 +376,7 @@ export const mirrorSettingsSections = [
     title: "Général",
     desc: "Nom du centre, adresse, email, téléphone",
     rows: [
-      { label: "Nom du centre", value: "Isteqm Agadir" },
+      { label: "Nom du centre", value: "Scholnexa" },
       { label: "Adresse", value: "Agadir, Maroc" },
     ],
   },

@@ -1,4 +1,4 @@
-# Backend   school-CRM API
+# Backend   Scholnexa API
 
 ```
 backend/

@@ -81,7 +81,50 @@ const envSchema = z.object({
 
 export type Env = z.infer<typeof envSchema>;
 
+/**
+ * True when running inside a serverless function (Vercel sets `VERCEL=1`
+ * automatically; the AWS_LAMBDA check is a defensive fallback). Serverless
+ * contexts get a 1-connection DB pool and no pino-pretty transport.
+ */
+export const IS_SERVERLESS =
+  process.env.VERCEL === "1" ||
+  process.env.AWS_LAMBDA_FUNCTION_NAME != null;
+
 let _env: Env | undefined;
+
+const WEAK_SECRETS = new Set([
+  "change-me-in-production",
+  "superadmin-secret-key-change-me",
+  "change-me-to-a-random-secret",
+  "minioadmin",
+]);
+
+/**
+ * Fail fast in production when obviously weak default secrets are used.
+ * A white-label deployment that forgets to set these would otherwise ship
+ * with a publicly guessable JWT signing key.
+ */
+function assertStrongProductionSecrets(env: Env): void {
+  if (env.NODE_ENV !== "production") return;
+  const problems: string[] = [];
+  if (WEAK_SECRETS.has(env.JWT_SECRET)) {
+    problems.push("JWT_SECRET must be a strong random value");
+  }
+  if (WEAK_SECRETS.has(env.ADMIN_API_KEY)) {
+    problems.push("ADMIN_API_KEY must be a strong random value");
+  }
+  if (env.MINIO_ACCESS_KEY === "minioadmin" || env.MINIO_SECRET_KEY === "minioadmin") {
+    problems.push("MINIO credentials must be changed from the defaults");
+  }
+  if (problems.length > 0) {
+    console.error(
+      "Invalid production environment — insecure defaults detected:\n" +
+        problems.map((p) => `  - ${p}`).join("\n") +
+        "\nGenerate values with `openssl rand -hex 32` and set them in .env.production.",
+    );
+    process.exit(1);
+  }
+}
 
 export function getEnv(): Env {
   if (!_env) {
@@ -91,6 +134,7 @@ export function getEnv(): Env {
       process.exit(1);
     }
     _env = result.data;
+    assertStrongProductionSecrets(_env);
   }
   return _env;
 }

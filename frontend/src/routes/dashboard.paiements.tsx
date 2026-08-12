@@ -4,7 +4,7 @@ import { Plus, BellRing, Eye, Receipt, PenLine, CalendarDays, Search, Check, Clo
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
-import { useIstpm } from "@/lib/istpm-store";
+import { useScholnexa } from "@/lib/scholnexa-store";
 import { makePaiementDocPdf } from "@/lib/branded-doc";
 import {
   ANNEES_UNIVERSITAIRES,
@@ -22,7 +22,7 @@ import {
   type Etudiant,
   type PaiementMensuel,
   type StatutPaiement,
-} from "@/lib/istpm-data";
+} from "@/lib/scholnexa-data";
 import {
   softCard,
   primaryPill,
@@ -97,7 +97,7 @@ function resteDu(records: PaiementMensuel[]): number {
 
 function PaiementsPage() {
   const { role } = useAuth();
-  const { etudiants, financier, aRelancer, payerMois, updatePaiementMensuel } = useIstpm();
+  const { etudiants, financier, aRelancer, payerMois, updatePaiementMensuel } = useScholnexa();
   const canEdit = role === "directeur" || role === "responsable";
 
   const [search, setSearch] = useState("");
@@ -645,7 +645,7 @@ function HistoriquePaiementsDialog({
   etudiant: Etudiant;
   onClose: () => void;
 }) {
-  const { updatePaiementMensuel } = useIstpm();
+  const { updatePaiementMensuel } = useScholnexa();
   const academicYear = getCurrentAcademicYear();
   const months = useMemo(() => getAcademicYearMonths(academicYear), [academicYear]);
   const canEdit = useAuth().role === "directeur" || useAuth().role === "responsable";

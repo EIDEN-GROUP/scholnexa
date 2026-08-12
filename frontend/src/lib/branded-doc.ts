@@ -1,13 +1,14 @@
 /**
- * Documents de marque ISTEPM Agadir — PDF et e-mail.
+ * Documents de marque Scholnexa — PDF et e-mail.
  *
  * Un seul endroit produit les livrables « officiels » (convention / rapport de
- * stage) pour qu'ils partagent le logo `public/istpm-logo.svg` et la palette de
- * marque, aussi bien dans le PDF téléchargé que dans le corps de l'e-mail.
+ * stage) pour qu'ils partagent le logo `public/scholnexa-logo-mark.png` et la
+ * palette de marque, aussi bien dans le PDF téléchargé que dans le corps de
+ * l'e-mail.
  *
- * Le logo est un SVG : il est rasterisé une fois dans le navigateur (canvas →
- * JPEG) puis mémorisé. Le JPEG sert à la fois de `data:` URL pour l'e-mail et de
- * flux `DCTDecode` embarqué dans le PDF.
+ * Le logo est rasterisé une fois dans le navigateur (canvas → JPEG) puis
+ * mémorisé. Le JPEG sert à la fois de `data:` URL pour l'e-mail et de flux
+ * `DCTDecode` embarqué dans le PDF.
  */
 
 import {
@@ -15,21 +16,22 @@ import {
   STATUT_PAIEMENT_LABEL,
   type Stage,
   type StatutPaiement,
-} from "@/lib/istpm-data";
+} from "@/lib/scholnexa-data";
 import { getStamp } from "@/lib/stamp";
+import { BRAND } from "@/lib/brand";
 
 /* ------------------------------------------------------------------ */
 /*  Palette de marque (miroir de styles.css)                           */
 /* ------------------------------------------------------------------ */
 
-export const BRAND = {
-  teal: "#029994",
-  tealDk: "#017a76",
-  tealMd: "#02807c",
-  tealPale: "#d6efee",
-  tealWash: "#eef7f6",
+export const PALETTE = {
+  blue: "#2563eb",
+  blueDk: "#1e40af",
+  blueMd: "#1d4ed8",
+  bluePale: "#dbeafe",
+  blueWash: "#eef5ff",
   red: "#e51e26",
-  ink: "#123b3a",
+  ink: "#14213d",
   white: "#ffffff",
 } as const;
 
@@ -43,8 +45,6 @@ const KIND_TITLE: Record<Kind, string> = {
 /* ------------------------------------------------------------------ */
 /*  Rasterisation du logo                                              */
 /* ------------------------------------------------------------------ */
-
-const LOGO_ASPECT = 1100.48 / 953.38;
 
 type LogoRaster = { dataUrl: string; jpeg: Uint8Array; w: number; h: number };
 
@@ -70,18 +70,14 @@ async function loadLogo(): Promise<LogoRaster | null> {
   if (logoPromise) return logoPromise;
   logoPromise = (async () => {
     try {
-      const res = await fetch(`${import.meta.env.BASE_URL}istpm-logo.svg`);
-      if (!res.ok) return null;
-      let svg = await res.text();
+      const img = await loadImage(
+        `${import.meta.env.BASE_URL}scholnexa-logo-mark.png`,
+      );
       const wPx = 320;
-      const hPx = Math.round(wPx / LOGO_ASPECT);
-      if (!/<svg[^>]*\swidth=/.test(svg)) {
-        svg = svg.replace(/<svg/, `<svg width="${wPx}" height="${hPx}"`);
-      }
-      const svgUrl =
-        "data:image/svg+xml;base64," +
-        btoa(unescape(encodeURIComponent(svg)));
-      const img = await loadImage(svgUrl);
+      // Respect the mark's real aspect ratio (square-only placeholders are a
+      // thing of the past — the current mark is 512×394).
+      const aspect = img.naturalWidth / img.naturalHeight || 1;
+      const hPx = Math.max(1, Math.round(wPx / aspect));
 
       const scale = 2;
       const canvas = document.createElement("canvas");
@@ -230,14 +226,14 @@ function hexToPdfRgb(hex: string): string {
 }
 
 const PDF = {
-  teal: hexToPdfRgb(BRAND.teal),
-  tealDk: hexToPdfRgb(BRAND.tealDk),
-  tealMd: hexToPdfRgb(BRAND.tealMd),
-  red: hexToPdfRgb(BRAND.red),
-  ink: hexToPdfRgb(BRAND.ink),
+  blue: hexToPdfRgb(PALETTE.blue),
+  blueDk: hexToPdfRgb(PALETTE.blueDk),
+  blueMd: hexToPdfRgb(PALETTE.blueMd),
+  red: hexToPdfRgb(PALETTE.red),
+  ink: hexToPdfRgb(PALETTE.ink),
   white: "1 1 1",
-  muted: "0.42 0.52 0.51",
-  pale: hexToPdfRgb(BRAND.tealPale),
+  muted: "0.30 0.38 0.55",
+  pale: hexToPdfRgb(PALETTE.bluePale),
 };
 
 function buildContentStream(
@@ -251,8 +247,8 @@ function buildContentStream(
   const ops: string[] = [];
   const PAGE_W = 595;
 
-  ops.push(`${PDF.tealDk} rg 0 746 ${PAGE_W} 96 re f`);
-  ops.push(`${PDF.red} rg 0 742 ${PAGE_W} 4 re f`);
+  ops.push(`${PDF.blueDk} rg 0 746 ${PAGE_W} 96 re f`);
+  ops.push(`${PDF.blueMd} rg 0 742 ${PAGE_W} 4 re f`);
 
   let textX = 44;
   if (hasLogo) {
@@ -280,12 +276,12 @@ function buildContentStream(
   );
   ops.push(
     `${PDF.pale} rg BT /F1 9.5 Tf ${textX} 784 Td (${pdfText(
-      "ISTEPM Agadir - Institut specialise des techniques paramedicales",
+      `${BRAND.name} - ${BRAND.academicLabel}`,
     )}) Tj ET`,
   );
   ops.push(
     `${PDF.pale} rg BT /F1 9.5 Tf ${textX} 770 Td (${pdfText(
-      "Techniques paramedicales",
+      BRAND.tagline,
     )}) Tj ET`,
   );
 
@@ -295,7 +291,7 @@ function buildContentStream(
   let y = 694;
   for (const sec of sections) {
     ops.push(
-      `${PDF.tealMd} rg BT /F2 11 Tf ${LEFT} ${y} Td (${pdfText(
+      `${PDF.blueMd} rg BT /F2 11 Tf ${LEFT} ${y} Td (${pdfText(
         sec.title.toUpperCase(),
       )}) Tj ET`,
     );
@@ -345,10 +341,10 @@ function buildContentStream(
     );
   }
 
-  ops.push(`${PDF.teal} rg ${LEFT} 96 ${RIGHT - LEFT} 2 re f`);
+  ops.push(`${PDF.blue} rg ${LEFT} 96 ${RIGHT - LEFT} 2 re f`);
   ops.push(
     `${PDF.muted} rg BT /F1 8 Tf ${LEFT} 80 Td (${pdfText(
-      "Document genere par la plateforme ISTEPM Agadir - usage interne.",
+      "Document genere par la plateforme Scholnexa - usage interne.",
     )}) Tj ET`,
   );
   ops.push(
@@ -620,19 +616,21 @@ export function buildStageEmailHtml(
   const title = KIND_TITLE[kind];
   const sections = stageSections(s, kind);
 
+  // The mark raster is 1.3:1 (512×394 source); 46×35 keeps that aspect in
+  // email clients that don't honor auto height.
   const logoCell = logoDataUrl
-    ? `<img src="${logoDataUrl}" width="46" height="40" alt="ISTEPM Agadir" style="display:block;border:0;" />`
-    : `<span style="font:700 20px/1 Arial,Helvetica,sans-serif;color:${BRAND.teal};">ISTEPM</span>`;
+    ? `<img src="${logoDataUrl}" width="46" height="35" alt="Scholnexa" style="display:block;border:0;" />`
+    : `<span style="font:700 20px/1 Arial,Helvetica,sans-serif;color:${PALETTE.blue};">Scholnexa</span>`;
 
   const rowsHtml = sections
     .map(
       (sec) => `
       <tr><td style="padding:22px 32px 0;">
         <p style="margin:0 0 4px;font:700 11px/1.4 Arial,Helvetica,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:${
-          BRAND.tealMd
+          PALETTE.blueMd
         };">${escapeHtml(sec.title)}</p>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid ${
-          BRAND.tealPale
+          PALETTE.bluePale
         };">
           ${sec.rows
             .map(
@@ -642,7 +640,7 @@ export function buildStageEmailHtml(
               r.label,
             )}</td>
             <td style="padding:9px 0;font:600 13px/1.4 Arial,Helvetica,sans-serif;color:${
-              BRAND.ink
+              PALETTE.ink
             };text-align:right;">${escapeHtml(r.value)}</td>
           </tr>`,
             )
@@ -655,32 +653,30 @@ export function buildStageEmailHtml(
   const html = `<!doctype html>
 <html lang="fr">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:${BRAND.tealWash};">
+<body style="margin:0;padding:0;background:${PALETTE.blueWash};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${
-    BRAND.tealWash
+    PALETTE.blueWash
   };padding:28px 12px;">
     <tr><td align="center">
-      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -12px rgba(18,59,58,.35);">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -12px rgba(20,33,61,.35);">
 
         <tr><td style="padding:24px 32px 20px;background:#ffffff;">
           <table role="presentation" cellpadding="0" cellspacing="0"><tr>
             <td style="padding-right:14px;vertical-align:middle;">${logoCell}</td>
             <td style="vertical-align:middle;">
               <div style="font:700 17px/1.2 Arial,Helvetica,sans-serif;color:${
-                BRAND.ink
-              };">ISTEPM Agadir</div>
-              <div style="font:400 11px/1.3 Arial,Helvetica,sans-serif;color:#6b7d7c;letter-spacing:.04em;">Techniques paramédicales</div>
+                PALETTE.ink
+              };">Scholnexa</div>
+              <div style="font:400 11px/1.3 Arial,Helvetica,sans-serif;color:#6b7d7c;letter-spacing:.04em;">${BRAND.tagline}</div>
             </td>
           </tr></table>
         </td></tr>
-        <tr><td style="height:4px;background:${BRAND.red};font-size:0;line-height:0;">&nbsp;</td></tr>
-        <tr><td style="height:6px;background:${
-          BRAND.teal
-        };font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr><td style="height:4px;background:${PALETTE.blue};font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr><td style="height:6px;background:${PALETTE.bluePale};font-size:0;line-height:0;">&nbsp;</td></tr>
 
         <tr><td style="padding:26px 32px 4px;">
           <h1 style="margin:0;font:700 20px/1.3 Arial,Helvetica,sans-serif;color:${
-            BRAND.ink
+            PALETTE.ink
           };">${escapeHtml(title)}</h1>
           <p style="margin:8px 0 0;font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#5a6d6c;">
             Bonjour,<br>
@@ -688,7 +684,7 @@ export function buildStageEmailHtml(
               kind === "convention"
                 ? "la convention de stage"
                 : "le rapport de stage"
-            } de <strong style="color:${BRAND.ink};">${escapeHtml(
+            } de <strong style="color:${PALETTE.ink};">${escapeHtml(
               `${s.prenom} ${s.nom}`,
             )}</strong>${
               s.structure
@@ -702,10 +698,10 @@ export function buildStageEmailHtml(
 
         <tr><td style="padding:24px 32px 4px;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${
-            BRAND.tealWash
-          };border:1px solid ${BRAND.tealPale};border-radius:12px;">
+            PALETTE.blueWash
+          };border:1px solid ${PALETTE.bluePale};border-radius:12px;">
             <tr><td style="padding:14px 16px;font:600 13px/1.4 Arial,Helvetica,sans-serif;color:${
-              BRAND.tealMd
+              PALETTE.blueMd
             };">
               📎 ${escapeHtml(title)} — document PDF joint à cet e-mail.
             </td></tr>
@@ -713,14 +709,14 @@ export function buildStageEmailHtml(
         </td></tr>
 
         <tr><td style="padding:26px 32px;background:${
-          BRAND.ink
+          PALETTE.ink
         };margin-top:24px;">
-          <div style="font:700 13px/1.4 Arial,Helvetica,sans-serif;color:#ffffff;">ISTEPM Agadir</div>
+          <div style="font:700 13px/1.4 Arial,Helvetica,sans-serif;color:#ffffff;">Scholnexa</div>
           <div style="font:400 12px/1.6 Arial,Helvetica,sans-serif;color:${
-            BRAND.tealPale
-          };">Institut spécialisé des techniques paramédicales</div>
+            PALETTE.bluePale
+          };">${BRAND.academicLabel}</div>
           <div style="margin-top:8px;font:400 11px/1.5 Arial,Helvetica,sans-serif;color:#8fb3b1;">
-            E-mail automatique — merci de ne pas y répondre.
+            ${BRAND.emailFooter}
           </div>
         </td></tr>
 
@@ -731,7 +727,7 @@ export function buildStageEmailHtml(
 </html>`;
 
   const text = [
-    "ISTEPM Agadir — Techniques paramédicales",
+    `${BRAND.name} — ${BRAND.tagline}`,
     "",
     title,
     "",
@@ -746,7 +742,7 @@ export function buildStageEmailHtml(
     ]),
     "Document PDF joint à cet e-mail.",
     "",
-    "ISTEPM Agadir — e-mail automatique, merci de ne pas y répondre.",
+    BRAND.emailFooter,
   ].join("\n");
 
   return { html, text };

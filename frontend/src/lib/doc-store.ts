@@ -11,7 +11,7 @@
  * sort du navigateur : aucun backend n'est appelé.
  */
 
-const DB_NAME = "istpm-docs";
+const DB_NAME = "scholnexa-docs";
 const STORE = "documents";
 const DB_VERSION = 1;
 
@@ -226,7 +226,7 @@ export async function ensureSeedDocuments(
       const blob =
         (await fetchSeedSujet(doc.id)) ??
         makePlaceholderPdf([
-          "ISTEPM Agadir  - Institut specialise des techniques paramedicales",
+          "Scholnexa - Etablissement de formation",
           "",
           exam.titre,
           "",

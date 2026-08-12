@@ -25,7 +25,7 @@ export async function adminRoutes(app: FastifyInstance) {
   }));
 
   app.get("/info", async () => ({
-    name: "School-CRM",
+    name: "Scholnexa",
     version: "1.0.0",
     environment: getEnv().NODE_ENV,
   }));

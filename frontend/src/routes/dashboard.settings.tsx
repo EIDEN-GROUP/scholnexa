@@ -39,8 +39,8 @@ import {
   type ModuleRecord,
   type GroupConfig,
   type StructureAccueil,
-} from "@/lib/istpm-data";
-import { useIstpm } from "@/lib/istpm-store";
+} from "@/lib/scholnexa-data";
+import { useScholnexa } from "@/lib/scholnexa-store";
 import { useStamp, setStamp, prepareStampFromFile } from "@/lib/stamp";
 import {
   fetchSettings,
@@ -58,7 +58,7 @@ import {
   assignUserRole,
   type RoleRecord,
   type UserRecord,
-} from "@/lib/istpm-api";
+} from "@/lib/scholnexa-api";
 import {
   ConfirmDialog,
   FormDialog,
@@ -515,7 +515,7 @@ const EMPTY_MODULE_FORM: ModuleForm = {
  * l'application ; un module ne peut être enregistré sans filière associée.
  */
 function ModulesSection({ filieres }: { filieres: string[] }) {
-  const { modules, addModule, updateModule, deleteModule } = useIstpm();
+  const { modules, addModule, updateModule, deleteModule } = useScholnexa();
   const [filtre, setFiltre] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<ModuleRecord | null>(null);
@@ -1016,7 +1016,7 @@ function NewUserForm({
         </div>
         <div>
           <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Email *</label>
-          <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="user@istpm.ma" className={cn(softInput, "h-8 text-sm")} />
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="user@example.com" className={cn(softInput, "h-8 text-sm")} />
         </div>
         <div>
           <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Mot de passe *</label>
@@ -1057,7 +1057,7 @@ function NewUserForm({
 /* ------------------------------------------------------------------ */
 
 function GroupesSection() {
-  const { groupConfigs, addGroupConfig, updateGroupConfig, deleteGroupConfig } = useIstpm();
+  const { groupConfigs, addGroupConfig, updateGroupConfig, deleteGroupConfig } = useScholnexa();
   const [activeSemester, setActiveSemester] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<GroupConfig | null>(null);
@@ -1278,7 +1278,7 @@ function SettingsPage() {
     // en dérive sa grille horaire, ils vivent donc dans le store partagé.
     creneauxLabels: creneaux,
     setCreneaux,
-  } = useIstpm();
+  } = useScholnexa();
 
   const autorisees = role ? SECTIONS_PAR_ROLE[role] : [];
   const peut = (id: SectionId) => autorisees.includes(id);
@@ -1299,15 +1299,15 @@ function SettingsPage() {
   const [activeGroup, setActiveGroup] = useState(0);
 
   const [institut, setInstitut] = useState({
-    nom: "ISTEPM Agadir",
+    nom: "Scholnexa",
     ville: "Agadir",
     telephone: "+212 5 28 00 00 00",
-    email: "contact@istpm-agadir.ma",
+    email: "contact@scholnexa.com",
   });
   const [systeme, setSysteme] = useState({
     langue: "Français",
     devise: "MAD",
-    fuseau: "Africa/Casablanca",
+    fuseau: "Africa/Agadir",
   });
   const [securite, setSecurite] = useState({
     longueurMdp: "8",

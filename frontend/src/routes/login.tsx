@@ -4,13 +4,14 @@ import { Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { BRAND } from "@/lib/brand";
 
 /**
  * Écran de connexion   minimaliste, centré, aux accents de la couleur de marque.
  *
  * Pas d'illustration ni de panneau : une colonne centrée, beaucoup de blanc, la
- * marque en teal et un unique point focal (le formulaire). Le CTA est une pilule
- * teal pleine largeur.
+ * marque en bleu et un unique point focal (le formulaire). Le CTA est une
+ * pilule bleue pleine largeur.
  *
  * L'authentification est celle du backend (`POST /auth/login`) : aucun choix de
  * profil n'est proposé, le rôle est déduit du compte renvoyé par le serveur.
@@ -48,13 +49,13 @@ function LoginPage() {
 
   return (
     <div className="relative grid min-h-dvh place-items-center overflow-hidden bg-white px-6 py-10">
-      {/* Un seul accent de marque : un halo teal très discret en haut, sinon du blanc. */}
+      {/* Un seul accent de marque : un halo bleu très discret en haut, sinon du blanc. */}
       <div
         aria-hidden
         className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[42rem] max-w-none -translate-x-1/2 rounded-full opacity-60 blur-3xl"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in srgb, var(--istpm-teal) 12%, transparent) 0%, transparent 70%)",
+            "radial-gradient(circle, color-mix(in srgb, var(--scholnexa-blue) 12%, transparent) 0%, transparent 70%)",
         }}
       />
 
@@ -66,18 +67,16 @@ function LoginPage() {
       >
         {/* Marque */}
         <div className="flex flex-col items-center text-center">
-          <span className="grid place-items-center">
-            <img
-              src="/istpm-logo.svg"
-              alt="ISTEPM Agadir"
-              className="h-28 w-28 rounded-full"
-            />
-          </span>
+          <img
+            src={BRAND.logoPath}
+            alt={BRAND.name}
+            className="h-auto w-44 drop-shadow-[0_16px_32px_-18px_rgb(var(--scholnexa-shadow)/0.5)] sm:w-52"
+          />
           <h1 className="mt-6 font-display text-2xl font-bold tracking-tight text-foreground">
             Connexion
           </h1>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            Accédez à votre espace ISTEPM Agadir
+            Accédez à votre espace Scholnexa
           </p>
         </div>
 
@@ -146,7 +145,7 @@ function LoginPage() {
             disabled={submitting}
             className={cn(
               "group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3 text-sm font-bold text-white",
-              "shadow-[0_4px_14px_-4px_rgb(var(--istpm-shadow)/0.32)] transition-all duration-300",
+              "shadow-[0_4px_14px_-4px_rgb(var(--scholnexa-shadow)/0.32)] transition-all duration-300",
               "hover:bg-brand-dk active:scale-[0.985]",
               "disabled:cursor-not-allowed disabled:opacity-70",
             )}

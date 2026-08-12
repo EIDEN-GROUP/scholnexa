@@ -1,7 +1,7 @@
 /**
  * Branded loading screen.
  *
- * A full-viewport, brand-tinted splash that draws the ISTEPM mark with a soft
+ * A full-viewport, brand-tinted splash that draws the Scholnexa mark with a soft
  * halo, the wordmark, and an indeterminate progress rail. Used both as the
  * initial boot gate (`AppLoadingGate`) and as a reusable overlay.
  *
@@ -10,13 +10,14 @@
  */
 import { type ReactNode, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { BRAND } from "@/lib/brand";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 /** The visual splash. Renders centered on a brand-tinted canvas. */
 export function BrandLoader({
-  label = "ISTEPM Agadir",
-  sublabel = "Techniques paramédicales",
+  label = BRAND.name,
+  sublabel = BRAND.tagline,
 }: {
   label?: string;
   sublabel?: string;
@@ -32,7 +33,7 @@ export function BrandLoader({
         className="pointer-events-none absolute h-[36rem] w-[36rem] rounded-full blur-3xl"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in srgb, var(--istpm-teal) 22%, transparent) 0%, transparent 68%)",
+            "radial-gradient(circle, color-mix(in srgb, var(--scholnexa-blue) 22%, transparent) 0%, transparent 68%)",
         }}
       />
 
@@ -45,7 +46,7 @@ export function BrandLoader({
             style={{
               width: "7.5rem",
               height: "7.5rem",
-              boxShadow: "0 0 0 1px color-mix(in srgb, var(--istpm-teal) 30%, transparent)",
+              boxShadow: "0 0 0 1px color-mix(in srgb, var(--scholnexa-blue) 30%, transparent)",
             }}
             initial={{ opacity: 0.5, scale: 0.9 }}
             animate={{ opacity: [0.5, 0, 0.5], scale: [0.9, 1.35, 0.9] }}
@@ -58,9 +59,9 @@ export function BrandLoader({
             className="relative grid place-items-center"
           >
             <motion.img
-              src="/istpm-logo.svg"
+              src={BRAND.logoMarkPath}
               alt={`${label} logo`}
-              className="h-28 w-28"
+              className="h-24 w-24 object-contain"
               animate={{ scale: [1, 1.06, 1] }}
               transition={{ duration: 2.2, ease: "easeInOut", repeat: Infinity }}
             />
