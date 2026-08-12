@@ -95,16 +95,17 @@ Reference for every environment variable used by Scholnexa. Example files:
 
 ### Vercel serverless deployment
 
-When the backend runs on Vercel (`backend/` project root), the same variables
-above apply, with these platform-specific notes:
+When the backend runs on Vercel (declared as the `backend` service in the
+root `vercel.json`), the same variables above apply, with these
+platform-specific notes:
 
 | Variable | Notes |
 |---|---|
 | `NODE_ENV` | set automatically to `production` by Vercel |
 | `VERCEL` | set automatically to `1`; enables serverless-safe behavior (1-connection DB pool, no pino-pretty transport) |
-| `JWT_SECRET`, `ADMIN_API_KEY`, `MINIO_ACCESS_KEY`, `MINIO_SECRET_KEY` | **mandatory** — the app refuses to start in production with the default placeholder values |
-| `DATABASE_URL` | must reach an externally accessible Postgres (managed provider or VPS, ideally via a pooled connection) |
-| `CORS_ORIGIN` | must include every frontend origin that will call the API |
+| `JWT_SECRET`, `ADMIN_API_KEY` | **mandatory** — the app refuses to start in production with the default placeholder values |
+| `DATABASE_URL` | must reach an externally accessible Postgres (Supabase pooler recommended) |
+| `CORS_ORIGIN` | include every frontend origin that will call the API; in the single-project multi-service setup (Mode C) the frontend calls same-origin `/api` and CORS is moot |
 
 See `README-DEPLOY.md` → *A.5 Backend on Vercel too* for the full
 architecture, function limits, and what must remain on an always-on host
@@ -119,7 +120,7 @@ browser bundle.
 
 | Variable | Default | Description |
 |---|---|---|
-| `VITE_API_URL` | `http://localhost:3000/api` | Backend API base URL. **Baked at build time** — set it on the hosting platform and redeploy after changing it. |
+| `VITE_API_URL` | `http://localhost:3000/api` | Backend API base URL. **Baked at build time** — set it on the hosting platform and redeploy after changing it. In the multi-service Vercel setup (Mode C) use the same-origin relative `/api`; in the two-project setup use the absolute backend URL (`https://<backend>.vercel.app/api`). |
 | `VITE_ADMIN_EMAIL` | `admin@scholnexa.com` | Contact email shown in the admin/support UI |
 | `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON` | *(empty)* | Supabase project URL + anon key. **Optional** — the app logs in with its own JWT against the backend; these are only needed if you later add direct Supabase client calls. |
 

@@ -14,17 +14,21 @@
   BullMQ workers, MinIO object storage and scheduled jobs. It is **not**
   serverless-compatible and must run on a VPS (Docker Swarm) or equivalent
   persistent Node.js hosting.
-- Both modes below are fully supported and tested configurations.
+- All modes below are fully supported and tested configurations. With
+  Supabase (Postgres + Storage), the whole app can also run on **Vercel alone**
+  via a single multi-service project (Mode C).
 
 ```
 Browser
   │
   ├── Mode A: https://app.example.com        (Vercel/Netlify/static host)
-  └── Mode B: https://example.com            (nginx on the VPS, Docker Swarm)
+  ├── Mode B: https://example.com            (nginx on the VPS, Docker Swarm)
+  └── Mode C: https://app.vercel.app         (single Vercel project, multi-service)
 
                         │
                         ▼
               https://api.example.com/api/*   (Fastify on the VPS)
+              https://app.vercel.app/api/*    (Fastify on Vercel, Mode C)
                         │
          ┌──────────────┼──────────────┐
          ▼              ▼              ▼
@@ -47,16 +51,11 @@ Browser
 | Install command | `npm ci` |
 | Node version | 22.x |
 
-The repository already contains a `frontend/vercel.json` with SPA rewrites:
-
-```json
-{
-  "framework": "vite",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]
-}
-```
+> **Note:** if you deploy the frontend as a *standalone* project (Mode A), the
+> Vercel project settings are: Framework preset **Vite**, Root directory
+> `frontend`, Build command `npm run build`, Output directory `dist`.
+> The SPA fallback rewrite is defined in the root `vercel.json` (Mode C) — for
+> a standalone project, add it as `frontend/vercel.json` or in the dashboard.
 
 ### A.2 Vercel environment variables
 
@@ -106,9 +105,10 @@ platform's TypeScript compiler does not resolve the `@/*` path alias used in
 
 **Known serverless limitations (do not fake these away):**
 
-- **Function duration:** `maxDuration` is set to 60s in `backend/vercel.json`
-  (Hobby plan default; 300s on Pro). Slow requests (large AI agent turns,
-  heavy reports) can time out.
+- **Function duration:** `maxDuration` is set to 60s for the catch-all in the
+  root `vercel.json` → `services.backend.functions` (Hobby plan default;
+  300s on Pro). Slow requests (large AI agent turns, heavy reports) can time
+  out.
 - **Request body limit:** 4.5 MB (Hobby/Pro). Exam documents are uploaded as
   base64 JSON, so PDFs/Word files must stay under that limit; larger files
   need direct-to-S3 uploads or the VPS backend.
@@ -129,9 +129,10 @@ platform's TypeScript compiler does not resolve the `@/*` path alias used in
 | Install command | `npm ci` |
 | Node version | 22.x |
 
-`backend/vercel.json` already configures the two functions (`api/[...path].js`
-catch-all + `api/health.ts`). The generated `api/[...path].js` is gitignored
-and recreated on every build.
+> **Note:** in the multi-service setup (Mode C) the two functions are
+> configured in the root `vercel.json` under `services.backend.functions`
+> (`api/[...path].js` catch-all + `api/health.ts`). The generated
+> `api/[...path].js` is gitignored and recreated on every build.
 
 > **Local `vercel dev`:** run `npm run vercel-build` once before `vercel dev`
 > so the catch-all function file exists.
@@ -149,6 +150,82 @@ and recreated on every build.
 | `VERCEL` | set automatically to `1` — enables serverless-safe behavior (1-connection DB pool, no pino-pretty transport) |
 
 Point the frontend at it with `VITE_API_URL=https://<backend-project>.vercel.app/api`.
+
+---
+
+## Mode C — Everything on Vercel (single multi-service project)
+
+With Supabase providing PostgreSQL and Storage, the whole application can
+run on a **single Vercel project** using the multi-service feature: the
+frontend SPA and the Fastify serverless functions are declared as two
+services in one root `vercel.json`, and both share the same domain.
+
+### C.1 Root `vercel.json`
+
+The repository root already contains the multi-service config:
+
+```json
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "frontend": {
+      "root": "frontend",
+      "framework": "vite",
+      "buildCommand": "npm run build",
+      "outputDirectory": "dist",
+      "rewrites": [
+        { "source": "/((?!api/).*)", "destination": "/index.html" }
+      ]
+    },
+    "backend": {
+      "root": "backend",
+      "buildCommand": "npm run vercel-build",
+      "functions": {
+        "api/[...path].js": { "maxDuration": 60, "memory": 1024 },
+        "api/health.ts": { "maxDuration": 10 }
+      }
+    }
+  },
+  "rewrites": [
+    { "source": "/api(/.*)?", "destination": { "type": "service", "service": "backend" } },
+    { "source": "/(.*)", "destination": { "type": "service", "service": "frontend" } }
+  ]
+}
+```
+
+Routing: `/api/*` → backend service, everything else → frontend SPA. Both
+services live on the same domain, so the frontend calls the API with the
+**same-origin relative URL** `VITE_API_URL=/api` (works on production and
+preview deployments alike — no CORS needed).
+
+### C.2 Vercel project settings
+
+| Setting | Value |
+|---|---|
+| Root directory | `.` (repo root — the `vercel.json` declares the services) |
+| Framework preset | *(multi-service — set by `vercel.json`)* |
+| Build command | `npm run vercel-build` for the backend service, `npm run build` for the frontend (both in `vercel.json`) |
+
+1. Create one project from the repo root.
+2. Import `.env.production` into the project (or set the variables in the
+   dashboard).
+3. Deploy. `/api/*` reaches the backend functions; `/` serves the SPA.
+
+### C.3 Env notes
+
+- `VITE_API_URL=/api` — relative, same-origin, baked at build time.
+- `CORS_ORIGIN` can keep the production origin (`https://<project>.vercel.app`
+  and a `-*.vercel.app` preview wildcard); with same-origin calls it is
+  effectively moot but harmless.
+- Everything else (Supabase, JWT, SMTP, AI) is identical to the backend
+  variable set in `backend/.env.example`.
+
+### C.4 What still needs an always-on host
+
+Same table as Mode A.5 — the BullMQ worker, scheduled jobs and long-running
+tasks must run on a VPS (or a managed queue + cron service). Request/response
+features (CRUD, login, payments, documents via Supabase Storage) work fully
+on Vercel alone.
 
 ---
 
