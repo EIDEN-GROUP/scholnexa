@@ -179,6 +179,7 @@ The repository root already contains the multi-service config:
     },
     "backend": {
       "root": "backend",
+      "framework": null,
       "buildCommand": "npm run vercel-build",
       "functions": {
         "api/[...path].js": { "maxDuration": 60, "memory": 1024 },
@@ -197,6 +198,11 @@ Routing: `/api/*` → backend service, everything else → frontend SPA. Both
 services live on the same domain, so the frontend calls the API with the
 **same-origin relative URL** `VITE_API_URL=/api` (works on production and
 preview deployments alike — no CORS needed).
+
+> `"framework": null` on the backend service is **required**: Vercel would
+> otherwise auto-detect the `fastify` framework from `backend/package.json`
+> and fail with *"must specify an entrypoint"*. `null` disables the preset
+> and treats the directory as a generic Node project with `api/` functions.
 
 ### C.2 Vercel project settings
 

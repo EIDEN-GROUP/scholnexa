@@ -12,6 +12,7 @@
     },
     "backend": {
       "root": "backend",
+      "framework": null,
       "buildCommand": "npm run vercel-build",
       "functions": {
         "api/[...path].js": {
