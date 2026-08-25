@@ -132,8 +132,8 @@ function LoginPage() {
                 aria-label={
                   showPw ? "Masquer le mot de passe" : "Afficher le mot de passe"
                 }
-                tabIndex={-1}
-                className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-brand-dk"
+                aria-pressed={showPw}
+                className="absolute end-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-muted-foreground transition-colors hover:text-brand-dk focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>

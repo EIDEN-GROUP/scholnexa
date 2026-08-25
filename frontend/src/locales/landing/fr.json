@@ -1,0 +1,506 @@
+{
+  "meta": {
+    "title": "Scholnexa - Gestion des écoles supérieures paramédicales au Maroc | Quittez Excel",
+    "description": "La plateforme de gestion pensée pour les écoles paramédicales privées au Maroc : inscriptions, emplois du temps, bulletins, stages cliniques et frais de scolarité centralisés. En ligne en 48h. Sans engagement."
+  },
+  "a11y": {
+    "backToTop": "Retour en haut de la page",
+    "switchLanguage": "Changer de langue",
+    "openMenu": "Ouvrir le menu",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "module": "Module",
+    "review": "Avis",
+    "choosePlan": "Choisir une formule",
+    "pickDate": "Choisir une date"
+  },
+  "nav": {
+    "demo": "Démo",
+    "modules": "Modules",
+    "pricing": "Tarifs",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "demoInteractive": "Démo interactive",
+    "navigation": "Navigation",
+    "bookDemo": "Réserver une démo",
+    "bookDemo20": "Réserver ma démo 20 min",
+    "connexion": "Connexion"
+  },
+  "previewNav": {
+    "dashboard": "Tableau de bord",
+    "calendar": "Planning",
+    "etudiants": "Étudiants",
+    "examens": "Examens",
+    "bulletins": "Bulletins",
+    "formateurs": "Formateurs",
+    "stages": "Stages",
+    "paiements": "Paiements",
+    "settings": "Paramètres"
+  },
+  "preview": {
+    "searchEllipsis": "Rechercher…",
+    "tableStage": "Stade",
+    "tablePayment": "Paiement",
+    "csvShort": "CSV",
+    "locked": {
+      "openCard": "Aperçu démo — connectez-vous pour accéder à cette vue.",
+      "quickAction": "« {{title}} » — disponible après connexion.",
+      "addClient": "Ajouter un étudiant — disponible après connexion.",
+      "exportCsv": "Export CSV — disponible après connexion.",
+      "paidList": "Frais réglés — disponible après connexion.",
+      "unpaidList": "Impayés — disponible après connexion."
+    }
+  },
+  "hero": {
+    "titleLine1": "Gérez votre école",
+    "titleHighlight": "sans Excel",
+    "titleLine2": "sans chaos.",
+    "subtitle": "Scholnexa est la plateforme de gestion conçue pour les écoles supérieures privées paramédicales au Maroc : étudiants, plannings, examens, stages cliniques et frais de scolarité, réunis dans un seul tableau de bord.",
+    "socialProof": "10+ écoles actives · 4.9/5 satisfaction",
+    "ctaPrimary": "Réserver ma démo gratuite",
+    "ctaSecondary": "Voir la démo interactive",
+    "trustServers": "Serveurs au Maroc",
+    "trust48h": "En ligne en 48h",
+    "trustNoCommit": "Sans engagement",
+    "promoLabel": "Promo",
+    "promoText": "-20% sur l'annuel",
+    "previewUrl": "scholnexa.eiden-group.com · aperçu démo",
+    "live": "Live",
+    "specializedCenter": "École paramédicale",
+    "loginToAccess": "Connectez-vous pour accéder à votre espace.",
+    "loginToAccessReal": "Connectez-vous pour accéder à votre espace réel."
+  },
+  "demo": {
+    "badge": "Démo interactive sans compte requis",
+    "title": "Explorez Scholnexa dès maintenant.",
+    "subtitle": "Cliquez sur chaque module pour découvrir son fonctionnement, comme si vous utilisiez le vrai tableau de bord de votre école.",
+    "liveDemo": "Démo live",
+    "adminRole": "Admin · Direction",
+    "moduleOf": "Module",
+    "ctaText": "Convaincu ? Réservez une démo de 20 minutes : nous vous montrons Scholnexa avec vos propres données.",
+    "ctaButton": "Réserver ma démo gratuite",
+    "steps": [
+      {
+        "label": "Tableau de bord",
+        "headline": "Les indicateurs clés de votre école en temps réel",
+        "description": "Étudiants actifs, formateurs, examens à venir, bulletins à publier et taux de réussite par filière : tout s'affiche dès l'ouverture, sans rapport à générer.",
+        "tag": "vue d'ensemble"
+      },
+      {
+        "label": "Planning",
+        "headline": "Toute la semaine sur une seule grille",
+        "description": "Créneaux de 08h30 à 19h00, séances par groupe et par salle, jours fériés et vacances : planifiez sans conflit et exportez vos emplois du temps en CSV.",
+        "tag": "planning"
+      },
+      {
+        "label": "Étudiants",
+        "headline": "Chaque étudiant, un dossier complet",
+        "description": "CNE, filière, niveau, statut et situation de paiement : importez vos listes en CSV et retrouvez chaque dossier — même archivé — en deux clics.",
+        "tag": "scolarité"
+      },
+      {
+        "label": "Examens",
+        "headline": "Des examens planifiés sans surprise",
+        "description": "Contrôles continus, examens théoriques et évaluations pratiques : sujets déposés, dates, groupes et formateurs visibles d'un coup d'œil, statuts suivis automatiquement.",
+        "tag": "examens"
+      },
+      {
+        "label": "Bulletins",
+        "headline": "Des bulletins publiés en quelques secondes",
+        "description": "Moyennes, mentions et décisions calculées automatiquement à partir des notes. Publiez tout en un clic : les bulletins partent aux familles à temps.",
+        "tag": "résultats"
+      },
+      {
+        "label": "Formateurs",
+        "headline": "Votre équipe pédagogique sous contrôle",
+        "description": "Matricule, département, modules enseignés et statut de chaque formateur : importez, exportez et gérez votre corps enseignant sans tableur.",
+        "tag": "équipe"
+      },
+      {
+        "label": "Stages cliniques",
+        "headline": "Du CHR à la clinique conventionnée",
+        "description": "Affectations, conventions signées, périodes et soutenance : chaque stage est tracé jusqu'à la validation, structure d'accueil par structure d'accueil.",
+        "tag": "stages"
+      },
+      {
+        "label": "Paiements",
+        "headline": "Frais de scolarité sous contrôle",
+        "description": "Encaissé, en attente, en retard et à recouvrer : la situation de chaque étudiant en un coup d'œil, avec relances et reçus générés automatiquement.",
+        "tag": "finances"
+      },
+      {
+        "label": "Paramètres & Export",
+        "headline": "Votre école, configurée à votre image",
+        "description": "Filières, semestres, groupes, salles, utilisateurs et rôles : configurez Scholnexa pour coller exactement à votre établissement. Vos données restent exportables à tout moment.",
+        "tag": "configuration"
+      }
+    ]
+  },
+  "pain": {
+    "badge": "La réalité du terrain",
+    "title": "Vous vous reconnaissez dans ces situations ?",
+    "subtitle": "Toutes les directions d'écoles paramédicales nous racontent la même chose. Ce n'est pas un manque de rigueur — c'est un manque d'outil adapté.",
+    "solutionHint": "Il existe une plateforme conçue exactement pour votre réalité.",
+    "items": [
+      {
+        "title": "Dossiers étudiants éparpillés",
+        "quote": "« Dans quel Excel est le dossier de Mme Bennani ? »",
+        "text": "Inscriptions, notes et pièces justificatives sont réparties entre fichiers, registres papier et boîtes mail. Retrouver un dossier complet prend parfois des heures."
+      },
+      {
+        "title": "Suivi des paiements à la main",
+        "quote": "« Trois étudiants n'ont pas réglé leur tranche depuis deux mois. »",
+        "text": "Sans échéancier automatisé, les retards de scolarité passent inaperçus jusqu'à ce que la trésorerie se tende — et les relances deviennent délicates."
+      },
+      {
+        "title": "Inscriptions et réinscriptions chronophages",
+        "quote": "« J'avais noté cette préinscription quelque part… »",
+        "text": "Un candidat appelle, on note sur un post-it. À la rentrée, la moitié des dossiers sont incomplets et les réinscriptions se font dans l'urgence."
+      }
+    ]
+  },
+  "solution": {
+    "badge": "La solution",
+    "title": "Scholnexa centralise tout.",
+    "titleMuted": "Un seul tableau de bord.",
+    "subtitle": "Fini les fichiers éparpillés. Scholnexa a été conçu de A à Z pour les écoles supérieures paramédicales, avec les contraintes réelles des directions en tête.",
+    "benefits": [
+      "Tous les dossiers étudiants centralisés, accessibles en 2 clics",
+      "Inscriptions et réinscriptions maîtrisées : plus jamais de candidature ou de réinscription perdue",
+      "Suivi des frais de scolarité automatisé avec alertes d'impayés en temps réel"
+    ],
+    "cta": "Réserver ma démo gratuite",
+    "stats": [
+      {
+        "value": "10+",
+        "label": "écoles actives",
+        "sub": "au Maroc"
+      },
+      {
+        "value": "9",
+        "label": "modules intégrés",
+        "sub": "tout-en-un"
+      },
+      {
+        "value": "< 48h",
+        "label": "mise en service",
+        "sub": "accompagnée"
+      },
+      {
+        "value": "100%",
+        "label": "adapté au Maroc",
+        "sub": "marché local"
+      }
+    ]
+  },
+  "modules": {
+    "badge": "Modules",
+    "title": "Tout ce dont votre école a besoin.",
+    "subtitle": "9 modules intégrés conçus pour les réalités d'une école paramédicale. En ligne en 48h. Formation incluse. Aucun développeur requis.",
+    "seeInDemo": "Voir dans la démo →",
+    "exploreAll": "Explorer tous les modules en démo",
+    "items": [
+      {
+        "title": "Tableau de bord",
+        "benefit": "Votre école entière en un regard",
+        "text": "Dès l'ouverture de Scholnexa, vous voyez l'essentiel : étudiants inscrits, examens à venir, paiements encaissés et stages en cours. Aucun rapport à générer."
+      },
+      {
+        "title": "Planning & emplois du temps",
+        "benefit": "Une grille hebdomadaire sans conflits",
+        "text": "Créneaux de 08h30 à 19h00, séances par groupe et par salle, jours fériés et vacances : planifiez sans conflit et exportez vos emplois du temps en CSV."
+      },
+      {
+        "title": "Étudiants",
+        "benefit": "Fini les dossiers éparpillés",
+        "text": "CNE, filière, niveau, statut et situation de paiement : importez vos listes en CSV et retrouvez chaque dossier — même archivé — en moins de 10 secondes."
+      },
+      {
+        "title": "Examens & Bulletins",
+        "benefit": "Des résultats publiés à temps",
+        "text": "Sujets déposés, statuts suivis, moyennes, mentions et décisions calculées automatiquement : publiez les bulletins en un clic, ils partent aux familles à temps."
+      },
+      {
+        "title": "Formateurs",
+        "benefit": "Votre équipe sous contrôle",
+        "text": "Matricule, département, modules enseignés et statut de chaque formateur : importez, exportez et gérez votre corps enseignant sans tableur."
+      },
+      {
+        "title": "Stages cliniques",
+        "benefit": "Le suivi des stages sous contrôle",
+        "text": "Affectations au CHR, au CHU et dans les cliniques conventionnées, conventions, suivi de présence et évaluations des stagiaires : chaque stage est tracé du départ jusqu'à la validation."
+      },
+      {
+        "title": "Paiements & recouvrement",
+        "benefit": "Zéro impayé qui passe entre les mailles",
+        "text": "Scholnexa génère les reçus, suit les échéances de chaque étudiant et envoie les relances automatiques. Vous ne courez plus après les frais de scolarité."
+      },
+      {
+        "title": "Rapports",
+        "benefit": "Des décisions basées sur des chiffres à jour",
+        "text": "Statistiques de recouvrement, répartitions par filière et par niveau, taux de réussite : la direction pilote avec des indicateurs fiables, exportables en CSV."
+      },
+      {
+        "title": "Paramètres & Export",
+        "benefit": "Votre école, à votre image",
+        "text": "Filières, semestres, groupes, salles, utilisateurs et rôles : configurez Scholnexa pour coller exactement à votre établissement. Vos données restent exportables à tout moment."
+      }
+    ]
+  },
+  "testimonials": {
+    "badge": "Avis vérifiés",
+    "title": "Ce que disent nos directions.",
+    "subtitle": "Des écoles paramédicales partout au Maroc utilisent Scholnexa au quotidien.",
+    "stats": [
+      {
+        "value": "10+",
+        "label": "écoles actives"
+      },
+      {
+        "value": "4.9 / 5",
+        "label": "note moyenne"
+      },
+      {
+        "value": "< 48h",
+        "label": "mise en service"
+      },
+      {
+        "value": "100%",
+        "label": "recommandent Scholnexa"
+      }
+    ],
+    "ctaText": "Votre école pourrait être la prochaine. 5 créneaux disponibles cette semaine.",
+    "ctaButton": "Réserver ma démo gratuite",
+    "items": [
+      {
+        "name": "Fatima Benali",
+        "role": "Directrice",
+        "center": "Institut Atlas Santé",
+        "city": "Casablanca",
+        "date": "Il y a 2 semaines",
+        "highlight": "Zéro Excel depuis 3 mois",
+        "quote": "Avant Scholnexa, je passais mes lundis matin à rapprocher trois fichiers Excel. Aujourd'hui, tout est là en temps réel : effectifs, présences, encaissements. Je me concentre sur la pédagogie, plus sur l'administratif."
+      },
+      {
+        "name": "Karim Mounir",
+        "role": "Secrétaire général",
+        "center": "Groupe Santé Al Manar",
+        "city": "Rabat",
+        "date": "Il y a 1 mois",
+        "highlight": "−40 % d'impayés en 2 mois",
+        "quote": "Le module paiements a tout changé : échéanciers par étudiant, relances automatiques, reçus numérotés. Nous avons réduit les retards de scolarité de 40 % et gagné une demi-journée par mois."
+      },
+      {
+        "name": "Samira Raji",
+        "role": "Responsable pédagogique",
+        "center": "Institut Ibn Sina Santé",
+        "city": "Marrakech",
+        "date": "Il y a 3 semaines",
+        "highlight": "Emplois du temps enfin stables",
+        "quote": "Planifier les filières infirmiers et kinésithérapeutes demandait des journées entières. Avec le module Planning, les emplois du temps se construisent en quelques heures et les conflits de salles ont disparu."
+      },
+      {
+        "name": "Youssef El Fassi",
+        "role": "Directeur",
+        "center": "Institut Nour Paramédical",
+        "city": "Fès",
+        "date": "Il y a 5 jours",
+        "highlight": "Zéro inscription perdue depuis l'adoption",
+        "quote": "Avant, une préinscription notée sur un post-it se perdait. Maintenant, chaque candidature est suivie jusqu'à l'inscription, et chaque étudiant est réinscrit en un clic."
+      },
+      {
+        "name": "Houda Alaoui",
+        "role": "Secrétaire générale",
+        "center": "Institut Rayane Santé",
+        "city": "Agadir",
+        "date": "Il y a 2 mois",
+        "highlight": "Support réactif et formation incluse",
+        "quote": "L'équipe Scholnexa nous a accompagnées pas à pas. La formation était incluse, le paramétrage fait avec nous. Je recommande à toutes les écoles qui veulent moderniser leur administration sans prise de tête."
+      },
+      {
+        "name": "Anas Chraibi",
+        "role": "Directeur",
+        "center": "Institut Al Amal Santé",
+        "city": "Tanger",
+        "date": "Il y a 3 mois",
+        "highlight": "Accessible depuis n'importe quel appareil",
+        "quote": "Je suis mes indicateurs depuis mon téléphone en déplacement. Le tableau de bord s'affiche parfaitement sur mobile : effectifs, encaissements, stages en cours. C'est devenu indispensable."
+      },
+      {
+        "name": "Nadia Berrada",
+        "role": "Responsable pédagogique",
+        "center": "Institut Soleil Santé",
+        "city": "Meknès",
+        "date": "Il y a 6 semaines",
+        "highlight": "Bulletins générés en quelques secondes",
+        "quote": "Moyennes, appréciations, taux de présence : tout est déjà dans le système. Les bulletins partent aux familles à temps, et mon équipe ne me demande plus où trouver une information."
+      },
+      {
+        "name": "Omar Tahir",
+        "role": "Fondateur",
+        "center": "Institut Wafa Santé",
+        "city": "Oujda",
+        "date": "Il y a 1 mois",
+        "highlight": "Excellent rapport qualité/prix",
+        "quote": "Pour ce prix, on dispose d'un outil qui rivalise avec ce qui se fait à l'étranger. Et tout est pensé pour le Maroc : les montants en dirhams, le contexte local, le support en français et en arabe."
+      }
+    ]
+  },
+  "pricing": {
+    "badge": "Tarifs",
+    "title": "Des formules claires et transparentes.",
+    "subtitle": "Des prix de départ transparents ; ajustement possible si votre école a des besoins spécifiques, après un appel de 20 min.",
+    "monthly": "Mensuel",
+    "yearly": "Annuel",
+    "yearlyDiscount": "−2 MOIS",
+    "billingYearly": "Facturation annuelle · 2 mois offerts",
+    "billingMonthly": "Facturation mensuelle · sans engagement",
+    "popular": "Populaire",
+    "onboardingOffer": "Onboarding offert jusqu'au 30 juin",
+    "custom": "Sur mesure",
+    "perYear": "MAD/ an HT",
+    "perMonth": "MAD/ mois HT",
+    "yearlyEquiv": "Soit environ",
+    "yearlyEquivSuffix": "ramené sur 10 mois",
+    "perMonthShort": " MAD/ mois",
+    "planLabel": "formule",
+    "of": "sur",
+    "miniFaq": [
+      {
+        "q": "Puis-je payer mensuellement ?",
+        "a": "Oui, les deux options sont disponibles. L'engagement annuel vous offre 2 mois offerts."
+      },
+      {
+        "q": "Y a-t-il des frais cachés ?",
+        "a": "Non. Le prix affiché inclut l'onboarding, la formation et le support. Aucune surprise."
+      },
+      {
+        "q": "Que se passe-t-il si mon école grandit ?",
+        "a": "Passez de Essentiel à Pro en un clic, sans perdre vos données. Notre équipe vous accompagne."
+      }
+    ],
+    "plans": [
+      {
+        "id": "essentiel",
+        "name": "Essentiel",
+        "blurb": "Jusqu'à ~500 étudiants actifs. Un seul administrateur.",
+        "features": [
+          "Dossiers étudiants & inscriptions",
+          "Agenda & emploi du temps",
+          "Rapports de base",
+          "Support par email"
+        ],
+        "cta": "Choisir Essentiel"
+      },
+      {
+        "id": "pro",
+        "name": "Pro",
+        "blurb": "Pour les écoles actives : équipe multi-rôles et pilotage renforcé.",
+        "features": [
+          "Tout Essentiel",
+          "Paiements & relances automatiques",
+          "Examens, bulletins & relevés de notes",
+          "Suivi des stages cliniques",
+          "Exports & tableaux avancés",
+          "Support prioritaire",
+          "✓ Onboarding + Formation + Support inclus"
+        ],
+        "cta": "Choisir Pro — le plus choisi"
+      },
+      {
+        "id": "reseau",
+        "name": "Réseau",
+        "blurb": "Multi-campus, groupes et besoins sur mesure.",
+        "features": [
+          "SLA dédié",
+          "Intégrations & API",
+          "Formation des équipes",
+          "Accompagnement au déploiement"
+        ],
+        "cta": "Parler à un expert"
+      }
+    ]
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "Questions fréquentes",
+    "subtitle": "Ce qu'il faut savoir avant de nous contacter.",
+    "items": [
+      {
+        "q": "Ma secrétaire peut-elle utiliser Scholnexa sans formation ?",
+        "a": "Oui. Scholnexa a été conçu pour les équipes non techniques. L'interface est intuitive, et nous assurons une formation incluse à la mise en service. La plupart des secrétaires sont autonomes en moins d'une heure."
+      },
+      {
+        "q": "Puis-je exporter mes données si je quitte Scholnexa ?",
+        "a": "Absolument. Toutes vos données (dossiers étudiants, paiements, historique) sont exportables en CSV à tout moment. Vous n'êtes jamais pris en otage : votre école reste propriétaire de ses données."
+      },
+      {
+        "q": "Combien d'étudiants la plateforme peut-elle gérer ?",
+        "a": "Essentiel prend en charge jusqu'à ~500 étudiants actifs. Pro est sans limite pratique. Réseau est conçu pour les groupes multi-campus. Contactez-nous pour un diagnostic personnalisé."
+      },
+      {
+        "q": "Y a-t-il une application mobile ?",
+        "a": "Scholnexa est entièrement responsive — il fonctionne parfaitement sur mobile et tablette depuis votre navigateur, sans installation. Vous pilotez votre école depuis n'importe quel appareil."
+      },
+      {
+        "q": "Scholnexa fonctionne-t-il en arabe ?",
+        "a": "Oui. Vous pouvez basculer entre le français et l'arabe depuis l'icône de langue en bas de l'écran. Le support reste disponible dans les deux langues."
+      },
+      {
+        "q": "Comment sont protégées mes données (RGPD / Maroc) ?",
+        "a": "Toutes les données sont chiffrées et hébergées sur des serveurs sécurisés. Nous appliquons les bonnes pratiques RGPD adaptées au contexte marocain (loi 09-08). Aucune donnée n'est partagée avec des tiers."
+      }
+    ]
+  },
+  "contact": {
+    "badge": "Démo gratuite",
+    "title": "20 minutes. Votre école dans Scholnexa. En direct.",
+    "subtitle": "Choisissez une date et laissez-nous vos coordonnées : nous vous montrons Scholnexa avec vos cas concrets, sans engagement.",
+    "phoneMorocco": "07 77 77 74 28 Maroc",
+    "website": "eiden-group.com",
+    "email": "contact@eiden-group.com",
+    "address": "Agadir Bay, Technopole 1 Bloc B, Agadir 80000",
+    "bullets": [
+      "Présentation personnalisée selon votre type d'école",
+      "Réponse garantie sous 2h ouvrées",
+      "Aucun engagement requis",
+      "Les créneaux partent vite - réservez le vôtre"
+    ],
+    "qr": {
+      "title": "Appel direct",
+      "subtitle": "Scannez pour nous appeler",
+      "callNow": "Appeler maintenant"
+    },
+    "form": {
+      "heading": "Réservez votre démo",
+      "centerLabel": "Nom de l'école *",
+      "centerPlaceholder": "Institut Atlas Santé",
+      "emailLabel": "Email *",
+      "emailPlaceholder": "vous@votre-ecole.ma",
+      "phoneLabel": "Téléphone *",
+      "phonePlaceholder": "06 12 34 56 78",
+      "dateLabel": "Date souhaitée *",
+      "datePlaceholder": "Choisir une date",
+      "messageLabel": "Message (optionnel)",
+      "messagePlaceholder": "Parlez-nous de votre école, du nombre d'étudiants, de vos besoins…",
+      "submit": "Réserver ma démo →",
+      "submitting": "Envoi en cours…",
+      "privacy": "Données sécurisées · Réponse sous 2h · Sans engagement",
+      "successTitle": "Demande envoyée !",
+      "successText": "Merci ! Un email de confirmation vous a été envoyé. Notre équipe vous recontacte sous 2h ouvrées.",
+      "retry": "Nouvelle demande",
+      "errorRequired": "Merci de remplir tous les champs obligatoires.",
+      "errorEmail": "Merci de saisir une adresse email valide.",
+      "errorGeneric": "Une erreur est survenue. Merci de réessayer ou de nous appeler."
+    }
+  },
+  "footer": {
+    "tagline": "La plateforme de gestion tout-en-un pour écoles paramédicales. Étudiants · Bulletins · Stages · Paiements.",
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "bookDemo": "Réserver une démo",
+    "copyright": "© 2026 Scholnexa · Tous droits réservés",
+    "phoneMorocco": "07 77 77 74 28 (Maroc)",
+    "website": "eiden-group.com"
+  }
+}

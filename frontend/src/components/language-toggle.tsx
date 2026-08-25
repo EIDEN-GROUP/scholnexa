@@ -1,14 +1,14 @@
 import { useRouterState } from "@tanstack/react-router";
 import { Languages } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useDashboardI18n, type DashboardLocale } from "@/lib/dashboard-i18n";
+import { useLandingI18nOptional, type LandingLocale } from "@/lib/landing-i18n";
 
 function LanguageToggleButton({
   locale,
   onToggle,
   label,
 }: {
-  locale: DashboardLocale;
+  locale: LandingLocale;
   onToggle: () => void;
   label: string;
 }) {
@@ -18,35 +18,51 @@ function LanguageToggleButton({
       onClick={onToggle}
       aria-label={label}
       className={cn(
-        "relative grid h-11 w-11 place-items-center rounded-full border border-border bg-card text-foreground shadow-[var(--shadow-soft)] transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "flex h-10 items-center gap-1 rounded-full border border-border bg-card/95 p-1 ps-2.5 shadow-[var(--shadow-soft)] backdrop-blur transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       )}
     >
-      <Languages className="h-5 w-5" strokeWidth={2} aria-hidden />
-      <span className="sr-only">
-        {locale === "fr" ? "العربية" : "Français"}
+      <Languages className="me-0.5 h-4 w-4 shrink-0 text-foreground/60" strokeWidth={2} aria-hidden />
+      {/* Les deux codes sont visibles : le bouton se lit comme un sélecteur de
+          langue, pas comme un bouton de chat. */}
+      <span
+        aria-hidden
+        className={cn(
+          "grid h-7 min-w-8 place-items-center rounded-full px-1.5 text-[10px] font-black uppercase tracking-wide transition",
+          locale === "fr" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground",
+        )}
+      >
+        FR
       </span>
       <span
-        className="pointer-events-none absolute -bottom-0.5 -end-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-0.5 text-[9px] font-black uppercase text-primary-foreground"
         aria-hidden
+        className={cn(
+          "grid h-7 min-w-8 place-items-center rounded-full px-1.5 text-[10px] font-black uppercase tracking-wide transition",
+          locale === "ar" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground",
+        )}
       >
-        {locale === "fr" ? "AR" : "FR"}
+        AR
       </span>
+      <span className="sr-only">{locale === "fr" ? "العربية" : "Français"}</span>
     </button>
   );
 }
 
+/**
+ * Fixed FR/AR control, visible on every public surface (landing, login) and on
+ * the dashboard. It drives the shared landing i18n context whose `setLocale`
+ * writes through to the dashboard's storage key and notifies the other provider
+ * via a window event, so both universes switch in lockstep.
+ */
 export function LanguageToggleFloating() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { locale, toggleLocale } = useDashboardI18n();
-
-  const show =
-    pathname.startsWith("/login") || pathname.startsWith("/dashboard");
-  if (!show) return null;
-
-  const langLabel =
-    locale === "fr" ? "Passer en arabe" : "التبديل إلى الفرنسية";
+  const i18n = useLandingI18nOptional();
 
   const onDashboard = pathname.startsWith("/dashboard");
+  const show = pathname === "/" || pathname.startsWith("/login") || onDashboard;
+  if (!show || !i18n) return null;
+
+  const langLabel =
+    i18n.locale === "fr" ? "Passer en arabe" : "التبديل إلى الفرنسية";
 
   return (
     <div
@@ -54,17 +70,16 @@ export function LanguageToggleFloating() {
         "fixed z-[60] flex flex-col items-center gap-2",
         "end-[max(1rem,env(safe-area-inset-right))]",
         onDashboard
-          ? "bottom-[calc(5rem+max(0.5rem,env(safe-area-inset-bottom)))] lg:bottom-[max(1rem,env(safe-area-inset-bottom))]"
-          : "bottom-[max(1rem,env(safe-area-inset-bottom))]",
+          ? // Mobile : au-dessus de la barre d'onglets fixe. Desktop : le bouton
+            // prend l'angle, SOUS le bouton du chat support (relevé à 4.25rem).
+            "bottom-[calc(5rem+max(0.5rem,env(safe-area-inset-bottom)))] lg:bottom-6"
+          : // Public pages: toggle hugs the corner, BackToTop stacks above it.
+            "bottom-[max(1rem,env(safe-area-inset-bottom))]",
       )}
     >
-      {/* The support-chat widget was removed from the SCHX shell: it is out of
-          scope and its polling hit a backend this frontend-only build no
-          longer has. The dashboard offset above is kept so the toggle still
-          clears the mobile tab bar. */}
       <LanguageToggleButton
-        locale={locale}
-        onToggle={toggleLocale}
+        locale={i18n.locale}
+        onToggle={i18n.toggleLocale}
         label={langLabel}
       />
     </div>

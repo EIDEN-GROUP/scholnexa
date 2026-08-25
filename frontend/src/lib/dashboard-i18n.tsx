@@ -25,6 +25,7 @@ import type { NavEntry, NavGroup, NavItem } from "@/components/dash-sidebar";
 import { fr as dateFnsFr, ar as dateFnsAr } from "date-fns/locale";
 import frDashboard from "@/locales/dashboard/fr.json";
 import arDashboard from "@/locales/dashboard/ar.json";
+import { LOCALE_SYNC_EVENT, type LocaleSyncEventDetail } from "@/lib/landing-i18n";
 
 export type DashboardLocale = "fr" | "ar";
 export type DashboardTranslations = typeof frDashboard;
@@ -69,6 +70,22 @@ export function DashboardI18nProvider({ children }: { children: ReactNode }) {
   const setLocale = useCallback((next: DashboardLocale) => {
     setLocaleState(next);
     localStorage.setItem(STORAGE_KEY, next);
+    // Broadcast so the landing i18n provider (root route) switches in lockstep.
+    window.dispatchEvent(
+      new CustomEvent<LocaleSyncEventDetail>(LOCALE_SYNC_EVENT, {
+        detail: { locale: next },
+      }),
+    );
+  }, []);
+
+  // Adopt locale changes made from the landing funnel / login toggles.
+  useEffect(() => {
+    const onSync = (e: Event) => {
+      const next = (e as CustomEvent<LocaleSyncEventDetail>).detail?.locale;
+      if (next === "fr" || next === "ar") setLocaleState(next);
+    };
+    window.addEventListener(LOCALE_SYNC_EVENT, onSync);
+    return () => window.removeEventListener(LOCALE_SYNC_EVENT, onSync);
   }, []);
 
   const toggleLocale = useCallback(() => {

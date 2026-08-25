@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { useDashboardI18n } from "@/lib/dashboard-i18n";
-import { LifeBuoy, X, Send, Plus, MessageCircle, Clock } from "lucide-react";
+import { MessageCircle, X, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
 
@@ -73,7 +73,8 @@ export function SupportChat() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-50 grid h-12 w-12 place-items-center rounded-full bg-brand text-white shadow-lg hover:bg-brand-dk"
+        aria-label={t?.common?.open ?? "Support"}
+        className="fixed bottom-6 end-6 z-50 grid h-12 w-12 place-items-center rounded-full bg-brand text-white shadow-lg hover:bg-brand-dk lg:bottom-[4.25rem]"
       >
         <MessageCircle className="h-5 w-5" />
       </button>
@@ -83,7 +84,7 @@ export function SupportChat() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-24 right-6 z-50 flex w-80 flex-col rounded-2xl border border-border bg-card shadow-2xl"
+            className="fixed bottom-24 end-6 z-50 flex w-80 flex-col rounded-2xl border border-border bg-card shadow-2xl lg:bottom-[8.25rem]"
           >
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <p className="text-sm font-semibold text-foreground">Support</p>

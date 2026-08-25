@@ -1,6 +1,6 @@
 /**
  * Shared dashboard UI tokens   soft, rounded, professional look
- * expressed in the SCHX palette (teal #029994 · red #e51e26 · white #ffffff).
+ * expressed in the SCHX palette (teal-charcoal #1a3e39 · red #e51e26 · white #ffffff).
  *
  * Import these instead of re-declaring per-page magic strings so every dashboard
  * page shares one consistent surface / input / badge language.

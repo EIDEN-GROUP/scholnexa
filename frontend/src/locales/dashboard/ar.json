@@ -59,7 +59,7 @@
     "demoSuffix": "  تجريبي",
     "open": "فتح",
     "active": "نشط",
-    "crm": "CRM",
+    "crm": "الشؤون المدرسية",
     "mad": "درهم",
     "allStatuses": "كل الحالات",
     "allModes": "كل الطرق",
@@ -92,8 +92,8 @@
     "resultsPlural": "نتائج",
     "family": "عائلة",
     "families": "عائلات",
-    "client": "عميل",
-    "clients": "عملاء",
+    "client": "أسرة",
+    "clients": "أسر",
     "employee": "موظف",
     "employees": "موظفون",
     "on": "من",
@@ -137,7 +137,7 @@
     "amountMad": "المبلغ (درهم)",
     "paymentDate": "تاريخ الدفع",
     "paymentMode": "طريقة الدفع",
-    "crmStage": "مرحلة CRM",
+    "crmStage": "حالة الملف",
     "contractType": "نوع العقد",
     "hireDate": "تاريخ التوظيف",
     "fullName": "الاسم الكامل",
@@ -163,19 +163,19 @@
     }
   },
   "home": {
-    "pageTitle": "CRM   المنصة",
-    "eyebrow": "نظرة عامة   CRM",
+    "pageTitle": "Scholnexa · منصة التسيير",
+    "eyebrow": "نظرة عامة · الإدارة",
     "titleBold": "لوحة",
     "titleItalic": "التحكم",
-    "subtitle": "نظرة عامة على إدارة علاقات العملاء",
+    "subtitle": "نظرة شاملة على مدرستك في الوقت الحقيقي",
     "tags": {
-      "clients": "العملاء",
+      "clients": "الأسر",
       "payments": "المدفوعات",
       "debt": "الدين",
       "collection": "التحصيل"
     },
     "metrics": {
-      "totalClients": "إجمالي العملاء",
+      "totalClients": "مجموع الأسر",
       "paidThisMonth": "مدفوع هذا الشهر",
       "totalDebt": "إجمالي الدين",
       "totalRevenue": "إجمالي الإيرادات",
@@ -193,37 +193,37 @@
     "quickNavItalic": "سريع",
     "quickActions": {
       "manageClients": {
-        "title": "إدارة العملاء",
-        "desc": "عرض وتعديل معلومات العملاء."
+        "title": "إدارة الأسر",
+        "desc": "عرض وتعديل ملفات الأسر."
       },
       "recordPayment": {
         "title": "تسجيل دفعة",
         "desc": "اختر ولي أمر وسجّل الدفع."
       },
       "lateClients": {
-        "title": "عملاء متأخرون",
-        "desc": "عرض العملاء ذوي المدفوعات المتأخرة."
+        "title": "أسر متأخرة عن الأداء",
+        "desc": "عرض الأسر ذات الدفعات المتأخرة."
       },
       "addClient": {
-        "title": "إضافة عميل",
-        "desc": "إنشاء عميل جديد من لوحة التحكم."
+        "title": "إضافة طالب",
+        "desc": "إنشاء ملف طالب جديد من لوحة القيادة."
       }
     },
     "addClientModal": {
-      "srDesc": "نموذج لإنشاء عميل جديد في CRM.",
-      "eyebrow": "  إضافة عميل",
-      "title": "عميل CRM جديد",
-      "submit": "إضافة العميل"
+      "srDesc": "استمارة لإنشاء ملف طالب جديد.",
+      "eyebrow": "· طالب جديد",
+      "title": "طالب جديد",
+      "submit": "إضافة الطالب"
     },
     "cardOpenAria": "{{label}}: {{value}}. فتح"
   },
   "familles": {
-    "pageTitle": "الأولياء   CRM",
-    "eyebrow": "CRM   الإدارة",
+    "pageTitle": "الأسر · الشؤون المدرسية",
+    "eyebrow": "الشؤون المدرسية · الأسر",
     "titleBold": "عملائي",
     "titleItalic": "",
     "subtitle": "أدر عملاءك وتقدمهم في مسار المبيعات",
-    "addClient": "إضافة عميل",
+    "addClient": "إضافة طالب",
     "searchPlaceholder": "البحث بالاسم، البريد، الهاتف…",
     "searchAria": "بحث العملاء",
     "filterStatusAria": "تصفية حسب الحالة",
@@ -232,7 +232,7 @@
       "parent": "ولي الأمر",
       "child": "الطفل",
       "contact": "الاتصال",
-      "crmStage": "مرحلة CRM",
+      "crmStage": "الحالة",
       "status": "الحالة",
       "monthly": "شهري",
       "debt": "الدين",
@@ -240,35 +240,35 @@
     },
     "viewAria": "عرض {{name}}",
     "editAria": "تعديل {{name}}",
-    "noMatch": "لا يوجد عميل يطابق الفلاتر.",
-    "clientsFoundOne": "عميل واحد",
+    "noMatch": "لا توجد أسرة مطابقة للتصفية.",
+    "clientsFoundOne": "تم العثور على أسرة واحدة",
     "clientsFoundMany": "{{count}} عملاء",
     "addModal": {
-      "srDesc": "إنشاء عميل جديد",
-      "eyebrow": "  إضافة عميل",
-      "title": "عميل CRM جديد",
-      "submit": "إضافة العميل"
+      "srDesc": "إنشاء ملف طالب جديد",
+      "eyebrow": "· ملف جديد",
+      "title": "طالب جديد",
+      "submit": "إضافة الطالب"
     },
     "detailModal": {
-      "srDesc": "تفاصيل العميل {{name}}",
-      "title": "تفاصيل العميل",
+      "srDesc": "تفاصيل أسرة {{name}}",
+      "title": "تفاصيل الأسرة",
       "recordPayment": "تسجيل دفعة"
     },
     "paymentModal": {
       "srDesc": "تسجيل دفعة لـ {{name}}",
-      "eyebrow": "  CRM",
+      "eyebrow": "· أداء",
       "title": "تسجيل دفعة",
       "confirm": "تأكيد الدفع"
     },
     "editModal": {
-      "srDesc": "تعديل العميل {{name}}",
-      "eyebrow": "  CRM",
-      "title": "تعديل العميل"
+      "srDesc": "تعديل ملف أسرة {{name}}",
+      "eyebrow": "· تعديل",
+      "title": "تعديل الملف"
     }
   },
   "rendezVous": {
-    "pageTitle": "المواعيد   CRM",
-    "eyebrow": "الطلبات   CRM",
+    "pageTitle": "المواعيد · التسجيلات",
+    "eyebrow": "الطلبات · التسجيلات",
     "titleBold": "إدارة ",
     "titleItalic": "المواعيد",
     "searchPlaceholder": "البحث بالاسم، البريد، الهاتف أو الموضوع...",
@@ -278,7 +278,7 @@
     "noMatch": "لا يوجد طلب يطابق هذه المعايير.",
     "viewDetailAria": "عرض التفاصيل",
     "replyAria": "رد",
-    "convertCrmAria": "تحويل CRM",
+    "convertCrmAria": "تحويل الطلب",
     "resultsFooter": "{{count}} نتيجة",
     "resultsFooterPlural": "{{count}} نتائج",
     "demandsNone": "لا توجد طلبات معروضة",
@@ -294,12 +294,12 @@
     "detailModal": {
       "eyebrow": "  التفاصيل   الموعد",
       "childAge": "عمر الطفل",
-      "confirmConversion": "تأكيد التحويل CRM"
+      "confirmConversion": "تأكيد التحويل"
     },
     "crmModal": {
-      "eyebrow": "تحويل CRM",
-      "title": "بطاقة العميل  ",
-      "intro": "أكمل المعلومات الناقصة لإنشاء الملف في CRM. عند الحفظ، يصبح الطلب محوّلاً (تجريبي).",
+      "eyebrow": "تحويل الطلب",
+      "title": "بطاقة الأسرة",
+      "intro": "أكمل المعلومات الناقصة لإنشاء الملف في Scholnexa. عند الحفظ، يتحول الطلب إلى «محول» (عرض توضيحي).",
       "submit": "حفظ وتحويل"
     },
     "replyModal": {
@@ -326,8 +326,8 @@
     ]
   },
   "paiements": {
-    "pageTitle": "المدفوعات   CRM",
-    "eyebrow": "CRM   المدفوعات",
+    "pageTitle": "الأداءات · الخزينة",
+    "eyebrow": "الخزينة · الأداءات",
     "titleBold": "سجل",
     "titleItalic": "المدفوعات",
     "subtitle": "سجل وإدارة مدفوعات الأولياء",
@@ -350,7 +350,7 @@
   },
   "affiches": {
     "pageTitle": "الملصقات   الفريق",
-    "eyebrow": "الفريق   CRM",
+    "eyebrow": "الموظفون · الفريق",
     "titleBold": "الملصقات",
     "titleItalic": "والموظفون",
     "subtitle": "قائمة الموظفين وحالتهم (بيانات تجريبية).",
@@ -381,8 +381,8 @@
     "editAria": "تعديل {{name}}"
   },
   "rapports": {
-    "pageTitle": "التقارير   CRM",
-    "eyebrow": "التحليل   CRM",
+    "pageTitle": "التقارير · التحليل",
+    "eyebrow": "التحليل · التقارير",
     "titleBold": "التقارير",
     "titleItalic": "والمؤشرات",
     "subtitle": "ملخص التسجيلات والنشاط التجاري (بيانات تجريبية).",
@@ -420,8 +420,8 @@
     ]
   },
   "planifications": {
-    "pageTitle": "التخطيطات   CRM",
-    "eyebrow": "التنظيم   CRM",
+    "pageTitle": "التخطيط · جدولة الحصص",
+    "eyebrow": "التنظيم · التخطيط",
     "titleBold": "التخطيطات",
     "titleItalic": "حسب الفترات",
     "subtitle": "أسبوع نموذجي : تظهر المواعيد والاجتماعات مباشرة في الشبكة الزمنية (بيانات تجريبية).",
@@ -584,5 +584,106 @@
     "fieldSource": "مصدر الحقول",
     "manual": "يدوي",
     "aiMode": "ذكاء اصطناعي"
+  },
+  "homeIndex": {
+    "greeting": {
+      "morning": "صباح الخير",
+      "afternoon": "مساء الخير",
+      "evening": "مساء الخير"
+    },
+    "roleFallback": "لوحة القيادة",
+    "roleLabels": {
+      "directeur": "المدير",
+      "enseignant": "أستاذ (مكوّن)",
+      "responsable": "مسؤول التخطيط"
+    },
+    "chips": {
+      "etudiants": "الطلبة",
+      "seancesAjd": "حصص اليوم",
+      "reussite": "النجاح",
+      "groupes": "الفروع",
+      "aNoter": "للتصحيح",
+      "sallesLibres": "قاعات شاغرة",
+      "conflits": "تعارضات"
+    },
+    "tabs": {
+      "ensemble": "نظرة عامة",
+      "ensembleShort": "عامة",
+      "academique": "أكاديمي",
+      "analyse": "تحليل",
+      "examens": "الامتحانات",
+      "etudiantsBulletins": "الطلبة وبيانات النقاط",
+      "etudiantsShort": "الطلبة",
+      "planification": "التخطيط",
+      "planningShort": "تخطيط"
+    },
+    "kpis": {
+      "etudiantsActifs": "الطلبة النشطون",
+      "formateursActifs": "الأستاذون النشطون",
+      "examensAVenir": "امتحانات قادمة",
+      "bulletinsAPublier": "بيانات نقاط للنشر",
+      "mesGroupes": "فروعي",
+      "mesModules": "وحداتي الدراسية",
+      "seancesAujourdhui": "حصص اليوم",
+      "mesExamens": "امتحاناتي",
+      "examensANoter": "امتحانات للتصحيح",
+      "sallesOccupees": "قاعات مشغولة",
+      "sallesDisponibles": "قاعات متاحة",
+      "conflits": "تعارضات",
+      "stagesAValider": "تربصات للمصادقة"
+    },
+    "metric": {
+      "reussite": "نسبة النجاح",
+      "recouvrement": "المجموع المتبقي للتحصيل",
+      "reussiteShort": "النجاح",
+      "recouvrementShort": "التحصيل"
+    },
+    "sections": {
+      "aujourdhui": "اليوم",
+      "notifications": "الإشعارات",
+      "examensRecents": "امتحانات حديثة",
+      "nouveauxEtudiants": "الطلبة الجدد",
+      "syntheseExamens": "حصيلة الامتحانات",
+      "analyse": "تحليل",
+      "chargeFormateurs": "عبء الأستاذة",
+      "monCalendrier": "رزنامتي (7 أيام)",
+      "mesSeances": "حصصي اليوم",
+      "mesExamens": "امتحاناتي",
+      "mesEtudiants": "طلابي",
+      "bulletinsAttente": "بيانات نقاط في انتظار النشر",
+      "alertesOrd": "تنبيهات الجدولة",
+      "occupationSalles": "إشغال القاعات"
+    },
+    "links": {
+      "voirPlanning": "عرض التخطيط",
+      "voirTout": "عرض الكل",
+      "tousExamens": "كل الامتحانات",
+      "tousEtudiants": "كل الطلبة",
+      "tousBulletins": "كل بيانات النقاط",
+      "monPlanning": "تخطيطي",
+      "creerExamen": "إنشاء امتحان"
+    },
+    "empty": {
+      "aucuneSeance": "لا حصص مبرمجة اليوم.",
+      "aucuneSeanceAVenir": "لا حصص قادمة.",
+      "aucunFormateur": "لا يوجد أستاذ مسجَّل."
+    },
+    "recouvrementParts": {
+      "enAttente": "قيد الانتظار",
+      "retard": "متأخر",
+      "impaye": "غير مؤدى"
+    },
+    "charts": {
+      "examensParStatut": "الامتحانات حسب الحالة",
+      "examensParType": "الامتحانات حسب النوع",
+      "examensParFormateur": "الامتحانات حسب الأستاذ",
+      "planifies": "مبرمجة",
+      "faits": "منجزة",
+      "repartitionFiliere": "التوزيع حسب الشعبة",
+      "repartitionNiveau": "التوزيع حسب المستوى",
+      "examensParMois": "الامتحانات حسب الشهر",
+      "seancesParJour": "الحصص حسب يوم الأسبوع",
+      "occupationSalles": "إشغال القاعات"
+    }
   }
 }

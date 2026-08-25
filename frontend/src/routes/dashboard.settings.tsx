@@ -1302,7 +1302,7 @@ function SettingsPage() {
     nom: "Scholnexa",
     ville: "Agadir",
     telephone: "+212 5 28 00 00 00",
-    email: "contact@scholnexa.com",
+    email: "contact@eiden-group.com",
   });
   const [systeme, setSysteme] = useState({
     langue: "Français",

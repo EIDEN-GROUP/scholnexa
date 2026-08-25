@@ -86,48 +86,54 @@
   --radius: 0.875rem;
 
   /* ------------------------------------------------------------------
-   * Scholnexa brand palette.
-   * Royal blue is the dominant brand colour (nav, CTAs, headers, positive
-   * states); red is reserved for alerts and negative states only.
+   * Scholnexa brand palette v3 — "Sceau émeraude" (logo palette).
+   * Deep teal-charcoal (#1A3E39) is the dominant brand colour (nav, headers,
+   * primary surfaces); gold-bronze (#C9A066) is the accent family (highlights,
+   * landing CTAs, dividing lines); muted green (#617F6A) supports charts and
+   * secondary accents. Red stays reserved for alerts/negative states only.
    * ------------------------------------------------------------------ */
-  --scholnexa-blue: #2563eb;
-  --scholnexa-blue-dk: #1e40af;
-  --scholnexa-blue-md: #1d4ed8;
-  --scholnexa-blue-lt: #60a5fa;
-  --scholnexa-blue-pale: #dbeafe;
-  --scholnexa-blue-wash: #eff6ff;
+  --scholnexa-blue: #1a3e39;
+  --scholnexa-blue-dk: #102824;
+  --scholnexa-blue-md: #14332e;
+  --scholnexa-blue-lt: #56807a;
+  --scholnexa-blue-pale: #d9e4e1;
+  --scholnexa-blue-wash: #eef3f1;
 
   --scholnexa-red: #e51e26;
   --scholnexa-red-dk: #b3141b;
   --scholnexa-red-lt: #f4626a;
   --scholnexa-red-pale: #fbdcdd;
 
-  /* Brand accent   the blue brand family, used as a gradient on the active nav
-     tile, the lead KPI and other accent surfaces. Red stays reserved for errors. */
-  --scholnexa-accent: #2563eb;
-  --scholnexa-accent-dk: #1e40af;
-  --scholnexa-accent-lt: #60a5fa;
-  --scholnexa-accent-pale: #dbeafe;
+  /* Brand accent — the gold-bronze ring colour from the emblem, used on the
+     active nav tile, the lead KPI, primary CTAs and highlights. Red stays
+     reserved for errors. */
+  --scholnexa-accent: #c9a066;
+  --scholnexa-accent-dk: #a87f44;
+  --scholnexa-accent-lt: #dcbf92;
+  --scholnexa-accent-pale: #f4ebdc;
 
-  --scholnexa-amber: #d98324;
-  --scholnexa-amber-pale: #fbebd6;
-  --scholnexa-sky: #2f6fb0;
-  --scholnexa-sky-pale: #dfeaf6;
+  /* Bronze-amber warning tone, harmonised with the gold accent. */
+  --scholnexa-amber: #c08a3e;
+  --scholnexa-amber-pale: #f6ecda;
+  /* Info — muted teal-green companion to the brand ink. */
+  --scholnexa-sky: #4f7d74;
+  --scholnexa-sky-pale: #e1ece8;
 
-  /* Extra categorical chart hues   muted, earthy companions to the teal brand
-     so multi-series charts read as a cohesive premium set on the cream canvas. */
-  --scholnexa-sage: #7ea262;
-  --scholnexa-coral: #e07a5f;
-  --scholnexa-gold: #e6b23a;
+  /* Extra categorical chart hues   muted, earthy companions drawn straight
+     from the logo palette (muted green, warm clay, gold) so multi-series
+     charts read as a cohesive premium set on the cream canvas. */
+  --scholnexa-sage: #617f6a;
+  --scholnexa-coral: #c26d5c;
+  --scholnexa-gold: #c9a066;
 
-  /* Secondary accent   Stripe-style indigo/violet. Reserved for accents,
-     never a second brand: teal stays dominant. */
-  --scholnexa-violet: #635bff;
-  --scholnexa-violet-dk: #4b45d6;
-  --scholnexa-violet-lt: #8f8bff;
-  --scholnexa-violet-pale: #ececff;
+  /* Secondary accent   the muted sage green of the laurel, used sparingly
+     next to the teal brand for highlights and charts. */
+  --scholnexa-violet: #617f6a;
+  --scholnexa-violet-dk: #4b6553;
+  --scholnexa-violet-lt: #87a18d;
+  --scholnexa-violet-pale: #e6eee8;
 
-  --scholnexa-ink: #14213d;
+  --scholnexa-ink: #1a3e39;
   --scholnexa-white: #ffffff;
 
   /* Warm cream canvas (reference dashboard backdrop). Neutral, faintly warm   the
@@ -142,7 +148,7 @@
      every `rgb(var(--scholnexa-shadow) / a)` shadow invalid (renders as `none`). */
   --scholnexa-shadow: 23 23 26;
   /* Neutral ink channels for crisp, colour-neutral elevation on white. */
-  --scholnexa-ink-rgb: 20 33 61;
+  --scholnexa-ink-rgb: 26 62 57;
 
   /* Legacy alias variables kept for compatibility: the landing-page
    * utility classes further down still reference them. Re-pointed at the
@@ -165,11 +171,12 @@
   --legacy-red: var(--scholnexa-red);
   --legacy-blue: var(--scholnexa-sky);
 
-  /* Landing */
-  --landing-hero-bg: color-mix(in srgb, var(--scholnexa-blue-dk) 30%, #050d1f 70%);
-  --landing-cta-primary: var(--scholnexa-blue);
-  --landing-cta-primary-hover: var(--scholnexa-blue-dk);
-  --landing-cta-on-primary: var(--scholnexa-white);
+  /* Landing   deep teal-charcoal hero slab; gold-bronze CTAs with deep-teal
+     text for AA contrast on the bronze fill. */
+  --landing-hero-bg: color-mix(in srgb, var(--scholnexa-blue) 55%, #04120e 45%);
+  --landing-cta-primary: var(--scholnexa-accent);
+  --landing-cta-primary-hover: var(--scholnexa-accent-dk);
+  --landing-cta-on-primary: var(--scholnexa-blue-dk);
 
   --background: var(--scholnexa-white);
   --foreground: var(--scholnexa-ink);
@@ -206,16 +213,17 @@
   --leaf: var(--scholnexa-blue-lt);
   --coral: var(--scholnexa-red);
 
-  /* Monochrome brand ramp   shades of the royal blue brand (#2563eb), deep → light.
-     All charts/graphs stay blue per the brand; the red (#e51e26) accent is
-     reserved for UI (active nav tile, lead KPI card, primary CTAs), not graphs. */
-  --chart-1: #1e3a8a;
-  --chart-2: #1d4ed8;
-  --chart-3: #2563eb;
-  --chart-4: #3b82f6;
-  --chart-5: #60a5fa;
-  --chart-6: #93c5fd;
-  --chart-7: #bfdbfe;
+  /* Monochrome brand ramp   shades of the teal-charcoal brand (#1a3e39),
+     deep → light, closing on the gold-bronze accent. All charts/graphs stay
+     in the logo family per the brand; red (#e51e26) stays reserved for UI
+     error states, not graphs. */
+  --chart-1: #102824;
+  --chart-2: #1a3e39;
+  --chart-3: #3d6157;
+  --chart-4: #617f6a;
+  --chart-5: #8fa98f;
+  --chart-6: #c9a066;
+  --chart-7: #dfc9a5;
 
   --sidebar: var(--scholnexa-white);
   --sidebar-foreground: var(--scholnexa-ink);

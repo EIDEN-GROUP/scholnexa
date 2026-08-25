@@ -1,5 +1,10 @@
+import { useEffect, useState } from "react";
 import { createRootRoute, Outlet, Link } from "@tanstack/react-router";
 import { MotionConfig } from "framer-motion";
+import { BackToTop } from "@/components/back-to-top";
+import { PageTransition } from "@/components/page-transition";
+import { LanguageToggleFloating } from "@/components/language-toggle";
+import { LandingI18nProvider } from "@/lib/landing-i18n";
 
 function NotFoundComponent() {
   return (
@@ -25,16 +30,35 @@ function NotFoundComponent() {
   );
 }
 
-export const Route = createRootRoute({
-  notFoundComponent: NotFoundComponent,
-  component: () => (
+function RootComponent() {
+  // Client-only gate: the curtain animates on navigation, so it must not render
+  // before hydration.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  return (
     // App-wide motion defaults: one smooth easing curve for every framer-motion
     // component that doesn't override it, and `reducedMotion="user"` so the whole
     // app honours the OS "reduce motion" setting automatically.
     <MotionConfig reducedMotion="user" transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}>
-      <div className="relative">
-        <Outlet />
-      </div>
+      {/* Shared FR/AR context for the landing funnel, the hero previews and the
+          floating controls below. It falls back to (and writes through to) the
+          dashboard's `gestio-locale` key so both universes stay in sync. */}
+      <LandingI18nProvider>
+        <div className="relative">
+          <Outlet />
+          {hydrated ? <PageTransition /> : null}
+        </div>
+        <LanguageToggleFloating />
+        <BackToTop />
+      </LandingI18nProvider>
     </MotionConfig>
-  ),
+  );
+}
+
+export const Route = createRootRoute({
+  notFoundComponent: NotFoundComponent,
+  component: RootComponent,
 });

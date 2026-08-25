@@ -161,7 +161,11 @@ function FloatingButton({ onClick, open }: { onClick: () => void; open: boolean 
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className={cn(
-        "fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-[0_16px_40px_-12px_rgb(var(--scholnexa-shadow)/0.5)] transition-shadow hover:shadow-[0_20px_50px_-12px_rgb(var(--scholnexa-shadow)/0.6)]",
+        // `end-6` : le bouton suit le sens de lecture (droite en LTR, gauche en
+        // RTL). Sur mobile comme sur desktop, il est AU-DESSUS du sélecteur de
+        // langue (mobile : pilule à 5.5rem au-dessus de la barre d'onglets ;
+        // desktop : pilule à bottom-6).
+        "fixed bottom-[8.25rem] end-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-[0_16px_40px_-12px_rgb(var(--scholnexa-shadow)/0.5)] transition-shadow hover:shadow-[0_20px_50px_-12px_rgb(var(--scholnexa-shadow)/0.6)] lg:bottom-[4.25rem]",
         open
           ? "bg-muted text-foreground ring-1 ring-brand/20"
           : "bg-gradient-to-b from-brand to-brand-dk text-white",
@@ -362,9 +366,11 @@ export function AiChatFloating() {
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
               softCard,
-              "fixed bottom-24 right-6 z-50 flex w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden shadow-[0_32px_80px_-20px_rgb(var(--scholnexa-shadow)/0.5)]",
+              // Panneau au-dessus du bouton, même côté logique (end) que lui.
+              // Hauteur responsive : laisse la place au bouton + pilule de langue
+              // empilés au-dessus de la barre d'onglets (mobile) ou du bord (desktop).
+              "fixed bottom-[12rem] end-6 z-50 flex h-[min(560px,calc(100dvh-13.5rem))] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden shadow-[0_32px_80px_-20px_rgb(var(--scholnexa-shadow)/0.5)] lg:bottom-[8.25rem] lg:h-[min(560px,calc(100dvh-9.5rem))]",
             )}
-            style={{ height: 560, maxHeight: "calc(100vh - 8rem)" }}
           >
             <div className="flex shrink-0 items-center gap-3 border-b border-brand/12 bg-gradient-to-r from-brand to-brand-dk px-5 py-4 text-white">
               <span className="grid h-9 w-9 place-items-center rounded-full bg-white/20">

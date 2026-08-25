@@ -21,8 +21,8 @@ export const BRAND = {
 
   /** Email sender name and contact addresses. */
   emailSender: "Scholnexa",
-  supportEmail: "support@scholnexa.com",
-  contactEmail: "contact@scholnexa.com",
+  supportEmail: "support@eiden-group.com",
+  contactEmail: "contact@eiden-group.com",
 
   /** Physical address shown on generated documents. */
   address: "Avenue Mohammed V, Agadir, Maroc",
@@ -36,7 +36,7 @@ export const BRAND = {
 
   /** Footer line used on generated PDFs. */
   documentFooter:
-    "Document généré par la plateforme Scholnexa — usage interne.",
+    "Document généré par la plateforme Scholnexa - usage interne.",
 
   /** Email footer used on automated messages. */
   emailFooter: "Scholnexa — e-mail automatique, merci de ne pas y répondre.",

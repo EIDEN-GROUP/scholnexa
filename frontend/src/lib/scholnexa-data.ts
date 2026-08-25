@@ -50662,16 +50662,18 @@ export const A_TRAITER = {
 export type ActiviteItem = {
   type: "inscription" | "note" | "paiement";
   texte: string;
+  /** Variante arabe (RTL) du texte, affichée quand la locale est `ar`. */
+  texteAr?: string;
   date: string;
 };
 
 export const ACTIVITE_RECENTE: ActiviteItem[] = [
-  { type: "inscription", texte: "Nouvelle inscription   Fatima Zahra Lahlou (Prothèse dentaire, S1)", date: "2026-07-21" },
-  { type: "paiement", texte: "Paiement reçu   Salma El Amrani, 11 000 MAD (Tranche 3)", date: "2026-07-20" },
-  { type: "note", texte: "Notes saisies   Anatomie dentaire (S1, Prothèse dentaire)", date: "2026-07-19" },
-  { type: "note", texte: "Notes saisies   Rééducation fonctionnelle (S3, Kinésithérapie)", date: "2026-07-18" },
-  { type: "paiement", texte: "Relance envoyée   Omar Bennani, solde 16 500 MAD", date: "2026-07-17" },
-  { type: "inscription", texte: "Réinscription confirmée   Zakaria Moutaouakil (Kinésithérapie, S4)", date: "2026-07-16" },
+  { type: "inscription", texte: "Nouvelle inscription   Fatima Zahra Lahlou (Prothèse dentaire, S1)", texteAr: "تسجيل جديد   فاطمة الزهراء لحلو (تدبير الأسنان، S1)", date: "2026-07-21" },
+  { type: "paiement", texte: "Paiement reçu   Salma El Amrani, 11 000 MAD (Tranche 3)", texteAr: "تلقّي أداء   سلمى العمراني، 11 000 درهم (القسط 3)", date: "2026-07-20" },
+  { type: "note", texte: "Notes saisies   Anatomie dentaire (S1, Prothèse dentaire)", texteAr: "تسجيل النقاط   تشريح الأسنان (S1، تدبير الأسنان)", date: "2026-07-19" },
+  { type: "note", texte: "Notes saisies   Rééducation fonctionnelle (S3, Kinésithérapie)", texteAr: "تسجيل النقاط   إعادة التأهيل الوظيفي (S3، العلاج الطبيعي)", date: "2026-07-18" },
+  { type: "paiement", texte: "Relance envoyée   Omar Bennani, solde 16 500 MAD", texteAr: "إرسال تذكير   عمر بناني، الرصيد المتبقي 16 500 درهم", date: "2026-07-17" },
+  { type: "inscription", texte: "Réinscription confirmée   Zakaria Moutaouakil (Kinésithérapie, S4)", texteAr: "تأكيد إعادة التسجيل   زكرياء الموتاواكيل (العلاج الطبيعي، S4)", date: "2026-07-16" },
 ];
 
 /* ------------------------------------------------------------------ */

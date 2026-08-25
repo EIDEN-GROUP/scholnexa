@@ -1,398 +1,228 @@
-// Static mirror data for the landing page hero
-// These are hardcoded sample values, not from any API
+// Static mirror data for the landing page hero + interactive demo.
+// Faithful miniature of the REAL Scholnexa dashboard (sample data, not from
+// any API): filières/niveaux follow `scholnexa-data.ts` referentials, the
+// dashboard figures match `dashboard.index` (chips, KPI cards, taux de
+// réussite, notifications), money is in MAD, school year 2025/2026.
 
 export type DashboardMiniaturePageId =
   | "dashboard"
-  | "familles"
-  | "paiements"
   | "calendar"
-  | "affiches"
-  | "planifications"
-  | "rapports"
-  | "settings"
-  | "superadmin";
+  | "etudiants"
+  | "examens"
+  | "bulletins"
+  | "formateurs"
+  | "stages"
+  | "paiements"
+  | "settings";
 
 export const MIRROR_PAGE_SIZE = 5;
 
-// Dashboard metrics as cards array
-export const mirrorDashboardMetrics = [
-  {
-    k: "total",
-    label: "Total familles",
-    value: "128",
-    sub: "Depuis le début",
-    tint: "#C9DCF2",
-    accent: "#28396C",
-    icon: ({ className: _ }: { className?: string }) => null,
-    to: "/dashboard/familles",
-    extra: null,
-  },
-  {
-    k: "paye",
-    label: "Payé ce mois",
-    value: "45 600 MAD",
-    sub: "+12% vs mars",
-    tint: "#B5E18B",
-    accent: "#3E6420",
-    icon: ({ className: _ }: { className?: string }) => null,
-    to: "/dashboard/paiements",
-    extra: null,
-  },
-  {
-    k: "retard",
-    label: "En retard",
-    value: "18 200 MAD",
-    sub: "14 familles",
-    tint: "#F6D8D8",
-    accent: "#9A2F2F",
-    icon: ({ className: _ }: { className?: string }) => null,
-    to: "/dashboard/paiements",
-    extra: null,
-  },
-  {
-    k: "impaye",
-    label: "Impayés",
-    value: "14",
-    sub: "Montant total 6 700 MAD",
-    tint: "#F4E3C0",
-    accent: "#8A5A16",
-    icon: ({ className: _ }: { className?: string }) => null,
-    to: "/dashboard/clients",
-    extra: "6 700 MAD",
-  },
+/* ------------------------------------------------------------------ */
+/*  Tableau de bord — exactement `dashboard.index` (vue Direction)     */
+/* ------------------------------------------------------------------ */
+
+/** Chips du DashHero : Étudiants · Séances ajd · Réussite. */
+export const mirrorHeroChips = [
+  { label: "Étudiants", value: "563" },
+  { label: "Séances ajd", value: "0" },
+  { label: "Réussite", value: "94 %" },
 ];
 
-// Revenue chart series
-export const mirrorStatSeries = [
-  { mois: "Sept", encaisse: 42, paiements: 38 },
-  { mois: "Oct", encaisse: 38, paiements: 35 },
-  { mois: "Nov", encaisse: 41, paiements: 40 },
-  { mois: "Déc", encaisse: 32, paiements: 30 },
-  { mois: "Jan", encaisse: 40, paiements: 39 },
-  { mois: "Fév", encaisse: 45, paiements: 42 },
-  { mois: "Mar", encaisse: 44, paiements: 43 },
+/** Les 4 cartes KPI (mêmes libellés/icônes que `KpiCard`). */
+export const mirrorKpis = [
+  { label: "Étudiants actifs", value: "541", tone: "teal" as const },
+  { label: "Formateurs actifs", value: "7", tone: "teal" as const },
+  { label: "Examens à venir", value: "15", tone: "amber" as const },
+  { label: "Bulletins à publier", value: "7", tone: "amber" as const },
 ];
 
-// KPI column
-export const mirrorStatKpis = [
-  { label: "Nouveaux", value: "8", up: true, delta: "+2" },
-  { label: "Taux actif", value: "75%", up: true, delta: "+5%" },
-  { label: "Revenu/mois", value: "43 600", up: true, delta: "+8%" },
-];
-
-// Last payments (also used as mirrorPaymentRows)
-export const mirrorLastPayments = [
-  {
-    id: "1",
-    who: "Karim El Fassi / Youssef",
-    note: "CP - Mensuel mars 2026",
-    amount: 1200,
-    mode: "Espèces",
-    date: "2026-03-15",
-    status: "paye",
-    statut: "paye",
-    parent: "Karim El Fassi",
-    enfant: "Youssef",
-    niveau: "CP",
-    montant: 1200,
-    recu: "EDU-20260315-0001",
-    facture: "envoye",
-  },
-  {
-    id: "2",
-    who: "Amina Benali / Lina",
-    note: "CE1 - Mensuel mars 2026",
-    amount: 900,
-    mode: "Virement",
-    date: "2026-03-14",
-    status: "en_attente",
-    statut: "paye",
-    parent: "Amina Benali",
-    enfant: "Lina",
-    niveau: "CE1",
-    montant: 900,
-    recu: "EDU-20260314-0002",
-    facture: "envoye",
-  },
-  {
-    id: "3",
-    who: "Driss Alaoui / Sofia",
-    note: "CE2 - Mensuel mars 2026",
-    amount: 1500,
-    mode: "Carte",
-    date: "2026-03-14",
-    status: "paye",
-    statut: "paye",
-    parent: "Driss Alaoui",
-    enfant: "Sofia",
-    niveau: "CE2",
-    montant: 1500,
-    recu: "EDU-20260314-0003",
-    facture: "envoye",
-  },
-  {
-    id: "4",
-    who: "Fatima Zahra / Omar",
-    note: "CM1 - Mensuel mars 2026",
-    amount: 1200,
-    mode: "Chèque",
-    date: "2026-03-13",
-    status: "retard",
-    statut: "paye",
-    parent: "Fatima Zahra",
-    enfant: "Omar",
-    niveau: "CM1",
-    montant: 1200,
-    recu: "EDU-20260313-0004",
-    facture: "non_envoye",
-  },
-  {
-    id: "5",
-    who: "Hassan Ouazzani / Aya",
-    note: "GS - Mensuel mars 2026",
-    amount: 600,
-    mode: "Espèces",
-    date: "2026-03-13",
-    status: "impaye",
-    statut: "paye",
-    parent: "Hassan Ouazzani",
-    enfant: "Aya",
-    niveau: "GS",
-    montant: 600,
-    recu: "EDU-20260313-0005",
-    facture: "non_envoye",
-  },
-];
-
-export const mirrorPaymentRows = mirrorLastPayments;
-
-export const mirrorPaymentsEncaisse = 45600;
-
-// Clients list
-export const mirrorClients = [
-  {
-    id: "1",
-    parent: "Karim El Fassi",
-    eleves: ["Youssef"],
-    niveau: "CP",
-    services: ["Transport"],
-    remise: 0,
-    mensuel: 1200,
-    payment: "paye",
-    dette: 0,
-    parentName: "Karim El Fassi",
-    childName: "Youssef",
-    level: "CP",
-    monthlyFee: 1200,
-    paymentStatus: "paye",
-  },
-  {
-    id: "2",
-    parent: "Amina Benali",
-    eleves: ["Lina"],
-    niveau: "CE1",
-    services: [],
-    remise: 5,
-    mensuel: 855,
-    payment: "impaye",
-    dette: 855,
-    parentName: "Amina Benali",
-    childName: "Lina",
-    level: "CE1",
-    monthlyFee: 900,
-    paymentStatus: "en_attente",
-  },
-  {
-    id: "3",
-    parent: "Driss Alaoui",
-    eleves: ["Sofia"],
-    niveau: "CE2",
-    services: ["Cantine", "Garderie"],
-    remise: 0,
-    mensuel: 1500,
-    payment: "paye",
-    dette: 0,
-    parentName: "Driss Alaoui",
-    childName: "Sofia",
-    level: "CE2",
-    monthlyFee: 1500,
-    paymentStatus: "paye",
-  },
-  {
-    id: "4",
-    parent: "Fatima Zahra",
-    eleves: ["Omar"],
-    niveau: "CM1",
-    services: ["Transport", "Cantine"],
-    remise: 10,
-    mensuel: 1080,
-    payment: "retard",
-    dette: 1080,
-    parentName: "Fatima Zahra",
-    childName: "Omar",
-    level: "CM1",
-    monthlyFee: 1200,
-    paymentStatus: "retard",
-  },
-  {
-    id: "5",
-    parent: "Hassan Ouazzani",
-    eleves: ["Aya"],
-    niveau: "GS",
-    services: [],
-    remise: 0,
-    mensuel: 600,
-    payment: "impaye",
-    dette: 1800,
-    parentName: "Hassan Ouazzani",
-    childName: "Aya",
-    level: "GS",
-    monthlyFee: 600,
-    paymentStatus: "impaye",
-  },
-];
-
-// Level split
-export const mirrorLevelSplit = [
-  { name: "CP", value: 18, color: "#28396C" },
-  { name: "CE1", value: 22, color: "#B5E18B" },
-  { name: "CE2", value: 15, color: "#D2624A" },
-  { name: "CM1", value: 20, color: "#F4C542" },
-  { name: "CM2", value: 25, color: "#7BA5D9" },
-  { name: "GS", value: 28, color: "#E8A87C" },
-];
-
-export const mirrorLevelSplitTotal = mirrorLevelSplit.reduce(
-  (s, d) => s + d.value,
-  0,
-);
-
-// Payment modes
-export const mirrorPaymentModes = [
-  { name: "Espèces", value: 45, color: "#28396C" },
-  { name: "Virement", value: 28, color: "#B5E18B" },
-  { name: "Carte", value: 18, color: "#7BA5D9" },
-  { name: "Chèque", value: 9, color: "#F4C542" },
-];
-
-// Pending dues
-export const mirrorPendingDues = [
-  {
-    id: "p1",
-    name: "Fatima Zahra",
-    amount: 1200,
-    period: "Mars 2026",
-    status: "retard",
-    days: 8,
-    level: "CM1",
-  },
-  {
-    id: "p2",
-    name: "Hassan Ouazzani",
-    amount: 1800,
-    period: "Jan-Mar 2026",
-    status: "retard",
-    days: 21,
-    level: "GS",
-  },
-  {
-    id: "p3",
-    name: "Amina Benali",
-    amount: 855,
-    period: "Mars 2026",
-    status: "attente",
-    days: 0,
-    level: "CE1",
-  },
-];
-
-export const mirrorPendingTotal = mirrorPendingDues.reduce(
-  (s, d) => s + d.amount,
-  0,
-);
-
-// Service revenue
-export const mirrorServiceRevenue = [
-  { name: "Transport", value: 14400, color: "#28396C" },
-  { name: "Cantine", value: 21600, color: "#B5E18B" },
-  { name: "Garderie", value: 7200, color: "#7BA5D9" },
-];
-
-export const mirrorServiceRevenueTotal = mirrorServiceRevenue.reduce(
-  (s, d) => s + d.value,
-  0,
-);
-
-// Calendar
-export const mirrorCalendar = {
-  month: "Mars",
-  year: "2026",
-  startOffset: 1,
-  daysInMonth: 31,
-  holidays: [2, 20],
-  vacations: [15, 16, 17],
-  planifications: [10, 24],
-  weekDays: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
-  today: 15,
+/** Barres du graphe « Taux de réussite » (une par filière, %). */
+export const mirrorReussite = {
+  value: 94,
+  bars: [
+    { name: "IP", value: 96 },
+    { name: "IADE", value: 92 },
+    { name: "SF", value: 95 },
+    { name: "KINÉ", value: 93 },
+    { name: "RADIO", value: 94 },
+    { name: "LABO", value: 91 },
+    { name: "PROTH", value: 97 },
+  ],
 };
 
-// Employees
-export const mirrorEmployes = [
-  {
-    id: "1",
-    nomComplet: "Nadia Tazi",
-    poste: "Enseignante",
-    departement: "Primaire",
-    email: "n.tazi@school-crm.ma",
-    tel: "+212 6 12 34 56 78",
-    salaire: 6500,
-    statut: "actif",
-  },
-  {
-    id: "2",
-    nomComplet: "Mohamed Amrani",
-    poste: "Enseignant",
-    departement: "Maternelle",
-    email: "m.amrani@school-crm.ma",
-    tel: "+212 6 23 45 67 89",
-    salaire: 5800,
-    statut: "actif",
-  },
-  {
-    id: "3",
-    nomComplet: "Sara Bennis",
-    poste: "Administratrice",
-    departement: "Admin",
-    email: "s.bennis@school-crm.ma",
-    tel: "+212 6 34 56 78 90",
-    salaire: 7200,
-    statut: "actif",
-  },
+/** Bascule « Recouvrement » : répartition du restant à recouvrer. */
+export const mirrorRecouvrement = {
+  total: 313700,
+  parts: [
+    { name: "À jour", value: 1240500 },
+    { name: "En retard", value: 216400 },
+    { name: "Impayé", value: 96800 },
+  ],
+};
+
+/** Fil d'activités « Notifications » — mêmes types que `ActiviteFeed`. */
+export const mirrorNotifications = [
+  { type: "inscription", texte: "Nouvelle inscription Fatima Zahra Lahlou (Prothèse dentaire, S1)", date: "21 juil. 2026" },
+  { type: "paiement", texte: "Paiement reçu Salma El Amrani, 11 000 MAD (Tranche 3)", date: "20 juil. 2026" },
+  { type: "note", texte: "Notes saisies Anatomie dentaire (S1, Prothèse dentaire)", date: "19 juil. 2026" },
+  { type: "note", texte: "Notes saisies Rééducation fonctionnelle (S3, Kinésithérapie)", date: "18 juil. 2026" },
+  { type: "paiement", texte: "Relance envoyée Omar Bennani, solde 16 500 MAD", date: "17 juil. 2026" },
+  { type: "inscription", texte: "Réinscription confirmée Zakaria Moutaouakil (Kinésithérapie, S4)", date: "16 juil. 2026" },
+] as const;
+
+/* ------------------------------------------------------------------ */
+/*  Planning — vue semaine (créneaux réels de `scholnexa-data`)        */
+/* ------------------------------------------------------------------ */
+
+export const mirrorPlanning = {
+  creneaux: [
+    "08:30 – 10:00",
+    "10:15 – 11:45",
+    "12:00 – 13:30",
+    "14:00 – 15:30",
+    "15:45 – 17:15",
+  ],
+  days: ["Lun", "Mar", "Mer", "Jeu", "Ven"],
+  // Une séance par créneau×jour ; `null` = case vide.
+  // tones : teal | amber | blue | violet
+  seances: [
+    [{ m: "Anatomie", g: "S1-A", s: "Amphi A", tone: "teal" }, null, { m: "Biophysique", g: "S1-B", s: "Amphi B", tone: "blue" }, null, { m: "Anatomie", g: "S1-A", s: "Amphi A", tone: "teal" }],
+    [{ m: "Rééducation", g: "S3-G1", s: "Salle rééd.", tone: "amber" }, { m: "Anatomie", g: "S1-B", s: "Amphi A", tone: "teal" }, null, { m: "Kiné cardio", g: "S3-G2", s: "Labo sim. 1", tone: "amber" }, null],
+    [null, { m: "Radioprotection", g: "S4-G1", s: "Amphi B", tone: "violet" }, { m: "Prothèse", g: "S1-A", s: "Atelier", tone: "teal" }, null, { m: "Scanner/IRM", g: "S5-G1", s: "Labo sim. 2", tone: "blue" }],
+    [{ m: "Biologie méd.", g: "S2-A", s: "Labo bio", tone: "blue" }, null, { m: "Obstétrique", g: "S4-G2", s: "Amphi A", tone: "violet" }, { m: "Soins intensifs", g: "S5-G2", s: "Labo sim. 1", tone: "amber" }, null],
+    [null, { m: "Anesthésie", g: "S5-G1", s: "Labo sim. 2", tone: "amber" }, null, { m: "Législation", g: "S6-G1", s: "Amphi B", tone: "teal" }, { m: "Rééducation", g: "S3-G1", s: "Salle rééd.", tone: "amber" }],
+  ] as ({ m: string; g: string; s: string; tone: "teal" | "amber" | "blue" | "violet" } | null)[][],
+};
+
+/* ------------------------------------------------------------------ */
+/*  Étudiants — colonnes réelles : CNE · Nom · Filière · Niveau ·      */
+/*  Statut · Paiement                                                  */
+/* ------------------------------------------------------------------ */
+
+export const mirrorEtudiants = [
+  { id: "1", cne: "D162004321", nom: "Salma El Amrani", filiere: "Prothèse dentaire", niveau: "S1", statut: "Actif", paiement: "paye" },
+  { id: "2", cne: "D162004322", nom: "Fatima Zahra Lahlou", filiere: "Prothèse dentaire", niveau: "S1", statut: "Actif", paiement: "paye" },
+  { id: "3", cne: "D162004087", nom: "Zakaria Moutaouakil", filiere: "Kinésithérapie", niveau: "S4", statut: "Actif", paiement: "paye" },
+  { id: "4", cne: "D162003955", nom: "Omar Bennani", filiere: "Kinésithérapie", niveau: "S3", statut: "Actif", paiement: "retard" },
+  { id: "5", cne: "D162004189", nom: "Lina Ouazzani", filiere: "Infirmier polyvalent", niveau: "S2", statut: "Actif", paiement: "impaye" },
+] as const;
+
+/* ------------------------------------------------------------------ */
+/*  Examens — Examen · Module · Groupe · Type · Date · Statut          */
+/* ------------------------------------------------------------------ */
+
+export const mirrorExamens = [
+  { id: "1", titre: "Anatomie dentaire", module: "Anatomie dentaire", groupe: "S1-A", type: "Contrôle continu", date: "02 sept.", niveau: "S1", formateur: "N. Tazi", statut: "Planifié" },
+  { id: "2", titre: "Réanimation et soins intensifs", module: "Soins intensifs", groupe: "S5-G2", type: "Évaluation pratique (TP)", date: "28 août", niveau: "S5", formateur: "R. Benjelloun", statut: "Planifié" },
+  { id: "3", titre: "Scanner et IRM", module: "Imagerie médicale", groupe: "S5-G1", type: "Évaluation pratique (TP)", date: "26 août", niveau: "S5", formateur: "M. Amrani", statut: "Notes saisies" },
+  { id: "4", titre: "Rééducation fonctionnelle", module: "Rééducation", groupe: "S3-G1", type: "Examen théorique", date: "25 août", niveau: "S3", formateur: "S. Bennis", statut: "Notes saisies" },
+  { id: "5", titre: "Biologie médicale", module: "Biochimie", groupe: "S2-A", type: "Contrôle continu", date: "22 août", niveau: "S2", formateur: "Y. Idrissi", statut: "En cours" },
+] as const;
+
+/* ------------------------------------------------------------------ */
+/*  Bulletins — Étudiant · Niveau · Moyenne · Mention · Décision ·     */
+/*  Statut (+ chip « 7 à publier »)                                    */
+/* ------------------------------------------------------------------ */
+
+export const mirrorBulletins = {
+  aPublier: 7,
+  rows: [
+    { id: "1", etudiant: "Salma El Amrani", niveau: "S1", moyenne: "15,4", mention: "Bien", decision: "Admise", statut: "Publié" },
+    { id: "2", etudiant: "Zakaria Moutaouakil", niveau: "S4", moyenne: "13,8", mention: "Assez bien", decision: "Admis", statut: "Publié" },
+    { id: "3", etudiant: "Omar Bennani", niveau: "S3", moyenne: "11,2", mention: "Passable", decision: "Admis", statut: "À publier" },
+    { id: "4", etudiant: "Lina Ouazzani", niveau: "S2", moyenne: "14,6", mention: "Bien", decision: "Admise", statut: "À publier" },
+    { id: "5", etudiant: "Aya Rachidi", niveau: "S6", moyenne: "16,1", mention: "Très bien", decision: "Admise", statut: "Publié" },
+  ] as const,
+};
+
+/* ------------------------------------------------------------------ */
+/*  Formateurs — Matricule · Nom · Département · Modules · Statut      */
+/* ------------------------------------------------------------------ */
+
+export const mirrorFormateurs = [
+  { id: "1", matricule: "FO-001", nom: "Nadia Tazi", departement: "Infirmier polyvalent", modules: 3, statut: "Actif" },
+  { id: "2", matricule: "FO-002", nom: "Mohamed Amrani", departement: "Radiologie / Imagerie médicale", modules: 2, statut: "Actif" },
+  { id: "3", matricule: "FO-003", nom: "Sara Bennis", departement: "Kinésithérapie", modules: 4, statut: "Actif" },
+  { id: "4", matricule: "FO-004", nom: "Youssef Idrissi", departement: "Laboratoire / Biologie médicale", modules: 2, statut: "Actif" },
+  { id: "5", matricule: "FO-005", nom: "Rim Benjelloun", departement: "Infirmier anesthésie-réanimation", modules: 3, statut: "Actif" },
+] as const;
+
+/* ------------------------------------------------------------------ */
+/*  Stages — Étudiant · Structure d'accueil · Service · Période ·      */
+/*  Statut (structures réelles de `STRUCTURES_ACCUEIL`)                */
+/* ------------------------------------------------------------------ */
+
+export const mirrorStages = [
+  { id: "1", etudiant: "Zakaria Moutaouakil", structure: "CHR Hassan II — Agadir", service: "Rééducation fonctionnelle", periode: "juil. – sept. 2026", statut: "En cours" },
+  { id: "2", etudiant: "Salma El Amrani", structure: "CHU Ibn Rochd — Agadir", service: "Laboratoire central", periode: "sept. – oct. 2026", statut: "Convention signée" },
+  { id: "3", etudiant: "Omar Bennani", structure: "Clinique Al Massira — Agadir", service: "Kinésithérapie", periode: "mai – juil. 2026", statut: "Soutenance" },
+  { id: "4", etudiant: "Lina Ouazzani", structure: "Hôpital Hassan II — Agadir", service: "Urgences", periode: "à définir", statut: "Recherche" },
+  { id: "5", etudiant: "Aya Rachidi", structure: "Hôpital préfectoral Inezgane", service: "Radiologie", periode: "avr. – juin 2026", statut: "Validé" },
+] as const;
+
+/* ------------------------------------------------------------------ */
+/*  Paiements — 5 KPI + table par étudiant (vue réelle)                */
+/* ------------------------------------------------------------------ */
+
+export const mirrorPaiementKpis = [
+  { label: "Encaissé (mois)", value: "142 600", tone: "teal" as const },
+  { label: "En attente", value: "18 200", tone: "amber" as const },
+  { label: "En retard", value: "21 300", tone: "red" as const },
+  { label: "Impayés", value: "9", tone: "red" as const },
+  { label: "À recouvrer", value: "39 500", tone: "blue" as const },
 ];
 
-// Settings sections
+export const mirrorPaiementsRows = [
+  { id: "1", etudiant: "Salma El Amrani", filiere: "Prothèse dentaire", semestre: "S1", annee: "1ère année", regle: "11 000", reste: "0", statut: "paye" },
+  { id: "2", etudiant: "Zakaria Moutaouakil", filiere: "Kinésithérapie", semestre: "S4", annee: "2ème année", regle: "24 000", reste: "0", statut: "paye" },
+  { id: "3", etudiant: "Omar Bennani", filiere: "Kinésithérapie", semestre: "S3", annee: "2ème année", regle: "8 500", reste: "16 500", statut: "retard" },
+  { id: "4", etudiant: "Lina Ouazzani", filiere: "Infirmier polyvalent", semestre: "S2", annee: "1ère année", regle: "6 000", reste: "12 000", statut: "impaye" },
+  { id: "5", etudiant: "Aya Rachidi", filiere: "Radiologie / Imagerie médicale", semestre: "S6", annee: "3ème année", regle: "27 000", reste: "0", statut: "paye" },
+] as const;
+
+export const STATUT_PAIEMENT_COURT: Record<string, { label: string; cls: string }> = {
+  paye: { label: "Payé", cls: "bg-[#C9A066]/30 text-[#44614F]" },
+  en_attente: { label: "En attente", cls: "bg-[#F4E3C0] text-[#8A5A16]" },
+  retard: { label: "Retard", cls: "bg-[#F6D8D8] text-[#9A2F2F]" },
+  impaye: { label: "Impayé", cls: "bg-[#F6D8D8] text-[#9A2F2F]" },
+};
+
+/* ------------------------------------------------------------------ */
+/*  Paramètres — sections du vrai module Paramètres                    */
+/* ------------------------------------------------------------------ */
+
 export const mirrorSettingsSections = [
   {
-    title: "Général",
-    desc: "Nom du centre, adresse, email, téléphone",
+    title: "Établissement",
+    desc: "Nom de l'école, ville, contacts",
     rows: [
-      { label: "Nom du centre", value: "Scholnexa" },
-      { label: "Adresse", value: "Agadir, Maroc" },
+      { label: "Nom de l'école", value: "Institut Atlas Santé" },
+      { label: "Ville", value: "Agadir" },
     ],
   },
   {
-    title: "Niveaux",
-    desc: "CP, CE1, CE2, CM1, CM2, GS",
-    rows: [{ label: "Niveaux actifs", value: "6" }],
+    title: "Filières & modules",
+    desc: "7 filières · modules par semestre",
+    rows: [
+      { label: "Filières actives", value: "7" },
+      { label: "Semestres", value: "S1 – S6" },
+    ],
   },
   {
-    title: "Services",
-    desc: "Transport, Cantine, Garderie",
-    rows: [{ label: "Services actifs", value: "3" }],
+    title: "Groupes & salles",
+    desc: "S1-A → S6-G2 · 12 salles",
+    rows: [
+      { label: "Groupes", value: "12" },
+      { label: "Salles & labos", value: "12" },
+    ],
   },
   {
-    title: "Paiement",
-    desc: "Espèces, Virement, Carte, Chèque",
-    rows: [{ label: "Modes de paiement", value: "4" }],
+    title: "Utilisateurs & rôles",
+    desc: "Direction, enseignants, administration",
+    rows: [
+      { label: "Utilisateurs", value: "14" },
+      { label: "Rôles actifs", value: "3" },
+    ],
   },
 ];
+

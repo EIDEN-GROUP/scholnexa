@@ -152,7 +152,7 @@ function DashboardPlanifications() {
             </div>
             <button
               onClick={() => createMutation.mutate()}
-              className="w-full rounded-full bg-brand py-2.5 text-sm font-semibold text-white hover:bg-[#5a9232]"
+              className="w-full rounded-full bg-brand py-2.5 text-sm font-semibold text-white hover:bg-[#14332e]"
             >
               Créer
             </button>

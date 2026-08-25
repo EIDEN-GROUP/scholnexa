@@ -62,7 +62,7 @@ export async function buildApp() {
   // Vercel preview deployments). Exact entries are matched literally;
   // wildcard entries are converted to RegExp.
   const corsOrigins: (string | RegExp)[] = env.CORS_ORIGIN.split(",")
-    .map((s) => s.trim())
+    .map((s) => s.trim().replace(/\/+$/, ""))
     .filter(Boolean)
     .map((origin) =>
       origin.includes("*")

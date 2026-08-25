@@ -25,13 +25,15 @@ import { BRAND } from "@/lib/brand";
 /* ------------------------------------------------------------------ */
 
 export const PALETTE = {
-  blue: "#2563eb",
-  blueDk: "#1e40af",
-  blueMd: "#1d4ed8",
-  bluePale: "#dbeafe",
-  blueWash: "#eef5ff",
+  blue: "#1a3e39",
+  blueDk: "#102824",
+  blueMd: "#14332e",
+  bluePale: "#d9e4e1",
+  blueWash: "#eef3f1",
+  gold: "#c9a066",
+  goldDk: "#a87f44",
   red: "#e51e26",
-  ink: "#14213d",
+  ink: "#1a3e39",
   white: "#ffffff",
 } as const;
 

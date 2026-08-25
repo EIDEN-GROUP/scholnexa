@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useAuth, ROLE_META } from "@/lib/auth";
 import { useScholnexa, useCurrentFormateur } from "@/lib/scholnexa-store";
+import { useDashboardI18n } from "@/lib/dashboard-i18n";
 import {
   fmtMAD,
   fmtDate,
@@ -133,9 +134,11 @@ function useTabs(initial = 0) {
 
 function DashHero({ chips }: { chips: { label: string; value: string | number }[] }) {
   const { role, user } = useAuth();
+  const { locale, t } = useDashboardI18n();
+  const ht = t.homeIndex;
   const h = new Date().getHours();
-  const greeting = h < 12 ? "Bonjour" : h < 18 ? "Bon après-midi" : "Bonsoir";
-  const dateStr = new Date().toLocaleDateString("fr-FR", {
+  const greeting = h < 12 ? ht.greeting.morning : h < 18 ? ht.greeting.afternoon : ht.greeting.evening;
+  const dateStr = new Date().toLocaleDateString(locale === "ar" ? "ar-MA" : "fr-FR", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
 
@@ -153,7 +156,7 @@ function DashHero({ chips }: { chips: { label: string; value: string | number }[
             {greeting}{user?.name ? `, ${user.name}` : ""}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {role ? ROLE_META[role].label : "Tableau de bord"} <span aria-hidden>·</span> <span className="capitalize">{dateStr}</span>
+            {role ? (ht.roleLabels[role] ?? ROLE_META[role].label) : ht.roleFallback} <span aria-hidden>·</span> <span className="capitalize">{dateStr}</span>
           </p>
         </div>
 
@@ -373,7 +376,7 @@ function KpiGrid({ children }: { children: ReactNode }) {
 type PerfMetric = "reussite" | "recouvrement";
 
 /** Recouvrement palette   teal / amber / coral (reference « Mail Statistic » donut). */
-const RECOUV_COLORS = ["#029994", "#f0a92e", "#ee6c4d"];
+const RECOUV_COLORS = ["#1A3E39", "#f0a92e", "#ee6c4d"];
 
 type PieDatum = { name: string; value: number; color: string };
 
@@ -450,6 +453,8 @@ function MetricSwitchChart({
   reussiteData: ChartDatum[];
   recouvrementData: ChartDatum[];
 }) {
+  const { t } = useDashboardI18n();
+  const ht = t.homeIndex;
   const [metric, setMetric] = useState<PerfMetric>("reussite");
   const isReussite = metric === "reussite";
   const color = "var(--chart-2)";
@@ -464,7 +469,7 @@ function MetricSwitchChart({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className={eyebrowClass}>
-            {isReussite ? "Taux de réussite" : "Total À recouvrer"}
+            {isReussite ? ht.metric.reussite : ht.metric.recouvrement}
           </p>
           <p className="mt-1 font-display text-2xl font-bold leading-none tracking-tight text-foreground">
             {isReussite ? `${reussite} %` : fmtMAD(aRecouvrer)}
@@ -478,8 +483,8 @@ function MetricSwitchChart({
         >
           {(
             [
-              ["reussite", "Réussite"],
-              ["recouvrement", "Recouvrement"],
+              ["reussite", ht.metric.reussiteShort],
+              ["recouvrement", ht.metric.recouvrementShort],
             ] as const
           ).map(([key, tabLabel]) => {
             const active = metric === key;
@@ -535,7 +540,7 @@ function MetricSwitchChart({
                   axisLine={false}
                   stroke="var(--muted-foreground)"
                 />
-                <Tooltip contentStyle={dashTooltip} cursor={dashCursor} formatter={(v: number) => [`${v} %`, "Réussite"]} />
+                <Tooltip contentStyle={dashTooltip} cursor={dashCursor} formatter={(v: number) => [`${v} %`, ht.metric.reussiteShort]} />
                 <Bar dataKey="value" maxBarSize={34} radius={[6, 6, 0, 0]} fill={`url(#${gid})`} animationDuration={600} />
               </BarChart>
             </ResponsiveContainer>
@@ -622,6 +627,8 @@ const ACTIVITE_ICON: Record<ActiviteItem["type"], typeof UserPlus> = {
 
 function ActiviteFeed() {
   const { activite } = useScholnexa();
+  const { locale } = useDashboardI18n();
+  const dateLocale = locale === "ar" ? "ar-MA" : "fr-FR";
   return (
     <div className={cn(softCard, "divide-y divide-brand/8 overflow-hidden")}>
       {activite.slice(0, 8).map((a, i) => {
@@ -638,8 +645,10 @@ function ActiviteFeed() {
               <Icon className="h-4 w-4" />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block text-sm text-foreground">{a.texte}</span>
-              <span className="block text-xs text-muted-foreground">{fmtDate(a.date)}</span>
+              <span className="block text-sm text-foreground">{locale === "ar" && a.texteAr ? a.texteAr : a.texte}</span>
+              <span className="block text-xs text-muted-foreground">
+                {new Date(a.date).toLocaleDateString(dateLocale, { day: "numeric", month: "short", year: "numeric" })}
+              </span>
             </span>
           </motion.div>
         );
@@ -709,7 +718,8 @@ const TH = "border-b border-brand/15 bg-muted text-[11px] font-semibold uppercas
 
 function AujourdhuiTable({ seances }: { seances: Seance[] }) {
   const { formateurs } = useScholnexa();
-  if (!seances.length) return <EmptyState icon={Calendar}>Aucune séance prévue aujourd&rsquo;hui.</EmptyState>;
+  const { t } = useDashboardI18n();
+  if (!seances.length) return <EmptyState icon={Calendar}>{t.homeIndex.empty.aucuneSeance}</EmptyState>;
   const tri = seances.slice().sort((a, b) => (a.debut < b.debut ? -1 : 1));
   return (
     <>
@@ -887,22 +897,24 @@ function StudentAvatarList({ etudiants }: { etudiants: { id: string; prenom: str
 /*  Director Dashboard                                                 */
 /* ------------------------------------------------------------------ */
 
-const DIRECTOR_TABS: DashTab[] = [
-  { label: "Vue d'ensemble", short: "Ensemble", icon: LayoutGrid },
-  { label: "Académique", icon: GraduationCap },
-  { label: "Analyse", icon: BarChart3 },
-];
-
 function DashboardDirecteur() {
   const { tab, setTab, direction } = useTabs();
+  const { t } = useDashboardI18n();
+  const ht = t.homeIndex;
   const { dashboard, financier, reussiteFiliere, formateurs, seances, examens, etudiants, aTraiter, repartitionFiliere, repartitionNiveau } = useScholnexa();
+
+  const DIRECTOR_TABS: DashTab[] = [
+    { label: ht.tabs.ensemble, short: ht.tabs.ensembleShort, icon: LayoutGrid },
+    { label: ht.tabs.academique, icon: GraduationCap },
+    { label: ht.tabs.analyse, icon: BarChart3 },
+  ];
 
   // Décomposition du « reste à recouvrer » par statut de paiement, pour le graphe.
   const recouvrementData = useMemo<ChartDatum[]>(() => [
-    { name: "En attente", value: financier.enAttente },
-    { name: "Retard", value: financier.retard },
-    { name: "Impayé", value: financier.impaye },
-  ], [financier]);
+    { name: ht.recouvrementParts.enAttente, value: financier.enAttente },
+    { name: ht.recouvrementParts.retard, value: financier.retard },
+    { name: ht.recouvrementParts.impaye, value: financier.impaye },
+  ], [financier, ht]);
 
   const seancesAujourdhui = useMemo(() => seances.filter((s) => s.date === today), [seances]);
   // « Étudiants actifs » = ceux dont la scolarité est en cours (statut inscrit),
@@ -951,7 +963,7 @@ function DashboardDirecteur() {
 
   return (
     <>
-      <DashHero chips={[{ label: "étudiants", value: dashboard.totalInscrits }, { label: "Séances ajd", value: seancesAujourdhui.length }, { label: "Réussite", value: `${dashboard.tauxReussite} %` }]} />
+      <DashHero chips={[{ label: ht.chips.etudiants, value: dashboard.totalInscrits }, { label: ht.chips.seancesAjd, value: seancesAujourdhui.length }, { label: ht.chips.reussite, value: `${dashboard.tauxReussite} %` }]} />
       <DashWorkspace tabs={DIRECTOR_TABS} tab={tab} onChange={setTab} direction={direction}>
         {tab === 0 ? (
           <div className="space-y-6 mt-5">
@@ -960,10 +972,10 @@ function DashboardDirecteur() {
                 cale avec les quatre autres cartes. */}
             <div className="grid grid-cols-1 gap-3 min-[500px]:grid-cols-2 sm:gap-4 lg:grid-cols-2 xl:grid-cols-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <KpiCard label="Étudiants actifs" value={etudiantsActifs} icon={Users} />
-                <KpiCard label="Formateurs actifs" value={dashboard.formateursActifs} />
-                <KpiCard label="Examens À venir" value={aTraiter.examensAVenir} tone="amber" icon={BookOpen} />
-                <KpiCard label="Bulletins À publier" value={aTraiter.bulletinsAPublier} tone="amber" icon={PenLine} />
+                <KpiCard label={ht.kpis.etudiantsActifs} value={etudiantsActifs} icon={Users} />
+                <KpiCard label={ht.kpis.formateursActifs} value={dashboard.formateursActifs} />
+                <KpiCard label={ht.kpis.examensAVenir} value={aTraiter.examensAVenir} tone="amber" icon={BookOpen} />
+                <KpiCard label={ht.kpis.bulletinsAPublier} value={aTraiter.bulletinsAPublier} tone="amber" icon={PenLine} />
               </div>
               <MetricSwitchChart
                 reussite={dashboard.tauxReussite}
@@ -972,10 +984,10 @@ function DashboardDirecteur() {
                 recouvrementData={recouvrementData}
               />
             </div>
-            <Section title="Aujourd&rsquo;hui" action={<SectionLink to="/dashboard/calendar">Voir le planning</SectionLink>}>
+            <Section title={ht.sections.aujourdhui} action={<SectionLink to="/dashboard/calendar">{ht.links.voirPlanning}</SectionLink>}>
               <AujourdhuiTable seances={seancesAujourdhui} />
             </Section>
-            <Section title="Notifications">
+            <Section title={ht.sections.notifications}>
               <ActiviteFeed />
             </Section>
           </div>
@@ -983,30 +995,30 @@ function DashboardDirecteur() {
           <div className="space-y-6">
             <div className="grid gap-6 xl:grid-cols-3">
               <div className="xl:col-span-2">
-                <Section title="Examens récents" action={<SectionLink to="/dashboard/examens">Tous les examens</SectionLink>}>
+                <Section title={ht.sections.examensRecents} action={<SectionLink to="/dashboard/examens">{ht.links.tousExamens}</SectionLink>}>
                   <ExamensRecentsTable examens={examensRecents} />
                 </Section>
               </div>
               <div className="xl:col-span-1">
-                <Section title="Nouveaux étudiants" action={<SectionLink to="/dashboard/etudiants">Tous les étudiants</SectionLink>}>
+                <Section title={ht.sections.nouveauxEtudiants} action={<SectionLink to="/dashboard/etudiants">{ht.links.tousEtudiants}</SectionLink>}>
                   <StudentAvatarList etudiants={derniersEtudiants} />
                 </Section>
               </div>
             </div>
-            <Section title="Synthèse des examens" action={<SectionLink to="/dashboard/examens">Tous les examens</SectionLink>}>
+            <Section title={ht.sections.syntheseExamens} action={<SectionLink to="/dashboard/examens">{ht.links.tousExamens}</SectionLink>}>
               <div className="grid gap-4 xl:grid-cols-2">
-                <DonutChart title="Examens par statut" data={examensParStatut} palette={BRAND_CHART_COLORS} />
-                <BarSeries title="Examens par type" data={examensParType} colorful palette={BRAND_CHART_COLORS} />
+                <DonutChart title={ht.charts.examensParStatut} data={examensParStatut} palette={BRAND_CHART_COLORS} />
+                <BarSeries title={ht.charts.examensParType} data={examensParType} colorful palette={BRAND_CHART_COLORS} />
                 <div className="xl:col-span-2">
                   <GroupedBarSeries
                     // Pas de sous-titre : la légende dit déjà « Planifiés / Faits ».
-                    title="Examens par formateur"
+                    title={ht.charts.examensParFormateur}
                     height={300}
                     data={examensParFormateur}
                     series={[
                       // Mêmes couleurs que les badges de statut : bleu « planifié », teal « notes saisies ».
-                      { key: "planifies", label: "Planifiés", color: BRAND_CHART_COLORS[1] },
-                      { key: "faits", label: "Faits", color: BRAND_CHART_COLORS[0] },
+                      { key: "planifies", label: ht.charts.planifies, color: BRAND_CHART_COLORS[1] },
+                      { key: "faits", label: ht.charts.faits, color: BRAND_CHART_COLORS[0] },
                     ]}
                   />
                 </div>
@@ -1015,16 +1027,16 @@ function DashboardDirecteur() {
           </div>
         ) : (
           <div className="space-y-6">
-            <Section title="Analyse">
+            <Section title={ht.sections.analyse}>
               <div className="grid gap-4 xl:grid-cols-2">
-                <DonutChart title="Répartition par filière" data={repartitionFiliere} palette={BRAND_CHART_COLORS} />
-                <BarSeries title="Répartition par niveau" data={repartitionNiveau} colorful palette={BRAND_CHART_COLORS} />
-                <AreaTrend title="Examens par mois" data={examensParMois} color="var(--scholnexa-sky)" />
-                <LineTrend title="Séances par jour de la semaine" data={sessionsParJour} color="var(--scholnexa-amber)" />
+                <DonutChart title={ht.charts.repartitionFiliere} data={repartitionFiliere} palette={BRAND_CHART_COLORS} />
+                <BarSeries title={ht.charts.repartitionNiveau} data={repartitionNiveau} colorful palette={BRAND_CHART_COLORS} />
+                <AreaTrend title={ht.charts.examensParMois} data={examensParMois} color="var(--scholnexa-sky)" />
+                <LineTrend title={ht.charts.seancesParJour} data={sessionsParJour} color="var(--scholnexa-amber)" />
               </div>
             </Section>
             <Section
-              title="Charge des formateurs"
+              title={ht.sections.chargeFormateurs}
               action={<DateRangeFilter du={chargeDu} a={chargeA} onDu={setChargeDu} onA={setChargeA} />}
             >
               <div className={cn(softCard, "divide-y divide-brand/8 overflow-hidden")}>
@@ -1104,6 +1116,8 @@ function DashboardDirecteur() {
 
 function DashboardEnseignant() {
   const { tab, setTab, direction } = useTabs();
+  const { t, locale } = useDashboardI18n();
+  const ht = t.homeIndex;
   const { seances, examens, bulletins, etudiants } = useScholnexa();
   const moi = useCurrentFormateur();
   const mesExamens = useMemo(() => (moi ? examens.filter((x) => moi.modules.includes(x.module)) : []), [examens, moi]);
@@ -1121,36 +1135,36 @@ function DashboardEnseignant() {
   }, [etudiants, moi]);
   const mesBulletins = useMemo(() => (moi ? bulletins.filter((b) => moi.modules.some((m) => b.notes?.some((n) => n.module === m))) : []), [bulletins, moi]);
   const calendrierProche = useMemo(() => mesSeances.filter((s) => s.date >= today).slice(0, 8), [mesSeances]);
-  if (!moi) return <EmptyState icon={GraduationCap}>Aucun formateur enregistré.</EmptyState>;
+  if (!moi) return <EmptyState icon={GraduationCap}>{ht.empty.aucunFormateur}</EmptyState>;
   const aNoter = mesExamens.filter((x) => x.statut !== "notes_saisies");
   const bulletinsAPublier = mesBulletins.filter((b) => b.statut !== "publie");
   const PROFESSOR_TABS: DashTab[] = [
-    { label: "Vue d'ensemble", short: "Ensemble", icon: LayoutGrid },
-    { label: "Examens", icon: BookOpen, badge: aNoter.length },
-    { label: "étudiants & Bulletins", short: "étudiants", icon: Users },
+    { label: ht.tabs.ensemble, short: ht.tabs.ensembleShort, icon: LayoutGrid },
+    { label: ht.tabs.examens, icon: BookOpen, badge: aNoter.length },
+    { label: ht.tabs.etudiantsBulletins, short: ht.tabs.etudiantsShort, icon: Users },
   ];
 
   return (
     <>
-      <DashHero chips={[{ label: "Groupes", value: moi.groupes.length }, { label: "Séances ajd", value: seancesAujourdhui.length }, { label: "À€ noter", value: aNoter.length }]} />
+      <DashHero chips={[{ label: ht.chips.groupes, value: moi.groupes.length }, { label: ht.chips.seancesAjd, value: seancesAujourdhui.length }, { label: ht.chips.aNoter, value: aNoter.length }]} />
       <DashWorkspace tabs={PROFESSOR_TABS} tab={tab} onChange={setTab} direction={direction}>
         {tab === 0 ? (
           <div className="space-y-5">
             <KpiGrid>
-              <KpiCard label="Mes groupes" value={moi.groupes.length} icon={Users} accent />
-              <KpiCard label="Mes modules" value={moi.modules.length} tone="blue" icon={BookOpen} />
-              <KpiCard label="Séances aujourd&rsquo;hui" value={seancesAujourdhui.length} icon={Calendar} />
-              <KpiCard label="Mes examens" value={mesExamens.length} tone="amber" icon={GraduationCap} />
-              <KpiCard label="Examens À  noter" value={aNoter.length} tone={aNoter.length ? "red" : "teal"} icon={PenLine} />
+              <KpiCard label={ht.kpis.mesGroupes} value={moi.groupes.length} icon={Users} accent />
+              <KpiCard label={ht.kpis.mesModules} value={moi.modules.length} tone="blue" icon={BookOpen} />
+              <KpiCard label={ht.kpis.seancesAujourdhui} value={seancesAujourdhui.length} icon={Calendar} />
+              <KpiCard label={ht.kpis.mesExamens} value={mesExamens.length} tone="amber" icon={GraduationCap} />
+              <KpiCard label={ht.kpis.examensANoter} value={aNoter.length} tone={aNoter.length ? "red" : "teal"} icon={PenLine} />
             </KpiGrid>
             <div className="grid gap-6 xl:grid-cols-2">
-              <Section title="Notifications"><ActiviteFeed /></Section>
-              <Section title="Mon calendrier (7 jours)" action={<SectionLink to="/dashboard/calendar">Voir tout</SectionLink>}>
+              <Section title={ht.sections.notifications}><ActiviteFeed /></Section>
+              <Section title={ht.sections.monCalendrier} action={<SectionLink to="/dashboard/calendar">{ht.links.voirTout}</SectionLink>}>
                 <div className={cn(softCard, "divide-y divide-brand/8 overflow-hidden")}>
                   {calendrierProche.length ? calendrierProche.map((s) => (
                     <div key={s.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 transition-colors hover:bg-brand/6 sm:px-5">
                       <span className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-xl bg-brand/12 text-center leading-tight">
-                        <span className="text-[10px] font-bold uppercase text-brand-dk">{new Date(s.date).toLocaleDateString("fr-FR", { weekday: "short" }).slice(0, 3)}</span>
+                        <span className="text-[10px] font-bold uppercase text-brand-dk">{new Date(s.date).toLocaleDateString(locale === "ar" ? "ar-MA" : "fr-FR", { weekday: "short" }).slice(0, 3)}</span>
                         <span className="text-xs font-bold text-brand-dk">{new Date(s.date).getDate()}</span>
                       </span>
                       <span className="min-w-0 flex-1">
@@ -1159,24 +1173,24 @@ function DashboardEnseignant() {
                       </span>
                       <span className={toneBadge("blue")}>{TYPE_SEANCE_LABEL[s.type]}</span>
                     </div>
-                  )) : <p className="px-5 py-8 text-center text-sm text-muted-foreground">Aucune séance à venir.</p>}
+                  )) : <p className="px-5 py-8 text-center text-sm text-muted-foreground">{ht.empty.aucuneSeanceAVenir}</p>}
                 </div>
               </Section>
             </div>
-            <Section title="Mes séances aujourd&rsquo;hui" action={<SectionLink to="/dashboard/calendar">Mon planning</SectionLink>}>
+            <Section title={ht.sections.mesSeances} action={<SectionLink to="/dashboard/calendar">{ht.links.monPlanning}</SectionLink>}>
                 <AujourdhuiTable seances={seancesAujourdhui} />
               </Section>
           </div>
         ) : tab === 1 ? (
-          <Section title="Mes examens" action={<Link to="/dashboard/examens" className={primaryPill}><Plus className="h-4 w-4" />Créer un examen</Link>}>
+          <Section title={ht.sections.mesExamens} action={<Link to="/dashboard/examens" className={primaryPill}><Plus className="h-4 w-4" />{ht.links.creerExamen}</Link>}>
             <ExamensRecentsTable examens={mesExamens} />
           </Section>
         ) : (
           <div className="grid gap-6 xl:grid-cols-1">
-            <Section title="Mes étudiants" action={<SectionLink to="/dashboard/etudiants">Tous les étudiants</SectionLink>}>
+            <Section title={ht.sections.mesEtudiants} action={<SectionLink to="/dashboard/etudiants">{ht.links.tousEtudiants}</SectionLink>}>
               <StudentAvatarList etudiants={mesEtudiants} />
             </Section>
-            <Section title="Bulletins en attente de publication" action={<SectionLink to="/dashboard/bulletins">Tous les bulletins</SectionLink>}>
+            <Section title={ht.sections.bulletinsAttente} action={<SectionLink to="/dashboard/bulletins">{ht.links.tousBulletins}</SectionLink>}>
               <BulletinsRecentsTable bulletins={bulletinsAPublier} />
             </Section>
           </div>
@@ -1211,6 +1225,8 @@ function conflitsGlobaux(seances: Seance[]) {
 
 function DashboardResponsable() {
   const { tab, setTab, direction } = useTabs();
+  const { t } = useDashboardI18n();
+  const ht = t.homeIndex;
   const { formateurs, seances, aTraiter, dashboard } = useScholnexa();
   const seancesAujourdhui = useMemo(() => seances.filter((s) => s.date === today), [seances]);
   const sallesOccupees = useMemo(() => [...new Set(seancesAujourdhui.map((s) => s.salle))], [seancesAujourdhui]);
@@ -1222,33 +1238,33 @@ function DashboardResponsable() {
   const maxCharge = Math.max(...chargeFormateurs.map((x) => x.seances), 1);
   const maxOcc = Math.max(...occupationSalles.map((x) => x.seancesCount), 1);
   const SUPERVISOR_TABS: DashTab[] = [
-    { label: "Vue d'ensemble", short: "Ensemble", icon: LayoutGrid },
-    { label: "Planification", short: "Planning", icon: CalendarRange, badge: conflits.length },
-    { label: "Analyse", icon: BarChart3 },
+    { label: ht.tabs.ensemble, short: ht.tabs.ensembleShort, icon: LayoutGrid },
+    { label: ht.tabs.planification, short: ht.tabs.planningShort, icon: CalendarRange, badge: conflits.length },
+    { label: ht.tabs.analyse, icon: BarChart3 },
   ];
 
   return (
     <>
-      <DashHero chips={[{ label: "Séances ajd", value: seancesAujourdhui.length }, { label: "Salles libres", value: SALLES.length - sallesOccupees.length }, { label: "Conflits", value: conflits.length }]} />
+      <DashHero chips={[{ label: ht.chips.seancesAjd, value: seancesAujourdhui.length }, { label: ht.chips.sallesLibres, value: SALLES.length - sallesOccupees.length }, { label: ht.chips.conflits, value: conflits.length }]} />
       <DashWorkspace tabs={SUPERVISOR_TABS} tab={tab} onChange={setTab} direction={direction}>
         {tab === 0 ? (
           <div className="space-y-6">
             <KpiGrid>
-              <KpiCard label="Séances aujourd&rsquo;hui" value={seancesAujourdhui.length} icon={Calendar} accent />
-              <KpiCard label="Formateurs actifs" value={dashboard.formateursActifs} hint={`sur ${formateurs.length} total`} tone="blue" icon={GraduationCap} />
-              <KpiCard label="Salles occupées" value={sallesOccupees.length} icon={MapPin} />
-              <KpiCard label="Salles disponibles" value={SALLES.length - sallesOccupees.length} tone={SALLES.length - sallesOccupees.length > 3 ? "teal" : "amber"} icon={Building2} />
-              <KpiCard label="Conflits" value={conflits.length} tone={conflits.length ? "red" : "teal"} icon={AlertCircle} />
-              <KpiCard label="Stages À  valider" value={aTraiter.stagesAValider} tone="amber" icon={BookOpen} />
+              <KpiCard label={ht.kpis.seancesAujourdhui} value={seancesAujourdhui.length} icon={Calendar} accent />
+              <KpiCard label={ht.kpis.formateursActifs} value={dashboard.formateursActifs} hint={`sur ${formateurs.length} total`} tone="blue" icon={GraduationCap} />
+              <KpiCard label={ht.kpis.sallesOccupees} value={sallesOccupees.length} icon={MapPin} />
+              <KpiCard label={ht.kpis.sallesDisponibles} value={SALLES.length - sallesOccupees.length} tone={SALLES.length - sallesOccupees.length > 3 ? "teal" : "amber"} icon={Building2} />
+              <KpiCard label={ht.kpis.conflits} value={conflits.length} tone={conflits.length ? "red" : "teal"} icon={AlertCircle} />
+              <KpiCard label={ht.kpis.stagesAValider} value={aTraiter.stagesAValider} tone="amber" icon={BookOpen} />
             </KpiGrid>
-            <Section title="Aujourd&rsquo;hui" action={<SectionLink to="/dashboard/calendar">Voir le planning</SectionLink>}>
+            <Section title={ht.sections.aujourdhui} action={<SectionLink to="/dashboard/calendar">{ht.links.voirPlanning}</SectionLink>}>
               <AujourdhuiTable seances={seancesAujourdhui} />
             </Section>
-            <Section title="Notifications"><ActiviteFeed /></Section>
+            <Section title={ht.sections.notifications}><ActiviteFeed /></Section>
           </div>
         ) : tab === 1 ? (
           <div className="space-y-6">
-            <Section title="Alertes d'ordonnancement">
+            <Section title={ht.sections.alertesOrd}>
               <div className={cn(softCard, "divide-y divide-brand/8 overflow-hidden")}>
                 {conflits.length ? conflits.slice(0, 6).map((c, i) => {
                   const p1 = formateurs.find((f) => f.id === c.s1.professeurId);
@@ -1267,12 +1283,12 @@ function DashboardResponsable() {
               </div>
             </Section>
             <div className="grid gap-6 xl:grid-cols-2">
-              <Section title="Charge des formateurs">
+              <Section title={ht.sections.chargeFormateurs}>
                 <div className={cn(softCard, "divide-y divide-brand/8 overflow-hidden")}>
                   {chargeFormateurs.map((f) => <MeterRow key={f.id} label={f.nom} ratio={f.seances / maxCharge} color={f.seances / maxCharge > 0.8 ? TONE_COLORS.red : f.seances / maxCharge > 0.5 ? TONE_COLORS.amber : TONE_COLORS.teal} detail={`${f.seances} séances`} />)}
                 </div>
               </Section>
-              <Section title="Occupation des salles">
+              <Section title={ht.sections.occupationSalles}>
                 <div className={cn(softCard, "divide-y divide-brand/8 overflow-hidden")}>
                   {occupationSalles.map((o) => <MeterRow key={o.salle} label={o.salle} ratio={o.seancesCount / maxOcc} color={o.aujourdhui > 0 ? TONE_COLORS.teal : TONE_COLORS.neutral} detail={<>{o.seancesCount} séances{o.aujourdhui > 0 ? <span className="ml-1 text-brand">Â· {o.aujourdhui} ajd</span> : null}</>} />)}
                 </div>
@@ -1280,17 +1296,17 @@ function DashboardResponsable() {
             </div>
           </div>
         ) : (
-          <Section title="Analyse">
+          <Section title={ht.sections.analyse}>
             <div className="grid gap-4 lg:grid-cols-1 2xl:grid-cols-2">
-              <DonutChart title="Occupation des salles" height={220} data={occupationSalles.map((o) => ({ name: o.salle, value: o.seancesCount }))} />
+              <DonutChart title={ht.charts.occupationSalles} height={220} data={occupationSalles.map((o) => ({ name: o.salle, value: o.seancesCount }))} />
               <HBarSeries
-                title="Charge des formateurs"
+                title={ht.sections.chargeFormateurs}
                 height={220}
                 data={workloadData}
                 formatter={(value: number, _name: string, entry: { payload?: { seances?: number } }) => [`${entry.payload?.seances ?? value} séances`, "Charge"]}
               />
             </div>
-            <AreaTrend title="Séances par jour" height={220} data={sessionsParJour} color="var(--chart-4)" />
+            <AreaTrend title={ht.charts.seancesParJour} height={220} data={sessionsParJour} color="var(--chart-4)" />
             
           </Section>
         )}

@@ -108,29 +108,29 @@ function printBulletin(b: Bulletin, groupe?: string) {
   const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <title>Bulletin   ${b.prenom} ${b.nom}</title>
 <style>
-  body{font-family:system-ui,sans-serif;color:#123b3a;margin:40px;}
-  h1{color:#029994;font-size:20px;margin:0 0 4px;}
+  body{font-family:system-ui,sans-serif;color:#102824;margin:40px;}
+  h1{color:#1a3e39;font-size:20px;margin:0 0 4px;}
   .sub{color:#556;font-size:12px;margin-bottom:24px;}
   table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
-  th{text-align:left;background:#f1f9f9;color:#017a76;font-size:11px;
+  th{text-align:left;background:#eef3f1;color:#14332e;font-size:11px;
      text-transform:uppercase;letter-spacing:.06em;padding:8px;}
-  td{padding:8px;border-top:1px solid #d6efee;}
+  td{padding:8px;border-top:1px solid #d9e4e1;}
   .r{text-align:right;}
   .sum{margin-top:24px;font-size:13px;}
   .sum div{display:flex;justify-content:space-between;
-           border-bottom:1px solid #d6efee;padding:6px 0;}
-  .clin{background:#f1f9f9;font-weight:600;}
+           border-bottom:1px solid #d9e4e1;padding:6px 0;}
+  .clin{background:#eef3f1;font-weight:600;}
   .calc{margin-top:28px;page-break-inside:avoid;}
-  .calc h2{color:#017a76;font-size:14px;margin:0 0 6px;}
-  .formula{background:#eef7f6;border:1px solid #d6efee;border-radius:8px;
-           padding:10px 12px;font-size:13px;color:#123b3a;margin:0 0 4px;}
+  .calc h2{color:#14332e;font-size:14px;margin:0 0 6px;}
+  .formula{background:#eef3f1;border:1px solid #d9e4e1;border-radius:8px;
+           padding:10px 12px;font-size:13px;color:#102824;margin:0 0 4px;}
   .note{color:#556;font-size:11px;margin-top:6px;}
   .cachet{margin-top:36px;text-align:right;page-break-inside:avoid;}
   .cachet img{max-width:150px;max-height:120px;}
   .cachet .lbl{color:#556;font-size:10px;margin-top:2px;
                text-transform:uppercase;letter-spacing:.06em;}
 </style></head><body>
-<h1>Scholnexa — Bulletin de notes</h1>
+<h1>Scholnexa - Bulletin de notes</h1>
 <div class="sub">Institut spécialisé des techniques paramédicales</div>
 <div class="sum">
   <div><span>Étudiant</span><strong>${b.prenom} ${b.nom}</strong></div>
