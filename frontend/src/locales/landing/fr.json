@@ -365,7 +365,13 @@
     "perMonthShort": " MAD/ mois",
     "planLabel": "formule",
     "of": "sur",
+    "studentsLabel": "Nombre d'étudiants",
+    "forStudents": "jusqu'à {{count}} étudiants",
     "miniFaq": [
+      {
+        "q": "Le prix évolue-t-il avec mon effectif ?",
+        "a": "Oui — choisissez votre nombre d'étudiants et le prix s'ajuste par tranche de 100. Vous changez de palier à tout moment, sans perdre vos données."
+      },
       {
         "q": "Puis-je payer mensuellement ?",
         "a": "Oui, les deux options sont disponibles. L'engagement annuel vous offre 2 mois offerts."
@@ -373,19 +379,16 @@
       {
         "q": "Y a-t-il des frais cachés ?",
         "a": "Non. Le prix affiché inclut l'onboarding, la formation et le support. Aucune surprise."
-      },
-      {
-        "q": "Que se passe-t-il si mon école grandit ?",
-        "a": "Passez de Essentiel à Pro en un clic, sans perdre vos données. Notre équipe vous accompagne."
       }
     ],
     "plans": [
       {
         "id": "essentiel",
         "name": "Essentiel",
-        "blurb": "Jusqu'à ~500 étudiants actifs. Un seul administrateur.",
+        "blurb": "Un seul administrateur. Parfait pour démarrer.",
         "features": [
           "Dossiers étudiants & inscriptions",
+          "Comptes formateurs dédiés",
           "Agenda & emploi du temps",
           "Rapports de base",
           "Support par email"
@@ -398,6 +401,7 @@
         "blurb": "Pour les écoles actives : équipe multi-rôles et pilotage renforcé.",
         "features": [
           "Tout Essentiel",
+          "Comptes formateurs dédiés",
           "Paiements & relances automatiques",
           "Examens, bulletins & relevés de notes",
           "Suivi des stages cliniques",
@@ -436,7 +440,7 @@
       },
       {
         "q": "Combien d'étudiants la plateforme peut-elle gérer ?",
-        "a": "Essentiel prend en charge jusqu'à ~500 étudiants actifs. Pro est sans limite pratique. Réseau est conçu pour les groupes multi-campus. Contactez-nous pour un diagnostic personnalisé."
+        "a": "Le prix s'ajuste à votre effectif par tranche de 100 étudiants — utilisez le sélecteur dans la section Tarifs. Pro ajoute le multi-rôles et le pilotage renforcé ; Réseau est conçu pour les groupes multi-campus. Contactez-nous pour un diagnostic personnalisé."
       },
       {
         "q": "Y a-t-il une application mobile ?",

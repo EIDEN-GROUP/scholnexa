@@ -12,7 +12,7 @@ import { HeroDashboardShot } from "@/components/hero-dashboard-shot";
 import type { DashboardMiniaturePageId } from "@/lib/dashboard-mirror-data";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
-import { useLandingI18n, getDateFnsLocale, DEMO_STEP_PAGES, PREVIEW_TOP_NAV_IDS, PREVIEW_SECONDARY_NAV_IDS, } from "@/lib/landing-i18n";
+import { useLandingI18n, getDateFnsLocale, interpolate, DEMO_STEP_PAGES, PREVIEW_TOP_NAV_IDS, PREVIEW_SECONDARY_NAV_IDS, } from "@/lib/landing-i18n";
 import { submitDemoRequest } from "@/lib/contact-demo";
 import { BRAND } from "@/lib/brand";
 
@@ -54,11 +54,25 @@ const TESTIMONIAL_AVATARS = [
   { initials: "OT", avatarColor: "#b91c1c", stars: 4 },
 ] as const;
 
-const PRICING_AMOUNTS = {
-  essentiel: { monthly: 1000, yearly: 8000, popular: false },
-  pro: { monthly: 2000, yearly: 16000, popular: true },
-  reseau: { monthly: null, yearly: null, popular: false },
+/* Tarif par tranche d'étudiants : base jusqu'à 100 étudiants, puis +step par
+   tranche supplémentaire de 100 (comptée entamée). L'annuel reste « 2 mois
+   offerts » : yearly = monthly × 10. Réseau reste sur mesure. */
+const PRICING_MODEL = {
+  essentiel: { base: 1000, step: 400, included: 100, popular: false },
+  pro: { base: 2000, step: 800, included: 100, popular: true },
+  reseau: null,
 } as const;
+
+/** Paliers proposés dans le sélecteur d'effectif. */
+const STUDENT_OPTIONS = [100, 250, 500] as const;
+const DEFAULT_STUDENTS = 250;
+
+function planMonthly(planId: string, students: number): number | null {
+  const model = PRICING_MODEL[planId as keyof typeof PRICING_MODEL];
+  if (!model) return null;
+  const extraBrackets = Math.max(0, Math.ceil((students - model.included) / 100));
+  return model.base + extraBrackets * model.step;
+}
 
 // Per-plan icon shown at the top of each pricing card.
 const PRICING_ICONS = [Sparkles, BadgeDollarSign, Building2] as const;
@@ -1446,19 +1460,19 @@ type Plan = {
   popular?: boolean;
 };
 
-function buildPricingPlans(t: ReturnType<typeof useLandingI18n>["t"]): Plan[] {
+function buildPricingPlans(t: ReturnType<typeof useLandingI18n>["t"], students: number): Plan[] {
   return t.pricing.plans.map((plan) => {
-    const amounts = PRICING_AMOUNTS[plan.id as keyof typeof PRICING_AMOUNTS];
+    const monthly = planMonthly(plan.id, students);
     return {
       ...plan,
-      monthly: amounts.monthly,
-      yearly: amounts.yearly,
-      popular: amounts.popular,
+      monthly,
+      yearly: monthly == null ? null : monthly * 10,
+      popular: plan.id === "pro",
     };
   });
 }
 
-function PricingCard({ plan, idx, yearly }: { plan: Plan; idx: number; yearly: boolean }) {
+function PricingCard({ plan, idx, yearly, students }: { plan: Plan; idx: number; yearly: boolean; students: number }) {
   const { t, numberLocale } = useLandingI18n();
   const Icon = PRICING_ICONS[idx] ?? PRICING_ICONS[0];
   const featured = plan.popular;
@@ -1510,7 +1524,7 @@ function PricingCard({ plan, idx, yearly }: { plan: Plan; idx: number; yearly: b
       <div className="mt-6 min-h-[4.5rem]">
         <AnimatePresence mode="wait">
           <motion.div
-            key={`${plan.id}-${yearly}`}
+            key={`${plan.id}-${yearly}-${students}`}
             initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: -12, filter: "blur(4px)" }}
@@ -1527,6 +1541,20 @@ function PricingCard({ plan, idx, yearly }: { plan: Plan; idx: number; yearly: b
                 </div>
                 <p className={cn("mt-1.5 text-xs font-semibold uppercase tracking-wider sm:text-sm", featured ? "text-[#FAF8F1]/70" : "text-[#5E7370]")}>
                   {yearly ? t.pricing.perYear : t.pricing.perMonth}
+                </p>
+                {yearly && (
+                  /* Économie rendue visible : le prix plein (×12) barré + le badge « −2 mois ». */
+                  <p className={cn("mt-1 text-xs", featured ? "text-[#FAF8F1]/60" : "text-[#5E7370]/80")}>
+                    <span className="line-through opacity-60">
+                      {(plan.monthly! * 12).toLocaleString(numberLocale)}{t.pricing.perYear}
+                    </span>
+                    <span className={cn("ms-1.5 inline-block rounded-full px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wide", featured ? "bg-[#C9A066]/25 text-[#F0DDB4]" : "bg-[#C9A066]/25 text-[#7D5C28]")}>
+                      {t.pricing.yearlyDiscount}
+                    </span>
+                  </p>
+                )}
+                <p className={cn("mt-0.5 text-[11px] font-medium sm:text-xs", featured ? "text-[#FAF8F1]/60" : "text-[#5E7370]/80")}>
+                  {interpolate(t.pricing.forStudents, { count: students.toLocaleString(numberLocale) })}
                 </p>
                 {yearly && (
                   <p className={cn("mt-1 text-xs", featured ? "text-[#FAF8F1]/60" : "text-[#5E7370]/80")}>
@@ -1584,8 +1612,9 @@ function PricingCard({ plan, idx, yearly }: { plan: Plan; idx: number; yearly: b
 }
 
 function PricingSection() {
-  const { t } = useLandingI18n();
-  const pricingPlans = buildPricingPlans(t);
+  const { t, numberLocale } = useLandingI18n();
+  const [students, setStudents] = useState<number>(DEFAULT_STUDENTS);
+  const pricingPlans = buildPricingPlans(t, students);
   const [yearly, setYearly] = useState(true);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -1672,6 +1701,35 @@ function PricingSection() {
               {yearly ? t.pricing.billingYearly : t.pricing.billingMonthly}
             </motion.p>
           </AnimatePresence>
+
+          {/* Sélecteur d'effectif : les prix Essentiel / Pro s'ajustent par tranche de 100 étudiants. */}
+          <div className="flex flex-col items-center gap-2.5">
+            <p className="text-xs font-bold uppercase tracking-wider text-[#5E7370]">{t.pricing.studentsLabel}</p>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {STUDENT_OPTIONS.map((count) => {
+                const active = students === count;
+                return (
+                  <button
+                    key={count}
+                    type="button"
+                    onClick={() => setStudents(count)}
+                    aria-pressed={active}
+                    className={cn(
+                      "min-w-[4.25rem] rounded-full border px-4 py-2 text-sm font-bold tabular-nums transition-all",
+                      active
+                        ? "border-[#1A3E39] bg-[#1A3E39] text-[#FAF8F1] shadow-[0_12px_25px_-12px_rgba(16,40,36,0.6)]"
+                        : "border-[#1A3E39]/15 bg-white text-[#1A3E39] hover:border-[#617F6A]/50 hover:bg-[#C9A066]/10",
+                    )}
+                  >
+                    {count.toLocaleString(numberLocale)}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-xs font-medium text-[#5E7370]">
+              {interpolate(t.pricing.forStudents, { count: students.toLocaleString(numberLocale) })}
+            </p>
+          </div>
         </motion.div>
 
         <div className="mt-10 w-full min-w-0 lg:hidden">
@@ -1679,7 +1737,7 @@ function PricingSection() {
             <CarouselContent className="-ml-3 sm:-ml-4">
               {pricingPlans.map((plan, idx) => (
                 <CarouselItem key={plan.id} className="basis-[min(100%,22rem)] pl-3 sm:basis-[88%] sm:pl-4">
-                  <PricingCard plan={plan} idx={idx} yearly={yearly} />
+                  <PricingCard plan={plan} idx={idx} yearly={yearly} students={students} />
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -1710,7 +1768,7 @@ function PricingSection() {
           className="mt-10 hidden min-w-0 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid lg:grid-cols-3 lg:items-stretch"
         >
           {pricingPlans.map((plan, idx) => (
-            <PricingCard key={plan.id} plan={plan} idx={idx} yearly={yearly} />
+            <PricingCard key={plan.id} plan={plan} idx={idx} yearly={yearly} students={students} />
           ))}
         </motion.div>
 
