@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Sidebar application shell.
  *
  * Replaces the previous horizontal top-nav. Layout:
@@ -25,8 +25,9 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { ROLES, ROLE_META, useAuth } from "@/lib/auth";
+import { BRAND } from "@/lib/brand";
 import { useDashboardI18n } from "@/lib/dashboard-i18n";
-import { useScholnexa } from "@/lib/scholnexa-store";
+import { useEssor } from "@/lib/scholnexa-store";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { AiChatFloating } from "@/components/ai-chat";
@@ -83,7 +84,7 @@ function isActive(pathname: string, to: string) {
 /*  Réglage : rail replié                                              */
 /* ------------------------------------------------------------------ */
 
-const COLLAPSE_KEY = "scholnexa-sidebar-collapsed";
+const COLLAPSE_KEY = "essor-sidebar-collapsed";
 
 // Note: the lg+ rail is now icon-only (see IconRail); useCollapsed is retained
 // only for potential reuse and is no longer wired into the shell.
@@ -144,7 +145,7 @@ function NavRow({
         ROW_BASE,
         collapsed ? "justify-center px-0" : nested && "ps-9",
         active
-          ? "bg-gradient-to-b from-med to-med-dk text-white shadow-[0_10px_22px_-10px_rgb(var(--scholnexa-shadow)/0.55)]"
+          ? "bg-gradient-to-b from-med to-med-dk text-white shadow-[0_10px_22px_-10px_rgb(var(--essor-shadow)/0.55)]"
           : "text-muted-foreground hover:bg-brand/8 hover:text-brand-dk",
       )}
     >
@@ -269,7 +270,7 @@ function NavGroupBlock({
 
 function RoleSwitcher({ collapsed }: { collapsed?: boolean }) {
   const { role, setRole, selectedFormateurId, setSelectedFormateurId } = useAuth();
-  const { formateurs } = useScholnexa();
+  const { formateurs } = useEssor();
   const navigate = useNavigate();
   const [pickerOpen, setPickerOpen] = useState(false);
 
@@ -422,7 +423,7 @@ function SidebarBody({
         >
           <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-xl bg-white ring-1 ring-brand/12">
             <img
-              src="/scholnexa-logo-mark.png"
+              src={BRAND.logoMarkPath}
               alt={`${brand} logo`}
               className="h-9 w-9 rounded-lg object-contain"
             />
@@ -542,7 +543,7 @@ const RAIL_TILE =
   "grid h-11 w-11 place-items-center rounded-2xl outline-none transition-all duration-200 focus-visible:ring-2 focus-visible:ring-brand/50";
 /** Active tile   filled medical-green squircle with a white glyph. */
 const RAIL_TILE_ACTIVE =
-  "bg-gradient-to-b from-med to-med-dk text-white shadow-[0_12px_24px_-12px_rgb(var(--scholnexa-shadow)/0.7)]";
+  "bg-gradient-to-b from-med to-med-dk text-white shadow-[0_12px_24px_-12px_rgb(var(--essor-shadow)/0.7)]";
 const RAIL_TILE_IDLE =
   "text-muted-foreground/75 hover:bg-ink/[0.05] hover:text-foreground";
 
@@ -675,7 +676,7 @@ function IconRail({
         className="grid h-18 w-18 shrink-0 place-items-center"
       >
         <img
-        src="/scholnexa-logo-mark.png"
+        src={BRAND.logoMarkPath}
         alt={`${brand} logo`}
         className="h-15 w-15 object-contain"
         />
@@ -828,7 +829,7 @@ export function DashSidebarShell({
           </button>
           <Link to="/dashboard" className="flex min-w-0 items-center gap-2">
             <img
-              src="/scholnexa-logo-mark.png"
+              src={BRAND.logoMarkPath}
               alt={`${brand} logo`}
               className="h-10 w-10 shrink-0 object-contain"
             />

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
+﻿import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Loader2, Check, Ban, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -165,7 +165,7 @@ function FloatingButton({ onClick, open }: { onClick: () => void; open: boolean 
         // RTL). Sur mobile comme sur desktop, il est AU-DESSUS du sélecteur de
         // langue (mobile : pilule à 5.5rem au-dessus de la barre d'onglets ;
         // desktop : pilule à bottom-6).
-        "fixed bottom-[8.25rem] end-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-[0_16px_40px_-12px_rgb(var(--scholnexa-shadow)/0.5)] transition-shadow hover:shadow-[0_20px_50px_-12px_rgb(var(--scholnexa-shadow)/0.6)] lg:bottom-[4.25rem]",
+        "fixed bottom-[8.25rem] end-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-[0_16px_40px_-12px_rgb(var(--essor-shadow)/0.5)] transition-shadow hover:shadow-[0_20px_50px_-12px_rgb(var(--essor-shadow)/0.6)] lg:bottom-[4.25rem]",
         open
           ? "bg-muted text-foreground ring-1 ring-brand/20"
           : "bg-gradient-to-b from-brand to-brand-dk text-white",
@@ -186,7 +186,7 @@ function FloatingButton({ onClick, open }: { onClick: () => void; open: boolean 
   );
 }
 
-const CHAT_STORAGE_KEY = "scholnexa-ai-chat";
+const CHAT_STORAGE_KEY = "essor-ai-chat";
 
 function loadChatHistory(): ChatMessage[] {
   try {
@@ -369,7 +369,7 @@ export function AiChatFloating() {
               // Panneau au-dessus du bouton, même côté logique (end) que lui.
               // Hauteur responsive : laisse la place au bouton + pilule de langue
               // empilés au-dessus de la barre d'onglets (mobile) ou du bord (desktop).
-              "fixed bottom-[12rem] end-6 z-50 flex h-[min(560px,calc(100dvh-13.5rem))] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden shadow-[0_32px_80px_-20px_rgb(var(--scholnexa-shadow)/0.5)] lg:bottom-[8.25rem] lg:h-[min(560px,calc(100dvh-9.5rem))]",
+              "fixed bottom-[12rem] end-6 z-50 flex h-[min(560px,calc(100dvh-13.5rem))] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden shadow-[0_32px_80px_-20px_rgb(var(--essor-shadow)/0.5)] lg:bottom-[8.25rem] lg:h-[min(560px,calc(100dvh-9.5rem))]",
             )}
           >
             <div className="flex shrink-0 items-center gap-3 border-b border-brand/12 bg-gradient-to-r from-brand to-brand-dk px-5 py-4 text-white">

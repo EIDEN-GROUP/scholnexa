@@ -1,6 +1,6 @@
-/**
+﻿/**
  * Shared dashboard UI tokens   soft, rounded, professional look
- * expressed in the SCHX palette (teal-charcoal #1a3e39 · red #e51e26 · white #ffffff).
+ * expressed in the Essor brand palette (Electric Blue #2563EB · Deep Ink #0B1220 · White #FFFFFF).
  *
  * Import these instead of re-declaring per-page magic strings so every dashboard
  * page shares one consistent surface / input / badge language.
@@ -50,12 +50,12 @@ const focusRing =
 
 /** Primary pill button   solid teal, one colour, with a light shadow. Main CTA. */
 export const primaryPill =
-  "inline-flex items-center gap-2 rounded-full bg-med px-5 py-2.5 text-sm font-bold text-white shadow-[0_4px_12px_-4px_rgb(var(--scholnexa-shadow)/0.3)] transition-all duration-200 hover:bg-med-dk active:scale-[0.98] " +
+  "inline-flex items-center gap-2 rounded-full bg-med px-5 py-2.5 text-sm font-bold text-white shadow-[0_4px_12px_-4px_rgb(var(--essor-shadow)/0.3)] transition-all duration-200 hover:bg-med-dk active:scale-[0.98] " +
   focusRing;
 
 /** Solid dark-teal pill button (secondary emphasis). */
 export const navyPill =
-  "inline-flex items-center gap-2 rounded-full bg-brand-dk px-5 py-2.5 text-sm font-medium text-white shadow-[0_4px_12px_-4px_rgb(var(--scholnexa-shadow)/0.28)] transition-all duration-200 hover:bg-brand-md active:scale-[0.98] " +
+  "inline-flex items-center gap-2 rounded-full bg-brand-dk px-5 py-2.5 text-sm font-medium text-white shadow-[0_4px_12px_-4px_rgb(var(--essor-shadow)/0.28)] transition-all duration-200 hover:bg-brand-md active:scale-[0.98] " +
   focusRing;
 
 /** Destructive pill button   solid red, reserved for irreversible actions. */
@@ -106,7 +106,7 @@ export const dashTooltip = {
   background: "color-mix(in srgb, var(--card) 88%, transparent)",
   backdropFilter: "blur(8px)",
   WebkitBackdropFilter: "blur(8px)",
-  border: "1px solid rgb(var(--scholnexa-shadow) / 0.16)",
+  border: "1px solid rgb(var(--essor-shadow) / 0.16)",
   borderRadius: 14,
   boxShadow: "var(--elevation-3)",
   color: "var(--foreground)",
@@ -114,7 +114,7 @@ export const dashTooltip = {
 } as const;
 
 /** Shared Recharts cursor fill for hovered bars/areas   faint teal wash. */
-export const dashCursor = { fill: "rgb(var(--scholnexa-shadow) / 0.06)" } as const;
+export const dashCursor = { fill: "rgb(var(--essor-shadow) / 0.06)" } as const;
 
 /** Ordered chart palette   teal family first, red last so it stays meaningful. */
 export const CHART_COLORS = [
@@ -129,18 +129,18 @@ export const CHART_COLORS = [
 
 /**
  * Multi-tone brand palette   teal + blue + amber + violet + sage + coral + red.
- * Unlike the monochrome teal `CHART_COLORS` ramp, this spans the full Scholnexa
+ * Unlike the monochrome teal `CHART_COLORS` ramp, this spans the full Essor
  * brand family so a chart reads as colourful/categorical. Opt-in per chart via
  * the `palette` prop   used on the director "Analyse" dashboard.
  */
 export const BRAND_CHART_COLORS = [
-  "var(--scholnexa-blue)",
-  "var(--scholnexa-sky)",
-  "var(--scholnexa-amber)",
-  "var(--scholnexa-violet)",
-  "var(--scholnexa-sage)",
-  "var(--scholnexa-coral)",
-  "var(--scholnexa-red)",
+  "var(--essor-blue)",
+  "var(--essor-sky)",
+  "var(--essor-amber)",
+  "var(--essor-violet)",
+  "var(--essor-sage)",
+  "var(--essor-coral)",
+  "var(--essor-red)",
 ] as const;
 
 /**
@@ -148,19 +148,19 @@ export const BRAND_CHART_COLORS = [
  * where a class name will not do.
  */
 export const TONE_COLORS: Record<BadgeTone, string> = {
-  teal: "var(--scholnexa-blue)",
-  red: "var(--scholnexa-red)",
-  amber: "var(--scholnexa-amber)",
-  blue: "var(--scholnexa-sky)",
-  neutral: "var(--scholnexa-blue-lt)",
+  teal: "var(--essor-blue)",
+  red: "var(--essor-red)",
+  amber: "var(--essor-amber)",
+  blue: "var(--essor-sky)",
+  neutral: "var(--essor-blue-lt)",
 };
 
 /** Status colours   payé / en attente / retard / impayé (shared across pages). */
 export const STATUS_COLORS = {
-  paye: "var(--scholnexa-blue)",
-  en_attente: "var(--scholnexa-amber)",
-  retard: "var(--scholnexa-red)",
-  impaye: "var(--scholnexa-red-dk)",
+  paye: "var(--essor-blue)",
+  en_attente: "var(--essor-amber)",
+  retard: "var(--essor-red)",
+  impaye: "var(--essor-red-dk)",
 } as const;
 
 /**

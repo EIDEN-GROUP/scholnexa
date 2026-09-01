@@ -1,4 +1,4 @@
-import {
+﻿import {
   createContext,
   useCallback,
   useContext,
@@ -30,7 +30,7 @@ import { LOCALE_SYNC_EVENT, type LocaleSyncEventDetail } from "@/lib/landing-i18
 export type DashboardLocale = "fr" | "ar";
 export type DashboardTranslations = typeof frDashboard;
 
-const STORAGE_KEY = "gestio-locale";
+const STORAGE_KEY = "essor-locale";
 
 const dashboardDictionaries: Record<DashboardLocale, DashboardTranslations> = {
   fr: frDashboard,

@@ -1,4 +1,4 @@
-import {
+﻿import {
   createContext,
   useCallback,
   useContext,
@@ -20,19 +20,19 @@ export type DashboardTranslations = typeof frDashboard;
 
 /**
  * La landing et le dashboard partagent la même langue : la clé de stockage de
- * la landing est dédiée mais retombe sur celle du dashboard (`gestio-locale`)
+ * la landing est dédiée mais retombe sur celle du dashboard (`essor-locale`)
  * comme valeur par défaut, et chaque changement écrit les deux clés pour que
  * les deux univers restent synchronisés.
  */
-const STORAGE_KEY = "scholnexa-landing-locale";
-const DASHBOARD_STORAGE_KEY = "gestio-locale";
+const STORAGE_KEY = "essor-landing-locale";
+const DASHBOARD_STORAGE_KEY = "essor-locale";
 
 /**
  * Cross-provider sync. The dashboard keeps its own i18n context (`lib/dashboard-i18n`),
  * so every locale change is broadcast on the window and adopted by the other
  * provider — otherwise one universe would render FR while the other renders AR.
  */
-export const LOCALE_SYNC_EVENT = "scholnexa:locale-sync";
+export const LOCALE_SYNC_EVENT = "essor:locale-sync";
 export type LocaleSyncEventDetail = { locale: LandingLocale };
 
 function broadcastLocale(locale: LandingLocale) {

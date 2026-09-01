@@ -1,4 +1,4 @@
-import type { FastifyInstance } from "fastify";
+﻿import type { FastifyInstance } from "fastify";
 import { getDb } from "@/db";
 import { centers } from "@/db/schema/centers";
 import { centerAdmins } from "@/db/schema/center-admins";
@@ -25,7 +25,7 @@ export async function adminRoutes(app: FastifyInstance) {
   }));
 
   app.get("/info", async () => ({
-    name: "Scholnexa",
+    name: "Essor",
     version: "1.0.0",
     environment: getEnv().NODE_ENV,
   }));

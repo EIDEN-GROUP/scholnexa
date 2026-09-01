@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Building2, Plus, Trash2, Save } from "lucide-react";
-import { useScholnexa } from "@/lib/scholnexa-store";
+import { useEssor } from "@/lib/scholnexa-store";
 import {
   Dialog,
   DialogContent,
@@ -37,7 +37,7 @@ export function StructuresAccueilDialog({
     addStructureAccueil,
     updateStructureAccueil,
     deleteStructureAccueil,
-  } = useScholnexa();
+  } = useEssor();
 
   const normalize = (s: unknown) =>
     typeof s === "string" ? { nom: s, capacite: 5 } : (s as Row);

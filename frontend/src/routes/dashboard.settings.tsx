@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import {
   Plus,
@@ -40,7 +40,7 @@ import {
   type GroupConfig,
   type StructureAccueil,
 } from "@/lib/scholnexa-data";
-import { useScholnexa } from "@/lib/scholnexa-store";
+import { useEssor } from "@/lib/scholnexa-store";
 import { useStamp, setStamp, prepareStampFromFile } from "@/lib/stamp";
 import {
   fetchSettings,
@@ -515,7 +515,7 @@ const EMPTY_MODULE_FORM: ModuleForm = {
  * l'application ; un module ne peut être enregistré sans filière associée.
  */
 function ModulesSection({ filieres }: { filieres: string[] }) {
-  const { modules, addModule, updateModule, deleteModule } = useScholnexa();
+  const { modules, addModule, updateModule, deleteModule } = useEssor();
   const [filtre, setFiltre] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<ModuleRecord | null>(null);
@@ -1057,7 +1057,7 @@ function NewUserForm({
 /* ------------------------------------------------------------------ */
 
 function GroupesSection() {
-  const { groupConfigs, addGroupConfig, updateGroupConfig, deleteGroupConfig } = useScholnexa();
+  const { groupConfigs, addGroupConfig, updateGroupConfig, deleteGroupConfig } = useEssor();
   const [activeSemester, setActiveSemester] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<GroupConfig | null>(null);
@@ -1278,7 +1278,7 @@ function SettingsPage() {
     // en dérive sa grille horaire, ils vivent donc dans le store partagé.
     creneauxLabels: creneaux,
     setCreneaux,
-  } = useScholnexa();
+  } = useEssor();
 
   const autorisees = role ? SECTIONS_PAR_ROLE[role] : [];
   const peut = (id: SectionId) => autorisees.includes(id);
@@ -1299,9 +1299,9 @@ function SettingsPage() {
   const [activeGroup, setActiveGroup] = useState(0);
 
   const [institut, setInstitut] = useState({
-    nom: "Scholnexa",
+    nom: "Essor",
     ville: "Agadir",
-    telephone: "+212 5 28 00 00 00",
+    telephone: "+212 5 00 00 00 00",
     email: "contact@eiden-group.com",
   });
   const [systeme, setSysteme] = useState({

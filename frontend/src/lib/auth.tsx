@@ -1,4 +1,4 @@
-import {
+﻿import {
   createContext,
   useCallback,
   useContext,
@@ -38,20 +38,20 @@ export const DEMO_FORMATEUR_ID = "fo-1";
 const demoFormateur = FORMATEURS.find((f) => f.id === DEMO_FORMATEUR_ID);
 
 const ROLE_USER: Record<UserRole, { name: string; email: string }> = {
-  directeur: { name: "Dr. Youssef Benali", email: "direction@demo.scholnexa.ma" },
+  directeur: { name: "Dr. Youssef Benali", email: "direction@demo.essor.ma" },
   enseignant: {
     name: demoFormateur
       ? `${demoFormateur.prenom} ${demoFormateur.nom}`
       : "Formateur",
-    email: demoFormateur?.email ?? "formateur@demo.scholnexa.ma",
+    email: demoFormateur?.email ?? "formateur@demo.essor.ma",
   },
-  responsable: { name: "M. Rachid El Ouafi", email: "scolarite@demo.scholnexa.ma" },
+  responsable: { name: "M. Rachid El Ouafi", email: "scolarite@demo.essor.ma" },
 };
 
-const ROLE_STORAGE_KEY = "scholnexa-role";
-const TOKEN_STORAGE_KEY = "scholnexa-token";
-const USER_STORAGE_KEY = "scholnexa-user";
-export const FORMATEUR_STORAGE_KEY = "scholnexa-selected-formateur";
+const ROLE_STORAGE_KEY = "essor-role";
+const TOKEN_STORAGE_KEY = "essor-token";
+const USER_STORAGE_KEY = "essor-user";
+export const FORMATEUR_STORAGE_KEY = "essor-selected-formateur";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 

@@ -1,7 +1,7 @@
 /**
  * Branded loading screen.
  *
- * A full-viewport, brand-tinted splash that draws the Scholnexa mark with a soft
+ * A full-viewport, brand-tinted splash that draws the Essor mark with a soft
  * halo, the wordmark, and an indeterminate progress rail. Used both as the
  * initial boot gate (`AppLoadingGate`) and as a reusable overlay.
  *
@@ -33,7 +33,7 @@ export function BrandLoader({
         className="pointer-events-none absolute h-[36rem] w-[36rem] rounded-full blur-3xl"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in srgb, var(--scholnexa-blue) 22%, transparent) 0%, transparent 68%)",
+            "radial-gradient(circle, color-mix(in srgb, var(--essor-blue) 35%, transparent) 0%, transparent 68%)",
         }}
       />
 
@@ -46,7 +46,7 @@ export function BrandLoader({
             style={{
               width: "7.5rem",
               height: "7.5rem",
-              boxShadow: "0 0 0 1px color-mix(in srgb, var(--scholnexa-blue) 30%, transparent)",
+              boxShadow: "0 0 0 1px color-mix(in srgb, var(--essor-blue) 45%, transparent)",
             }}
             initial={{ opacity: 0.5, scale: 0.9 }}
             animate={{ opacity: [0.5, 0, 0.5], scale: [0.9, 1.35, 0.9] }}
@@ -88,9 +88,9 @@ export function BrandLoader({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="relative h-1 w-40 overflow-hidden rounded-full bg-brand/12"
+          className="relative h-1 w-40 overflow-hidden rounded-full bg-brand/15"
         >
-          <span className="absolute inset-y-0 left-0 w-1/3 rounded-full bg-gradient-to-r from-brand to-brand-lt animate-brand-progress" />
+          <span className="absolute inset-y-0 left-0 w-1/3 rounded-full bg-gradient-to-r from-brand to-brand-lt animate-brand-progress shadow-[0_0_12px_rgba(37,99,235,0.5)]" />
         </motion.div>
       </div>
     </div>
@@ -99,7 +99,7 @@ export function BrandLoader({
 
 /**
  * Boot gate. Shows the branded splash on first mount for at least `minMs`, then
- * fades it out and reveals the app. Purely presentational   it renders children
+ * fades it out and reveals the app. Purely presentational — it renders children
  * immediately underneath, so no data loading or routing is affected.
  */
 export function AppLoadingGate({

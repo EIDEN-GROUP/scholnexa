@@ -1,4 +1,4 @@
-import {
+﻿import {
   Children,
   cloneElement,
   isValidElement,
@@ -401,7 +401,7 @@ export function DetailShell({
       <header className="shrink-0 border-b border-brand/12 bg-brand-wash px-6 py-5">
         <div className="flex items-start gap-3.5">
           {icon ? (
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand text-sm font-bold text-white shadow-[0_10px_22px_-12px_rgb(var(--scholnexa-shadow)/0.9)]">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand text-sm font-bold text-white shadow-[0_10px_22px_-12px_rgb(var(--essor-shadow)/0.9)]">
               {icon}
             </span>
           ) : null}

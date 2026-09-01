@@ -1,8 +1,8 @@
-/**
- * Documents de marque Scholnexa — PDF et e-mail.
+﻿/**
+ * Documents de marque Essor — PDF et e-mail.
  *
  * Un seul endroit produit les livrables « officiels » (convention / rapport de
- * stage) pour qu'ils partagent le logo `public/scholnexa-logo-mark.png` et la
+ * stage) pour qu'ils partagent le logo `public/essor-logo-mark.svg` et la
  * palette de marque, aussi bien dans le PDF téléchargé que dans le corps de
  * l'e-mail.
  *
@@ -25,16 +25,23 @@ import { BRAND } from "@/lib/brand";
 /* ------------------------------------------------------------------ */
 
 export const PALETTE = {
-  blue: "#1a3e39",
-  blueDk: "#102824",
-  blueMd: "#14332e",
-  bluePale: "#d9e4e1",
-  blueWash: "#eef3f1",
-  gold: "#c9a066",
-  goldDk: "#a87f44",
-  red: "#e51e26",
-  ink: "#1a3e39",
+  // Essor brand palette — kept in sync with styles.css and the email templates.
+  // Used to colour the brand band, text and accent strips on generated PDFs.
+  blue: "#2563EB",
+  blueDk: "#1E40AF",
+  blueMd: "#1E40AF",
+  blueLt: "#60A5FA",
+  bluePale: "#DBEAFE",
+  blueWash: "#EFF6FF",
+  coral: "#FF6B4A",
+  coralDk: "#E25537",
+  ink: "#0B1220",
+  ink2: "#1E293B",
+  ink3: "#475569",
+  red: "#E11D48",
   white: "#ffffff",
+  mist: "#F3F5F9",
+  border: "#E2E8F0",
 } as const;
 
 type Kind = "convention" | "rapport";
@@ -73,7 +80,7 @@ async function loadLogo(): Promise<LogoRaster | null> {
   logoPromise = (async () => {
     try {
       const img = await loadImage(
-        `${import.meta.env.BASE_URL}scholnexa-logo-mark.png`,
+        `${import.meta.env.BASE_URL}essor-logo-mark.svg`,
       );
       const wPx = 320;
       // Respect the mark's real aspect ratio (square-only placeholders are a
@@ -346,7 +353,7 @@ function buildContentStream(
   ops.push(`${PDF.blue} rg ${LEFT} 96 ${RIGHT - LEFT} 2 re f`);
   ops.push(
     `${PDF.muted} rg BT /F1 8 Tf ${LEFT} 80 Td (${pdfText(
-      "Document genere par la plateforme Scholnexa - usage interne.",
+      "Document genere par la plateforme Essor - usage interne.",
     )}) Tj ET`,
   );
   ops.push(
@@ -621,8 +628,8 @@ export function buildStageEmailHtml(
   // The mark raster is 1.3:1 (512×394 source); 46×35 keeps that aspect in
   // email clients that don't honor auto height.
   const logoCell = logoDataUrl
-    ? `<img src="${logoDataUrl}" width="46" height="35" alt="Scholnexa" style="display:block;border:0;" />`
-    : `<span style="font:700 20px/1 Arial,Helvetica,sans-serif;color:${PALETTE.blue};">Scholnexa</span>`;
+    ? `<img src="${logoDataUrl}" width="46" height="35" alt="Essor" style="display:block;border:0;" />`
+    : `<span style="font:700 20px/1 Arial,Helvetica,sans-serif;color:${PALETTE.blue};">Essor</span>`;
 
   const rowsHtml = sections
     .map(
@@ -668,7 +675,7 @@ export function buildStageEmailHtml(
             <td style="vertical-align:middle;">
               <div style="font:700 17px/1.2 Arial,Helvetica,sans-serif;color:${
                 PALETTE.ink
-              };">Scholnexa</div>
+              };">Essor</div>
               <div style="font:400 11px/1.3 Arial,Helvetica,sans-serif;color:#6b7d7c;letter-spacing:.04em;">${BRAND.tagline}</div>
             </td>
           </tr></table>
@@ -713,7 +720,7 @@ export function buildStageEmailHtml(
         <tr><td style="padding:26px 32px;background:${
           PALETTE.ink
         };margin-top:24px;">
-          <div style="font:700 13px/1.4 Arial,Helvetica,sans-serif;color:#ffffff;">Scholnexa</div>
+          <div style="font:700 13px/1.4 Arial,Helvetica,sans-serif;color:#ffffff;">Essor</div>
           <div style="font:400 12px/1.6 Arial,Helvetica,sans-serif;color:${
             PALETTE.bluePale
           };">${BRAND.academicLabel}</div>

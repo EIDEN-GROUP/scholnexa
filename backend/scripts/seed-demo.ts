@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+﻿import bcrypt from "bcrypt";
 import pg from "pg";
 import crypto from "crypto";
 import "dotenv/config";
@@ -163,9 +163,9 @@ async function seed() {
   /*  1. Demo users                                                      */
   /* ------------------------------------------------------------------ */
   const users = [
-    { email: "direction@demo.scholnexa.ma", password: "directeur123", name: "Dr. Youssef Benali", role: "directeur" },
-    { email: "enseignant@demo.scholnexa.ma", password: "enseignant123", name: "Mme Salma Ait Taleb", role: "enseignant" },
-    { email: "responsable@demo.scholnexa.ma", password: "responsable123", name: "M. Rachid El Ouafi", role: "responsable" },
+    { email: "direction@demo.essor.ma", password: "directeur123", name: "Dr. Youssef Benali", role: "directeur" },
+    { email: "enseignant@demo.essor.ma", password: "enseignant123", name: "Mme Salma Ait Taleb", role: "enseignant" },
+    { email: "responsable@demo.essor.ma", password: "responsable123", name: "M. Rachid El Ouafi", role: "responsable" },
   ];
 
   for (const u of users) {
@@ -208,20 +208,20 @@ async function seed() {
   /*  3. Étudiants (14)                                                  */
   /* ------------------------------------------------------------------ */
   const etudiantsData = [
-    { id: ID.ET_1, cne: "G134567890", matricule: "SCHX-23-0142", prenom: "Salma", nom: "El Amrani", filiere: "Infirmier polyvalent", niveau: "S5", annee: "3e année", groupe: "G1", statut: "inscrit", paiement: "paye", moyenne: 14.6, telephone: "+212 6 61 24 55 018", email: "salma.elamrani@demo.scholnexa.ma", dateNaissance: "2003-04-12", ville: "Agadir", fraisAnnuels: 34000, resteAPayer: 0 },
-    { id: ID.ET_2, cne: "J138245017", matricule: "SCHX-23-0155", prenom: "Youssef", nom: "Ait Taleb", filiere: "Infirmier en anesthésie-réanimation", niveau: "S5", annee: "3e année", groupe: "G1", statut: "inscrit", paiement: "retard", moyenne: 12.3, telephone: "+212 6 70 11 42 88", email: "y.aittaleb@demo.scholnexa.ma", dateNaissance: "2002-11-30", ville: "Inezgane", fraisAnnuels: 38000, resteAPayer: 13000 },
-    { id: ID.ET_3, cne: "F145908712", matricule: "SCHX-24-0203", prenom: "Imane", nom: "Benkirane", filiere: "Sage-femme", niveau: "S3", annee: "2e année", groupe: "G2", statut: "inscrit", paiement: "paye", moyenne: 15.9, telephone: "+212 6 55 78 90 12", email: "i.benkirane@demo.scholnexa.ma", dateNaissance: "2004-02-18", ville: "Agadir", fraisAnnuels: 32000, resteAPayer: 0 },
-    { id: ID.ET_4, cne: "M139874521", matricule: "SCHX-24-0211", prenom: "Anas", nom: "Chafik", filiere: "Kinésithérapie", niveau: "S3", annee: "2e année", groupe: "G1", statut: "inscrit", paiement: "en_attente", moyenne: 11.2, telephone: "+212 6 12 34 56 78", email: "a.chafik@demo.scholnexa.ma", dateNaissance: "2003-07-05", ville: "Taroudant", fraisAnnuels: 33000, resteAPayer: 16500 },
-    { id: ID.ET_5, cne: "D141200983", matricule: "SCHX-22-0098", prenom: "Khadija", nom: "Ouhssaine", filiere: "Radiologie / Imagerie médicale", niveau: "S6", annee: "3e année", groupe: "G1", statut: "inscrit", paiement: "paye", moyenne: 13.7, telephone: "+212 6 88 45 21 09", email: "k.ouhssaine@demo.scholnexa.ma", dateNaissance: "2002-05-22", ville: "Agadir", fraisAnnuels: 35000, resteAPayer: 0 },
-    { id: ID.ET_6, cne: "H137654210", matricule: "SCHX-22-0104", prenom: "Omar", nom: "Bennani", filiere: "Laboratoire / Biologie médicale", niveau: "S6", annee: "3e année", groupe: "G2", statut: "inscrit", paiement: "impaye", moyenne: 9.4, telephone: "+212 6 33 90 18 45", email: "o.bennani@demo.scholnexa.ma", dateNaissance: "2002-09-14", ville: "Agadir", fraisAnnuels: 33000, resteAPayer: 33000 },
-    { id: ID.ET_7, cne: "S144210087", matricule: "SCHX-24-0230", prenom: "Fatima Zahra", nom: "Lahlou", filiere: "Prothèse dentaire", niveau: "S1", annee: "1re année", groupe: "A", statut: "inscrit", paiement: "paye", moyenne: 13.1, telephone: "+212 6 47 22 88 90", email: "fz.lahlou@demo.scholnexa.ma", dateNaissance: "2005-01-08", ville: "Aït Melloul", fraisAnnuels: 30000, resteAPayer: 0 },
-    { id: ID.ET_8, cne: "R142870031", matricule: "SCHX-24-0245", prenom: "Mehdi", nom: "Sabri", filiere: "Infirmier polyvalent", niveau: "S1", annee: "1re année", groupe: "B", statut: "inscrit", paiement: "retard", moyenne: 10.8, telephone: "+212 6 90 34 12 67", email: "m.sabri@demo.scholnexa.ma", dateNaissance: "2005-03-25", ville: "Agadir", fraisAnnuels: 34000, resteAPayer: 11000 },
-    { id: ID.ET_9, cne: "B140095512", matricule: "SCHX-23-0167", prenom: "Hajar", nom: "Idrissi", filiere: "Sage-femme", niveau: "S4", annee: "2e année", groupe: "G1", statut: "inscrit", paiement: "paye", moyenne: 14.2, telephone: "+212 6 21 76 43 90", email: "h.idrissi@demo.scholnexa.ma", dateNaissance: "2003-12-01", ville: "Agadir", fraisAnnuels: 32000, resteAPayer: 8000 },
-    { id: ID.ET_10, cne: "K139001284", matricule: "SCHX-23-0178", prenom: "Zakaria", nom: "Moutaouakil", filiere: "Kinésithérapie", niveau: "S4", annee: "2e année", groupe: "G2", statut: "inscrit", paiement: "paye", moyenne: 13.9, telephone: "+212 6 64 30 11 22", email: "z.moutaouakil@demo.scholnexa.ma", dateNaissance: "2003-06-19", ville: "Ouarzazate", fraisAnnuels: 33000, resteAPayer: 0 },
-    { id: ID.ET_11, cne: "T143562019", matricule: "SCHX-24-0251", prenom: "Nisrine", nom: "Fadili", filiere: "Radiologie / Imagerie médicale", niveau: "S2", annee: "1re année", groupe: "A", statut: "inscrit", paiement: "en_attente", moyenne: 12.6, telephone: "+212 6 78 45 60 33", email: "n.fadili@demo.scholnexa.ma", dateNaissance: "2005-08-11", ville: "Agadir", fraisAnnuels: 35000, resteAPayer: 17500 },
-    { id: ID.ET_12, cne: "L138744120", matricule: "SCHX-22-0087", prenom: "Ayoub", nom: "Naciri", filiere: "Infirmier en anesthésie-réanimation", niveau: "S6", annee: "3e année", groupe: "G1", statut: "diplome", paiement: "paye", moyenne: 15.4, telephone: "+212 6 55 12 90 84", email: "a.naciri@demo.scholnexa.ma", dateNaissance: "2002-01-27", ville: "Agadir", fraisAnnuels: 38000, resteAPayer: 0 },
-    { id: ID.ET_13, cne: "N142008874", matricule: "SCHX-24-0260", prenom: "Sara", nom: "El Ghazi", filiere: "Laboratoire / Biologie médicale", niveau: "S2", annee: "1re année", groupe: "B", statut: "en_attente", paiement: "impaye", moyenne: 8.7, telephone: "+212 6 41 55 78 20", email: "s.elghazi@demo.scholnexa.ma", dateNaissance: "2005-10-03", ville: "Tiznit", fraisAnnuels: 33000, resteAPayer: 33000 },
-    { id: ID.ET_14, cne: "C139887654", matricule: "SCHX-23-0190", prenom: "Bilal", nom: "Ramdani", filiere: "Prothèse dentaire", niveau: "S4", annee: "2e année", groupe: "A", statut: "abandon", paiement: "impaye", moyenne: 7.9, telephone: "+212 6 60 21 43 77", email: "b.ramdani@demo.scholnexa.ma", dateNaissance: "2003-04-30", ville: "Agadir", fraisAnnuels: 30000, resteAPayer: 22000 },
+    { id: ID.ET_1, cne: "G134567890", matricule: "SCHX-23-0142", prenom: "Salma", nom: "El Amrani", filiere: "Infirmier polyvalent", niveau: "S5", annee: "3e année", groupe: "G1", statut: "inscrit", paiement: "paye", moyenne: 14.6, telephone: "+212 6 61 24 55 018", email: "salma.elamrani@demo.essor.ma", dateNaissance: "2003-04-12", ville: "Agadir", fraisAnnuels: 34000, resteAPayer: 0 },
+    { id: ID.ET_2, cne: "J138245017", matricule: "SCHX-23-0155", prenom: "Youssef", nom: "Ait Taleb", filiere: "Infirmier en anesthésie-réanimation", niveau: "S5", annee: "3e année", groupe: "G1", statut: "inscrit", paiement: "retard", moyenne: 12.3, telephone: "+212 6 70 11 42 88", email: "y.aittaleb@demo.essor.ma", dateNaissance: "2002-11-30", ville: "Inezgane", fraisAnnuels: 38000, resteAPayer: 13000 },
+    { id: ID.ET_3, cne: "F145908712", matricule: "SCHX-24-0203", prenom: "Imane", nom: "Benkirane", filiere: "Sage-femme", niveau: "S3", annee: "2e année", groupe: "G2", statut: "inscrit", paiement: "paye", moyenne: 15.9, telephone: "+212 6 55 78 90 12", email: "i.benkirane@demo.essor.ma", dateNaissance: "2004-02-18", ville: "Agadir", fraisAnnuels: 32000, resteAPayer: 0 },
+    { id: ID.ET_4, cne: "M139874521", matricule: "SCHX-24-0211", prenom: "Anas", nom: "Chafik", filiere: "Kinésithérapie", niveau: "S3", annee: "2e année", groupe: "G1", statut: "inscrit", paiement: "en_attente", moyenne: 11.2, telephone: "+212 6 12 34 56 78", email: "a.chafik@demo.essor.ma", dateNaissance: "2003-07-05", ville: "Taroudant", fraisAnnuels: 33000, resteAPayer: 16500 },
+    { id: ID.ET_5, cne: "D141200983", matricule: "SCHX-22-0098", prenom: "Khadija", nom: "Ouhssaine", filiere: "Radiologie / Imagerie médicale", niveau: "S6", annee: "3e année", groupe: "G1", statut: "inscrit", paiement: "paye", moyenne: 13.7, telephone: "+212 6 88 45 21 09", email: "k.ouhssaine@demo.essor.ma", dateNaissance: "2002-05-22", ville: "Agadir", fraisAnnuels: 35000, resteAPayer: 0 },
+    { id: ID.ET_6, cne: "H137654210", matricule: "SCHX-22-0104", prenom: "Omar", nom: "Bennani", filiere: "Laboratoire / Biologie médicale", niveau: "S6", annee: "3e année", groupe: "G2", statut: "inscrit", paiement: "impaye", moyenne: 9.4, telephone: "+212 6 33 90 18 45", email: "o.bennani@demo.essor.ma", dateNaissance: "2002-09-14", ville: "Agadir", fraisAnnuels: 33000, resteAPayer: 33000 },
+    { id: ID.ET_7, cne: "S144210087", matricule: "SCHX-24-0230", prenom: "Fatima Zahra", nom: "Lahlou", filiere: "Prothèse dentaire", niveau: "S1", annee: "1re année", groupe: "A", statut: "inscrit", paiement: "paye", moyenne: 13.1, telephone: "+212 6 47 22 88 90", email: "fz.lahlou@demo.essor.ma", dateNaissance: "2005-01-08", ville: "Aït Melloul", fraisAnnuels: 30000, resteAPayer: 0 },
+    { id: ID.ET_8, cne: "R142870031", matricule: "SCHX-24-0245", prenom: "Mehdi", nom: "Sabri", filiere: "Infirmier polyvalent", niveau: "S1", annee: "1re année", groupe: "B", statut: "inscrit", paiement: "retard", moyenne: 10.8, telephone: "+212 6 90 34 12 67", email: "m.sabri@demo.essor.ma", dateNaissance: "2005-03-25", ville: "Agadir", fraisAnnuels: 34000, resteAPayer: 11000 },
+    { id: ID.ET_9, cne: "B140095512", matricule: "SCHX-23-0167", prenom: "Hajar", nom: "Idrissi", filiere: "Sage-femme", niveau: "S4", annee: "2e année", groupe: "G1", statut: "inscrit", paiement: "paye", moyenne: 14.2, telephone: "+212 6 21 76 43 90", email: "h.idrissi@demo.essor.ma", dateNaissance: "2003-12-01", ville: "Agadir", fraisAnnuels: 32000, resteAPayer: 8000 },
+    { id: ID.ET_10, cne: "K139001284", matricule: "SCHX-23-0178", prenom: "Zakaria", nom: "Moutaouakil", filiere: "Kinésithérapie", niveau: "S4", annee: "2e année", groupe: "G2", statut: "inscrit", paiement: "paye", moyenne: 13.9, telephone: "+212 6 64 30 11 22", email: "z.moutaouakil@demo.essor.ma", dateNaissance: "2003-06-19", ville: "Ouarzazate", fraisAnnuels: 33000, resteAPayer: 0 },
+    { id: ID.ET_11, cne: "T143562019", matricule: "SCHX-24-0251", prenom: "Nisrine", nom: "Fadili", filiere: "Radiologie / Imagerie médicale", niveau: "S2", annee: "1re année", groupe: "A", statut: "inscrit", paiement: "en_attente", moyenne: 12.6, telephone: "+212 6 78 45 60 33", email: "n.fadili@demo.essor.ma", dateNaissance: "2005-08-11", ville: "Agadir", fraisAnnuels: 35000, resteAPayer: 17500 },
+    { id: ID.ET_12, cne: "L138744120", matricule: "SCHX-22-0087", prenom: "Ayoub", nom: "Naciri", filiere: "Infirmier en anesthésie-réanimation", niveau: "S6", annee: "3e année", groupe: "G1", statut: "diplome", paiement: "paye", moyenne: 15.4, telephone: "+212 6 55 12 90 84", email: "a.naciri@demo.essor.ma", dateNaissance: "2002-01-27", ville: "Agadir", fraisAnnuels: 38000, resteAPayer: 0 },
+    { id: ID.ET_13, cne: "N142008874", matricule: "SCHX-24-0260", prenom: "Sara", nom: "El Ghazi", filiere: "Laboratoire / Biologie médicale", niveau: "S2", annee: "1re année", groupe: "B", statut: "en_attente", paiement: "impaye", moyenne: 8.7, telephone: "+212 6 41 55 78 20", email: "s.elghazi@demo.essor.ma", dateNaissance: "2005-10-03", ville: "Tiznit", fraisAnnuels: 33000, resteAPayer: 33000 },
+    { id: ID.ET_14, cne: "C139887654", matricule: "SCHX-23-0190", prenom: "Bilal", nom: "Ramdani", filiere: "Prothèse dentaire", niveau: "S4", annee: "2e année", groupe: "A", statut: "abandon", paiement: "impaye", moyenne: 7.9, telephone: "+212 6 60 21 43 77", email: "b.ramdani@demo.essor.ma", dateNaissance: "2003-04-30", ville: "Agadir", fraisAnnuels: 30000, resteAPayer: 22000 },
   ];
 
   for (const e of etudiantsData) {
@@ -343,14 +343,14 @@ async function seed() {
   /*  6. Formateurs (8)                                                  */
   /* ------------------------------------------------------------------ */
   const formateursData = [
-    { id: ID.FO_1, matricule: "ENS-014", cin: "JB145872", prenom: "Salma", nom: "El Idrissi", grade: "PES", departement: "Infirmier polyvalent", modules: ["Soins infirmiers en médecine", "Hygiène hospitalière", "Éthique et déontologie"], groupes: ["S5-G1", "S1-B"], statut: "permanent", telephone: "+212 6 61 45 22 10", email: "s.elidrissi@demo.scholnexa.ma", notesSaisies: 128 },
-    { id: ID.FO_2, matricule: "ENS-021", cin: "J409231", prenom: "Rachid", nom: "Benjelloun", grade: "PES", departement: "Infirmier en anesthésie-réanimation", modules: ["Réanimation et soins intensifs", "Anesthésie clinique"], groupes: ["S5-G1", "S6-G1"], statut: "permanent", telephone: "+212 6 70 88 41 05", email: "r.benjelloun@demo.scholnexa.ma", notesSaisies: 96 },
-    { id: ID.FO_3, matricule: "ENS-033", cin: "JC220514", prenom: "Naima", nom: "Ait Hammou", grade: "PES", departement: "Sage-femme", modules: ["Obstétrique", "Suivi de grossesse", "Néonatologie"], groupes: ["S3-G2", "S4-G1"], statut: "permanent", telephone: "+212 6 55 30 78 44", email: "n.aithammou@demo.scholnexa.ma", notesSaisies: 142 },
-    { id: ID.FO_4, matricule: "ENS-045", cin: "JE118064", prenom: "Hicham", nom: "Bouzid", grade: "vacataire", departement: "Kinésithérapie", modules: ["Rééducation fonctionnelle", "Électrothérapie"], groupes: ["S3-G1", "S4-G2"], statut: "vacataire", telephone: "+212 6 12 90 34 56", email: "h.bouzid@demo.scholnexa.ma", notesSaisies: 54 },
-    { id: ID.FO_5, matricule: "ENS-052", cin: "JB302977", prenom: "Loubna", nom: "Sekkat", grade: "PES", departement: "Radiologie / Imagerie médicale", modules: ["Techniques de radiologie", "Scanner et IRM", "Radioprotection"], groupes: ["S6-G1", "S2-A"], statut: "en_conge", telephone: "+212 6 88 12 44 90", email: "l.sekkat@demo.scholnexa.ma", notesSaisies: 71 },
-    { id: ID.FO_6, matricule: "ENS-060", cin: "J512403", prenom: "Karim", nom: "Tahiri", grade: "formateur_clinique", departement: "Laboratoire / Biologie médicale", modules: ["Hématologie", "Biochimie clinique", "Microbiologie"], groupes: ["S6-G2", "S2-B"], statut: "permanent", telephone: "+212 6 33 21 09 87", email: "k.tahiri@demo.scholnexa.ma", notesSaisies: 88 },
-    { id: ID.FO_7, matricule: "ENS-068", cin: "JC176390", prenom: "Amina", nom: "Rochdi", grade: "vacataire", departement: "Prothèse dentaire", modules: ["Anatomie dentaire", "Prothèse fixe (TP)", "Occlusodontie"], groupes: ["S1-A", "S4-A"], statut: "vacataire", telephone: "+212 6 47 66 21 08", email: "a.rochdi@demo.scholnexa.ma", notesSaisies: 42 },
-    { id: ID.FO_8, matricule: "ENS-074", cin: "JE240815", prenom: "Mustapha", nom: "El Khattabi", grade: "formateur_clinique", departement: "Infirmier polyvalent", modules: ["Pharmacologie", "Santé publique"], groupes: ["S5-G1", "S1-B"], statut: "permanent", telephone: "+212 6 90 55 12 34", email: "m.elkhattabi@demo.scholnexa.ma", notesSaisies: 63 },
+    { id: ID.FO_1, matricule: "ENS-014", cin: "JB145872", prenom: "Salma", nom: "El Idrissi", grade: "PES", departement: "Infirmier polyvalent", modules: ["Soins infirmiers en médecine", "Hygiène hospitalière", "Éthique et déontologie"], groupes: ["S5-G1", "S1-B"], statut: "permanent", telephone: "+212 6 61 45 22 10", email: "s.elidrissi@demo.essor.ma", notesSaisies: 128 },
+    { id: ID.FO_2, matricule: "ENS-021", cin: "J409231", prenom: "Rachid", nom: "Benjelloun", grade: "PES", departement: "Infirmier en anesthésie-réanimation", modules: ["Réanimation et soins intensifs", "Anesthésie clinique"], groupes: ["S5-G1", "S6-G1"], statut: "permanent", telephone: "+212 6 70 88 41 05", email: "r.benjelloun@demo.essor.ma", notesSaisies: 96 },
+    { id: ID.FO_3, matricule: "ENS-033", cin: "JC220514", prenom: "Naima", nom: "Ait Hammou", grade: "PES", departement: "Sage-femme", modules: ["Obstétrique", "Suivi de grossesse", "Néonatologie"], groupes: ["S3-G2", "S4-G1"], statut: "permanent", telephone: "+212 6 55 30 78 44", email: "n.aithammou@demo.essor.ma", notesSaisies: 142 },
+    { id: ID.FO_4, matricule: "ENS-045", cin: "JE118064", prenom: "Hicham", nom: "Bouzid", grade: "vacataire", departement: "Kinésithérapie", modules: ["Rééducation fonctionnelle", "Électrothérapie"], groupes: ["S3-G1", "S4-G2"], statut: "vacataire", telephone: "+212 6 12 90 34 56", email: "h.bouzid@demo.essor.ma", notesSaisies: 54 },
+    { id: ID.FO_5, matricule: "ENS-052", cin: "JB302977", prenom: "Loubna", nom: "Sekkat", grade: "PES", departement: "Radiologie / Imagerie médicale", modules: ["Techniques de radiologie", "Scanner et IRM", "Radioprotection"], groupes: ["S6-G1", "S2-A"], statut: "en_conge", telephone: "+212 6 88 12 44 90", email: "l.sekkat@demo.essor.ma", notesSaisies: 71 },
+    { id: ID.FO_6, matricule: "ENS-060", cin: "J512403", prenom: "Karim", nom: "Tahiri", grade: "formateur_clinique", departement: "Laboratoire / Biologie médicale", modules: ["Hématologie", "Biochimie clinique", "Microbiologie"], groupes: ["S6-G2", "S2-B"], statut: "permanent", telephone: "+212 6 33 21 09 87", email: "k.tahiri@demo.essor.ma", notesSaisies: 88 },
+    { id: ID.FO_7, matricule: "ENS-068", cin: "JC176390", prenom: "Amina", nom: "Rochdi", grade: "vacataire", departement: "Prothèse dentaire", modules: ["Anatomie dentaire", "Prothèse fixe (TP)", "Occlusodontie"], groupes: ["S1-A", "S4-A"], statut: "vacataire", telephone: "+212 6 47 66 21 08", email: "a.rochdi@demo.essor.ma", notesSaisies: 42 },
+    { id: ID.FO_8, matricule: "ENS-074", cin: "JE240815", prenom: "Mustapha", nom: "El Khattabi", grade: "formateur_clinique", departement: "Infirmier polyvalent", modules: ["Pharmacologie", "Santé publique"], groupes: ["S5-G1", "S1-B"], statut: "permanent", telephone: "+212 6 90 55 12 34", email: "m.elkhattabi@demo.essor.ma", notesSaisies: 63 },
   ];
 
   for (const f of formateursData) {
@@ -721,8 +721,8 @@ async function seed() {
   /*  20. Centers & center admins (multi-center support)                  */
   /* ------------------------------------------------------------------ */
   const centersData = [
-    { id: ID.CT_1, name: "SCHX Agadir", city: "Agadir", contactEmail: "contact@demo.scholnexa.ma", contactPhone: "+212 5 28 22 11 00", plan: "premium", status: "active", monthlyPrice: 29900, studentsCount: 120, isPrimary: true, notes: "Siège principal" },
-    { id: ID.CT_2, name: "SCHX Inezgane", city: "Inezgane", contactEmail: "contact.inezgane@demo.scholnexa.ma", contactPhone: "+212 5 28 33 22 11", plan: "standard", status: "active", monthlyPrice: 19900, studentsCount: 65, isPrimary: false, notes: "Antenne Inezgane" },
+    { id: ID.CT_1, name: "SCHX Agadir", city: "Agadir", contactEmail: "contact@demo.essor.ma", contactPhone: "+212 5 28 22 11 00", plan: "premium", status: "active", monthlyPrice: 29900, studentsCount: 120, isPrimary: true, notes: "Siège principal" },
+    { id: ID.CT_2, name: "SCHX Inezgane", city: "Inezgane", contactEmail: "contact.inezgane@demo.essor.ma", contactPhone: "+212 5 28 33 22 11", plan: "standard", status: "active", monthlyPrice: 19900, studentsCount: 65, isPrimary: false, notes: "Antenne Inezgane" },
   ];
   for (const c of centersData) {
     await pool.query(
@@ -735,7 +735,7 @@ async function seed() {
   // center admins   link the directeur user to the primary center
   await pool.query(
     `INSERT INTO center_admins (center_id, profile_id)
-     SELECT $1, id FROM users WHERE email = 'direction@demo.scholnexa.ma'
+     SELECT $1, id FROM users WHERE email = 'direction@demo.essor.ma'
      ON CONFLICT DO NOTHING`,
     [ID.CT_1],
   );
@@ -745,10 +745,10 @@ async function seed() {
   /*  21. Employees (staff records)                                       */
   /* ------------------------------------------------------------------ */
   const employeesData = [
-    { id: ID.EM_1, fullName: "Dr. Youssef Benali", position: "Directeur", department: "Direction", email: "direction@demo.scholnexa.ma", personalEmail: "y.benali@email.ma", phone: "+212 6 61 11 22 33", cin: "AB123456", birthDate: "1975-03-15", hireDate: "2018-09-01", address: "12 Rue Hassan II, Agadir", contractType: "cdi", salary: 25000, status: "actif" },
-    { id: ID.EM_2, fullName: "M. Rachid El Ouafi", position: "Responsable pédagogique", department: "Pédagogie", email: "responsable@demo.scholnexa.ma", personalEmail: "r.ouafi@email.ma", phone: "+212 6 62 33 44 55", cin: "CD789012", birthDate: "1985-07-22", hireDate: "2019-10-01", address: "8 Rue Mohammed V, Agadir", contractType: "cdi", salary: 18000, status: "actif" },
-    { id: ID.EM_3, fullName: "Mme Salma Ait Taleb", position: "Enseignante", department: "Pédagogie", email: "enseignant@demo.scholnexa.ma", personalEmail: "s.ait taleb@email.ma", phone: "+212 6 63 44 55 66", cin: "EF345678", birthDate: "1990-11-10", hireDate: "2020-02-15", address: "5 Rue Al Qods, Agadir", contractType: "cdi", salary: 14000, status: "actif" },
-    { id: ID.EM_4, fullName: "Mme Fatima Hassani", position: "Secrétaire générale", department: "Administration", email: "secretariat@demo.scholnexa.ma", personalEmail: "f.hassani@email.ma", phone: "+212 6 64 55 66 77", cin: "GH901234", birthDate: "1988-09-05", hireDate: "2021-01-10", address: "3 Rue de la Liberté, Agadir", contractType: "cdi", salary: 12000, status: "actif" },
+    { id: ID.EM_1, fullName: "Dr. Youssef Benali", position: "Directeur", department: "Direction", email: "direction@demo.essor.ma", personalEmail: "y.benali@email.ma", phone: "+212 6 61 11 22 33", cin: "AB123456", birthDate: "1975-03-15", hireDate: "2018-09-01", address: "12 Rue Hassan II, Agadir", contractType: "cdi", salary: 25000, status: "actif" },
+    { id: ID.EM_2, fullName: "M. Rachid El Ouafi", position: "Responsable pédagogique", department: "Pédagogie", email: "responsable@demo.essor.ma", personalEmail: "r.ouafi@email.ma", phone: "+212 6 62 33 44 55", cin: "CD789012", birthDate: "1985-07-22", hireDate: "2019-10-01", address: "8 Rue Mohammed V, Agadir", contractType: "cdi", salary: 18000, status: "actif" },
+    { id: ID.EM_3, fullName: "Mme Salma Ait Taleb", position: "Enseignante", department: "Pédagogie", email: "enseignant@demo.essor.ma", personalEmail: "s.ait taleb@email.ma", phone: "+212 6 63 44 55 66", cin: "EF345678", birthDate: "1990-11-10", hireDate: "2020-02-15", address: "5 Rue Al Qods, Agadir", contractType: "cdi", salary: 14000, status: "actif" },
+    { id: ID.EM_4, fullName: "Mme Fatima Hassani", position: "Secrétaire générale", department: "Administration", email: "secretariat@demo.essor.ma", personalEmail: "f.hassani@email.ma", phone: "+212 6 64 55 66 77", cin: "GH901234", birthDate: "1988-09-05", hireDate: "2021-01-10", address: "3 Rue de la Liberté, Agadir", contractType: "cdi", salary: 12000, status: "actif" },
   ];
   for (const em of employeesData) {
     await pool.query(
@@ -819,13 +819,13 @@ async function seed() {
   await pool.query(
     `INSERT INTO support_messages (session_id, sender_id, sender_role, content)
      SELECT $1, id, 'directeur', 'Bonjour, je rencontre un problème avec l''export PDF des bulletins.'
-     FROM users WHERE email = 'direction@demo.scholnexa.ma'`,
+     FROM users WHERE email = 'direction@demo.essor.ma'`,
     [ID.SS_1],
   );
   await pool.query(
     `INSERT INTO support_messages (session_id, sender_id, sender_role, content)
      SELECT $1, id, 'support', 'Bonjour Dr. Benali. Pouvez-vous préciser le problème ?'
-     FROM users WHERE email = 'direction@demo.scholnexa.ma'`,
+     FROM users WHERE email = 'direction@demo.essor.ma'`,
     [ID.SS_1],
   );
   console.log("  ✓ 2 support sessions + 2 messages created");
@@ -848,7 +848,7 @@ async function seed() {
   // Email log
   await pool.query(
     `INSERT INTO email_logs (recipient, subject, type, status, error_msg)
-     VALUES ('direction@demo.scholnexa.ma','Bienvenue sur SCHX','welcome','envoye','')`,
+     VALUES ('direction@demo.essor.ma','Bienvenue sur SCHX','welcome','envoye','')`,
   );
   // Reminder
   await pool.query(
@@ -864,9 +864,9 @@ async function seed() {
 
   console.log("\n✅ Seed complete!");
   console.log("Demo accounts:");
-  console.log("  direction@demo.scholnexa.ma / directeur123  (directeur)");
-  console.log("  enseignant@demo.scholnexa.ma / enseignant123 (enseignant)");
-  console.log("  responsable@demo.scholnexa.ma / responsable123 (responsable)");
+  console.log("  direction@demo.essor.ma / directeur123  (directeur)");
+  console.log("  enseignant@demo.essor.ma / enseignant123 (enseignant)");
+  console.log("  responsable@demo.essor.ma / responsable123 (responsable)");
   console.log("");
   console.log("Created entities:");
   console.log("  3 roles · 3 users · 7 filieres · 14 etudiants · 38 notes");

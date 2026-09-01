@@ -1,7 +1,7 @@
-{
+﻿{
   "shell": {
     "platform": "Plateforme",
-    "brand": "Scholnexa",
+    "brand": "Essor",
     "logout": "Sortir",
     "logoutAria": "Sortir",
     "disconnect": "Déconnexion",
@@ -163,7 +163,7 @@
     }
   },
   "home": {
-    "pageTitle": "Scholnexa · Plateforme",
+    "pageTitle": "Essor · Plateforme",
     "eyebrow": "Vue d'ensemble · Direction",
     "titleBold": "Tableau",
     "titleItalic": "de bord",
@@ -299,7 +299,7 @@
     "crmModal": {
       "eyebrow": "Conversion du prospect",
       "title": "Fiche famille",
-      "intro": "Complétez les informations manquantes pour créer le dossier dans Scholnexa. À l'enregistrement, la demande passe en Converti (démo).",
+      "intro": "Complétez les informations manquantes pour créer le dossier dans Essor. À l'enregistrement, la demande passe en Converti (démo).",
       "submit": "Enregistrer et convertir"
     },
     "replyModal": {

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 96" fill="none" aria-label="Essor">
+  <defs>
+    <linearGradient id="elA" x1="48" y1="16" x2="48" y2="68" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="elB" x1="14" y1="48" x2="66" y2="66" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1E40AF"/>
+    </linearGradient>
+    <linearGradient id="elC" x1="64" y1="22" x2="64" y2="84" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1E40AF"/>
+    </linearGradient>
+    <radialGradient id="elDot" cx="0.5" cy="0.45" r="0.55">
+      <stop offset="0" stop-color="#FFB199"/>
+      <stop offset="0.45" stop-color="#FF6B4A"/>
+      <stop offset="1" stop-color="#E25537"/>
+    </radialGradient>
+  </defs>
+  <g>
+    <path d="M48 18 C 60 26, 63 41, 53 52 C 46 60, 38 58, 36 50 C 34 41, 38 26, 48 18 Z" fill="url(#elA)"/>
+    <path d="M22 56 C 14 46, 18 31, 30 28 C 41 28, 48 35, 46 44 C 44 53, 35 58, 26 58 C 23 58, 22 57, 22 56 Z" fill="url(#elB)"/>
+    <path d="M72 40 C 83 46, 84 59, 75 67 C 66 73, 56 70, 53 63 C 51 56, 58 47, 68 42 C 70 40, 71 40, 72 40 Z" fill="url(#elC)"/>
+    <circle cx="53" cy="38" r="5.5" fill="url(#elDot)"/>
+  </g>
+  <text x="100" y="64" font-family="Manrope, Inter, system-ui, sans-serif" font-size="44" font-weight="800" letter-spacing="-1.5" fill="#FFFFFF">essor</text>
+</svg>

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, type ReactNode } from "react";
 import { Eye, FileDown, FileText, Pencil, Trash2, Mail, Users, Building2 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -16,7 +16,7 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
-import { useScholnexa } from "@/lib/scholnexa-store";
+import { useEssor } from "@/lib/scholnexa-store";
 import {
   makeStageDocPdf,
   buildStageEmailHtml,
@@ -177,7 +177,7 @@ function ChartSwitch<T extends string>({
             className={cn(
               "rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors",
               active
-                ? "bg-brand text-white shadow-[0_2px_8px_-3px_rgb(var(--scholnexa-shadow)/0.5)]"
+                ? "bg-brand text-white shadow-[0_2px_8px_-3px_rgb(var(--essor-shadow)/0.5)]"
                 : "text-muted-foreground hover:text-brand-dk",
             )}
           >
@@ -424,7 +424,7 @@ function StagesAnalytics({
 
 function StagesPage() {
   const { role } = useAuth();
-  const { stages, etudiants, structuresAccueil, addStage, updateStage, deleteStage } = useScholnexa();
+  const { stages, etudiants, structuresAccueil, addStage, updateStage, deleteStage } = useEssor();
   // Conventions are handled by student administration.
   const canManage = role === "directeur" || role === "responsable";
 
@@ -919,7 +919,7 @@ function StageForm({
   onCancel,
 }: {
   initial: Stage | null;
-  etudiants: ReturnType<typeof useScholnexa>["etudiants"];
+  etudiants: ReturnType<typeof useEssor>["etudiants"];
   structuresAccueil: string[];
   onSubmit: (data: Omit<Stage, "id">) => void;
   onCancel: () => void;

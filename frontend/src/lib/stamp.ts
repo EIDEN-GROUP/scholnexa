@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Cachet / tampon officiel de l'établissement.
  *
  * Le directeur téléverse une image (PNG/JPEG) depuis les Paramètres ; elle est
@@ -12,8 +12,8 @@
  */
 import { useEffect, useState } from "react";
 
-const STAMP_KEY = "scholnexa:stamp";
-const EVT = "scholnexa:stamp-changed";
+const STAMP_KEY = "essor:stamp";
+const EVT = "essor:stamp-changed";
 
 /** Cachet courant (data URL) ou `null` si aucun n'a été téléversé. */
 export function getStamp(): string | null {

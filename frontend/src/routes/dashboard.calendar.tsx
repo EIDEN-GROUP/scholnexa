@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+﻿import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import {
   Plus,
@@ -24,7 +24,7 @@ import { toast } from "sonner";
 import { useAuth, DEMO_FORMATEUR_ID, getStoredRole } from "@/lib/auth";
 import { canAccess } from "@/lib/dashboard-i18n";
 import {
-  useScholnexa,
+  useEssor,
   useCurrentFormateur,
   type Conflit,
   type ConflitCandidate,
@@ -133,7 +133,7 @@ function PlanningPage() {
     moveSeance,
     conflitsSeance,
     creneaux,
-  } = useScholnexa();
+  } = useEssor();
 
   // La direction et le responsable des affaires estudiantines organisent les
   // séances ; l'enseignant consulte uniquement son propre planning.
@@ -384,7 +384,7 @@ const [importOpen, setImportOpen] = useState(false);
     });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "emploi-du-temps-scholnexa.csv";
+    a.download = "emploi-du-temps-essor.csv";
     a.click();
     URL.revokeObjectURL(a.href);
     toast.success(`${filtrees.length} séance(s) exportée(s)`);
@@ -406,7 +406,7 @@ const [importOpen, setImportOpen] = useState(false);
     const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "modele-emploi-du-temps-scholnexa.csv";
+    a.download = "modele-emploi-du-temps-essor.csv";
     a.click();
     URL.revokeObjectURL(a.href);
     toast.success("Modèle CSV d'exemple téléchargé");
@@ -583,7 +583,7 @@ const [importOpen, setImportOpen] = useState(false);
                 className={cn(
                   "rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200",
                   vue === v
-                    ? "bg-brand text-white shadow-[0_8px_18px_-10px_rgb(var(--scholnexa-shadow)/0.9)]"
+                    ? "bg-brand text-white shadow-[0_8px_18px_-10px_rgb(var(--essor-shadow)/0.9)]"
                     : "text-muted-foreground hover:bg-brand/10 hover:text-brand-dk",
                 )}
               >

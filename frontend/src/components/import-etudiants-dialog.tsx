@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+﻿import { useState, useRef, useCallback } from "react";
 import { Upload, FileUp, CheckCircle2, AlertCircle, AlertTriangle, Loader2, Download, ArrowLeft, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -11,9 +11,9 @@ type Step = "upload" | "preview" | "confirming" | "result";
 
 /** Modèle CSV d'exemple pour l'import d'étudiants (entêtes + lignes types). */
 const EXEMPLE_ETUDIANTS_CSV = `cne,matricule,prenom,nom,filiere,niveau,annee,groupe,statut,paiement,telephone,email,dateNaissance,ville,fraisMensuels
-G134567890,SCHX-23-0142,Salma,El Amrani,Infirmier polyvalent,S5,3e annee,G1,inscrit,paye,+212 6 61 24 55 018,salma.elamrani@demo.scholnexa.ma,2003-04-12,Agadir,3400
-J138245017,SCHX-23-0155,Youssef,Ait Taleb,Infirmier en anesthesie-reanimation,S5,3e annee,G1,inscrit,retard,+212 6 70 11 42 88,y.aittaleb@demo.scholnexa.ma,2002-11-30,Inezgane,3800
-F145908712,SCHX-24-0203,Imane,Benkirane,Sage-femme,S3,2e annee,G2,inscrit,paye,+212 6 55 78 90 12,i.benkirane@demo.scholnexa.ma,2004-02-18,Agadir,3200`;
+G134567890,SCHX-23-0142,Salma,El Amrani,Infirmier polyvalent,S5,3e annee,G1,inscrit,paye,+212 6 61 24 55 018,salma.elamrani@demo.essor.ma,2003-04-12,Agadir,3400
+J138245017,SCHX-23-0155,Youssef,Ait Taleb,Infirmier en anesthesie-reanimation,S5,3e annee,G1,inscrit,retard,+212 6 70 11 42 88,y.aittaleb@demo.essor.ma,2002-11-30,Inezgane,3800
+F145908712,SCHX-24-0203,Imane,Benkirane,Sage-femme,S3,2e annee,G2,inscrit,paye,+212 6 55 78 90 12,i.benkirane@demo.essor.ma,2004-02-18,Agadir,3200`;
 
 /** Télécharge le modèle CSV d'exemple d'import étudiants (réutilisé par la page). */
 export function downloadExempleEtudiantsCsv() {

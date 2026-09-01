@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Mutable, frontend-only data store for the SCHX CRM.
  *
  * `scholnexa-data.ts` provides the immutable seed (sample records + reference
@@ -362,7 +362,7 @@ export type ConflitCandidate = Pick<
   'date' | 'debut' | 'fin' | 'professeurId' | 'salle' | 'groupe'
 >;
 
-type ScholnexaCtx = {
+type EssorCtx = {
   etudiants: Etudiant[];
   formateurs: Formateur[];
   examens: Examen[];
@@ -490,9 +490,9 @@ type ScholnexaCtx = {
   reset: () => void;
 };
 
-const Ctx = createContext<ScholnexaCtx | null>(null);
+const Ctx = createContext<EssorCtx | null>(null);
 
-export function ScholnexaProvider({ children }: { children: ReactNode }) {
+export function EssorProvider({ children }: { children: ReactNode }) {
   // Initialise straight from storage via lazy state rather than in an effect.
   //
   // The effect-based variant loses data: on the first commit the persist effect
@@ -1639,7 +1639,7 @@ export function ScholnexaProvider({ children }: { children: ReactNode }) {
     [snap.etudiants],
   );
 
-  const value: ScholnexaCtx = {
+  const value: EssorCtx = {
     ...snap,
     // `snap.creneaux` porte les libellés bruts ; le contexte expose en plus la
     // version analysée, d'où l'écrasement après le spread.
@@ -1701,9 +1701,9 @@ addSeance,
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
-export function useScholnexa() {
+export function useEssor() {
   const ctx = useContext(Ctx);
-  if (!ctx) throw new Error("useScholnexa must be used within an ScholnexaProvider");
+  if (!ctx) throw new Error("useEssor must be used within an EssorProvider");
   return ctx;
 }
 
@@ -1715,7 +1715,7 @@ export function useScholnexa() {
  * Repli sur le formateur de démonstration puis sur le premier de la liste.
  */
 export function useCurrentFormateur(): Formateur | null {
-  const { formateurs } = useScholnexa();
+  const { formateurs } = useEssor();
   const { selectedFormateurId } = useAuth();
   return useMemo(() => {
     if (formateurs.length === 0) return null;

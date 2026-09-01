@@ -1,7 +1,9 @@
-import { Link, useNavigate, useLocation } from "@tanstack/react-router";
+﻿import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { LucideIcon } from "lucide-react";
 import { ROLES, ROLE_META, useAuth } from "@/lib/auth";
+import { BRAND } from "@/lib/brand";
 import { Toaster } from "@/components/ui/sonner";
 import { useDashboardI18n } from "@/lib/dashboard-i18n";
 import { cn } from "@/lib/utils";
@@ -58,7 +60,7 @@ export type NavItem = {
   label: string;
   /** Condensed label for the mobile tab bar, where the full label would ellipsise. */
   shortLabel?: string;
-  icon: any;
+  icon: LucideIcon;
 };
 
 type PanelTab = "alertes" | "whatsapp";
@@ -834,7 +836,7 @@ function MobileBottomNav({
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 border-t border-brand/12 bg-white/95 pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-1 shadow-[0_-10px_35px_-15px_rgb(var(--scholnexa-shadow)/0.3)] backdrop-blur-xl lg:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-brand/12 bg-white/95 pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-1 shadow-[0_-10px_35px_-15px_rgb(var(--essor-shadow)/0.3)] backdrop-blur-xl lg:hidden"
       aria-label={mainNavAria}
     >
       <div
@@ -946,7 +948,7 @@ export function DashShell({
                 className="flex min-w-0 items-center gap-2"
               >
                 <img
-                  src="/scholnexa-logo-mark.png"
+                  src={BRAND.logoMarkPath}
                   alt={`${brand} logo`}
                   className="h-10 w-10 shrink-0 object-contain"
                 />
@@ -958,7 +960,7 @@ export function DashShell({
             <div className="flex shrink-0 items-center gap-2 pt-0.5">
               {hideNotifications ? null : <ShellNotifications />}
               <RoleSwitcher compact />
-              <div className="grid h-9 w-9 place-items-center rounded-full bg-brand text-sm font-medium text-white shadow-[0_10px_20px_-10px_rgb(var(--scholnexa-shadow)/0.5)]">
+              <div className="grid h-9 w-9 place-items-center rounded-full bg-brand text-sm font-medium text-white shadow-[0_10px_20px_-10px_rgb(var(--essor-shadow)/0.5)]">
                 {(user?.name || user?.email || "A")!.slice(0, 1).toUpperCase()}
               </div>
               <button
@@ -980,7 +982,7 @@ export function DashShell({
                 className="flex items-center gap-2.5"
               >
                 <img
-                  src="/scholnexa-logo-mark.png"
+                  src={BRAND.logoMarkPath}
                   alt={`${brand} logo`}
                   className="h-11 w-11 shrink-0 object-contain"
                 />
@@ -1005,7 +1007,7 @@ export function DashShell({
                     className={
                       "flex items-center gap-2 rounded-full px-4 py-2 text-sm whitespace-nowrap transition-colors " +
                       (active
-                        ? "bg-brand font-medium text-white shadow-[0_12px_25px_-12px_rgb(var(--scholnexa-shadow)/0.6)]"
+                        ? "bg-brand font-medium text-white shadow-[0_12px_25px_-12px_rgb(var(--essor-shadow)/0.6)]"
                         : "text-muted-foreground hover:bg-brand/10 hover:text-foreground")
                     }
                   >
@@ -1030,7 +1032,7 @@ export function DashShell({
                     </p>
                   ) : null}
                 </div>
-                <div className="grid h-9 w-9 place-items-center rounded-full bg-brand text-sm font-medium text-white shadow-[0_10px_20px_-10px_rgb(var(--scholnexa-shadow)/0.5)]">
+                <div className="grid h-9 w-9 place-items-center rounded-full bg-brand text-sm font-medium text-white shadow-[0_10px_20px_-10px_rgb(var(--essor-shadow)/0.5)]">
                   {(user?.name || user?.email || "A")!
                     .slice(0, 1)
                     .toUpperCase()}
@@ -1098,7 +1100,7 @@ export function DashShell({
         <div className="px-6 py-5 border-b border-border space-y-3">
           <div className="flex items-center gap-2.5">
             <img
-              src="/scholnexa-logo-mark.png"
+              src={BRAND.logoMarkPath}
               alt={`${brand} logo`}
               className="h-10 w-10 shrink-0 object-contain"
             />
@@ -1177,10 +1179,10 @@ export function StatCard({
   sub?: string;
   color?: string;
   monochrome?: boolean;
-  icon?: any;
+  icon?: LucideIcon;
 }) {
   return (
-    <div className="rounded-2xl bg-card border border-brand/12 p-5 shadow-[0_18px_45px_-28px_rgb(var(--scholnexa-shadow)/0.35)]">
+    <div className="rounded-2xl bg-card border border-brand/12 p-5 shadow-[0_18px_45px_-28px_rgb(var(--essor-shadow)/0.35)]">
       <div className="flex items-center justify-between">
         <p className="text-xs uppercase tracking-widest text-muted-foreground">
           {label}

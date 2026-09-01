@@ -26,7 +26,7 @@ import {
   type LucideProps,
 } from "lucide-react";
 import { useAuth, ROLE_META } from "@/lib/auth";
-import { useScholnexa, useCurrentFormateur } from "@/lib/scholnexa-store";
+import { useEssor, useCurrentFormateur } from "@/lib/scholnexa-store";
 import { useDashboardI18n } from "@/lib/dashboard-i18n";
 import {
   fmtMAD,
@@ -297,7 +297,7 @@ function KpiCard({
       className={cn(
         "group relative overflow-hidden p-4 sm:p-5",
         accent
-          ? "rounded-3xl bg-gradient-to-br from-med to-med-dk text-white shadow-[0_18px_40px_-18px_rgb(var(--scholnexa-shadow)/0.6)]"
+          ? "rounded-3xl bg-gradient-to-br from-med to-med-dk text-white shadow-[0_18px_40px_-18px_rgb(var(--essor-shadow)/0.6)]"
           : cn(softCard, "transition-shadow duration-300 hover:[box-shadow:var(--edge-highlight),var(--elevation-4)]"),
       )}
     >
@@ -375,8 +375,8 @@ function KpiGrid({ children }: { children: ReactNode }) {
  */
 type PerfMetric = "reussite" | "recouvrement";
 
-/** Recouvrement palette   teal / amber / coral (reference « Mail Statistic » donut). */
-const RECOUV_COLORS = ["#1A3E39", "#f0a92e", "#ee6c4d"];
+/** Recouvrement palette — Electric Blue / Coral / Light Blue (brand colors). */
+const RECOUV_COLORS = ["#2563EB", "#FF6B4A", "#60A5FA"];
 
 type PieDatum = { name: string; value: number; color: string };
 
@@ -498,7 +498,7 @@ function MetricSwitchChart({
                 className={cn(
                   "rounded-full px-3 py-1.5 text-xs font-semibold transition-colors",
                   active
-                    ? "bg-brand text-white shadow-[0_2px_8px_-3px_rgb(var(--scholnexa-shadow)/0.5)]"
+                    ? "bg-brand text-white shadow-[0_2px_8px_-3px_rgb(var(--essor-shadow)/0.5)]"
                     : "text-muted-foreground hover:text-brand-dk",
                 )}
               >
@@ -626,7 +626,7 @@ const ACTIVITE_ICON: Record<ActiviteItem["type"], typeof UserPlus> = {
 };
 
 function ActiviteFeed() {
-  const { activite } = useScholnexa();
+  const { activite } = useEssor();
   const { locale } = useDashboardI18n();
   const dateLocale = locale === "ar" ? "ar-MA" : "fr-FR";
   return (
@@ -717,7 +717,7 @@ const TH = "border-b border-brand/15 bg-muted text-[11px] font-semibold uppercas
 /* ------------------------------------------------------------------ */
 
 function AujourdhuiTable({ seances }: { seances: Seance[] }) {
-  const { formateurs } = useScholnexa();
+  const { formateurs } = useEssor();
   const { t } = useDashboardI18n();
   if (!seances.length) return <EmptyState icon={Calendar}>{t.homeIndex.empty.aucuneSeance}</EmptyState>;
   const tri = seances.slice().sort((a, b) => (a.debut < b.debut ? -1 : 1));
@@ -901,7 +901,7 @@ function DashboardDirecteur() {
   const { tab, setTab, direction } = useTabs();
   const { t } = useDashboardI18n();
   const ht = t.homeIndex;
-  const { dashboard, financier, reussiteFiliere, formateurs, seances, examens, etudiants, aTraiter, repartitionFiliere, repartitionNiveau } = useScholnexa();
+  const { dashboard, financier, reussiteFiliere, formateurs, seances, examens, etudiants, aTraiter, repartitionFiliere, repartitionNiveau } = useEssor();
 
   const DIRECTOR_TABS: DashTab[] = [
     { label: ht.tabs.ensemble, short: ht.tabs.ensembleShort, icon: LayoutGrid },
@@ -1031,8 +1031,8 @@ function DashboardDirecteur() {
               <div className="grid gap-4 xl:grid-cols-2">
                 <DonutChart title={ht.charts.repartitionFiliere} data={repartitionFiliere} palette={BRAND_CHART_COLORS} />
                 <BarSeries title={ht.charts.repartitionNiveau} data={repartitionNiveau} colorful palette={BRAND_CHART_COLORS} />
-                <AreaTrend title={ht.charts.examensParMois} data={examensParMois} color="var(--scholnexa-sky)" />
-                <LineTrend title={ht.charts.seancesParJour} data={sessionsParJour} color="var(--scholnexa-amber)" />
+                <AreaTrend title={ht.charts.examensParMois} data={examensParMois} color="var(--essor-sky)" />
+                <LineTrend title={ht.charts.seancesParJour} data={sessionsParJour} color="var(--essor-amber)" />
               </div>
             </Section>
             <Section
@@ -1118,7 +1118,7 @@ function DashboardEnseignant() {
   const { tab, setTab, direction } = useTabs();
   const { t, locale } = useDashboardI18n();
   const ht = t.homeIndex;
-  const { seances, examens, bulletins, etudiants } = useScholnexa();
+  const { seances, examens, bulletins, etudiants } = useEssor();
   const moi = useCurrentFormateur();
   const mesExamens = useMemo(() => (moi ? examens.filter((x) => moi.modules.includes(x.module)) : []), [examens, moi]);
   const seancesAujourdhui = useMemo(() => seances.filter((s) => s.date === today && s.professeurId === moi?.id), [seances, moi?.id]);
@@ -1227,7 +1227,7 @@ function DashboardResponsable() {
   const { tab, setTab, direction } = useTabs();
   const { t } = useDashboardI18n();
   const ht = t.homeIndex;
-  const { formateurs, seances, aTraiter, dashboard } = useScholnexa();
+  const { formateurs, seances, aTraiter, dashboard } = useEssor();
   const seancesAujourdhui = useMemo(() => seances.filter((s) => s.date === today), [seances]);
   const sallesOccupees = useMemo(() => [...new Set(seancesAujourdhui.map((s) => s.salle))], [seancesAujourdhui]);
   const conflits = useMemo(() => conflitsGlobaux(seances), [seances]);

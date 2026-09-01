@@ -1,5 +1,5 @@
-/**
- * Scholnexa — Vercel health-check function.
+﻿/**
+ * Essor — Vercel health-check function.
  *
  * Kept deliberately separate from the catch-all so load balancers and
  * uptime monitors can probe `/health` without paying a cold-start of the

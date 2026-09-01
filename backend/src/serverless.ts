@@ -1,5 +1,5 @@
-/**
- * Scholnexa — Vercel serverless entry point (source).
+﻿/**
+ * Essor — Vercel serverless entry point (source).
  *
  * This file is bundled by `scripts/build-vercel-function.mjs` (run from the
  * `vercel-build` script) into the self-contained function `api/[...path].js`

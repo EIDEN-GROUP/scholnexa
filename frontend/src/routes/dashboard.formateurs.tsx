@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Plus, Pencil, Eye, Trash2, Upload, Archive, Download, FileUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
-import { useScholnexa, type NouveauFormateur } from "@/lib/scholnexa-store";
+import { useEssor, type NouveauFormateur } from "@/lib/scholnexa-store";
 import { createUser } from "@/lib/scholnexa-api";
 import { ImportCsvDialog, type ImportColumn } from "@/components/import-csv";
 import {
@@ -72,7 +72,7 @@ const STATUTS: StatutFormateur[] = ["permanent", "vacataire", "en_conge"];
 function FormateursPage() {
   const { role } = useAuth();
   const { formateurs, modules, addFormateur, updateFormateur, deleteFormateur } =
-    useScholnexa();
+    useEssor();
   const canEdit = role === "directeur" || role === "responsable";
 
   /** Options du sélecteur : registre des modules (Paramètres › Modules),
@@ -230,8 +230,8 @@ function FormateursPage() {
   /** Télécharge un modèle CSV d'exemple (entêtes + lignes types) pour l'import. */
   const exportExempleFormateursCsv = () => {
     const exemples: (string | number)[][] = [
-      ["PR-2025-001", "AB123456", "Yassine", "El Amrani", "PES", FILIERES[0], "Anatomie, Physiologie", "S3-G1, S3-G2", "Permanent", "0612345678", "y.elamrani@demo.scholnexa.ma"],
-      ["PR-2025-002", "CD789012", "Salma", "Benali", "Vacataire", FILIERES[0], "Pharmacologie", "S5-G1", "Vacataire", "0698765432", "s.benali@demo.scholnexa.ma"],
+      ["PR-2025-001", "AB123456", "Yassine", "El Amrani", "PES", FILIERES[0], "Anatomie, Physiologie", "S3-G1, S3-G2", "Permanent", "0612345678", "y.elamrani@demo.essor.ma"],
+      ["PR-2025-002", "CD789012", "Salma", "Benali", "Vacataire", FILIERES[0], "Pharmacologie", "S5-G1", "Vacataire", "0698765432", "s.benali@demo.essor.ma"],
     ];
     telechargerCsvFormateurs(exemples, "formateurs-import-exemple.csv");
     toast.success("Modèle CSV d'exemple téléchargé");

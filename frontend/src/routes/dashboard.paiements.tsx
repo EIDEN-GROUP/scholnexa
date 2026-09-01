@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Plus, BellRing, Eye, Receipt, PenLine, CalendarDays, Search, Check, Clock, AlertTriangle, Ban, Save, Download } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
-import { useScholnexa } from "@/lib/scholnexa-store";
+import { useEssor } from "@/lib/scholnexa-store";
 import { makePaiementDocPdf } from "@/lib/branded-doc";
 import {
   ANNEES_UNIVERSITAIRES,
@@ -97,7 +97,7 @@ function resteDu(records: PaiementMensuel[]): number {
 
 function PaiementsPage() {
   const { role } = useAuth();
-  const { etudiants, financier, aRelancer, payerMois, updatePaiementMensuel } = useScholnexa();
+  const { etudiants, financier, aRelancer, payerMois, updatePaiementMensuel } = useEssor();
   const canEdit = role === "directeur" || role === "responsable";
 
   const [search, setSearch] = useState("");
@@ -645,7 +645,7 @@ function HistoriquePaiementsDialog({
   etudiant: Etudiant;
   onClose: () => void;
 }) {
-  const { updatePaiementMensuel } = useScholnexa();
+  const { updatePaiementMensuel } = useEssor();
   const academicYear = getCurrentAcademicYear();
   const months = useMemo(() => getAcademicYearMonths(academicYear), [academicYear]);
   const canEdit = useAuth().role === "directeur" || useAuth().role === "responsable";

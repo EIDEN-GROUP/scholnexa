@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { createRootRoute, Outlet, Link } from "@tanstack/react-router";
 import { MotionConfig } from "framer-motion";
 import { BackToTop } from "@/components/back-to-top";
@@ -45,7 +45,7 @@ function RootComponent() {
     <MotionConfig reducedMotion="user" transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}>
       {/* Shared FR/AR context for the landing funnel, the hero previews and the
           floating controls below. It falls back to (and writes through to) the
-          dashboard's `gestio-locale` key so both universes stay in sync. */}
+          dashboard's `essor-locale` key so both universes stay in sync. */}
       <LandingI18nProvider>
         <div className="relative">
           <Outlet />

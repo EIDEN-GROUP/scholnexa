@@ -1,5 +1,5 @@
-// Static mirror data for the landing page hero + interactive demo.
-// Faithful miniature of the REAL Scholnexa dashboard (sample data, not from
+﻿// Static mirror data for the landing page hero + interactive demo.
+// Faithful miniature of the REAL Essor dashboard (sample data, not from
 // any API): filières/niveaux follow `scholnexa-data.ts` referentials, the
 // dashboard figures match `dashboard.index` (chips, KPI cards, taux de
 // réussite, notifications), money is in MAD, school year 2025/2026.
@@ -181,10 +181,10 @@ export const mirrorPaiementsRows = [
 ] as const;
 
 export const STATUT_PAIEMENT_COURT: Record<string, { label: string; cls: string }> = {
-  paye: { label: "Payé", cls: "bg-[#C9A066]/30 text-[#44614F]" },
-  en_attente: { label: "En attente", cls: "bg-[#F4E3C0] text-[#8A5A16]" },
-  retard: { label: "Retard", cls: "bg-[#F6D8D8] text-[#9A2F2F]" },
-  impaye: { label: "Impayé", cls: "bg-[#F6D8D8] text-[#9A2F2F]" },
+  paye: { label: "Payé", cls: "bg-[#2563EB]/30 text-[#1E40AF]" },
+  en_attente: { label: "En attente", cls: "bg-[#FF6B4A]/20 text-[#C14A2E]" },
+  retard: { label: "Retard", cls: "bg-[#EF4444]/20 text-[#DC2626]" },
+  impaye: { label: "Impayé", cls: "bg-[#EF4444]/20 text-[#DC2626]" },
 };
 
 /* ------------------------------------------------------------------ */

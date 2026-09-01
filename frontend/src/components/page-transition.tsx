@@ -158,16 +158,16 @@ export function PageTransition() {
           animate="animate"
           exit="exit"
           transition={reduceMotion ? { duration: 0.25 } : undefined}
-          className="fixed inset-0 z-[9998] flex items-center justify-center overflow-hidden bg-[#1A3E39]"
+          className="fixed inset-0 z-[9998] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0B1220] to-[#1E293B]"
         >
-          {/* Brass glow, echoing the brand mark in the header. */}
+          {/* Electric Blue glow, echoing the brand */}
           <span
             aria-hidden
-            className="pointer-events-none absolute -bottom-24 -end-24 h-80 w-80 rounded-full bg-[#C9A066]/20 blur-3xl"
+            className="pointer-events-none absolute -bottom-24 -end-24 h-80 w-80 rounded-full bg-[#2563EB]/25 blur-3xl"
           />
           <span
             aria-hidden
-            className="pointer-events-none absolute -top-32 -start-24 h-80 w-80 rounded-full bg-[#617F6A]/15 blur-3xl"
+            className="pointer-events-none absolute -top-32 -start-24 h-80 w-80 rounded-full bg-[#60A5FA]/20 blur-3xl"
           />
 
           <motion.div
@@ -180,7 +180,7 @@ export function PageTransition() {
             </div>
 
             <div className="space-y-1">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#C9A066]">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#2563EB]">
                 Chargement
               </p>
               <p className="font-display text-2xl tracking-tight text-white">{label}</p>
@@ -190,7 +190,7 @@ export function PageTransition() {
               aria-hidden
               className="relative h-1 w-32 overflow-hidden rounded-full bg-white/15"
             >
-              <span className="absolute inset-y-0 left-0 w-1/3 rounded-full bg-[#C9A066] motion-safe:animate-brand-progress" />
+              <span className="absolute inset-y-0 left-0 w-1/3 rounded-full bg-gradient-to-r from-[#2563EB] to-[#60A5FA] motion-safe:animate-brand-progress shadow-[0_0_12px_rgba(37,99,235,0.6)]" />
             </span>
           </motion.div>
 

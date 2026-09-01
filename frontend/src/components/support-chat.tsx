@@ -96,7 +96,7 @@ export function SupportChat() {
               </button>
             </div>
             <div className="flex max-h-96 min-h-[200px] flex-col overflow-y-auto p-4">
-              {messages.map((m: any) => (
+              {messages.map((m: { id: number; senderRole: string; content: string; createdAt: string }) => (
                 <div
                   key={m.id}
                   className={cn(

@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useRef } from "react";
 import { Plus, Pencil, Eye, Download, Archive, RotateCcw, Upload, ListFilter, ChevronDown, FileUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import { BRAND } from "@/lib/brand";
-import { useScholnexa, useCurrentFormateur, type NouvelEtudiant } from "@/lib/scholnexa-store";
+import { useEssor, useCurrentFormateur, type NouvelEtudiant } from "@/lib/scholnexa-store";
 import { ImportEtudiantsDialog, downloadExempleEtudiantsCsv } from "@/components/import-etudiants-dialog";
 import { fetchStudentSemestres, exportEtudiantsCsv } from "@/lib/scholnexa-api";
 import {
@@ -83,7 +83,7 @@ const STATUTS_PAIEMENT: StatutPaiement[] = [
 
 function EtudiantsPage() {
   const { role, selectedFormateurId } = useAuth();
-  const { etudiants, addEtudiant, updateEtudiant, deleteEtudiant, restoreEtudiant } = useScholnexa();
+  const { etudiants, addEtudiant, updateEtudiant, deleteEtudiant, restoreEtudiant } = useEssor();
   // Teachers get a read-only view; student administration is the responsable's
   // and the directeur's job.
   const canEdit = role === "directeur" || role === "responsable";

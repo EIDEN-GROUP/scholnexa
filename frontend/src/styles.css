@@ -41,33 +41,36 @@
   --color-chart-5: var(--chart-5);
   --color-chart-6: var(--chart-6);
   --color-chart-7: var(--chart-7);
-  /* SCHX brand utilities   bg-brand, border-brand/15, text-alert, ... */
-  --color-brand: var(--scholnexa-blue);
-  --color-brand-dk: var(--scholnexa-blue-dk);
-  --color-brand-md: var(--scholnexa-blue-md);
-  --color-brand-lt: var(--scholnexa-blue-lt);
-  --color-brand-pale: var(--scholnexa-blue-pale);
-  --color-brand-wash: var(--scholnexa-blue-wash);
-  --color-alert: var(--scholnexa-red);
-  --color-alert-dk: var(--scholnexa-red-dk);
-  --color-alert-pale: var(--scholnexa-red-pale);
-  /* Brand accent — royal blue, used on active nav, primary CTAs and the
-     lead KPI, so red stays reserved strictly for errors and negative states. */
-  --color-med: var(--scholnexa-accent);
-  --color-med-dk: var(--scholnexa-accent-dk);
-  --color-med-lt: var(--scholnexa-accent-lt);
-  --color-med-pale: var(--scholnexa-accent-pale);
-  --color-warn: var(--scholnexa-amber);
-  --color-warn-pale: var(--scholnexa-amber-pale);
-  --color-info: var(--scholnexa-sky);
-  --color-info-pale: var(--scholnexa-sky-pale);
-  /* Secondary accent   refined indigo/violet ("technology · innovation"),
-     used sparingly next to the teal brand for highlights and charts. */
-  --color-accent2: var(--scholnexa-violet);
-  --color-accent2-dk: var(--scholnexa-violet-dk);
-  --color-accent2-lt: var(--scholnexa-violet-lt);
-  --color-accent2-pale: var(--scholnexa-violet-pale);
-  --color-ink: var(--scholnexa-ink);
+  /* Essor brand utilities — bg-brand, border-brand/15, text-alert, ... */
+  --color-brand: var(--essor-blue);
+  --color-brand-dk: var(--essor-blue-dk);
+  --color-brand-md: var(--essor-blue-md);
+  --color-brand-lt: var(--essor-blue-lt);
+  --color-brand-pale: var(--essor-blue-pale);
+  --color-brand-wash: var(--essor-blue-wash);
+  --color-alert: var(--essor-red);
+  --color-alert-dk: var(--essor-red-dk);
+  --color-alert-pale: var(--essor-red-pale);
+  /* Brand accent — Electric Blue, used on active nav, primary CTAs and the
+     lead KPI, so coral stays reserved for highlights, not destructive states. */
+  --color-med: var(--essor-accent);
+  --color-med-dk: var(--essor-accent-dk);
+  --color-med-lt: var(--essor-accent-lt);
+  --color-med-pale: var(--essor-accent-pale);
+  --color-warn: var(--essor-amber);
+  --color-warn-pale: var(--essor-amber-pale);
+  --color-info: var(--essor-sky);
+  --color-info-pale: var(--essor-sky-pale);
+  /* Secondary accent — Lavender, used sparingly next to the brand for
+     highlights and charts. */
+  --color-accent2: var(--essor-lavender);
+  --color-accent2-dk: var(--essor-lavender-dk);
+  --color-accent2-lt: var(--essor-lavender-lt);
+  --color-accent2-pale: var(--essor-lavender-pale);
+  --color-coral-brand: var(--essor-coral);
+  --color-coral-dk: var(--essor-coral-dk);
+  --color-coral-pale: var(--essor-coral-pale);
+  --color-ink: var(--essor-ink);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -76,9 +79,9 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  /* Scholnexa   Brand Identity System v2 (Outfit / DM Serif / Cormorant / Inter) */
-  --font-display: "Outfit", system-ui, sans-serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  /* Essor — Brand Identity (Manrope / Inter) */
+  --font-display: "Manrope", "Inter", system-ui, -apple-system, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --animate-brand-progress: brand-progress 1.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
 
@@ -86,237 +89,220 @@
   --radius: 0.875rem;
 
   /* ------------------------------------------------------------------
-   * Scholnexa brand palette v3 — "Sceau émeraude" (logo palette).
-   * Deep teal-charcoal (#1A3E39) is the dominant brand colour (nav, headers,
-   * primary surfaces); gold-bronze (#C9A066) is the accent family (highlights,
-   * landing CTAs, dividing lines); muted green (#617F6A) supports charts and
-   * secondary accents. Red stays reserved for alerts/negative states only.
+   * Essor brand palette v1.0 — derived from the Brand Book (May 2026).
+   * Deep Ink (#0B1220) is the dominant text colour; Electric Blue
+   * (#2563EB) drives primary CTAs, navigation, and the lead KPI.
+   * Coral (#FF6B4A) is reserved for highlights and the logo's accent
+   * dot. Lavender and Sky provide secondary categorical hues.
+   * Red (#E11D48) stays reserved for errors and negative states.
    * ------------------------------------------------------------------ */
-  --scholnexa-blue: #1a3e39;
-  --scholnexa-blue-dk: #102824;
-  --scholnexa-blue-md: #14332e;
-  --scholnexa-blue-lt: #56807a;
-  --scholnexa-blue-pale: #d9e4e1;
-  --scholnexa-blue-wash: #eef3f1;
+  --essor-blue: #2563EB;
+  --essor-blue-dk: #1E40AF;
+  --essor-blue-md: #1E40AF;
+  --essor-blue-lt: #60A5FA;
+  --essor-blue-pale: #DBEAFE;
+  --essor-blue-wash: #EFF6FF;
 
-  --scholnexa-red: #e51e26;
-  --scholnexa-red-dk: #b3141b;
-  --scholnexa-red-lt: #f4626a;
-  --scholnexa-red-pale: #fbdcdd;
+  --essor-red: #E11D48;
+  --essor-red-dk: #BE123C;
+  --essor-red-lt: #FB7185;
+  --essor-red-pale: #FFE4E6;
 
-  /* Brand accent — the gold-bronze ring colour from the emblem, used on the
-     active nav tile, the lead KPI, primary CTAs and highlights. Red stays
-     reserved for errors. */
-  --scholnexa-accent: #c9a066;
-  --scholnexa-accent-dk: #a87f44;
-  --scholnexa-accent-lt: #dcbf92;
-  --scholnexa-accent-pale: #f4ebdc;
+  /* Brand accent — the blue from the logo's three petals, used on the
+     active nav tile, the lead KPI, primary CTAs and highlights. */
+  --essor-accent: #2563EB;
+  --essor-accent-dk: #1E40AF;
+  --essor-accent-lt: #60A5FA;
+  --essor-accent-pale: #DBEAFE;
 
-  /* Bronze-amber warning tone, harmonised with the gold accent. */
-  --scholnexa-amber: #c08a3e;
-  --scholnexa-amber-pale: #f6ecda;
-  /* Info — muted teal-green companion to the brand ink. */
-  --scholnexa-sky: #4f7d74;
-  --scholnexa-sky-pale: #e1ece8;
+  --essor-amber: #D97706;
+  --essor-amber-pale: #FEF3C7;
+  --essor-sky: #22D3EE;
+  --essor-sky-pale: #CFFAFE;
+  --essor-sky-dk: #0891B2;
 
-  /* Extra categorical chart hues   muted, earthy companions drawn straight
-     from the logo palette (muted green, warm clay, gold) so multi-series
-     charts read as a cohesive premium set on the cream canvas. */
-  --scholnexa-sage: #617f6a;
-  --scholnexa-coral: #c26d5c;
-  --scholnexa-gold: #c9a066;
+  /* Coral — Essor's brand highlight colour, drawn straight from the
+     logo's accent dot. Used sparingly on marketing and as a "highlight"
+     chip in charts. */
+  --essor-coral: #FF6B4A;
+  --essor-coral-dk: #E25537;
+  --essor-coral-lt: #FF8A6E;
+  --essor-coral-pale: #FFE2D9;
 
-  /* Secondary accent   the muted sage green of the laurel, used sparingly
-     next to the teal brand for highlights and charts. */
-  --scholnexa-violet: #617f6a;
-  --scholnexa-violet-dk: #4b6553;
-  --scholnexa-violet-lt: #87a18d;
-  --scholnexa-violet-pale: #e6eee8;
+  /* Lavender — secondary brand accent, drawn from the brand book. */
+  --essor-lavender: #7C5CFF;
+  --essor-lavender-dk: #5B3FE6;
+  --essor-lavender-lt: #A78BFA;
+  --essor-lavender-pale: #EDE9FE;
 
-  --scholnexa-ink: #1a3e39;
-  --scholnexa-white: #ffffff;
+  --essor-ink: #0B1220;
+  --essor-ink-2: #1E293B;
+  --essor-ink-3: #475569;
+  --essor-white: #ffffff;
 
-  /* Warm cream canvas (reference dashboard backdrop). Neutral, faintly warm   the
-     white cards lift off it without competing colour. */
-  --app-cream-top: #f6f4ee;
-  --app-cream-bottom: #f0eee6;
+  /* App canvas — a soft, neutral mist backdrop with a hint of cool
+     blue in the corners. White cards lift off it without competing
+     colour. */
+  --app-canvas-top: #F7F9FC;
+  --app-canvas-bottom: #EEF2F8;
 
   /* Shadow channels (space-separated for `rgb(... / a)` alpha syntax) used by the
-     soft-card shadow language. Kept NEUTRAL grey on purpose: coloured (teal)
-     shadows read as artificial, so elevation stays a plain, human drop shadow.
-     NB: must stay space-separated   the older comma form `2, 153, 148` makes
-     every `rgb(var(--scholnexa-shadow) / a)` shadow invalid (renders as `none`). */
-  --scholnexa-shadow: 23 23 26;
+     soft-card shadow language. Kept NEUTRAL grey on purpose: coloured (blue)
+     shadows read as artificial, so elevation stays a plain, human drop shadow. */
+  --essor-shadow: 11 18 32;
   /* Neutral ink channels for crisp, colour-neutral elevation on white. */
-  --scholnexa-ink-rgb: 26 62 57;
+  --essor-ink-rgb: 11 18 32;
 
-  /* Legacy alias variables kept for compatibility: the landing-page
-   * utility classes further down still reference them. Re-pointed at the
-   * Scholnexa palette so nothing renders in the old scheme. */
-  --legacy-brass: var(--scholnexa-blue);
-  --legacy-canvas: var(--scholnexa-white);
-  --legacy-beige: var(--scholnexa-blue-pale);
-  --legacy-beige-dk: var(--scholnexa-blue-lt);
-  --legacy-forest: var(--scholnexa-blue-dk);
-  --legacy-forest-md: var(--scholnexa-blue-md);
-  --legacy-deep: var(--scholnexa-blue-dk);
-  --legacy-teal: var(--scholnexa-blue);
-  --legacy-teal-lt: var(--scholnexa-blue-lt);
-  --legacy-gold: var(--scholnexa-amber);
-  --legacy-gold-dk: var(--scholnexa-blue-md);
-  --legacy-mint: var(--scholnexa-blue-pale);
-  --legacy-cream: var(--scholnexa-blue-wash);
-  --legacy-ink: var(--scholnexa-ink);
-  --legacy-white: var(--scholnexa-white);
-  --legacy-red: var(--scholnexa-red);
-  --legacy-blue: var(--scholnexa-sky);
+  /* Landing — deep ink hero slab; electric blue CTAs with white text. */
+  --landing-hero-bg: linear-gradient(135deg, #0B1220 0%, #1E293B 100%);
+  --landing-cta-primary: #2563EB;
+  --landing-cta-primary-hover: #1E40AF;
+  --landing-cta-on-primary: #FFFFFF;
+  
+  /* Landing page backgrounds */
+  --landing-bg-white: #FFFFFF;
+  --landing-bg-mist: #F7F9FC;
+  --landing-bg-gradient: linear-gradient(180deg, #FFFFFF 0%, #F7F9FC 50%, #FFFFFF 100%);
+  
+  /* Landing page cards */
+  --landing-card-bg: #FFFFFF;
+  --landing-card-border: rgb(11 18 32 / 0.08);
+  --landing-card-shadow: 0 4px 20px -4px rgb(11 18 32 / 0.1);
+  --landing-card-shadow-hover: 0 20px 40px -10px rgb(11 18 32 / 0.15);
+  --landing-card-radius: 1.5rem;
 
-  /* Landing   deep teal-charcoal hero slab; gold-bronze CTAs with deep-teal
-     text for AA contrast on the bronze fill. */
-  --landing-hero-bg: color-mix(in srgb, var(--scholnexa-blue) 55%, #04120e 45%);
-  --landing-cta-primary: var(--scholnexa-accent);
-  --landing-cta-primary-hover: var(--scholnexa-accent-dk);
-  --landing-cta-on-primary: var(--scholnexa-blue-dk);
+  --background: var(--essor-white);
+  --foreground: var(--essor-ink);
+  --hover-menu-foreground: var(--essor-ink);
 
-  --background: var(--scholnexa-white);
-  --foreground: var(--scholnexa-ink);
-  --hover-menu-foreground: var(--scholnexa-blue-dk);
+  --card: var(--essor-white);
+  --card-foreground: var(--essor-ink);
+  --popover: var(--essor-white);
+  --popover-foreground: var(--essor-ink);
 
-  --card: var(--scholnexa-white);
-  --card-foreground: var(--scholnexa-ink);
-  --popover: var(--scholnexa-white);
-  --popover-foreground: var(--scholnexa-ink);
+  /* Brand primary — Electric Blue with white text */
+  --primary: var(--essor-blue);
+  --primary-foreground: var(--essor-white);
 
-  /* Brand accent / CTA   solid teal with white text */
-  --primary: var(--scholnexa-blue);
-  --primary-foreground: var(--scholnexa-white);
+  --secondary: var(--essor-blue-pale);
+  --secondary-foreground: var(--essor-blue-dk);
 
-  --secondary: var(--scholnexa-blue-pale);
-  --secondary-foreground: var(--scholnexa-blue-dk);
+  --muted: var(--essor-blue-wash);
+  --muted-foreground: color-mix(in srgb, var(--essor-ink) 62%, var(--essor-blue) 38%);
 
-  --muted: var(--scholnexa-blue-wash);
-  --muted-foreground: color-mix(in srgb, var(--scholnexa-ink) 62%, var(--scholnexa-blue) 38%);
+  --accent: var(--essor-blue-pale);
+  --accent-foreground: var(--essor-blue-dk);
 
-  --accent: var(--scholnexa-blue-pale);
-  --accent-foreground: var(--scholnexa-blue-dk);
+  --destructive: var(--essor-red);
+  --destructive-foreground: var(--essor-white);
 
-  --destructive: var(--scholnexa-red);
-  --destructive-foreground: var(--scholnexa-white);
-
-  --border: color-mix(in srgb, var(--scholnexa-blue) 22%, var(--scholnexa-white) 78%);
-  --input: color-mix(in srgb, var(--scholnexa-blue) 28%, var(--scholnexa-white) 72%);
-  --ring: var(--scholnexa-blue);
+  --border: color-mix(in srgb, var(--essor-blue) 18%, var(--essor-white) 82%);
+  --input: color-mix(in srgb, var(--essor-blue) 22%, var(--essor-white) 78%);
+  --ring: var(--essor-blue);
 
   /* Supporting accents (charts, badges, utilities) */
-  --sun: var(--scholnexa-amber);
-  --sky: var(--scholnexa-sky);
-  --leaf: var(--scholnexa-blue-lt);
-  --coral: var(--scholnexa-red);
+  --sun: var(--essor-amber);
+  --sky: var(--essor-sky);
+  --leaf: var(--essor-blue-lt);
+  --coral: var(--essor-coral);
 
-  /* Monochrome brand ramp   shades of the teal-charcoal brand (#1a3e39),
-     deep → light, closing on the gold-bronze accent. All charts/graphs stay
-     in the logo family per the brand; red (#e51e26) stays reserved for UI
-     error states, not graphs. */
-  --chart-1: #102824;
-  --chart-2: #1a3e39;
-  --chart-3: #3d6157;
-  --chart-4: #617f6a;
-  --chart-5: #8fa98f;
-  --chart-6: #c9a066;
-  --chart-7: #dfc9a5;
+  /* Monochrome brand ramp — shades of Electric Blue, deep → light, closing
+     on the coral accent. All charts/graphs stay in the logo family per the
+     brand; red (#E11D48) stays reserved for UI error states, not graphs. */
+  --chart-1: #1E40AF;
+  --chart-2: #2563EB;
+  --chart-3: #60A5FA;
+  --chart-4: #93C5FD;
+  --chart-5: #BFDBFE;
+  --chart-6: #FF6B4A;
+  --chart-7: #7C5CFF;
 
-  --sidebar: var(--scholnexa-white);
-  --sidebar-foreground: var(--scholnexa-ink);
-  --sidebar-primary: var(--scholnexa-blue);
-  --sidebar-primary-foreground: var(--scholnexa-white);
-  --sidebar-accent: var(--scholnexa-blue-pale);
-  --sidebar-accent-foreground: var(--scholnexa-blue-dk);
-  --sidebar-border: color-mix(in srgb, var(--scholnexa-blue) 22%, var(--scholnexa-white) 78%);
-  --sidebar-ring: var(--scholnexa-blue);
+  --sidebar: var(--essor-white);
+  --sidebar-foreground: var(--essor-ink);
+  --sidebar-primary: var(--essor-blue);
+  --sidebar-primary-foreground: var(--essor-white);
+  --sidebar-accent: var(--essor-blue-pale);
+  --sidebar-accent-foreground: var(--essor-blue-dk);
+  --sidebar-border: color-mix(in srgb, var(--essor-blue) 18%, var(--essor-white) 82%);
+  --sidebar-ring: var(--essor-blue);
 
-  --scrollbar-thumb: color-mix(in srgb, var(--scholnexa-blue) 40%, transparent);
-  --scrollbar-thumb-hover: color-mix(in srgb, var(--scholnexa-blue) 62%, transparent);
+  --scrollbar-thumb: color-mix(in srgb, var(--essor-blue) 40%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--essor-blue) 62%, transparent);
 
-  --gradient-hero: linear-gradient(135deg, var(--scholnexa-blue-dk) 0%, var(--scholnexa-blue) 55%, var(--scholnexa-blue-lt) 100%);
-  --shadow-elegant: 0 20px 60px -20px rgb(var(--scholnexa-shadow) / 0.34);
-  --shadow-soft: 0 8px 30px -10px rgb(var(--scholnexa-shadow) / 0.22);
+  --gradient-hero: linear-gradient(135deg, var(--essor-blue-dk) 0%, var(--essor-blue) 55%, var(--essor-blue-lt) 100%);
+  --shadow-elegant: 0 20px 60px -20px rgb(var(--essor-shadow) / 0.34);
+  --shadow-soft: 0 8px 30px -10px rgb(var(--essor-shadow) / 0.22);
 
   /* ------------------------------------------------------------------
-   * Refined elevation ladder   layered, colour-neutral shadows in the
+   * Refined elevation ladder — layered, colour-neutral shadows in the
    * spirit of Linear / Stripe. Each step stacks a tight contact shadow
    * with a soft ambient one plus a hairline top highlight, so surfaces
    * read as physically lifted rather than blurred.
    * ------------------------------------------------------------------ */
   --elevation-1:
-    0 1px 2px -1px rgb(var(--scholnexa-ink-rgb) / 0.08),
-    0 1px 3px 0 rgb(var(--scholnexa-ink-rgb) / 0.06);
+    0 1px 2px -1px rgb(var(--essor-ink-rgb) / 0.08),
+    0 1px 3px 0 rgb(var(--essor-ink-rgb) / 0.06);
   --elevation-2:
-    0 1px 2px -1px rgb(var(--scholnexa-ink-rgb) / 0.06),
-    0 6px 16px -8px rgb(var(--scholnexa-ink-rgb) / 0.10);
+    0 1px 2px -1px rgb(var(--essor-ink-rgb) / 0.06),
+    0 6px 16px -8px rgb(var(--essor-ink-rgb) / 0.10);
   --elevation-3:
-    0 4px 10px -6px rgb(var(--scholnexa-ink-rgb) / 0.09),
-    0 14px 28px -14px rgb(var(--scholnexa-ink-rgb) / 0.13);
+    0 4px 10px -6px rgb(var(--essor-ink-rgb) / 0.09),
+    0 14px 28px -14px rgb(var(--essor-ink-rgb) / 0.13);
   --elevation-4:
-    0 8px 18px -10px rgb(var(--scholnexa-ink-rgb) / 0.10),
-    0 26px 50px -22px rgb(var(--scholnexa-ink-rgb) / 0.18);
+    0 8px 18px -10px rgb(var(--essor-ink-rgb) / 0.10),
+    0 26px 50px -22px rgb(var(--essor-ink-rgb) / 0.18);
   /* Highlight applied inset at a card's top edge for a "lit from above" feel. */
   --edge-highlight: inset 0 1px 0 rgb(255 255 255 / 0.7);
 }
 
 .dark {
-  --background: var(--legacy-forest-md);
-  --foreground: var(--legacy-canvas);
-  --card: var(--legacy-forest);
-  --card-foreground: var(--legacy-canvas);
-  --popover: var(--legacy-forest);
-  --popover-foreground: var(--legacy-canvas);
-  --primary: var(--legacy-gold);
-  --primary-foreground: var(--legacy-forest);
-  --secondary: color-mix(in srgb, var(--legacy-forest) 86%, var(--legacy-deep) 14%);
-  --secondary-foreground: var(--legacy-canvas);
-  --muted: color-mix(in srgb, var(--legacy-forest) 78%, var(--legacy-deep) 22%);
-  --muted-foreground: color-mix(in srgb, var(--legacy-beige) 58%, transparent);
-  --accent: color-mix(in srgb, var(--legacy-brass) 28%, var(--legacy-forest) 72%);
-  --accent-foreground: var(--legacy-canvas);
-  --destructive: color-mix(in srgb, var(--legacy-red) 92%, white 8%);
-  --destructive-foreground: var(--legacy-ink);
-  --border: color-mix(in srgb, var(--legacy-canvas) 14%, transparent);
-  --input: color-mix(in srgb, var(--legacy-canvas) 16%, transparent);
-  --ring: var(--legacy-gold);
-  --sidebar: var(--legacy-ink);
-  --sidebar-foreground: var(--legacy-canvas);
-  --sidebar-primary: var(--legacy-gold);
-  --sidebar-primary-foreground: var(--legacy-forest);
-  --sidebar-accent: var(--legacy-forest);
-  --sidebar-accent-foreground: var(--legacy-canvas);
-  --sidebar-border: color-mix(in srgb, var(--legacy-canvas) 12%, transparent);
-  --sidebar-ring: var(--legacy-gold);
+  --background: #0B1220;
+  --foreground: #F8FAFC;
+  --card: #111A2E;
+  --card-foreground: #F8FAFC;
+  --popover: #111A2E;
+  --popover-foreground: #F8FAFC;
+  --primary: #60A5FA;
+  --primary-foreground: #0B1220;
+  --secondary: #1E293B;
+  --secondary-foreground: #F8FAFC;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #1E293B;
+  --accent-foreground: #F8FAFC;
+  --destructive: #FB7185;
+  --destructive-foreground: #0B1220;
+  --border: #1E293B;
+  --input: #1E293B;
+  --ring: #60A5FA;
+  --sidebar: #0B1220;
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-primary: #60A5FA;
+  --sidebar-primary-foreground: #0B1220;
+  --sidebar-accent: #1E293B;
+  --sidebar-accent-foreground: #F8FAFC;
+  --sidebar-border: #1E293B;
+  --sidebar-ring: #60A5FA;
 
-  --sun: var(--legacy-gold);
-  --sky: var(--legacy-teal-lt);
-  --leaf: var(--legacy-mint);
-  --coral: var(--legacy-gold-dk);
+  --sun: #FBBF24;
+  --sky: #22D3EE;
+  --leaf: #60A5FA;
+  --coral: #FF8A6E;
 
-  --chart-1: var(--legacy-gold);
-  --chart-2: var(--legacy-brass);
-  --chart-3: var(--legacy-canvas);
-  --chart-4: var(--legacy-mint);
-  --chart-5: var(--scholnexa-violet-lt);
-  --chart-6: var(--legacy-blue);
-  --chart-7: var(--legacy-red);
+  --chart-1: #60A5FA;
+  --chart-2: #93C5FD;
+  --chart-3: #60A5FA;
+  --chart-4: #FF6B4A;
+  --chart-5: #7C5CFF;
+  --chart-6: #22D3EE;
+  --chart-7: #FB7185;
 
-  /* Secondary accent reads lighter on dark surfaces to keep contrast. */
-  --scholnexa-violet: #8f8bff;
-  --scholnexa-violet-dk: #635bff;
-  --scholnexa-violet-lt: #b3b0ff;
-  --scholnexa-violet-pale: color-mix(in srgb, #8f8bff 22%, transparent);
+  --scrollbar-thumb: color-mix(in srgb, var(--essor-blue) 42%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--essor-blue) 52%, transparent);
 
-  --scrollbar-thumb: color-mix(in srgb, var(--legacy-gold) 42%, transparent);
-  --scrollbar-thumb-hover: color-mix(in srgb, var(--legacy-brass) 52%, transparent);
-
-  --gradient-hero: linear-gradient(135deg, var(--legacy-ink) 0%, var(--legacy-deep) 45%, color-mix(in srgb, var(--legacy-brass) 40%, var(--legacy-forest) 60%) 100%);
+  --gradient-hero: linear-gradient(135deg, #0B1220 0%, #1E293B 45%, #2563EB 100%);
   --shadow-elegant: 0 20px 60px -20px color-mix(in srgb, black 55%, transparent);
-  --shadow-soft: 0 8px 30px -10px color-mix(in srgb, var(--legacy-brass) 28%, transparent);
+  --shadow-soft: 0 8px 30px -10px color-mix(in srgb, var(--essor-blue) 28%, transparent);
 
   /* Dark elevation leans on black ambient + a faint light top edge. */
   --elevation-1: 0 1px 2px -1px rgb(0 0 0 / 0.5), 0 1px 3px rgb(0 0 0 / 0.4);
@@ -327,8 +313,8 @@
 }
 
 /* Anti-FOUC reveal. Higher specificity than the inline `#root { opacity: 0 }` in
-   index.html (and unlayered), so once this bundled stylesheet applies   whenever
-   that is   it wins and the app fades in instead of flashing unstyled content. */
+   index.html (and unlayered), so once this bundled stylesheet applies — whenever
+   that is — it wins and the app fades in instead of flashing unstyled content. */
 html #root {
   opacity: 1;
   transition: opacity 0.25s ease;
@@ -425,7 +411,7 @@ html #root {
   }
 
   /* ------------------------------------------------------------------
-   * Premium surface system   layered elevation + a lit top edge.
+   * Premium surface system — layered elevation + a lit top edge.
    * `surface-2` is the default card; `surface-3/4` for popovers/dialogs.
    * `surface-interactive` adds a smooth lift on hover for clickable cards.
    * ------------------------------------------------------------------ */
@@ -445,19 +431,19 @@ html #root {
     box-shadow: var(--edge-highlight), var(--elevation-4);
   }
 
-  /* App canvas   a warm, neutral cream backdrop (reference dashboard) so the
-     white cards read as softly lifted rather than floating on tinted colour.
-     A whisper of teal sits in the top corners to keep the brand present. */
+  /* App canvas — a soft, neutral mist backdrop with a hint of cool
+     blue in the corners. White cards lift off it without competing
+     colour. */
   .app-canvas {
     background:
-      radial-gradient(1000px 480px at 100% -10%, color-mix(in srgb, var(--scholnexa-blue) 6%, transparent) 0%, transparent 60%),
-      radial-gradient(900px 460px at -6% 0%, color-mix(in srgb, var(--scholnexa-blue) 5%, transparent) 0%, transparent 55%),
-      linear-gradient(180deg, var(--app-cream-top) 0%, var(--app-cream-bottom) 100%);
+      radial-gradient(1000px 480px at 100% -10%, color-mix(in srgb, var(--essor-blue) 6%, transparent) 0%, transparent 60%),
+      radial-gradient(900px 460px at -6% 0%, color-mix(in srgb, var(--essor-coral) 4%, transparent) 0%, transparent 55%),
+      linear-gradient(180deg, var(--app-canvas-top) 0%, var(--app-canvas-bottom) 100%);
   }
   :is(.dark) .app-canvas {
     background:
-      radial-gradient(1100px 520px at 100% -8%, color-mix(in srgb, var(--scholnexa-violet) 16%, transparent) 0%, transparent 58%),
-      radial-gradient(1000px 500px at -8% 0%, color-mix(in srgb, var(--legacy-brass) 12%, transparent) 0%, transparent 55%),
+      radial-gradient(1100px 520px at 100% -8%, color-mix(in srgb, var(--essor-lavender) 16%, transparent) 0%, transparent 58%),
+      radial-gradient(1000px 500px at -8% 0%, color-mix(in srgb, var(--essor-blue) 12%, transparent) 0%, transparent 55%),
       var(--background);
   }
 
@@ -468,15 +454,15 @@ html #root {
     backdrop-filter: blur(14px) saturate(1.5);
   }
 
-  /* Subtle brand aura   a soft radial wash used behind hero KPIs / headers. */
+  /* Subtle brand aura — a soft radial wash used behind hero KPIs / headers. */
   .brand-aura {
     background:
-      radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--scholnexa-blue) 10%, transparent) 0%, transparent 45%),
-      radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--scholnexa-violet) 9%, transparent) 0%, transparent 45%),
+      radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--essor-blue) 10%, transparent) 0%, transparent 45%),
+      radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--essor-lavender) 9%, transparent) 0%, transparent 45%),
       var(--card);
   }
 
-  /* Loading skeleton   soft shimmer sweep. */
+  /* Loading skeleton — soft shimmer sweep. */
   .skeleton {
     position: relative;
     overflow: hidden;
@@ -506,7 +492,7 @@ html #root {
     display: none;
   }
 
-  /* Lumina-style landing mesh (login keeps dot `bg-grid` above) */
+  /* Landing mesh grid (login keeps dot `bg-grid` above) */
   .hero-mesh-grid {
     background-image:
       linear-gradient(to right, color-mix(in oklab, var(--foreground) 7%, transparent) 1px, transparent 1px),
@@ -518,7 +504,7 @@ html #root {
     -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 100%);
   }
 
-  /* Landing hero   flat dark slab (reference screenshot) */
+  /* Landing hero — flat dark slab */
   .hero-promo-section {
     border-bottom: 1px solid rgb(255 255 255 / 0.08);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
@@ -540,27 +526,27 @@ html #root {
   .text-shimmer-neon {
     background: linear-gradient(
       90deg,
-      var(--scholnexa-blue-lt) 0%,
-      var(--landing-cta-primary) 35%,
-      var(--scholnexa-blue-pale) 52%,
-      var(--landing-cta-primary) 70%,
-      var(--scholnexa-blue-lt) 100%
+      var(--essor-coral) 0%,
+      var(--essor-coral) 35%,
+      var(--essor-coral-pale) 52%,
+      var(--essor-coral) 70%,
+      var(--essor-coral) 100%
     );
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     animation: landing-shimmer 4.5s linear infinite;
-    text-shadow: 0 0 20px color-mix(in srgb, var(--landing-cta-primary) 35%, transparent);
-    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--landing-cta-primary) 30%, transparent));
+    text-shadow: 0 0 20px color-mix(in srgb, var(--essor-coral) 35%, transparent);
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--essor-coral) 30%, transparent));
   }
 
   .landing-cta-primary {
     background-color: var(--landing-cta-primary);
     color: var(--landing-cta-on-primary);
-    border: 1px solid color-mix(in srgb, var(--landing-cta-primary) 78%, var(--scholnexa-blue-dk) 22%);
+    border: 1px solid color-mix(in srgb, var(--landing-cta-primary) 78%, var(--essor-ink) 22%);
     border-radius: 9999px !important;
-    box-shadow: 0 16px 36px -14px color-mix(in srgb, var(--landing-cta-primary) 65%, var(--scholnexa-blue-dk) 35%);
+    box-shadow: 0 16px 36px -14px color-mix(in srgb, var(--landing-cta-primary) 65%, var(--essor-ink) 35%);
   }
 
   .landing-cta-primary:hover {
@@ -586,7 +572,7 @@ html #root {
     color: var(--foreground);
   }
 
-  /* Frosted-glass floating tile (reference-style hero decoration) */
+  /* Frosted-glass floating tile (hero decoration) */
   .glass-tile {
     background: linear-gradient(135deg, rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.14));
     -webkit-backdrop-filter: blur(10px);
@@ -594,7 +580,7 @@ html #root {
     border: 1px solid rgb(255 255 255 / 0.65);
     border-radius: 1.4rem;
     box-shadow:
-      0 24px 48px -20px rgb(var(--scholnexa-shadow) / 0.28),
+      0 24px 48px -20px rgb(var(--essor-shadow) / 0.28),
       inset 0 1px 0 rgb(255 255 255 / 0.8);
   }
 
@@ -644,7 +630,7 @@ html #root {
 }
 
 /**
- * CRM dashboard (topnav)   mobile / tablet < lg: slightly smaller, denser type
+ * CRM dashboard (topnav) — mobile / tablet < lg: slightly smaller, denser type
  * Scoped via [data-dashboard-main] on DashShell main (children only; modals in portal unchanged).
  */
 @media (max-width: 1023px) {
@@ -705,7 +691,7 @@ html #root {
     font-size: max(0.875rem, 16px);
   }
 
-  /* Placeholders & select empty state   slightly smaller than field text on mobile */
+  /* Placeholders & select empty state — slightly smaller than field text on mobile */
   [data-dashboard-main] input::placeholder,
   [data-dashboard-main] textarea::placeholder {
     font-size: 0.75rem !important;
@@ -789,7 +775,7 @@ html #root {
   }
 }
 
-/* Barre de progression indéterminée   va-et-vient continu (rideau de transition). */
+/* Barre de progression indéterminée — va-et-vient continu (rideau de transition). */
 @keyframes brand-progress {
   0% {
     transform: translateX(-100%);
@@ -808,7 +794,7 @@ html[dir="rtl"] [data-dashboard-main] {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Animation utilities   smooth CRM transitions                        */
+/*  Animation utilities — smooth CRM transitions                        */
 /* ------------------------------------------------------------------ */
 
 @keyframes skeleton-sweep {
@@ -912,53 +898,53 @@ html[dir="rtl"] [data-dashboard-main] {
 }
 
 /* ==================================================================
- * Animations   système de mouvement partagé
+ * Animations — système de mouvement partagé
  *
  * Une seule courbe d'accélération (« ease-out » prononcée) et des durées
  * courtes : le mouvement doit accompagner la lecture, pas la retarder.
  * Tout est désactivé si l'utilisateur a demandé moins d'animations.
  * ================================================================== */
 
-@keyframes scholnexa-rise {
+@keyframes essor-rise {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: none; }
 }
-@keyframes scholnexa-rise-sm {
+@keyframes essor-rise-sm {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: none; }
 }
-@keyframes scholnexa-fade {
+@keyframes essor-fade {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-@keyframes scholnexa-scale {
+@keyframes essor-scale {
   from { opacity: 0; transform: scale(0.96); }
   to   { opacity: 1; transform: none; }
 }
-@keyframes scholnexa-shake {
+@keyframes essor-shake {
   10%, 90% { transform: translateX(-1px); }
   20%, 80% { transform: translateX(2px); }
   30%, 50%, 70% { transform: translateX(-4px); }
   40%, 60% { transform: translateX(4px); }
 }
-@keyframes scholnexa-drift {
+@keyframes essor-drift {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
   50%      { transform: translate3d(0, -20px, 0) rotate(3deg); }
 }
-@keyframes scholnexa-pop {
+@keyframes essor-pop {
   0%   { transform: scale(1); }
   40%  { transform: scale(1.14); }
   100% { transform: scale(1); }
 }
 
-.anim-rise     { animation: scholnexa-rise .55s cubic-bezier(.16, 1, .3, 1) both; }
-.anim-rise-sm  { animation: scholnexa-rise-sm .5s cubic-bezier(.16, 1, .3, 1) .08s both; }
-.anim-fade     { animation: scholnexa-fade .6s ease both; }
-.anim-scale    { animation: scholnexa-scale .4s cubic-bezier(.16, 1, .3, 1) both; }
-.anim-shake    { animation: scholnexa-shake .5s both; }
-.anim-pop      { animation: scholnexa-pop .45s cubic-bezier(.16, 1, .3, 1); }
-.anim-drift      { animation: scholnexa-drift 18s ease-in-out infinite; }
-.anim-drift-slow { animation: scholnexa-drift 26s ease-in-out infinite reverse; }
+.anim-rise     { animation: essor-rise .55s cubic-bezier(.16, 1, .3, 1) both; }
+.anim-rise-sm  { animation: essor-rise-sm .5s cubic-bezier(.16, 1, .3, 1) .08s both; }
+.anim-fade     { animation: essor-fade .6s ease both; }
+.anim-scale    { animation: essor-scale .4s cubic-bezier(.16, 1, .3, 1) both; }
+.anim-shake    { animation: essor-shake .5s both; }
+.anim-pop      { animation: essor-pop .45s cubic-bezier(.16, 1, .3, 1); }
+.anim-drift      { animation: essor-drift 18s ease-in-out infinite; }
+.anim-drift-slow { animation: essor-drift 26s ease-in-out infinite reverse; }
 
 /* Note : à l'intérieur du CRM, l'entrée des en-têtes, panneaux, tableaux et
  * lignes est animée par framer-motion (voir dash-page.tsx et les pages). Les
@@ -977,5 +963,187 @@ html[dir="rtl"] [data-dashboard-main] {
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+
+
+/* ================================================================
+ * Landing Page Utilities - Standardized Design System
+ * ================================================================ */
+
+/* Section Backgrounds */
+.landing-section-white {
+  background: var(--landing-bg-white);
+}
+
+.landing-section-mist {
+  background: var(--landing-bg-mist);
+}
+
+.landing-section-gradient {
+  background: var(--landing-bg-gradient);
+}
+
+/* Feature Cards - Standardized */
+.landing-card {
+  background: var(--landing-card-bg);
+  border: 1px solid var(--landing-card-border);
+  border-radius: var(--landing-card-radius);
+  padding: 2rem;
+  box-shadow: var(--landing-card-shadow);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.landing-card:hover {
+  border-color: rgb(37 99 235 / 0.3);
+  box-shadow: var(--landing-card-shadow-hover);
+  transform: translateY(-4px);
+}
+
+/* Buttons - Standardized */
+.landing-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--landing-cta-on-primary);
+  background: linear-gradient(135deg, var(--landing-cta-primary) 0%, var(--landing-cta-primary-hover) 100%);
+  border-radius: 9999px;
+  box-shadow: 0 8px 30px -10px rgb(37 99 235 / 0.4);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+}
+
+.landing-btn-primary:hover {
+  box-shadow: 0 20px 60px -20px rgb(37 99 235 / 0.5);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.landing-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--essor-ink);
+  background: white;
+  border: 1px solid rgb(11 18 32 / 0.15);
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px 0 rgb(11 18 32 / 0.1);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.landing-btn-secondary:hover {
+  border-color: rgb(37 99 235 / 0.3);
+  background: #F8FAFC;
+}
+
+/* Typography - Standardized */
+.landing-section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--essor-blue);
+  background: rgb(37 99 235 / 0.1);
+  border: 1px solid rgb(37 99 235 / 0.2);
+  border-radius: 9999px;
+}
+
+.landing-section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--essor-ink);
+}
+
+.landing-section-description {
+  font-size: 1.125rem;
+  line-height: 1.625;
+  color: rgb(11 18 32 / 0.7);
+}
+
+/* Dark Section Styling */
+.landing-dark-section {
+  background: linear-gradient(135deg, #0B1220 0%, #1E293B 100%);
+  color: white;
+}
+
+.landing-dark-section .landing-card {
+  background: rgb(255 255 255 / 0.05);
+  border-color: rgb(255 255 255 / 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.landing-dark-section .landing-card:hover {
+  background: rgb(255 255 255 / 0.08);
+  border-color: rgb(37 99 235 / 0.3);
+}
+
+/* Stats Cards */
+.landing-stat-card {
+  padding: 1.5rem;
+  text-align: center;
+  background: white;
+  border: 1px solid rgb(11 18 32 / 0.08);
+  border-radius: 1rem;
+}
+
+.landing-stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--essor-ink);
+}
+
+.landing-stat-label {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(11 18 32 / 0.6);
+}
+
+/* Icon Containers */
+.landing-icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgb(37 99 235 / 0.15) 0%, rgb(37 99 235 / 0.05) 100%);
+  border: 1px solid rgb(37 99 235 / 0.2);
+  color: var(--essor-blue);
+}
+
+/* Responsive Spacing */
+@media (min-width: 640px) {
+  .landing-card {
+    padding: 2.5rem;
+  }
+  
+  .landing-section-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .landing-card {
+    padding: 3rem;
   }
 }

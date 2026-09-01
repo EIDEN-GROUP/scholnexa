@@ -1,51 +1,78 @@
 /**
- * Scholnexa — central white-label brand configuration.
+ * Essor — central white-label brand configuration.
  *
  * This is the single source of truth for the product identity. Change the
  * values below to rebrand the whole application (display name, tagline,
  * contact details, logo assets). Keep the palette variables in `styles.css`
- * (`--scholnexa-*`) in sync with the brand colours referenced here.
+ * (`--essor-*`) in sync with the brand colours referenced here.
  *
- * See WHITELABEL.md at the repository root for the full rebranding guide.
+ * Brand identity derived from the Essor Brand Book v1.0 (May 2026):
+ *   • Logotype — 3 connected blue petals + a coral point.
+ *   • Palette  — Electric Blue #2563EB · Coral #FF6B4A · Lavender #7C5CFF ·
+ *                Sky #22D3EE · Deep Ink #0B1220 · Mist #F3F5F9 · White #FFFFFF.
+ *   • Type     — Manrope (display) · Inter (UI / web).
+ *   • Voice    — Human, clear, optimistic.  "Tout avance, simplement."
  */
 export const BRAND = {
   /** Product / establishment display name. */
-  name: "Scholnexa",
+  name: "Essor",
 
-  /** Tagline shown under the wordmark on loading screens and login. */
-  tagline: "Plateforme de gestion scolaire",
-  taglineEn: "School Management System",
+  /** Lowercase wordmark used in the logo (no capital E). */
+  wordmark: "essor",
+
+  /** Headline used in copy and on the loading screen. */
+  tagline: "La solution tout-en-un pour votre école",
+  taglineEn: "All-in-one platform for your school",
+
+  /** Brand promise. */
+  promise: "Tout avance, simplement.",
 
   /** Academic descriptor used on document letterheads. */
   academicLabel: "Établissement de formation",
 
   /** Email sender name and contact addresses. */
-  emailSender: "Scholnexa",
-  supportEmail: "support@eiden-group.com",
+  emailSender: "Essor",
+  supportEmail: "contact@eiden-group.com",
   contactEmail: "contact@eiden-group.com",
 
   /** Physical address shown on generated documents. */
   address: "Avenue Mohammed V, Agadir, Maroc",
   phone: "+212 5 00 00 00 00",
 
-  /** Static assets — place the files in /public.
-   * `logoPath` is the white-background lockup (login page); `logoMarkPath`
-   * is the dark-background mark (sidebar, splash, favicon, PDFs, e-mails). */
-  logoPath: "/scholnexa-logo.png",
-  logoMarkPath: "/scholnexa-logo-mark.png",
+  /** Static assets — placed in /public.
+   * `logoPath` is the light-background horizontal wordmark (header / login);
+   * `logoMarkPath` is the icon-only mark (sidebar, splash, favicon, emails);
+   * `logoDarkPath` is the same wordmark for dark surfaces (footer of emails
+   * sent on white, etc.). */
+  logoPath: "/essor-logo-full.png",
+  logoMarkPath: "/essor-logo-mark.png",
+  logoDarkPath: "/essor-logo-full.png",
+  faviconPath: "/essor-logo-mark.png",
 
   /** Footer line used on generated PDFs. */
   documentFooter:
-    "Document généré par la plateforme Scholnexa - usage interne.",
+    "Document généré par la plateforme Essor — usage interne.",
 
   /** Email footer used on automated messages. */
-  emailFooter: "Scholnexa — e-mail automatique, merci de ne pas y répondre.",
+  emailFooter:
+    "Essor — e-mail automatique, merci de ne pas y répondre.",
+
+  /** SEO defaults. */
+  seo: {
+    siteName: "Essor",
+    siteUrl: "https://essor.eiden-group.com",
+    locale: "fr_MA",
+    defaultTitle: "Essor — Plateforme tout-en-un pour écoles paramédicales au Maroc",
+    defaultDescription:
+      "Essor centralise la gestion de votre école, votre équipe et vos étudiants : plannings, paiements, bulletins, stages cliniques et reporting. En ligne en 48h. Sans engagement.",
+    twitterHandle: "@essor_app",
+  },
 
   /** Prefix used for auto-generated student registration numbers. */
-  matriculePrefix: "SCHX",
+  matriculePrefix: "ESSR",
 
   /** Prefix used for payment receipt numbers. */
-  receiptPrefix: "SCHX",
+  receiptPrefix: "ESSR",
 } as const;
 
 export type Brand = typeof BRAND;

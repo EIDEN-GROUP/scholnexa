@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Scholnexa - Gestion des écoles supérieures paramédicales au Maroc | Quittez Excel",
-    "description": "La plateforme de gestion pensée pour les écoles paramédicales privées au Maroc : inscriptions, emplois du temps, bulletins, stages cliniques et frais de scolarité centralisés. En ligne en 48h. Sans engagement."
+    "title": "Essor — Plateforme tout-en-un pour écoles paramédicales au Maroc",
+    "description": "Essor centralise la gestion de votre école, votre équipe et vos étudiants : plannings, paiements, bulletins, stages cliniques et reporting. En ligne en 48h. Sans engagement."
   },
   "a11y": {
     "backToTop": "Retour en haut de la page",
@@ -52,19 +52,20 @@
     }
   },
   "hero": {
-    "titleLine1": "Gérez votre école",
+    "badge": "Plateforme tout-en-un · Maroc",
+    "titleLine1": "Gérez votre école,",
     "titleHighlight": "sans Excel",
-    "titleLine2": "sans chaos.",
-    "subtitle": "Scholnexa est la plateforme de gestion conçue pour les écoles supérieures privées paramédicales au Maroc : étudiants, plannings, examens, stages cliniques et frais de scolarité, réunis dans un seul tableau de bord.",
-    "socialProof": "10+ écoles actives · 4.9/5 satisfaction",
+    "titleLine2": "et sans chaos.",
+    "subtitle": "Essor est la plateforme tout-en-un pensée pour les écoles supérieures privées paramédicales au Maroc. Étudiants, plannings, examens, stages cliniques et frais de scolarité — tout converge dans un seul tableau de bord moderne, rapide et accessible sur tous vos appareils.",
+    "socialProof": "10+ écoles actives · 4,9/5 de satisfaction",
     "ctaPrimary": "Réserver ma démo gratuite",
     "ctaSecondary": "Voir la démo interactive",
     "trustServers": "Serveurs au Maroc",
     "trust48h": "En ligne en 48h",
     "trustNoCommit": "Sans engagement",
     "promoLabel": "Promo",
-    "promoText": "-20% sur l'annuel",
-    "previewUrl": "scholnexa.eiden-group.com · aperçu démo",
+    "promoText": "−20% sur l'annuel",
+    "previewUrl": "app.essor.eiden-group.com · aperçu démo",
     "live": "Live",
     "specializedCenter": "École paramédicale",
     "loginToAccess": "Connectez-vous pour accéder à votre espace.",
@@ -72,12 +73,12 @@
   },
   "demo": {
     "badge": "Démo interactive sans compte requis",
-    "title": "Explorez Scholnexa dès maintenant.",
+    "title": "Explorez Essor dès maintenant.",
     "subtitle": "Cliquez sur chaque module pour découvrir son fonctionnement, comme si vous utilisiez le vrai tableau de bord de votre école.",
     "liveDemo": "Démo live",
     "adminRole": "Admin · Direction",
     "moduleOf": "Module",
-    "ctaText": "Convaincu ? Réservez une démo de 20 minutes : nous vous montrons Scholnexa avec vos propres données.",
+    "ctaText": "Convaincu ? Réservez une démo de 20 minutes : nous vous montrons Essor avec vos propres données.",
     "ctaButton": "Réserver ma démo gratuite",
     "steps": [
       {
@@ -131,7 +132,7 @@
       {
         "label": "Paramètres & Export",
         "headline": "Votre école, configurée à votre image",
-        "description": "Filières, semestres, groupes, salles, utilisateurs et rôles : configurez Scholnexa pour coller exactement à votre établissement. Vos données restent exportables à tout moment.",
+        "description": "Filières, semestres, groupes, salles, utilisateurs et rôles : configurez Essor pour coller exactement à votre établissement. Vos données restent exportables à tout moment.",
         "tag": "configuration"
       }
     ]
@@ -144,7 +145,7 @@
     "items": [
       {
         "title": "Dossiers étudiants éparpillés",
-        "quote": "« Dans quel Excel est le dossier de Mme Bennani ? »",
+        "quote": "« Dans quel tableur est le dossier de Mme Bennani ? »",
         "text": "Inscriptions, notes et pièces justificatives sont réparties entre fichiers, registres papier et boîtes mail. Retrouver un dossier complet prend parfois des heures."
       },
       {
@@ -161,9 +162,9 @@
   },
   "solution": {
     "badge": "La solution",
-    "title": "Scholnexa centralise tout.",
+    "title": "Essor centralise tout.",
     "titleMuted": "Un seul tableau de bord.",
-    "subtitle": "Fini les fichiers éparpillés. Scholnexa a été conçu de A à Z pour les écoles supérieures paramédicales, avec les contraintes réelles des directions en tête.",
+    "subtitle": "Fini les fichiers éparpillés. Essor a été conçu de A à Z pour les écoles supérieures paramédicales, avec les contraintes réelles des directions en tête.",
     "benefits": [
       "Tous les dossiers étudiants centralisés, accessibles en 2 clics",
       "Inscriptions et réinscriptions maîtrisées : plus jamais de candidature ou de réinscription perdue",
@@ -203,7 +204,7 @@
       {
         "title": "Tableau de bord",
         "benefit": "Votre école entière en un regard",
-        "text": "Dès l'ouverture de Scholnexa, vous voyez l'essentiel : étudiants inscrits, examens à venir, paiements encaissés et stages en cours. Aucun rapport à générer."
+        "text": "Dès l'ouverture d'Essor, vous voyez l'essentiel : étudiants inscrits, examens à venir, paiements encaissés et stages en cours. Aucun rapport à générer."
       },
       {
         "title": "Planning & emplois du temps",
@@ -233,7 +234,7 @@
       {
         "title": "Paiements & recouvrement",
         "benefit": "Zéro impayé qui passe entre les mailles",
-        "text": "Scholnexa génère les reçus, suit les échéances de chaque étudiant et envoie les relances automatiques. Vous ne courez plus après les frais de scolarité."
+        "text": "Essor génère les reçus, suit les échéances de chaque étudiant et envoie les relances automatiques. Vous ne courez plus après les frais de scolarité."
       },
       {
         "title": "Rapports",
@@ -243,21 +244,21 @@
       {
         "title": "Paramètres & Export",
         "benefit": "Votre école, à votre image",
-        "text": "Filières, semestres, groupes, salles, utilisateurs et rôles : configurez Scholnexa pour coller exactement à votre établissement. Vos données restent exportables à tout moment."
+        "text": "Filières, semestres, groupes, salles, utilisateurs et rôles : configurez Essor pour coller exactement à votre établissement. Vos données restent exportables à tout moment."
       }
     ]
   },
   "testimonials": {
     "badge": "Avis vérifiés",
     "title": "Ce que disent nos directions.",
-    "subtitle": "Des écoles paramédicales partout au Maroc utilisent Scholnexa au quotidien.",
+    "subtitle": "Des écoles paramédicales partout au Maroc utilisent Essor au quotidien.",
     "stats": [
       {
         "value": "10+",
         "label": "écoles actives"
       },
       {
-        "value": "4.9 / 5",
+        "value": "4,9 / 5",
         "label": "note moyenne"
       },
       {
@@ -266,7 +267,7 @@
       },
       {
         "value": "100%",
-        "label": "recommandent Scholnexa"
+        "label": "recommandent Essor"
       }
     ],
     "ctaText": "Votre école pourrait être la prochaine. 5 créneaux disponibles cette semaine.",
@@ -278,8 +279,8 @@
         "center": "Institut Atlas Santé",
         "city": "Casablanca",
         "date": "Il y a 2 semaines",
-        "highlight": "Zéro Excel depuis 3 mois",
-        "quote": "Avant Scholnexa, je passais mes lundis matin à rapprocher trois fichiers Excel. Aujourd'hui, tout est là en temps réel : effectifs, présences, encaissements. Je me concentre sur la pédagogie, plus sur l'administratif."
+        "highlight": "Zéro tableur depuis 3 mois",
+        "quote": "Avant Essor, je passais mes lundis matin à rapprocher trois fichiers Excel. Aujourd'hui, tout est là en temps réel : effectifs, présences, encaissements. Je me concentre sur la pédagogie, plus sur l'administratif."
       },
       {
         "name": "Karim Mounir",
@@ -315,7 +316,7 @@
         "city": "Agadir",
         "date": "Il y a 2 mois",
         "highlight": "Support réactif et formation incluse",
-        "quote": "L'équipe Scholnexa nous a accompagnées pas à pas. La formation était incluse, le paramétrage fait avec nous. Je recommande à toutes les écoles qui veulent moderniser leur administration sans prise de tête."
+        "quote": "L'équipe Essor nous a accompagnées pas à pas. La formation était incluse, le paramétrage fait avec nous. Je recommande à toutes les écoles qui veulent moderniser leur administration sans prise de tête."
       },
       {
         "name": "Anas Chraibi",
@@ -431,11 +432,11 @@
     "subtitle": "Ce qu'il faut savoir avant de nous contacter.",
     "items": [
       {
-        "q": "Ma secrétaire peut-elle utiliser Scholnexa sans formation ?",
-        "a": "Oui. Scholnexa a été conçu pour les équipes non techniques. L'interface est intuitive, et nous assurons une formation incluse à la mise en service. La plupart des secrétaires sont autonomes en moins d'une heure."
+        "q": "Ma secrétaire peut-elle utiliser Essor sans formation ?",
+        "a": "Oui. Essor a été conçu pour les équipes non techniques. L'interface est intuitive, et nous assurons une formation incluse à la mise en service. La plupart des secrétaires sont autonomes en moins d'une heure."
       },
       {
-        "q": "Puis-je exporter mes données si je quitte Scholnexa ?",
+        "q": "Puis-je exporter mes données si je quitte Essor ?",
         "a": "Absolument. Toutes vos données (dossiers étudiants, paiements, historique) sont exportables en CSV à tout moment. Vous n'êtes jamais pris en otage : votre école reste propriétaire de ses données."
       },
       {
@@ -444,10 +445,10 @@
       },
       {
         "q": "Y a-t-il une application mobile ?",
-        "a": "Scholnexa est entièrement responsive — il fonctionne parfaitement sur mobile et tablette depuis votre navigateur, sans installation. Vous pilotez votre école depuis n'importe quel appareil."
+        "a": "Essor est entièrement responsive — il fonctionne parfaitement sur mobile et tablette depuis votre navigateur, sans installation. Vous pilotez votre école depuis n'importe quel appareil."
       },
       {
-        "q": "Scholnexa fonctionne-t-il en arabe ?",
+        "q": "Essor fonctionne-t-il en arabe ?",
         "a": "Oui. Vous pouvez basculer entre le français et l'arabe depuis l'icône de langue en bas de l'écran. Le support reste disponible dans les deux langues."
       },
       {
@@ -458,17 +459,17 @@
   },
   "contact": {
     "badge": "Démo gratuite",
-    "title": "20 minutes. Votre école dans Scholnexa. En direct.",
-    "subtitle": "Choisissez une date et laissez-nous vos coordonnées : nous vous montrons Scholnexa avec vos cas concrets, sans engagement.",
+    "title": "20 minutes. Votre école dans Essor. En direct.",
+    "subtitle": "Choisissez une date et laissez-nous vos coordonnées : nous vous montrons Essor avec vos cas concrets, sans engagement.",
     "phoneMorocco": "07 77 77 74 28 Maroc",
-    "website": "eiden-group.com",
+    "website": "essor.eiden-group.com",
     "email": "contact@eiden-group.com",
     "address": "Agadir Bay, Technopole 1 Bloc B, Agadir 80000",
     "bullets": [
       "Présentation personnalisée selon votre type d'école",
       "Réponse garantie sous 2h ouvrées",
       "Aucun engagement requis",
-      "Les créneaux partent vite - réservez le vôtre"
+      "Les créneaux partent vite — réservez le vôtre"
     ],
     "qr": {
       "title": "Appel direct",
@@ -499,12 +500,12 @@
     }
   },
   "footer": {
-    "tagline": "La plateforme de gestion tout-en-un pour écoles paramédicales. Étudiants · Bulletins · Stages · Paiements.",
+    "tagline": "La plateforme tout-en-un pour écoles paramédicales. Étudiants · Bulletins · Stages · Paiements.",
     "navigation": "Navigation",
     "contact": "Contact",
     "bookDemo": "Réserver une démo",
-    "copyright": "© 2026 Scholnexa · Tous droits réservés",
+    "copyright": "© 2026 Essor · Tous droits réservés",
     "phoneMorocco": "07 77 77 74 28 (Maroc)",
-    "website": "eiden-group.com"
+    "website": "essor.eiden-group.com"
   }
 }
