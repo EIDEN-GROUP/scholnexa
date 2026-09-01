@@ -118,7 +118,7 @@ export function StudentFields({
             <SelectValue placeholder="Sélectionner" />
           </SelectTrigger>
           <SelectContent className={softSelectContent}>
-            {levels.map((l: { id: number; name: string }) => (
+            {levels.map((l: { id: string; name: string }) => (
               <SelectItem key={l.id} value={l.name}>
                 {l.name}
               </SelectItem>

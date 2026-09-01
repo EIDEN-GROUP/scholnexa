@@ -4,10 +4,20 @@
  */
 
 import { type ButtonHTMLAttributes, type ReactNode } from 'react';
-import { motion } from 'framer-motion';
+import { motion, type HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+type NativeButtonProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  | 'onDrag'
+  | 'onDragEnd'
+  | 'onDragStart'
+  | 'onAnimationStart'
+  | 'onAnimationEnd'
+  | 'onAnimationIteration'
+>;
+
+interface ButtonProps extends NativeButtonProps {
   children: ReactNode;
   variant?: 'primary' | 'secondary' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
