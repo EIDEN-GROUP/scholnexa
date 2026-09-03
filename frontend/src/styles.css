@@ -2,6 +2,12 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Reveal the app once styles load. The HTML shell holds #root at opacity: 0
+ * (anti-FOUC guard); without this rule the whole page stays invisible. */
+#root {
+  opacity: 1;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /*
