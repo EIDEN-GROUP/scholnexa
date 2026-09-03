@@ -338,7 +338,7 @@ export type PaiementMensuelApi = {
 };
 
 export function fetchPaiementsMensuels(params?: { etudiantId?: string }) {
-  return api.get<PaiementMensuelApi[]>("/paiements-istpm", params);
+  return api.get<PaiementMensuelApi[]>("/monthly-payments", params);
 }
 
 export function createPaiementsMensuels(data: {
@@ -355,7 +355,7 @@ export function createPaiementsMensuels(data: {
     recu: string;
     result: Array<{ mois: string; statut: string }>;
     reste: number;
-  }>("/paiements-istpm", data);
+  }>("/monthly-payments", data);
 }
 
 export function updatePaiementMensuel(
@@ -369,7 +369,7 @@ export function updatePaiementMensuel(
     notes?: string;
   },
 ) {
-  return api.put<{ ok: boolean }>(`/paiements-istpm/${id}`, data);
+  return api.put<{ ok: boolean }>(`/monthly-payments/${id}`, data);
 }
 
 export function fetchPaiementStats() {
@@ -381,7 +381,7 @@ export function fetchPaiementStats() {
     impaye: number;
     retard: number;
     tauxRecouvrement: number;
-  }>("/paiements-istpm/stats");
+  }>("/monthly-payments/stats");
 }
 
 /* ------------------------------------------------------------------ */
@@ -587,7 +587,7 @@ export function fetchDashboardStats() {
     formateursActifs: number;
     tauxReussite: number;
     totalARecouvrer: number;
-  }>("/dashboard/istpm-stats");
+  }>("/dashboard/academic-stats");
 }
 
 export function fetchFinancier() {
@@ -598,31 +598,31 @@ export function fetchFinancier() {
     impaye: number;
     retard: number;
     tauxRecouvrement: number;
-  }>("/dashboard/istpm-financier");
+  }>("/dashboard/financier");
 }
 
 export function fetchRepartitionFiliere() {
   return api.get<{ name: string; filiere: string; value: number }[]>(
-    "/dashboard/istpm-repartition-filiere",
+    "/dashboard/repartition-filiere",
   );
 }
 
 export function fetchRepartitionNiveau() {
-  return api.get<{ name: string; value: number }[]>("/dashboard/istpm-repartition-niveau");
+  return api.get<{ name: string; value: number }[]>("/dashboard/repartition-niveau");
 }
 
 export function fetchReussiteFiliere() {
   return api.get<{ name: string; filiere: string; value: number }[]>(
-    "/dashboard/istpm-reussite-filiere",
+    "/dashboard/reussite-filiere",
   );
 }
 
 export function fetchEtudiantsARisque() {
-  return api.get<any[]>("/dashboard/istpm-etudiants-a-risque");
+  return api.get<any[]>("/dashboard/etudiants-a-risque");
 }
 
 export function fetchARelancer() {
-  return api.get<any[]>("/dashboard/istpm-a-relancer");
+  return api.get<any[]>("/dashboard/a-relancer");
 }
 
 export function fetchATraiter() {
@@ -630,7 +630,7 @@ export function fetchATraiter() {
     examensAVenir: number;
     bulletinsAPublier: number;
     stagesAValider: number;
-  }>("/dashboard/istpm-a-traiter");
+  }>("/dashboard/a-traiter");
 }
 
 /* ------------------------------------------------------------------ */
