@@ -50,14 +50,15 @@ export default {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       
-      // DEBUG: Log if SSR render is returning the bare template
-      const clone = response.clone();
-      const body = await clone.text();
-      console.log(`[SSR DEBUG] Path: ${new URL(request.url).pathname}, Status: ${response.status}, Body length: ${body.length}, Is template: ${body.includes('<div id="root">') && !body.includes('id="root"></div>') ? 'No (Content found)' : 'Yes (Empty/Bare)'}`);
+      // DEBUG: If render failed (returned raw template), log the response
+      const body = await response.clone().text();
+      if (!body.includes('<div id="root">') || body.includes('id="root"></div>')) {
+        console.error(`[SSR ERROR] Path: ${new URL(request.url).pathname}, SSR Render failed to inject content.`);
+      }
       
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
-      console.error(error);
+      console.error("[SSR CRITICAL ERROR]", error);
       return new Response(renderErrorPage(), {
         status: 500,
         headers: { "content-type": "text/html; charset=utf-8" },
