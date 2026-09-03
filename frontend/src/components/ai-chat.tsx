@@ -256,7 +256,7 @@ export function AiChatFloating() {
     e?.preventDefault();
     const text = input.trim();
     if (!text || loading) return;
-    track("Assistant IA · message envoyé", { length: text.length });
+    track("AI Assistant Message Sent", { length: text.length });
     setInput("");
     setPendingActions([]);
 

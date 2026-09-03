@@ -622,7 +622,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
         "inscription",
         `Nouvelle inscription   ${etudiant.prenom} ${etudiant.nom} (${etudiant.filiere}, ${etudiant.niveau})`,
       );
-      track("Étudiant ajouté", { filiere: etudiant.filiere, niveau: etudiant.niveau });
+      track("Student Added", { filiere: etudiant.filiere, niveau: etudiant.niveau });
       return etudiant;
     },
     [log],
@@ -658,7 +658,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
     const formateur: Formateur = { ...data, id: uid("fo"), notesSaisies: 0 };
     apiCreateFormateur(data as unknown as Record<string, unknown>).catch(() => {});
     setSnap((s) => ({ ...s, formateurs: [formateur, ...s.formateurs] }));
-    track("Formateur ajouté", { departement: formateur.departement });
+    track("Trainer Added", { departement: formateur.departement });
     return formateur;
   }, []);
 
@@ -754,7 +754,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
     const examen: Examen = { ...data, id: uid("ex"), createdBy: auteurId };
     apiCreateExamen(data as unknown as Record<string, unknown>).catch(() => {});
     setSnap((s) => ({ ...s, examens: [examen, ...s.examens] }));
-    track("Examen créé", { type: examen.type, module: examen.module });
+    track("Exam Created", { type: examen.type, module: examen.module });
     return examen;
   }, []);
 
@@ -838,7 +838,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
   const saveNotesExamen = useCallback((examenId: string, saisies: SaisieNote[]) => {
     const retenues = saisies.filter((s) => s.theorique !== undefined || s.pratique !== undefined);
     if (!retenues.length) return 0;
-    track("Notes d'examen saisies", { count: retenues.length });
+    track("Exam Grades Entered", { count: retenues.length });
 
     saveNotesExamenApi(
       examenId,
@@ -912,7 +912,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
       ...s,
       bulletins: s.bulletins.map((b) => (b.id === id ? { ...b, statut: "publie" as const } : b)),
     }));
-    track("Bulletin publié", { mode: "single" });
+    track("Bulletin Published", { mode: "single" });
   }, []);
 
   const publierTousBulletins = useCallback(() => {
@@ -922,7 +922,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
       ...s,
       bulletins: s.bulletins.map((b) => ({ ...b, statut: "publie" as const })),
     }));
-    track("Bulletin publié", { mode: "bulk", count });
+    track("Bulletin Published", { mode: "bulk", count });
     return count;
   }, [snap.bulletins]);
 
@@ -932,7 +932,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
     const stage: Stage = { ...data, id: uid("st") };
     apiCreateStage(data as unknown as Record<string, unknown>).catch(() => {});
     setSnap((s) => ({ ...s, stages: [stage, ...s.stages] }));
-    track("Stage affecté", { structure: stage.structure });
+    track("Internship Assigned", { structure: stage.structure });
     return stage;
   }, []);
 
@@ -1074,7 +1074,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
         apiUpdatePaiementMensuel(id, patch).catch(() => {});
       }
       if (patch.statut || patch.montantPaye != null) {
-        track("Paiement enregistré", { statut: patch.statut, mode: patch.mode });
+        track("Payment Recorded", { statut: patch.statut, mode: patch.mode });
       }
       setSnap((s) => {
         const updatedRecords =
@@ -1116,7 +1116,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
    * La moyenne pondérée de l'étudiant est recalculée à chaque saisie.
    */
   const addNote = useCallback((etudiantId: string, note: NoteModule) => {
-    track("Note saisie", { module: note.module });
+    track("Grade Entered", { module: note.module });
     apiCreateNote({
       etudiantId,
       module: note.module,
@@ -1256,7 +1256,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
     const seance: Seance = { ...data, id: uid("se") };
     apiCreateSeance(data as unknown as Record<string, unknown>).catch(() => {});
     setSnap((s) => ({ ...s, seances: [...s.seances, seance] }));
-    track("Séance planifiée", { type: seance.type });
+    track("Session Scheduled", { type: seance.type });
     return seance;
   }, []);
 
@@ -1327,7 +1327,7 @@ export function IstpmProvider({ children }: { children: ReactNode }) {
   const reset = useCallback(() => {
     window.localStorage.removeItem(STORAGE_KEY);
     setSnap(seed());
-    track("Démo réinitialisée");
+    track("Demo Reset");
   }, []);
 
   /* ---------------- Dérivés ---------------- */

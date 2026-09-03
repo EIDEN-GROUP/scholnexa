@@ -2,20 +2,36 @@ import type { ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteNav } from "@/components/landing/site-nav";
 import { Footer } from "@/components/landing/footer";
+import { OG_IMAGE, PAGES, buildWebPage, canonicalUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/confidentialite")({
-  head: () => ({
-    meta: [
-      { title: "Politique de confidentialité · Essor" },
-      {
-        name: "description",
-        content:
-          "Comment Essor (Eiden Group) collecte, utilise et protège les données personnelles des écoles, de leurs étudiants et des visiteurs du site.",
-      },
-      { name: "robots", content: "index, follow" },
-      { property: "og:title", content: "Politique de confidentialité · Essor" },
-    ],
-  }),
+  head: () => {
+    const path = "/confidentialite";
+    const canonical = canonicalUrl(path);
+    return {
+      meta: [
+        { title: PAGES.privacy.title },
+        { name: "description", content: PAGES.privacy.description },
+        { name: "robots", content: "index, follow, max-image-preview:large" },
+        { property: "og:type", content: "article" },
+        { property: "og:site_name", content: "Essor" },
+        { property: "og:locale", content: "fr_MA" },
+        { property: "og:title", content: PAGES.privacy.title },
+        { property: "og:description", content: PAGES.privacy.description },
+        { property: "og:url", content: canonical },
+        { property: "og:image", content: OG_IMAGE.url },
+        { property: "og:image:width", content: String(OG_IMAGE.width) },
+        { property: "og:image:height", content: String(OG_IMAGE.height) },
+        { property: "og:image:alt", content: OG_IMAGE.alt },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: PAGES.privacy.title },
+        { name: "twitter:description", content: PAGES.privacy.description },
+        { name: "twitter:image", content: OG_IMAGE.url },
+        { name: "twitter:image:alt", content: OG_IMAGE.alt },
+      ],
+      links: [{ rel: "canonical", href: canonical }],
+    };
+  },
   component: PrivacyPage,
 });
 
@@ -31,8 +47,17 @@ function Section({ id, title, children }: { id: string; title: string; children:
 }
 
 function PrivacyPage() {
+  const webPageSchema = buildWebPage({
+    ...PAGES.privacy,
+    path: "/confidentialite",
+  });
   return (
     <div className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
       <SiteNav />
       <main className="mx-auto max-w-3xl px-5 pb-20 pt-28 sm:pt-32">
         <p className="text-[0.7rem] font-bold uppercase tracking-[0.22em] text-muted-foreground">

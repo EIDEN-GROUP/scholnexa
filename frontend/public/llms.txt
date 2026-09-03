@@ -1,47 +1,89 @@
 # Essor
 
-> Essor is a French-language school and training-center management platform by Eiden Group,
-> built for private paramedical schools in Morocco. It brings student records and enrollment,
-> timetabling, monthly payments and reminders, exams, report cards, and clinical-placement
-> tracking into a single web app. Tagline: "Zéro Excel, zéro chaos."
+> **Essor** is a school-management web application operated by **Eiden Group**
+> (Agadir, Morocco). It is designed for private paramedical training schools,
+> institutes, and multi-campus networks. Single source of truth for the product
+> and its entity relationships: https://essor.eiden-group.com
+>
+> Tagline: *"Zéro Excel, zéro chaos."*
 
-## What Essor does
+## Brand entity relationships
 
-- **Étudiants / enrollment**: student files, enrollment by filière (Infirmier polyvalent, Prothèse dentaire, Kinésithérapie, Sage-femme…) and semester.
-- **Planning**: weekly timetable, session scheduling, room and trainer assignment, double-booking prevention.
-- **Paiements**: per-student monthly installments, automatic late/unpaid flags, receipts (PDF), email reminders, real-time outstanding-balance view for the director.
-- **Examens & bulletins**: exam planning, grade entry, weighted averages, report cards and transcripts with a decision (Admis / Rattrapage / Ajourné).
-- **Stages cliniques**: assignment of students to host structures (hospitals, clinics), capacity tracking per service, generation and signature of internship agreements (conventions).
-- **Rôles**: separate accounts for direction, affaires estudiantines, and formateurs.
+- **Essor** → product/brand (SoftwareApplication, `#software`).
+- **Eiden Group** → company / publisher / operator (Organization, `#organization`).
+- **essor.eiden-group.com** → the web surface for the product (WebSite, `#website`).
+- **Essor is not the company** — Eiden Group is the legal entity behind Essor.
+
+## What Essor does (marketing-site facts, matching visible copy)
+
+- Étudiants / enrollment: student records, enrollment by filière (Infirmier polyvalent, Prothèse dentaire, Kinésithérapie, Sage-femme…) and semester, group, and status.
+- Planning: weekly timetable, session scheduling, room + trainer assignment, double-booking prevention.
+- Paiements: per-student monthly installments, automatic late/unpaid flags, PDF receipts, email reminders, real-time outstanding-balance view for the director.
+- Examens & bulletins: exam planning, weighted averages per module, report cards and transcripts with a decision (Admis / Rattrapage / Ajourné).
+- Stages cliniques: assign students to host structures (hospitals, clinics), track capacity per service, generate + sign internship agreements (conventions).
+- Rôles: separate accounts for direction, scolarité / affaires estudiantines, and formateurs.
 
 ## Who it is for
 
-Directors of private health-training schools, student-affairs managers, and trainers. Works for a single center or a multi-campus network.
+Directors of private health-training schools, student-affairs officers, and trainers.
+Serves single centres or multi-campus networks. Moroccan context (filières FR/AR, MAD,
+CNDP, CNSS, conventions types, stages en milieu hospitalier marocain).
 
-## Pricing
+## Pricing (matching the visible pricing section)
 
-- **Essentiel** — from 1,000 MAD HT / month, single administrator.
-- **Pro** — from 2,000 MAD HT / month, multi-role team, payments, report cards, placements.
+- **Essentiel** — from 1 000 MAD HT / month, single administrator.
+- **Pro** — from 2 000 MAD HT / month, multi-role team: payments, bulletins, stages.
 - **Réseau** — custom quote, multi-campus.
-- Price scales per 100-student tier. Annual billing gives 2 months free. No setup or hidden fees; onboarding, training, updates and support included. No lock-in (monthly plans have no commitment).
+- Prices scale per 100-student tier on the same page. Annual billing = 2 months free.
+- No setup or hidden fees. Onboarding, training, updates and support are included.
+- Monthly plans have no lock-in; annual = optional commitment for the 2-month discount.
 
-## Key facts
+## Availability & location
 
-- Language: French only. Interface adapted to the Moroccan context.
-- Hosting: European infrastructure; encrypted in transit and at rest; data isolated per school.
-- Data portability: export students, payments, grades and report cards to Excel/PDF at any time.
-- Setup: nothing to install (runs in the browser); importing a multi-hundred-student roster from Excel takes about a morning.
-- Demo: 20-minute guided demo on the school's own data, requested via the pricing → contact form.
+- **Where**: Morocco (Agadir, Casablanca, Rabat, Marrakech, Tanger, Fès, Meknès,
+  Oujda, and any city with a paramedical school or training centre). The product
+  is web-hosted, not city-limited.
+- **HQ**: Eiden Group — Agadir Bay, Technopole 1, Bloc B, Agadir 80000, Morocco.
+- **Data hosting**: EU infrastructure; encrypted in transit and at rest;
+  data physically isolated per school.
 
-## Company
+## Language & i18n
 
-Eiden Group — Agadir Bay, Technopole 1 Bloc B, Agadir 80000, Morocco.
-Contact: contact@eiden-group.com · +212 7 77 77 74 28
+- Current interface language: **French only** (Moroccan French conventions for
+  school terminology).
+- No `/ar/` Arabic route is currently implemented and therefore **not** declared
+  via `hreflang` on the site.
 
-## Pages
+## Onboarding & demo facts
+
+- Setup: no installation — runs in the browser. Importing a multi-hundred-student
+  roster from Excel takes about a morning.
+- Demo: 20-minute guided session on the school's own data; booked via the
+  `#contact` form (or the demo CTA) on the home page.
+
+## Privacy & data handling (matching the policy page)
+
+- No advertising cookies or third-party trackers used other than **Amplitude**
+  (product analytics) and optional transactional email providers.
+- Demo requests: stored max 24 months unless converted to customer.
+- Customer school data: retained for the duration of the contract, then
+  returned or purged within 90 days.
+- Users can exercise their rights under Moroccan CNDP and, for EU-based
+  individuals, GDPR.
+
+## Public URLs
 
 - Home / product overview: https://essor.eiden-group.com/
-- FAQ: https://essor.eiden-group.com/#faq
-- Pricing: https://essor.eiden-group.com/#tarifs
-- Request a demo: https://essor.eiden-group.com/#contact
-- Privacy policy: https://essor.eiden-group.com/confidentialite
+- FAQ section:      https://essor.eiden-group.com/#faq
+- Pricing section:  https://essor.eiden-group.com/#tarifs
+- Demo request:     https://essor.eiden-group.com/#contact
+- Privacy policy:   https://essor.eiden-group.com/confidentialite
+- Sitemap:          https://essor.eiden-group.com/sitemap.xml
+- Robots:           https://essor.eiden-group.com/robots.txt
+- Structured data:  JSON-LD graph (Organization, WebSite, SoftwareApplication,
+  per-page WebPage, FAQPage on the home page) embedded in every page `<head>`.
+
+## Contact
+
+- Email: contact@eiden-group.com
+- Telephone: +212 7 77 77 74 28

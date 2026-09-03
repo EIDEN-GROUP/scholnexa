@@ -184,25 +184,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({ error: "Erreur de connexion" }));
-        track("Login Failed", { status: res.status });
-        throw new Error(err.error || "Email ou mot de passe incorrect");
-      }
-      const data = await res.json();
-      const token: string = data.token;
-      const backendUser: { id: string; email: string; name: string; role: string } = data.user;
-      const mappedRole = mapBackendRole(backendUser.role);
-      const authUser: AuthUser = {
-        id: backendUser.id,
-        email: backendUser.email,
-        name: backendUser.name,
-        role: mappedRole,
-      };
-      window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
-      persistRole(mappedRole, authUser);
-      identifyUser(authUser);
-      track("Logged In", { method: "password", role: mappedRole });
+if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: "Erreur de connexion" }));
+    track("Login Failed", { status: res.status });
+    throw new Error(err.error || "Email ou mot de passe incorrect");
+  }
+  const data = await res.json();
+  const token: string = data.token;
+  const backendUser: { id: string; email: string; name: string; role: string } = data.user;
+  const mappedRole = mapBackendRole(backendUser.role);
+  const authUser: AuthUser = {
+    id: backendUser.id,
+    email: backendUser.email,
+    name: backendUser.name,
+    role: mappedRole,
+  };
+  window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
+  persistRole(mappedRole, authUser);
+  identifyUser(authUser);
+  track("Login Succeeded", { method: "password", role: mappedRole });
     },
     [persistRole],
   );

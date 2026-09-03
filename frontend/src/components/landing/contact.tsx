@@ -72,7 +72,7 @@ export function Contact({ selection }: { selection: PricingChoice | null }) {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selection) {
-      track("Demo Request Blocked", { reason: "no_plan_selected" });
+      track("Demo Form Validation Failed", { reason: "no_plan_selected" });
       setError("Choisissez d'abord une formule dans la section Tarifs.");
       goToPricing();
       return;
@@ -97,7 +97,7 @@ export function Contact({ selection }: { selection: PricingChoice | null }) {
     });
     setBusy(false);
     if (res.ok) {
-      track("Demo Request Submitted", {
+      track("Demo Requested", {
         plan: selection.plan,
         billing: selection.yearly ? "annual" : "monthly",
         students: selection.students,

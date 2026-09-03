@@ -1,27 +1,217 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr-MA">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      STATIC FALLBACK metadata for non-JS crawlers (Google's AI answer engine,
+      ChatGPT, Perplexity, Claude, basic validators, etc).
+      On hydrate, React 19's <HeadContent /> from `__root.tsx` hoists
+      per-route metadata into the same <head>, replacing this block.
+      Keep in sync with `src/lib/seo.ts` values below.
+    -->
+    <title>Essor · Logiciel de gestion pour écoles et centres de formation au Maroc</title>
+    <meta
+      name="description"
+      content="Essor, par Eiden Group (Agadir, Maroc), réunit inscriptions, emploi du temps, paiements et relances, examens, bulletins et stages cliniques des écoles paramédicales — dans un seul espace en ligne. Zéro Excel, zéro chaos."
+    />
+    <meta name="author" content="Eiden Group" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#2563EB" />
+
+    <link rel="canonical" href="https://essor.eiden-group.com/" />
+    <link rel="alternate" hreflang="fr-MA" href="https://essor.eiden-group.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://essor.eiden-group.com/" />
+
+    <meta property="og:site_name" content="Essor" />
+    <meta property="og:locale" content="fr_MA" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Essor · Logiciel de gestion pour écoles et centres de formation au Maroc" />
+    <meta
+      property="og:description"
+      content="Essor, par Eiden Group (Agadir, Maroc), réunit inscriptions, emploi du temps, paiements et relances, examens, bulletins et stages cliniques des écoles paramédicales — dans un seul espace en ligne. Zéro Excel, zéro chaos."
+    />
+    <meta property="og:url" content="https://essor.eiden-group.com/" />
+    <meta property="og:image" content="https://essor.eiden-group.com/brand/essor-logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Essor — plateforme de gestion pour écoles paramédicales au Maroc" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Essor · Logiciel de gestion pour écoles et centres de formation au Maroc" />
+    <meta
+      name="twitter:description"
+      content="Essor réunit gestion des étudiants, plannings, paiements, examens, bulletins et stages cliniques pour les écoles paramédicales au Maroc."
+    />
+    <meta name="twitter:image" content="https://essor.eiden-group.com/brand/essor-logo.png" />
+    <meta name="twitter:image:alt" content="Essor — plateforme de gestion pour écoles paramédicales au Maroc" />
+
+    <!--
+      STATIC FALLBACK JSON-LD for non-JS crawlers. After hydration, the React
+      <HeadContent> + <Routes> hoisting replaces this with the same or per-page
+      variant. Content is generated from src/lib/seo.ts (source of truth).
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://essor.eiden-group.com/#organization",
+            "name": "Eiden Group",
+            "legalName": "Eiden Group",
+            "url": "https://essor.eiden-group.com",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://essor.eiden-group.com/brand/essor-logo.png"
+            },
+            "email": "contact@eiden-group.com",
+            "telephone": "+212777777428",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Agadir Bay, Technopole 1 Bloc B",
+              "addressLocality": "Agadir",
+              "postalCode": "80000",
+              "addressCountry": "MA"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://essor.eiden-group.com/#website",
+            "url": "https://essor.eiden-group.com",
+            "name": "Essor",
+            "inLanguage": "fr_MA",
+            "publisher": { "@id": "https://essor.eiden-group.com/#organization" }
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://essor.eiden-group.com/",
+            "url": "https://essor.eiden-group.com/",
+            "name": "Essor · Logiciel de gestion pour écoles et centres de formation au Maroc",
+            "inLanguage": "fr_MA",
+            "isPartOf": { "@id": "https://essor.eiden-group.com/#website" },
+            "about": { "@id": "https://essor.eiden-group.com/#software" },
+            "publisher": { "@id": "https://essor.eiden-group.com/#organization" }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://essor.eiden-group.com/#software",
+            "name": "Essor",
+            "applicationCategory": "BusinessApplication",
+            "applicationSubCategory": "School management software",
+            "operatingSystem": "Web",
+            "url": "https://essor.eiden-group.com",
+            "inLanguage": "fr_MA",
+            "description": "Essor, par Eiden Group (Agadir, Maroc), réunit inscriptions, emploi du temps, paiements et relances, examens, bulletins et stages cliniques des écoles paramédicales — dans un seul espace en ligne. Zéro Excel, zéro chaos.",
+            "publisher": { "@id": "https://essor.eiden-group.com/#organization" },
+            "featureList": [
+              "Dossiers étudiants et inscriptions",
+              "Emploi du temps et planning des séances",
+              "Paiements mensuels, reçus et relances automatiques",
+              "Examens, bulletins et relevés de notes",
+              "Suivi des stages cliniques et conventions"
+            ],
+            "offers": [
+              {
+                "@type": "Offer",
+                "name": "Essentiel",
+                "price": "1000",
+                "priceCurrency": "MAD",
+                "description": "À partir de 1 000 MAD HT / mois, un administrateur.",
+                "url": "https://essor.eiden-group.com/#tarifs"
+              },
+              {
+                "@type": "Offer",
+                "name": "Pro",
+                "price": "2000",
+                "priceCurrency": "MAD",
+                "description": "À partir de 2 000 MAD HT / mois, équipe multi-rôles.",
+                "url": "https://essor.eiden-group.com/#tarifs"
+              },
+              {
+                "@type": "Offer",
+                "name": "Réseau",
+                "priceSpecification": {
+                  "@type": "PriceSpecification",
+                  "priceCurrency": "MAD"
+                },
+                "description": "Sur devis, multi-campus.",
+                "url": "https://essor.eiden-group.com/#tarifs"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.essor.eiden-group.com" />
+
+    <!--
+      Anti-FOUC guard. In dev, the bundled stylesheet is injected by JS, so the
+      first React paint can happen before any styles apply — during that frame,
+      `currentColor` SVG shapes render solid black (the flash the user saw). We
+      paint the shell on a plain white background and keep #root hidden until the
+      real stylesheet loads and reveals it (see `#root { opacity: 1 }` in
+      styles.css). Never black, so no bar can flash.
+    -->
     <style>
       html { background-color: #ffffff; }
       #root { opacity: 0; }
     </style>
   </head>
   <body class="min-h-full antialiased">
-    <div id="root"></div>
+    <div id="root">
+    <!--
+      Pre-hydration fallback content for non-JS crawlers (SEO + AEO). React
+      clears this container on mount (createRoot), so it has zero visual
+      impact for real users. Content mirrors the on-page SEO sections.
+    -->
     <noscript>
-      <div style="padding:2rem;font-family:Inter,system-ui,sans-serif;max-width:42rem;margin:0 auto;">
-        <h1 style="font-size:1.5rem;font-weight:800;margin:0 0 0.5rem;color:#0B1220;">Essor — gestion d'école tout-en-un</h1>
-        <p style="color:#475569;line-height:1.6;">
-          Cette application nécessite JavaScript pour fonctionner. Activez JavaScript puis
-          <a href="https://essor.eiden-group.com" style="color:#2563EB;">retournez à la page d'accueil</a>.
+      <div style="max-width:42rem;margin:0 auto;padding:2rem;font-family:Inter,system-ui,sans-serif;line-height:1.6;color:#0B1220">
+        <h1>Essor — Logiciel de gestion pour écoles paramédicales au Maroc</h1>
+        <p>
+          <strong>Essor</strong> est une plateforme de gestion développée par
+          <strong>Eiden Group</strong>, une société basée à <strong>Agadir,
+          Maroc</strong>. Elle réunit dans un seul espace en ligne&nbsp;:
         </p>
+        <ul>
+          <li>Dossiers étudiants et inscriptions (filière, semestre, groupes)</li>
+          <li>Emploi du temps et planning des séances</li>
+          <li>Paiements mensuels, reçus et relances automatiques</li>
+          <li>Examens, bulletins et relevés de notes</li>
+          <li>Suivi des stages cliniques et conventions</li>
+        </ul>
+        <h2>Tarifs</h2>
+        <p>
+          Formule <strong>Essentiel</strong> à partir de <strong>1000&nbsp;MAD HT
+          / mois</strong>.<br />
+          Formule <strong>Pro</strong> à partir de <strong>2000&nbsp;MAD HT
+          / mois</strong>.<br />
+          Offre <strong>Réseau</strong> (multi-campus) sur devis.<br />
+          Engagement annuel = deux mois offerts. Aucun frais de dossier. Import
+          d'un fichier d'étudiants, formation initiale, mises à jour et support
+          technique inclus.
+        </p>
+        <h2>Contact</h2>
+        <p>
+          Eiden Group — Agadir Bay, Technopole&nbsp;1, Bloc&nbsp;B, 80000 Agadir,
+          Maroc.<br />
+          <a href="mailto:contact@eiden-group.com" style="color:#2563EB">contact@eiden-group.com</a>
+          &middot;
+          <a href="tel:+212777777428" style="color:#2563EB">+212&nbsp;7&nbsp;77&nbsp;77&nbsp;74&nbsp;28</a>
+        </p>
+        <p><em>Activez JavaScript pour visualiser l'application complète.</em></p>
       </div>
     </noscript>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  </div>
+
+  <script type="module" src="/src/main.tsx"></script>
+</body>
 </html>
