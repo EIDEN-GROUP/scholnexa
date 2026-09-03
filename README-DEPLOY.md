@@ -1,4 +1,4 @@
-# Scholnexa — Deployment Guide
+# Scholnexa | Deployment Guide
 
 > **Version:** 1.0.0
 > **Stack:** Fastify 5 + React 19 + PostgreSQL 16 (Supabase) + Redis 7 + Supabase Storage
@@ -24,7 +24,7 @@ Browser
   │
   ├── Mode A: https://app.example.com        (Vercel/Netlify/static host)
   ├── Mode B: https://example.com            (nginx on the VPS, Docker Swarm)
-  └── Mode C: https://<frontend>.vercel.app  (Vercel — two projects)
+  └── Mode C: https://<frontend>.vercel.app  (Vercel | two projects)
 
                         │
                         ▼
@@ -39,7 +39,7 @@ Browser
 
 ---
 
-## Mode A — Frontend on Vercel, backend on a VPS (recommended)
+## Mode A | Frontend on Vercel, backend on a VPS (recommended)
 
 ### A.1 Vercel project settings
 
@@ -61,7 +61,7 @@ Browser
 |---|---|
 | `VITE_API_URL` | `https://api.example.com/api` |
 
-> Vite bakes `VITE_API_URL` into the bundle at build time — changing it
+> Vite bakes `VITE_API_URL` into the bundle at build time | changing it
 > requires a redeploy.
 
 ### A.3 Backend CORS
@@ -76,7 +76,7 @@ CORS_ORIGIN=https://app.example.com,https://app-example-com.vercel.app
 ### A.5 Backend on Vercel too (full-serverless mode)
 
 The backend can also be deployed to Vercel as serverless functions, so the
-whole application runs without a VPS — **except** the parts that require a
+whole application runs without a VPS | **except** the parts that require a
 persistent process or persistent infrastructure. This is an *additional*
 option; Mode A (backend on a VPS) remains the recommended production setup
 because it has no function-time limits.
@@ -85,7 +85,7 @@ because it has no function-time limits.
 `/health`, as two serverless functions. The app is pre-bundled into a single
 self-contained file during the build (`api/[...path].js`) because the
 platform's TypeScript compiler does not resolve the `@/*` path alias used in
-`src/` — see `backend/scripts/build-vercel-function.mjs`.
+`src/` | see `backend/scripts/build-vercel-function.mjs`.
 
 **What must stay on an always-on host (VPS) or be a managed service:**
 
@@ -122,13 +122,13 @@ platform's TypeScript compiler does not resolve the `@/*` path alias used in
 | Framework preset | **Other** |
 | Root directory | `backend` |
 | Build command | `npm run vercel-build` (defined in `backend/package.json`) |
-| Output directory | *(none — functions are deployed)* |
+| Output directory | *(none | functions are deployed)* |
 | Install command | `npm ci` |
 | Node version | 22.x |
 
 > **Note:** the two functions are configured in `backend/vercel.json`
 > (`api/[...path].js` catch-all + `api/health.ts`). The catch-all bundle is
-> **committed** on purpose — Vercel validates `functions` patterns and
+> **committed** on purpose | Vercel validates `functions` patterns and
 > discovers `api/` functions *before* the build command runs, so the file
 > must exist in the repo at clone time. `npm run vercel-build` regenerates it
 > deterministically on every deploy.
@@ -136,23 +136,23 @@ platform's TypeScript compiler does not resolve the `@/*` path alias used in
 > **Local `vercel dev`:** run `npm run vercel-build` once before `vercel dev`
 > so the catch-all function file exists.
 
-**Backend environment variables** (same set as the VPS — see
+**Backend environment variables** (same set as the VPS | see
 `backend/.env.example` and `ENVIRONMENT.md`):
 
 | Variable | Notes |
 |---|---|
 | `DATABASE_URL` | must point to an externally reachable Postgres (managed or VPS) |
-| `JWT_SECRET`, `ADMIN_API_KEY`, `MINIO_*` | **required** — the app refuses to boot in production with default values |
+| `JWT_SECRET`, `ADMIN_API_KEY`, `MINIO_*` | **required** | the app refuses to boot in production with default values |
 | `REDIS_URL` | needed only if queues are used; otherwise optional |
 | `CORS_ORIGIN` | comma-separated; must include the frontend origin(s) |
 | `NODE_ENV` | set automatically to `production` by Vercel |
-| `VERCEL` | set automatically to `1` — enables serverless-safe behavior (1-connection DB pool, no pino-pretty transport) |
+| `VERCEL` | set automatically to `1` | enables serverless-safe behavior (1-connection DB pool, no pino-pretty transport) |
 
 Point the frontend at it with `VITE_API_URL=https://<backend-project>.vercel.app/api`.
 
 ---
 
-## Mode C — Everything on Vercel (two projects)
+## Mode C | Everything on Vercel (two projects)
 
 With Supabase providing PostgreSQL and Storage, the whole application can run
 on Vercel alone using **two separate Vercel projects** (the classic monorepo
@@ -162,13 +162,13 @@ pattern): one project serves the frontend SPA, the other deploys the backend
 > **Why two projects and not the multi-service (`services`) feature?** Vercel's
 > multi-service config only supports framework presets that run the backend as
 > a single monolithic app (`@vercel/fastify`, `@vercel/backends`, …). None of
-> them deploy classic `api/`-directory `@vercel/node` functions — which is the
+> them deploy classic `api/`-directory `@vercel/node` functions | which is the
 > architecture this backend uses (`api/[...path].js` + `api/health.ts`, pre-
 > bundled by `vercel-build`). The two-project model uses exactly that
 > battle-tested functions pipeline, so it is the supported way to run this
 > backend on Vercel.
 
-### C.1 Project 1 — Frontend
+### C.1 Project 1 | Frontend
 
 | Setting | Value |
 |---|---|
@@ -192,14 +192,14 @@ pattern): one project serves the frontend SPA, the other deploys the backend
 }
 ```
 
-### C.2 Project 2 — Backend
+### C.2 Project 2 | Backend
 
 | Setting | Value |
 |---|---|
 | Project name | `scholnexa-api` (URL `https://scholnexa-api.vercel.app`) |
 | Framework preset | **Other** |
 | Root directory | `backend` |
-| Build command | *(none set — Vercel auto-runs `npm run vercel-build`, which takes precedence over `build`)* |
+| Build command | *(none set | Vercel auto-runs `npm run vercel-build`, which takes precedence over `build`)* |
 | Install command | `npm ci` |
 | Node version | 22.x |
 
@@ -224,7 +224,7 @@ picked up automatically from `package.json`:
 ```
 
 The `backend/public/` directory (a small landing page + `robots.txt`) exists
-to satisfy Vercel's static-output check for framework-null projects — the
+to satisfy Vercel's static-output check for framework-null projects | the
 `api/` functions deploy alongside it.
 
 > **Why the `rewrites` entry is required:** Vercel CLI 58.x generates routing
@@ -246,7 +246,7 @@ additionally serves `/health` directly.
 Import the same `.env.production` file into **both** projects:
 
 - **Frontend project** reads the `VITE_*` variables. `VITE_API_URL` must be the
-  **absolute backend URL** (`https://scholnexa-api.vercel.app/api`) — it is
+  **absolute backend URL** (`https://scholnexa-api.vercel.app/api`) | it is
   baked at build time, so change + redeploy the frontend if the backend URL
   differs.
 - **Backend project** reads everything else (Supabase, JWT, SMTP, CORS, AI).
@@ -258,14 +258,14 @@ wildcard covers preview deployments (`*` entries are compiled to RegExp in
 
 ### C.4 What still needs an always-on host
 
-Same table as Mode A.5 — the BullMQ worker, scheduled jobs and long-running
+Same table as Mode A.5 | the BullMQ worker, scheduled jobs and long-running
 tasks must run on a VPS (or a managed queue + cron service). Request/response
 features (CRUD, login, payments, documents via Supabase Storage) work fully
 on Vercel alone.
 
 ---
 
-## Mode B — Full VPS deployment (Docker Swarm)
+## Mode B | Full VPS deployment (Docker Swarm)
 
 ### B.1 Requirements
 
@@ -404,7 +404,7 @@ The production stack includes:
 | Symptom | Fix |
 |---|---|
 | Frontend cannot reach the API | Check `VITE_API_URL` was set at build time; check backend `CORS_ORIGIN` includes the frontend origin |
-| 502 on `/api/*` | Backend container unhealthy — `docker service logs scholnexa_backend --tail 50` |
+| 502 on `/api/*` | Backend container unhealthy | `docker service logs scholnexa_backend --tail 50` |
 | Migration failed | `docker service logs scholnexa-migrate --tail 50`; DB credentials in `.env.production` |
 | SSL certificate errors | Re-run `certbot --nginx -d example.com`; verify the A record |
 | Redis connection refused | Verify `REDIS_PASSWORD` matches between `.env.production` and compose |

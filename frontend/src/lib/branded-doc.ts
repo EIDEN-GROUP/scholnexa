@@ -1,5 +1,5 @@
 /**
- * Documents de marque Essor — PDF et e-mail.
+ * Documents de marque Essor | PDF et e-mail.
  *
  * Un seul endroit produit les livrables « officiels » (convention / rapport de
  * stage) pour qu'ils partagent le logo `public/istpm-logo.svg` et la palette de
@@ -156,8 +156,8 @@ function stageSections(s: Stage, kind: Kind): Section[] {
     {
       title: "Encadrement",
       rows: [
-        { label: "Tuteur clinique", value: s.encadrantClinique || "—" },
-        { label: "Tuteur académique", value: s.tuteurAcademique || "—" },
+        { label: "Tuteur clinique", value: s.encadrantClinique || "|" },
+        { label: "Tuteur académique", value: s.tuteurAcademique || "|" },
       ],
     },
   ];
@@ -415,7 +415,7 @@ export async function makeStageDocPdf(s: Stage, kind: Kind): Promise<Blob> {
 }
 
 /**
- * Reçu de paiement — génère un PDF estampillé pour un règlement mensuel.
+ * Reçu de paiement | génère un PDF estampillé pour un règlement mensuel.
  *
  * Utilise le même logo, le même cachet et la même mise en page que les
  * conventions de stage, avec les données de l'étudiant et de la ligne de
@@ -453,7 +453,7 @@ export async function makePaiementDocPdf(params: {
         { label: "Montant réglé", value: `${params.montantPaye.toFixed(2)} MAD` },
         {
           label: "Date de paiement",
-          value: params.datePaiement ? fmtDate(params.datePaiement) : "—",
+          value: params.datePaiement ? fmtDate(params.datePaiement) : "|",
         },
         {
           label: "Statut",
@@ -642,7 +642,7 @@ export function buildStageEmailHtml(
             <tr><td style="padding:14px 16px;font:600 13px/1.4 Arial,Helvetica,sans-serif;color:${
               BRAND.tealMd
             };">
-              📎 ${escapeHtml(title)} — document PDF joint à cet e-mail.
+              📎 ${escapeHtml(title)} | document PDF joint à cet e-mail.
             </td></tr>
           </table>
         </td></tr>
@@ -653,7 +653,7 @@ export function buildStageEmailHtml(
             BRAND.tealPale
           };">Institut spécialisé des techniques paramédicales</div>
           <div style="margin-top:8px;font:400 11px/1.5 Arial,Helvetica,sans-serif;color:#8fb3b1;">
-            E-mail automatique — merci de ne pas y répondre.
+            E-mail automatique | merci de ne pas y répondre.
           </div>
         </td></tr>
 
@@ -664,7 +664,7 @@ export function buildStageEmailHtml(
 </html>`;
 
   const text = [
-    "Essor — Techniques paramédicales",
+    "Essor | Techniques paramédicales",
     "",
     title,
     "",
@@ -679,7 +679,7 @@ export function buildStageEmailHtml(
     ]),
     "Document PDF joint à cet e-mail.",
     "",
-    "Essor — e-mail automatique, merci de ne pas y répondre.",
+    "Essor | e-mail automatique, merci de ne pas y répondre.",
   ].join("\n");
 
   return { html, text };

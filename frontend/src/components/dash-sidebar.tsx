@@ -113,7 +113,7 @@ function useCollapsed() {
 const ROW_BASE =
   "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-brand-lt/60";
 
-/** Couleur d'icône par destination — l'icône au repos porte sa teinte, l'actif
+/** Couleur d'icône par destination | l'icône au repos porte sa teinte, l'actif
     reste blanc sur la tuile navy. */
 const ICON_TEINTE: Record<string, string> = {
   "/dashboard": "var(--blue)",
@@ -757,7 +757,7 @@ export function DashSidebarShell({
 
   return (
     <div dir={dir} className="app-canvas flex h-dvh min-h-0 overflow-hidden">
-      {/* Rail latéral (lg+) — repliable en icônes seules, état mémorisé. */}
+      {/* Rail latéral (lg+) | repliable en icônes seules, état mémorisé. */}
       <aside
         className={cn(
           "hidden shrink-0 border-e border-brand/10 bg-card rounded-tr-4xl transition-[width] duration-300 ease-out lg:block",

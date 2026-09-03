@@ -185,7 +185,7 @@ async function generateHTMLSnippet() {
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://essor.eiden-group.com" />
-<meta property="og:title" content="Essor — Plateforme tout-en-un pour écoles" />
+<meta property="og:title" content="Essor | Plateforme tout-en-un pour écoles" />
 <meta property="og:description" content="Tout avance, simplement. Gérez votre école, votre équipe et vos étudiants en ligne." />
 <meta property="og:image" content="https://essor.eiden-group.com/og-image.png" />
 <meta property="og:image:width" content="1200" />
@@ -194,7 +194,7 @@ async function generateHTMLSnippet() {
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content="https://essor.eiden-group.com" />
-<meta name="twitter:title" content="Essor — Plateforme tout-en-un pour écoles" />
+<meta name="twitter:title" content="Essor | Plateforme tout-en-un pour écoles" />
 <meta name="twitter:description" content="Tout avance, simplement." />
 <meta name="twitter:image" content="https://essor.eiden-group.com/og-image.png" />
 

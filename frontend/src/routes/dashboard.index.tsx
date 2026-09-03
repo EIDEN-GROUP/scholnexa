@@ -1434,7 +1434,7 @@ function DashboardEnseignant() {
   );
   // Tous les étudiants de la filière du formateur dans les semestres qu'il
   // enseigne (préfixe de ses groupes : « S5-G1 » → « S5 »), sans restriction de
-  // sous-groupe — le professeur voit ainsi l'intégralité de ses promotions.
+  // sous-groupe | le professeur voit ainsi l'intégralité de ses promotions.
   const mesEtudiants = useMemo(() => {
     if (!moi) return [];
     const niveaux = new Set(moi.groupes.map((g) => g.split("-")[0]));

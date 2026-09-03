@@ -3,7 +3,7 @@
  *
  * Le directeur téléverse une image (PNG/JPEG) depuis les Paramètres ; elle est
  * mémorisée localement (localStorage, cohérent avec le store « local-first »)
- * puis apposée sur tous les documents PDF générés — bulletins, conventions et
+ * puis apposée sur tous les documents PDF générés | bulletins, conventions et
  * rapports de stage.
  *
  * Le cachet est redimensionné à l'upload (max 600 px) pour rester sous la
@@ -30,7 +30,7 @@ export function setStamp(dataUrl: string | null): void {
     if (dataUrl) localStorage.setItem(STAMP_KEY, dataUrl);
     else localStorage.removeItem(STAMP_KEY);
   } catch {
-    /* quota dépassé ou navigation privée — on ignore silencieusement */
+    /* quota dépassé ou navigation privée | on ignore silencieusement */
   }
   window.dispatchEvent(new CustomEvent(EVT));
 }

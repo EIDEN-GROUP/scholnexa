@@ -1,5 +1,5 @@
 /**
- * Demande de démo — formulaire public de la landing Essor.
+ * Demande de démo | formulaire public de la landing Essor.
  *
  * Construit les deux e-mails (confirmation visiteur + notification équipe) côté
  * client puis les envoie via `POST {VITE_API_URL}/email/send-demo` (endpoint
@@ -161,7 +161,7 @@ function renderVisitorEmail(d: DemoRequest): Rendered {
       </p>
     </div>`;
   return {
-    subject: `Votre demande de démo Essor — ${d.center}`,
+    subject: `Votre demande de démo Essor | ${d.center}`,
     html: emailShell(`Demande de démo Essor reçue pour ${d.center}`, body),
     text: `Bonjour ${d.center}, votre demande de démo Essor pour le ${d.preferredDate} a bien été reçue. Notre équipe vous recontacte sous 2h ouvrées.`,
   };
@@ -191,9 +191,9 @@ function renderAdminEmail(d: DemoRequest): Rendered {
       </p>
     </div>`;
   return {
-    subject: `Nouvelle demande de démo — ${d.center}`,
-    html: emailShell(`Nouvelle demande de démo — ${d.center}`, body),
-    text: `Nouvelle demande de démo Essor — ${d.center} (${d.email}, ${d.phone}) pour le ${d.preferredDate}.${d.plan ? ` Formule : ${d.plan}.` : ""}${d.message ? ` Message : ${d.message}` : ""}`,
+    subject: `Nouvelle demande de démo | ${d.center}`,
+    html: emailShell(`Nouvelle demande de démo | ${d.center}`, body),
+    text: `Nouvelle demande de démo Essor | ${d.center} (${d.email}, ${d.phone}) pour le ${d.preferredDate}.${d.plan ? ` Formule : ${d.plan}.` : ""}${d.message ? ` Message : ${d.message}` : ""}`,
   };
 }
 

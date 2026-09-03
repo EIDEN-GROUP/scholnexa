@@ -29,7 +29,7 @@ Reference for every environment variable used by Scholnexa. Example files:
 
 | Variable | Default | Description |
 |---|---|---|
-| `DATABASE_URL` | `postgres://postgres:postgres@localhost:5432/school_crm` | Supabase PostgreSQL connection string. Use the **transaction pooler** for the API (`postgresql://postgres.<ref>:<pw>@aws-0-<region>.pooler.supabase.com:6543/postgres`) and the **session pooler** (`:5432`, same host) for migrations. **Password must be percent-encoded** — e.g. `y.brox95@gmail.com` becomes `y.brox95%40gmail.com` — or the `@` is parsed as the host separator. SSL is enabled automatically for `*.supabase.com` hosts. New Supabase projects expose the `db.<ref>.supabase.co` direct host on IPv6 only; use the pooler host for IPv4 reachability. |
+| `DATABASE_URL` | `postgres://postgres:postgres@localhost:5432/school_crm` | Supabase PostgreSQL connection string. Use the **transaction pooler** for the API (`postgresql://postgres.<ref>:<pw>@aws-0-<region>.pooler.supabase.com:6543/postgres`) and the **session pooler** (`:5432`, same host) for migrations. **Password must be percent-encoded** | e.g. `y.brox95@gmail.com` becomes `y.brox95%40gmail.com` | or the `@` is parsed as the host separator. SSL is enabled automatically for `*.supabase.com` hosts. New Supabase projects expose the `db.<ref>.supabase.co` direct host on IPv6 only; use the pooler host for IPv4 reachability. |
 
 ### Authentication
 
@@ -49,7 +49,7 @@ Reference for every environment variable used by Scholnexa. Example files:
 | Variable | Default | Description |
 |---|---|---|
 | `SUPABASE_URL` | `http://localhost:54321` | Supabase project URL |
-| `SUPABASE_SERVICE_ROLE_KEY` | *(empty)* | **Required in production** — document storage fails without it |
+| `SUPABASE_SERVICE_ROLE_KEY` | *(empty)* | **Required in production** | document storage fails without it |
 | `SUPABASE_STORAGE_BUCKET` | `examens` | Storage bucket (created automatically on startup) |
 
 ### Email (SMTP)
@@ -103,11 +103,11 @@ variables above apply, with these platform-specific notes:
 |---|---|
 | `NODE_ENV` | set automatically to `production` by Vercel |
 | `VERCEL` | set automatically to `1`; enables serverless-safe behavior (1-connection DB pool, no pino-pretty transport) |
-| `JWT_SECRET`, `ADMIN_API_KEY` | **mandatory** — the app refuses to start in production with the default placeholder values |
+| `JWT_SECRET`, `ADMIN_API_KEY` | **mandatory** | the app refuses to start in production with the default placeholder values |
 | `DATABASE_URL` | must reach an externally accessible Postgres (Supabase pooler recommended) |
 | `CORS_ORIGIN` | include every frontend origin that will call the API; in the two-project Vercel setup (Mode C) the frontend calls the backend across origins, so this must contain the frontend project URL plus a `-*.vercel.app` preview wildcard |
 
-See `README-DEPLOY.md` → *Mode C — Everything on Vercel (two projects)* and
+See `README-DEPLOY.md` → *Mode C | Everything on Vercel (two projects)* and
 *A.5 Backend on Vercel too* for the full architecture, function limits, and
 what must remain on an always-on host (Postgres, Redis, the BullMQ worker,
 object storage).
@@ -121,9 +121,9 @@ browser bundle.
 
 | Variable | Default | Description |
 |---|---|---|
-| `VITE_API_URL` | `http://localhost:3000/api` | Backend API base URL. **Baked at build time** — set it on the hosting platform and redeploy after changing it. On Vercel use the absolute URL of the backend project, e.g. `https://<backend>.vercel.app/api`. |
+| `VITE_API_URL` | `http://localhost:3000/api` | Backend API base URL. **Baked at build time** | set it on the hosting platform and redeploy after changing it. On Vercel use the absolute URL of the backend project, e.g. `https://<backend>.vercel.app/api`. |
 | `VITE_ADMIN_EMAIL` | `admin@scholnexa.com` | Contact email shown in the admin/support UI |
-| `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON` | *(empty)* | Supabase project URL + anon key. **Optional** — the app logs in with its own JWT against the backend; these are only needed if you later add direct Supabase client calls. |
+| `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON` | *(empty)* | Supabase project URL + anon key. **Optional** | the app logs in with its own JWT against the backend; these are only needed if you later add direct Supabase client calls. |
 
 ---
 

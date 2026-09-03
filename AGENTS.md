@@ -54,15 +54,15 @@ echo "YOUR_PAT" | docker login ghcr.io -u scholnexa --password-stdin
 ## How CI/CD Works
 
 On every push/PR to `main` or `develop`:
-1. **Backend CI** — `npm ci` → lint → test → build
-2. **Frontend CI** — `npm ci` → lint → build (with `VITE_API_URL`)
+1. **Backend CI** | `npm ci` → lint → test → build
+2. **Frontend CI** | `npm ci` → lint → build (with `VITE_API_URL`)
 
 On push to `main` only (after CI passes):
-3. **Docker Build** — build & push 3 images to GHCR:
+3. **Docker Build** | build & push 3 images to GHCR:
    - `ghcr.io/<namespace>/school-crm-api`
    - `ghcr.io/<namespace>/school-crm-frontend`
    - `ghcr.io/<namespace>/school-crm-backup`
-4. **Deploy** — SSH into the VPS → pull images → `docker stack deploy` → run migrations
+4. **Deploy** | SSH into the VPS → pull images → `docker stack deploy` → run migrations
 
 ## Vercel Deployments
 
@@ -75,7 +75,7 @@ The frontend and backend can each be deployed to Vercel as separate projects:
 
 When the backend runs on Vercel, the BullMQ worker (`npm run worker`), the
 PostgreSQL, Redis, and MinIO services must remain on the VPS (or be managed
-services) — serverless functions cannot host persistent processes. See
+services) | serverless functions cannot host persistent processes. See
 `README-DEPLOY.md` § A.5 for the full split and limits.
 
 ## Reverse Proxy (host nginx)

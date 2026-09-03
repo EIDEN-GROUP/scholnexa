@@ -120,7 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       else window.localStorage.removeItem(FORMATEUR_STORAGE_KEY);
     }
     // Choosing a specific formateur switches the session to that teacher's
-    // identity, so the greeting, sidebar and avatar reflect who was picked —
+    // identity, so the greeting, sidebar and avatar reflect who was picked |
     // not the generic demo formateur.
     if (id) {
       const fo = FORMATEURS.find((f) => f.id === id);

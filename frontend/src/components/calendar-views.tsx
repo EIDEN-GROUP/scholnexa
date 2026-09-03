@@ -1,5 +1,5 @@
 /**
- * Vues du calendrier — Jour, Semaine, Mois.
+ * Vues du calendrier | Jour, Semaine, Mois.
  *
  * Jour et Semaine partagent une grille horaire : chaque séance est positionnée
  * en absolu d'après son heure de début et sa durée, comme un agenda classique.
@@ -385,7 +385,7 @@ type GrilleProps = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Vue Jour — agenda vertical (une ligne par créneau)                 */
+/*  Vue Jour | agenda vertical (une ligne par créneau)                 */
 /* ------------------------------------------------------------------ */
 
 export function VueJour({
@@ -535,7 +535,7 @@ export function VueJour({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Vue Semaine — matrice par créneau (emploi du temps)               */
+/*  Vue Semaine | matrice par créneau (emploi du temps)               */
 /* ------------------------------------------------------------------ */
 
 /** Créneau auquel appartient une séance (celui qui contient son début). */

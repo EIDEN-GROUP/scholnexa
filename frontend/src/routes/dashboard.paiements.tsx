@@ -320,7 +320,7 @@ function PaiementsPage() {
                 r.resteDu > 0 ? "text-alert" : "text-muted-foreground",
               )}
             >
-              {r.resteDu > 0 ? fmtMAD(r.resteDu) : "—"}
+              {r.resteDu > 0 ? fmtMAD(r.resteDu) : "|"}
             </td>
             <td>
               {(() => {
@@ -452,7 +452,7 @@ function PaiementsPage() {
               </ul>
             ) : (
               <p className="text-sm text-muted-foreground">
-                Aucun solde en attente — tous les étudiants sont à jour.
+                Aucun solde en attente | tous les étudiants sont à jour.
               </p>
             )}
           </DetailShell>
@@ -738,7 +738,7 @@ function HistoriquePaiementsDialog({
               <DetailField label="Total réglé" value={fmtMAD(totalPayeE)} tone="positive" />
               <DetailField
                 label="Reste dû"
-                value={resteDuE > 0 ? fmtMAD(resteDuE) : "—"}
+                value={resteDuE > 0 ? fmtMAD(resteDuE) : "|"}
                 tone={resteDuE > 0 ? "negative" : "default"}
               />
             </DetailGrid>
@@ -767,17 +767,17 @@ function HistoriquePaiementsDialog({
                       {fmtMAD(m.montantDu)}
                     </td>
                     <td className="px-3 py-2 text-right font-semibold tabular-nums text-brand-dk">
-                      {m.montantPaye > 0 ? fmtMAD(m.montantPaye) : "—"}
+                      {m.montantPaye > 0 ? fmtMAD(m.montantPaye) : "|"}
                     </td>
                     <td className="px-3 py-2 text-right font-semibold tabular-nums">
                       {reste > 0 ? (
                         <span className="text-alert">{fmtMAD(reste)}</span>
                       ) : (
-                        <span className="text-muted-foreground">—</span>
+                        <span className="text-muted-foreground">|</span>
                       )}
                     </td>
                     <td className="whitespace-nowrap px-3 py-2 text-muted-foreground">
-                      {m.datePaiement ? fmtDate(m.datePaiement) : "—"}
+                      {m.datePaiement ? fmtDate(m.datePaiement) : "|"}
                     </td>
                     <td className="px-3 py-2">
                       {canEdit && editingMois === m.mois ? (
@@ -859,7 +859,7 @@ function HistoriquePaiementsDialog({
                           Télécharger
                         </button>
                       ) : (
-                        "—"
+                        "|"
                       )}
                     </td>
                   </tr>
@@ -889,7 +889,7 @@ function StudentSearchField({
   error?: string;
 }) {
   const label = (s: { prenom: string; nom: string; cne: string }) =>
-    `${s.prenom} ${s.nom} — ${s.cne}`;
+    `${s.prenom} ${s.nom} | ${s.cne}`;
   const selected = students.find((s) => s.id === value);
   const [query, setQuery] = useState(selected ? label(selected) : "");
   const [open, setOpen] = useState(false);

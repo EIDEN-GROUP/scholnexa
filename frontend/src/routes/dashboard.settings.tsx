@@ -269,7 +269,7 @@ const META: Record<
 /*  Blocs réutilisables                                                */
 /* ------------------------------------------------------------------ */
 
-/** Décor d'angle discret — une pièce différente par carte, très basse opacité. */
+/** Décor d'angle discret | une pièce différente par carte, très basse opacité. */
 const CARTE_DECOR = [
   "/brand/decor/blob-lavender-corner.png",
   "/brand/decor/blob-coral-accent.png",
@@ -344,7 +344,7 @@ function StampSection() {
       const dataUrl = await prepareStampFromFile(file);
       setStamp(dataUrl);
       updateSetting("stamp_image", dataUrl).catch(() => {});
-      toast.success("Cachet enregistré — il sera apposé sur tous les PDF");
+      toast.success("Cachet enregistré | il sera apposé sur tous les PDF");
     } catch {
       toast.error("Impossible de lire cette image");
     } finally {

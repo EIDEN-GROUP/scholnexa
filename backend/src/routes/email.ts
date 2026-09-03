@@ -58,7 +58,7 @@ function getTransporter() {
 }
 
 /* ------------------------------------------------------------------
- * Essor brand tokens — kept in sync with the frontend design system.
+ * Essor brand tokens | kept in sync with the frontend design system.
  * Used in the email templates below so receipts / notifications
  * share the same look as the in-app surfaces.
  * ------------------------------------------------------------------ */
@@ -85,7 +85,7 @@ const ESSOR = {
 };
 
 /**
- * Shared, responsive email chrome — header with the Essor wordmark, a
+ * Shared, responsive email chrome | header with the Essor wordmark, a
  * single-content body, and a footer with contact details and an
  * unsubscribe / auto-mailer notice. Inline-styled for max compatibility
  * with Outlook, Gmail, Apple Mail.
@@ -154,7 +154,7 @@ function essorEmailShell(args: {
               </tr>
               <tr>
                 <td style="font-size:12px;color:${ESSOR.ink3};line-height:1.6;">
-                  E-mail automatique — merci de ne pas y répondre directement.<br/>
+                  E-mail automatique | merci de ne pas y répondre directement.<br/>
                   <span style="color:${ESSOR.ink2};">© 2026 Essor · Tous droits réservés.</span>
                 </td>
               </tr>
@@ -177,7 +177,7 @@ function essorEmailShell(args: {
 </html>`;
 }
 
-/** Small inline-SVG mark used inside emails — no external request. */
+/** Small inline-SVG mark used inside emails | no external request. */
 function essorMarkSvg() {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 64 64" aria-label="Essor" style="display:inline-block;vertical-align:middle;">
     <defs>
@@ -267,7 +267,7 @@ export async function emailRoutes(app: FastifyInstance) {
     const stampImage = settingsMap.stamp_image as string | null;
 
     /* ----------------------------------------------------------------
-     * PDF — Essor-branded receipt
+     * PDF | Essor-branded receipt
      * ---------------------------------------------------------------- */
     const pdfDoc = await PDFDocument.create();
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -291,7 +291,7 @@ export async function emailRoutes(app: FastifyInstance) {
       color: rgb(0.145, 0.388, 0.922), // #2563EB
     });
 
-    // Wordmark in white (text only — pure pdf-lib, no font work for the mark)
+    // Wordmark in white (text only | pure pdf-lib, no font work for the mark)
     page.drawText("essor", {
       x: 50,
       y: height - 60,
@@ -400,7 +400,7 @@ export async function emailRoutes(app: FastifyInstance) {
     const pdfBase64 = Buffer.from(pdfBytes).toString("base64");
 
     /* ----------------------------------------------------------------
-     * HTML — responsive Essor-branded email
+     * HTML | responsive Essor-branded email
      * ---------------------------------------------------------------- */
     const formattedAmount = `${input.amount.toLocaleString("fr-FR")} MAD`;
     const bodyHtml = `
@@ -445,7 +445,7 @@ export async function emailRoutes(app: FastifyInstance) {
       await transporter.sendMail({
         from: env.FROM_EMAIL,
         to: input.to,
-        subject: `Reçu de paiement ${input.receipt} — Essor`,
+        subject: `Reçu de paiement ${input.receipt} | Essor`,
         html,
         attachments: [
           {

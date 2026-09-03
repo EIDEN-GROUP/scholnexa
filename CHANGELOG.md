@@ -1,6 +1,6 @@
 # Changelog
 
-## 2026-08 — White-label release (Scholnexa)
+## 2026-08 | White-label release (Scholnexa)
 
 The project was white-labeled into a generic, reusable school management
 platform. No institute-specific identity remains in the codebase.
@@ -22,7 +22,7 @@ platform. No institute-specific identity remains in the codebase.
   `scholnexa-*`.
 - API paths neutralized: `/api/paiements-istpm` → `/api/monthly-payments`,
   `/api/dashboard/istpm-*` → `/api/dashboard/*` (backend, frontend and AI
-  agent actions updated together — no behavior change).
+  agent actions updated together | no behavior change).
 
 **Deployment**
 - Docker registry/namespace/domain parameterized (`REGISTRY`,

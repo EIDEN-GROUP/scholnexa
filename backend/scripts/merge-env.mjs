@@ -2,7 +2,7 @@
  * Merges `backend/.env` + `frontend/.env` into a single monorepo-root `.env`
  * that works for both apps (import into Vercel, used by local dev and
  * migrations). Obsolete MINIO_* keys are dropped; a default storage bucket is
- * added when missing. Only key names are printed — values stay in the files.
+ * added when missing. Only key names are printed | values stay in the files.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -52,7 +52,7 @@ const FRONTEND_ORDER = [
 
 const lines = [
   "# ═══════════════════════════════════════════════════════════════",
-  "# Scholnexa — merged environment (backend + frontend)",
+  "# Scholnexa | merged environment (backend + frontend)",
   "# ═══════════════════════════════════════════════════════════════",
   "# One file for both apps: import it into the Vercel frontend AND",
   "# backend projects, and it powers local dev + migrations.",

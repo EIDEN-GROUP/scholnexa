@@ -196,7 +196,7 @@ services:
           memory: 256M
 
   # ═══════════════════════════════════════════════════════════
-  # Database Backups — daily pg_dump with 30-day retention
+  # Database Backups | daily pg_dump with 30-day retention
   # ═══════════════════════════════════════════════════════════
 
   db-backup:
@@ -224,7 +224,7 @@ services:
           memory: 256M
 
   # ═══════════════════════════════════════════════════════════
-  # Monitoring Stack — Prometheus + Grafana + Loki
+  # Monitoring Stack | Prometheus + Grafana + Loki
   # ═══════════════════════════════════════════════════════════
 
   cadvisor:

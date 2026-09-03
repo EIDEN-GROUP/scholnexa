@@ -628,7 +628,7 @@ function StagesPage() {
                         const { html, text } = buildStageEmailHtml(s, "convention", logoDataUrl);
                         const res = await sendEmailApi({
                           to,
-                          subject: `Convention de stage — ${s.prenom} ${s.nom}`,
+                          subject: `Convention de stage | ${s.prenom} ${s.nom}`,
                           html,
                           text,
                           attachments: [

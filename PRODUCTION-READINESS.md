@@ -146,7 +146,7 @@ npx google-webfonts-helper download Manrope Inter
 {/* Open Graph */}
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://essor.app" />
-<meta property="og:title" content="Essor — Plateforme de gestion scolaire" />
+<meta property="og:title" content="Essor | Plateforme de gestion scolaire" />
 <meta property="og:description" content="Tout avance, simplement." />
 <meta property="og:image" content="https://essor.app/og-image.png" />
 <meta property="og:image:width" content="1200" />
@@ -155,7 +155,7 @@ npx google-webfonts-helper download Manrope Inter
 {/* Twitter */}
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content="https://essor.app" />
-<meta name="twitter:title" content="Essor — Plateforme de gestion scolaire" />
+<meta name="twitter:title" content="Essor | Plateforme de gestion scolaire" />
 <meta name="twitter:description" content="Tout avance, simplement." />
 <meta name="twitter:image" content="https://essor.app/og-image.png" />
 

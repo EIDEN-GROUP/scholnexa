@@ -120,7 +120,7 @@ function assertStrongProductionSecrets(env: Env): void {
   }
   if (problems.length > 0) {
     console.error(
-      "Invalid production environment — insecure defaults detected:\n" +
+      "Invalid production environment | insecure defaults detected:\n" +
         problems.map((p) => `  - ${p}`).join("\n") +
         "\nGenerate values with `openssl rand -hex 32` and set them in .env.production.",
     );

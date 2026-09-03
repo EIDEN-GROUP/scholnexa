@@ -112,17 +112,17 @@ function PrivacyPage() {
         <Section id="finalites" title="3. Finalités et bases légales">
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              Répondre à votre demande de démonstration et vous recontacter — exécution de mesures
+              Répondre à votre demande de démonstration et vous recontacter | exécution de mesures
               précontractuelles et intérêt légitime.
             </li>
             <li>
-              Fournir, sécuriser et facturer le service aux écoles clientes — exécution du contrat.
+              Fournir, sécuriser et facturer le service aux écoles clientes | exécution du contrat.
             </li>
             <li>
-              Mesurer l'audience et améliorer le produit — intérêt légitime (mesure proportionnée,
+              Mesurer l'audience et améliorer le produit | intérêt légitime (mesure proportionnée,
               sans profilage publicitaire).
             </li>
-            <li>Respecter nos obligations légales et comptables — obligation légale.</li>
+            <li>Respecter nos obligations légales et comptables | obligation légale.</li>
           </ul>
         </Section>
 

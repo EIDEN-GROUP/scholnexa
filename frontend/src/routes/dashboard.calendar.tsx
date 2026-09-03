@@ -242,7 +242,7 @@ function PlanningPage() {
     );
 
     if (conflits.length) {
-      toast.error(`Déplacement refusé — ${resumeConflits(conflits)} déjà occupé(e) à cet horaire`);
+      toast.error(`Déplacement refusé | ${resumeConflits(conflits)} déjà occupé(e) à cet horaire`);
       return;
     }
 
@@ -831,7 +831,7 @@ function SeanceForm({
     // chevauchement (professeur / salle / groupe) subsiste.
     if (conflits.length) {
       toast.error(
-        `Enregistrement bloqué — ${resumeConflits(conflits)} déjà occupé(e) à cet horaire`,
+        `Enregistrement bloqué | ${resumeConflits(conflits)} déjà occupé(e) à cet horaire`,
       );
       return;
     }
@@ -870,7 +870,7 @@ function SeanceForm({
           <div className="space-y-1.5 rounded-2xl bg-alert/10 px-4 py-3">
             <p className="flex items-center gap-1.5 text-sm font-semibold text-alert">
               <AlertTriangle className="h-4 w-4" />
-              {conflits.length} conflit(s) — enregistrement bloqué
+              {conflits.length} conflit(s) | enregistrement bloqué
             </p>
             <ul className="space-y-0.5 text-xs text-alert-dk">
               {conflits.map((c, i) => (

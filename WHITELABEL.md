@@ -7,7 +7,7 @@ identity is centralized in three places:
 |---|---|
 | Name, tagline, contact, PDF/email wording | `frontend/src/lib/brand.ts` |
 | Logo & favicon | `frontend/public/scholnexa-logo.png`, `frontend/public/scholnexa-logo-mark.png`, `favicon.png` |
-| Brand colours | `frontend/src/styles.css` — the `--scholnexa-*` variables |
+| Brand colours | `frontend/src/styles.css` | the `--scholnexa-*` variables |
 
 ## 1. Application name
 
@@ -25,8 +25,8 @@ export const BRAND = {
   phone: "+212 5 00 00 00 00",
   matriculePrefix: "SCHX",      // ← student registration number prefix
   receiptPrefix: "SCHX",        // ← payment receipt number prefix
-  documentFooter: "Document généré par la plateforme Scholnexa — usage interne.",
-  emailFooter: "Scholnexa — e-mail automatique, merci de ne pas y répondre.",
+  documentFooter: "Document généré par la plateforme Scholnexa | usage interne.",
+  emailFooter: "Scholnexa | e-mail automatique, merci de ne pas y répondre.",
 };
 ```
 
@@ -40,23 +40,23 @@ Change them to your school name.
 
 ### Sidebar / shell
 
-The sidebar and shell import the logo from `BRAND.logoMarkPath` — nothing else
+The sidebar and shell import the logo from `BRAND.logoMarkPath` | nothing else
 to change.
 
 ## 2. Logo & favicon
 
 Client source files live in `assets/` at the repo root (`logo.*` = dark
 mark, `logo-title.*` = white lockup). The optimized web assets in
-`frontend/public/` are generated from them (resized PNGs — no image library
+`frontend/public/` are generated from them (resized PNGs | no image library
 is needed at build time). Replace the sources, then regenerate the optimized
 files with any image tool and keep the filenames below:
 
-- `frontend/public/scholnexa-logo.png` — white-background lockup
+- `frontend/public/scholnexa-logo.png` | white-background lockup
   (mark + wordmark), used on the login page
-- `frontend/public/scholnexa-logo-mark.png` — dark-background mark
+- `frontend/public/scholnexa-logo-mark.png` | dark-background mark
   (sidebar, loading screen, PDFs, e-mails)
 - `frontend/public/favicon.png` and `frontend/public/apple-touch-icon.png`
-  — favicon variants
+  | favicon variants
 
 The mark is displayed at 40–96 px in the UI and ~48 pt in PDF letterheads.
 
@@ -96,7 +96,7 @@ Demo users, students and partner structures live in:
   import dialog)
 
 The demo uses clearly fictional records on the `@demo.scholnexa.ma` domain.
-Replace names/emails with your own sample data if desired — the structure and
+Replace names/emails with your own sample data if desired | the structure and
 workflows stay the same.
 
 ## 6. Public branding checklist

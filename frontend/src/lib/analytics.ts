@@ -1,5 +1,5 @@
 /**
- * Amplitude — single integration point for the entire app.
+ * Amplitude | single integration point for the entire app.
  *
  * `initAnalytics()` runs once, client-side, from the root route. It enables
  * autocapture and starts `track()` once. Every call is routed through this
@@ -239,7 +239,7 @@ export function identifyUser(u: {
   role?: string | null;
   email?: string;
   name?: string;
-  /** Optional multi-tenant context — e.g. a school id/uuid. Never send PII. */
+  /** Optional multi-tenant context | e.g. a school id/uuid. Never send PII. */
   account_id?: string;
 }) {
   if (!started || optOut) return;
@@ -250,7 +250,7 @@ export function identifyUser(u: {
   if (u.name) identity.set("name", u.name);
   if (u.account_id) {
     identity.set("account_id", u.account_id);
-    // Amplitude Accounts SDK grouping (optional — SDK 2 supports setGroup).
+    // Amplitude Accounts SDK grouping (optional | SDK 2 supports setGroup).
     try {
       amplitude.setGroup("schools", u.account_id);
     } catch {}

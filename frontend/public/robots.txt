@@ -1,11 +1,11 @@
-# Essor — robots.txt
+# Essor | robots.txt
 # Canonical origin: https://essor.eiden-group.com
 #
-# Policy: every crawler — search engine or answer engine — follows the same
+# Policy: every crawler | search engine or answer engine | follows the same
 # rules. Public marketing pages are allowed; the authenticated application
 # surface under /dashboard and the login page are not crawlable.
 #
-# NOTE: `robots.txt` is not a security boundary — /dashboard is also protected
+# NOTE: `robots.txt` is not a security boundary | /dashboard is also protected
 # by `auth.tsx` redirecting to /login when unauthenticated, and by a
 # `meta name=robots content=noindex,nofollow` tag injected at runtime in
 # `__root.tsx`.

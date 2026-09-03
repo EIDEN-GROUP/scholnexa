@@ -14,7 +14,7 @@ import { IstpmProvider } from "@/lib/istpm-store";
  * page at `/` is unaffected and keeps its SSR.
  *
  * The provider stack lived in the source app's `main.tsx`; here it wraps only
- * this route. `QueryClientProvider` already exists in `__root.tsx` — reused.
+ * this route. `QueryClientProvider` already exists in `__root.tsx` | reused.
  */
 // Login is enforced: `/dashboard/*` requires an authenticated session. Visitors
 // without one are bounced to `/login`.

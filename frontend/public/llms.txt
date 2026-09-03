@@ -12,7 +12,7 @@
 - **Essor** → product/brand (SoftwareApplication, `#software`).
 - **Eiden Group** → company / publisher / operator (Organization, `#organization`).
 - **essor.eiden-group.com** → the web surface for the product (WebSite, `#website`).
-- **Essor is not the company** — Eiden Group is the legal entity behind Essor.
+- **Essor is not the company** | Eiden Group is the legal entity behind Essor.
 
 ## What Essor does (marketing-site facts, matching visible copy)
 
@@ -31,9 +31,9 @@ CNDP, CNSS, conventions types, stages en milieu hospitalier marocain).
 
 ## Pricing (matching the visible pricing section)
 
-- **Essentiel** — from 1 000 MAD HT / month, single administrator.
-- **Pro** — from 2 000 MAD HT / month, multi-role team: payments, bulletins, stages.
-- **Réseau** — custom quote, multi-campus.
+- **Essentiel** | from 1 000 MAD HT / month, single administrator.
+- **Pro** | from 2 000 MAD HT / month, multi-role team: payments, bulletins, stages.
+- **Réseau** | custom quote, multi-campus.
 - Prices scale per 100-student tier on the same page. Annual billing = 2 months free.
 - No setup or hidden fees. Onboarding, training, updates and support are included.
 - Monthly plans have no lock-in; annual = optional commitment for the 2-month discount.
@@ -43,7 +43,7 @@ CNDP, CNSS, conventions types, stages en milieu hospitalier marocain).
 - **Where**: Morocco (Agadir, Casablanca, Rabat, Marrakech, Tanger, Fès, Meknès,
   Oujda, and any city with a paramedical school or training centre). The product
   is web-hosted, not city-limited.
-- **HQ**: Eiden Group — Agadir Bay, Technopole 1, Bloc B, Agadir 80000, Morocco.
+- **HQ**: Eiden Group | Agadir Bay, Technopole 1, Bloc B, Agadir 80000, Morocco.
 - **Data hosting**: EU infrastructure; encrypted in transit and at rest;
   data physically isolated per school.
 
@@ -56,7 +56,7 @@ CNDP, CNSS, conventions types, stages en milieu hospitalier marocain).
 
 ## Onboarding & demo facts
 
-- Setup: no installation — runs in the browser. Importing a multi-hundred-student
+- Setup: no installation | runs in the browser. Importing a multi-hundred-student
   roster from Excel takes about a morning.
 - Demo: 20-minute guided session on the school's own data; booked via the
   `#contact` form (or the demo CTA) on the home page.

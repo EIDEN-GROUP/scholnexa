@@ -1,5 +1,5 @@
 ﻿/**
- * Essor — Vercel serverless entry point (source).
+ * Essor | Vercel serverless entry point (source).
  *
  * This file is bundled by `scripts/build-vercel-function.mjs` (run from the
  * `vercel-build` script) into the self-contained function `api/[...path].js`
@@ -9,20 +9,20 @@
  *
  * Serves the entire Fastify API as a single Vercel Node function. Vercel
  * routes every request under `/api/*` to it; the Fastify router is driven by
- * emitting the incoming request into the app's HTTP server — the same
+ * emitting the incoming request into the app's HTTP server | the same
  * mechanism used by the official `@fastify/vercel` adapter.
  *
  * Deployment model:
- * - VPS (default): `src/index.ts` calls `app.listen()` — persistent process.
- * - Vercel: the bundled function — each invocation is ephemeral; the app
+ * - VPS (default): `src/index.ts` calls `app.listen()` | persistent process.
+ * - Vercel: the bundled function | each invocation is ephemeral; the app
  *   instance is built once and reused across warm invocations.
  *
  * What cannot run serverless (and therefore stays on the VPS or on managed
  * infrastructure):
- * - The BullMQ background worker (`src/jobs/worker.ts`) — a long-lived
+ * - The BullMQ background worker (`src/jobs/worker.ts`) | a long-lived
  *   process that must keep running on an always-on host. The API can still
  *   enqueue jobs; the VPS worker consumes them.
- * - PostgreSQL, Redis, MinIO/S3 — reachable network services (exposed from
+ * - PostgreSQL, Redis, MinIO/S3 | reachable network services (exposed from
  *   the VPS or managed providers).
  */
 
@@ -34,7 +34,7 @@ let appPromise: Promise<import("fastify").FastifyInstance> | undefined;
 /**
  * Build and fully initialize the Fastify app once per warm instance.
  * `app.ready()` finalizes plugin encapsulation (route contexts, hooks), which
- * is required before driving the router through `server.emit()` — the same
+ * is required before driving the router through `server.emit()` | the same
  * sequence used by the official `@fastify/vercel` adapter.
  */
 function getApp(): Promise<import("fastify").FastifyInstance> {

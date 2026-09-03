@@ -143,7 +143,7 @@ function printBulletin(b: Bulletin, groupe?: string) {
   <table>
     <thead><tr><th>Module</th><th class="r">Note</th><th class="r">Coef.</th><th class="r">Note × Coef.</th></tr></thead>
     <tbody>${calcTableRows}
-    <tr class="clin"><td>Total</td><td class="r">—</td><td class="r">${totalCoef}</td><td class="r">${sommePond.toFixed(2)}</td></tr>
+    <tr class="clin"><td>Total</td><td class="r">|</td><td class="r">${totalCoef}</td><td class="r">${sommePond.toFixed(2)}</td></tr>
     </tbody>
   </table>
   <div class="sum">

@@ -22,7 +22,7 @@ VOIR DANS LA DÉMO →
 
 FINI LES DOSSIERS ÉPARPILLÉS
 
-CNE, filière, niveau, statut et situation de paiement : importez vos listes en CSV et retrouvez chaque dossier — même archivé — en moins de 10 secondes.
+CNE, filière, niveau, statut et situation de paiement : importez vos listes en CSV et retrouvez chaque dossier | même archivé | en moins de 10 secondes.
 
 VOIR DANS LA DÉMO →
 
@@ -363,7 +363,7 @@ Suivi des stages cliniques
 Exports & tableaux avancés
 Support prioritaire
 ✓ Onboarding + Formation + Support inclus
-CHOISIR PRO — LE PLUS CHOISI
+CHOISIR PRO | LE PLUS CHOISI
 Réseau
 
 Multi-campus, groupes et besoins sur mesure.
@@ -377,7 +377,7 @@ PARLER À UN EXPERT
 
 Le prix évolue-t-il avec mon effectif ?
 
-Oui — choisissez votre nombre d'étudiants et le prix s'ajuste par tranche de 100. Vous changez de palier à tout moment, sans perdre vos données.
+Oui | choisissez votre nombre d'étudiants et le prix s'ajuste par tranche de 100. Vous changez de palier à tout moment, sans perdre vos données.
 
 Puis-je payer mensuellement ?
 

@@ -1,5 +1,5 @@
 /**
- * Scholnexa — Vercel function bundler.
+ * Scholnexa | Vercel function bundler.
  *
  * Bundles `src/serverless.ts` (the Fastify app entry) into a single
  * self-contained `api/[...path].js` file that Vercel executes directly.

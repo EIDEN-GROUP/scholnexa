@@ -45,7 +45,7 @@ export async function buildApp() {
   const env = getEnv();
 
   // The pino-pretty transport spawns a worker thread (thread-stream), which
-  // does not work inside the bundled Vercel function — even in local
+  // does not work inside the bundled Vercel function | even in local
   // `vercel dev`. Disable it in any serverless context; plain JSON logs are
   // used instead.
   const app = Fastify({

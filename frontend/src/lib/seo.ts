@@ -3,12 +3,12 @@
  *
  * Canonical domain, brand entity relationships, default title/description,
  * locale, social contact, product offers, and per-page metadata live here.
- * Route files and `__root.tsx` import from this module — they do not
+ * Route files and `__root.tsx` import from this module | they do not
  * hardcode SEO tokens independently. This guarantees one coherent signal
  * across the whole site (and prevents the previously-duplicated index.html
  * vs __root.tsx metadata divergence).
  *
- * DO NOT invent data here — anything that appears in JSON-LD must be
+ * DO NOT invent data here | anything that appears in JSON-LD must be
  * verifiable from the visible site copy (per the audit brief).
  */
 
@@ -78,7 +78,7 @@ export const HOME_TITLE =
 /** Homepage-specific canonical description. */
 export const HOME_DESCRIPTION =
   "Essor, par Eiden Group (Agadir, Maroc), réunit inscriptions, emploi du temps, paiements et relances, " +
-  "examens, bulletins et stages cliniques des écoles paramédicales — dans un seul espace en ligne. " +
+  "examens, bulletins et stages cliniques des écoles paramédicales | dans un seul espace en ligne. " +
   "Zéro Excel, zéro chaos.";
 
 /** Fallback description used for pages that don't set their own. */
@@ -92,7 +92,7 @@ export const OG_IMAGE = {
   url: `${SITE_ORIGIN}/brand/essor-logo.png`,
   width: 1200,
   height: 630,
-  alt: "Essor — plateforme de gestion pour écoles paramédicales au Maroc",
+  alt: "Essor | plateforme de gestion pour écoles paramédicales au Maroc",
 } as const;
 
 /* ------------------------------------------------------------------ */

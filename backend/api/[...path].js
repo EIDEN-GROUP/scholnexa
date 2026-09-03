@@ -58777,7 +58777,7 @@ var require_buffer_writer = __commonJS({
       }
       // Write an Int32 byte-length prefix immediately followed by the string's UTF-8
       // bytes. Postgres' Bind wire format prefixes every parameter with its length,
-      // and doing it in one method computes Buffer.byteLength ONCE — the previous
+      // and doing it in one method computes Buffer.byteLength ONCE | the previous
       // `addInt32(Buffer.byteLength(s)).addString(s)` pairing scanned the string
       // three times (byteLength for the prefix, byteLength again inside addString,
       // then the encode), which is costly for large text parameters.
@@ -95750,7 +95750,7 @@ var require_FunctionsClient = __commonJS({
        *
        * @remarks
        * - The API key is sent in the `apikey` header. The `Authorization` header is reserved
-       *   for the signed-in user's JWT (or a custom auth token) — when there is no session, a
+       *   for the signed-in user's JWT (or a custom auth token) | when there is no session, a
        *   new-format API key (`sb_publishable_…` / `sb_secret_…`) is not sent as a Bearer token.
        * - Invoke params generally match the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) spec.
        * - When you pass in a body to your function, we automatically attach the Content-Type header for `Blob`, `ArrayBuffer`, `File`, `FormData` and `String`. If it doesn't match any of these types we assume the payload is `json`, serialize it and attach the `Content-Type` header as `application/json`. You can override this behavior by passing in a `Content-Type` header of your own.
@@ -98694,7 +98694,7 @@ var require_RealtimePostgresFilterBuilder = __commonJS({
        * Requires at least one value; duplicates are removed. An element containing a
        * reserved character is double-quoted (`in.("a,b",c)`), so commas inside an
        * element are preserved. `null` is intentionally not accepted (`IN (null)`
-       * never matches in SQL) — use `is`/`not('col','is',null)` for null checks.
+       * never matches in SQL) | use `is`/`not('col','is',null)` for null checks.
        */
       in(column, values) {
         return this.add(column, "in", values);
@@ -98733,8 +98733,8 @@ var require_RealtimePostgresFilterBuilder = __commonJS({
        * Serialize all conditions into the comma-separated (AND) filter string.
        *
        * Conditions are joined by commas, which the server applies as `AND`. A scalar
-       * value (or single `in` element) that contains a reserved character — `,`,
-       * `(`, `)`, `"`, `\` — or surrounding whitespace is double-quoted and escaped
+       * value (or single `in` element) that contains a reserved character | `,`,
+       * `(`, `)`, `"`, `\` | or surrounding whitespace is double-quoted and escaped
        * the way PostgREST does, so commas inside a value are preserved rather than
        * read as a condition boundary.
        */
@@ -98969,7 +98969,7 @@ var require_RealtimeChannel = __commonJS({
        * client is online. Use `untrack` to stop broadcasting presence for the same key.
        *
        * Tracking makes this client visible to other subscribers immediately, regardless of this
-       * channel's `config.presence.enabled` setting or whether it has a `presence` listener — that
+       * channel's `config.presence.enabled` setting or whether it has a `presence` listener | that
        * flag only affects whether *this* client receives presence updates from others (and, on
        * RLS-protected channels, whether it's authorized to do so).
        *
@@ -103718,7 +103718,7 @@ var require_GoTrueClient = __commonJS({
        * than awaiting `initialize()`.
        *
        * You only need to call it manually when you have opted out of the automatic
-       * call by passing `skipAutoInitialize: true` — for example, in an SSR context
+       * call by passing `skipAutoInitialize: true` | for example, in an SSR context
        * where you need to control initialization timing. In that case, awaiting
        * `initialize()` returns the resolved session result (or any error encountered
        * while detecting it from the URL).
@@ -104431,7 +104431,7 @@ var require_GoTrueClient = __commonJS({
        *   automatically in a browser).
        * - When a flow id is present but its stored verifier is gone (evicted,
        *   already used, or from another device), the call fails with a verifier
-       *   missing error instead of trying another flow's verifier — a mismatched
+       *   missing error instead of trying another flow's verifier | a mismatched
        *   verifier would consume the single-use code. Without any flow id the
        *   most recently stored verifier is used, as before.
        *
@@ -107343,7 +107343,7 @@ var require_GoTrueClient = __commonJS({
           const storageChangedUnderUs = storedAtStart !== null && (storedAfter === null || storedAfter.refresh_token !== storedAtStart.refresh_token);
           if (storageChangedUnderUs) {
             this._debug(debugName, "commit guard: storage changed since refresh started, discarding rotated tokens", {
-              // Presence indicators only — never log refresh token fragments,
+              // Presence indicators only | never log refresh token fragments,
               // even partial. Logs may be forwarded to third-party services.
               startedWith: "present",
               nowHolds: storedAfter ? "replaced" : "cleared"
@@ -124765,8 +124765,8 @@ var PostgrestTransformBuilder = class extends PostgrestBuilder {
   *
   * Server-side, PostgREST runs the query inside a transaction and rolls it back
   * instead of committing. The response still contains the data that *would* have
-  * been returned — `RETURNING` clauses execute and RLS, triggers, and constraints
-  * are all evaluated — but no row is actually inserted, updated, or deleted.
+  * been returned | `RETURNING` clauses execute and RLS, triggers, and constraints
+  * are all evaluated | but no row is actually inserted, updated, or deleted.
   *
   * This affects only the single request it is chained to. The JS caller has no
   * handle on the transaction: supabase-js does not group multiple queries into
@@ -125495,7 +125495,7 @@ var PostgrestQueryBuilder = class {
   * ```
   *
   * @exampleDescription Handling errors
-  * The most useful field on a Postgres error is usually `hint` — when the database knows the fix, it puts the literal SQL there. For example, a permission-denied error (`code: '42501'`) arrives with a `hint` like `"Grant the required privileges to the current role with: GRANT SELECT ON public.characters TO anon;"`. Log the full `error` object so the hint isn't hidden behind `error.message`.
+  * The most useful field on a Postgres error is usually `hint` | when the database knows the fix, it puts the literal SQL there. For example, a permission-denied error (`code: '42501'`) arrives with a `hint` like `"Grant the required privileges to the current role with: GRANT SELECT ON public.characters TO anon;"`. Log the full `error` object so the hint isn't hidden behind `error.message`.
   *
   * @example Handling errors
   * ```js
@@ -128946,7 +128946,7 @@ var StorageFileApi = class extends BaseApiClient {
   * issues a CDN invalidation for the object and returns `{ message: 'success' }`.
   *
   * **Requires the `service_role` key.** The underlying endpoint enforces
-  * `service_role` JWT — calls made with the anon key or a user JWT will be
+  * `service_role` JWT | calls made with the anon key or a user JWT will be
   * rejected by the server.
   *
   * **Hosted CDN feature.** On self-hosted Supabase, the Storage service must
@@ -129095,7 +129095,7 @@ var StorageFileApi = class extends BaseApiClient {
   /**
   * Lists all the files and folders within a bucket using the V2 API with pagination support.
   *
-  * **Important:** Folder entries in the `folders` array only contain `name` and optionally `key` —
+  * **Important:** Folder entries in the `folders` array only contain `name` and optionally `key` |
   * they have no `id`, timestamps, or `metadata` fields. Full file metadata is only available
   * on entries in the `objects` array.
   *
@@ -129466,7 +129466,7 @@ var StorageBucketApi = class extends BaseApiClient {
   * issues a CDN invalidation for the bucket and returns `{ message: 'success' }`.
   *
   * **Requires the `service_role` key.** The underlying endpoint enforces
-  * `service_role` JWT — calls made with the anon key or a user JWT will be
+  * `service_role` JWT | calls made with the anon key or a user JWT will be
   * rejected by the server.
   *
   * **Hosted CDN feature.** On self-hosted Supabase, the Storage service must
@@ -130840,14 +130840,14 @@ var SupabaseClient = class {
   * @param supabaseUrl The unique Supabase URL which is supplied when you create a new project in your project dashboard.
   * @param supabaseKey The unique Supabase Key which is supplied when you create a new project in your project dashboard.
   * @param options Optional configuration for the client:
-  * - `db.schema` — You can switch in between schemas. The schema needs to be on the list of exposed schemas inside Supabase.
-  * - `auth.autoRefreshToken` — Set to `true` if you want to automatically refresh the token before expiring.
-  * - `auth.persistSession` — Set to `true` if you want to automatically save the user session into local storage.
-  * - `auth.detectSessionInUrl` — Set to `true` if you want to automatically detect OAuth grants in the URL and sign in the user.
-  * - `realtime` — Options passed along to the realtime-js constructor.
-  * - `storage` — Options passed along to the storage-js constructor.
-  * - `global.fetch` — A custom fetch implementation.
-  * - `global.headers` — Any additional headers to send with each network request.
+  * - `db.schema` | You can switch in between schemas. The schema needs to be on the list of exposed schemas inside Supabase.
+  * - `auth.autoRefreshToken` | Set to `true` if you want to automatically refresh the token before expiring.
+  * - `auth.persistSession` | Set to `true` if you want to automatically save the user session into local storage.
+  * - `auth.detectSessionInUrl` | Set to `true` if you want to automatically detect OAuth grants in the URL and sign in the user.
+  * - `realtime` | Options passed along to the realtime-js constructor.
+  * - `storage` | Options passed along to the storage-js constructor.
+  * - `global.fetch` | A custom fetch implementation.
+  * - `global.headers` | Any additional headers to send with each network request.
   *
   * @example Creating a client
   * ```js
@@ -131215,7 +131215,7 @@ var SupabaseClient = class {
     return this.realtime.removeAllChannels();
   }
   /**
-  * The raw session token — the custom `accessToken` result or the signed-in user's JWT —
+  * The raw session token | the custom `accessToken` result or the signed-in user's JWT |
   * or `null` when there is no session. Unlike {@link _getAccessToken} it does not fall back
   * to `supabaseKey`, so callers can distinguish "no session" from "has session".
   */

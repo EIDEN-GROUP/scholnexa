@@ -16,7 +16,7 @@ const API_URL = "https://scholnexa-api.vercel.app";
 
 const lines = [
   "# ═══════════════════════════════════════════════════════════════",
-  "# Scholnexa — Production Environment (Vercel import file)",
+  "# Scholnexa | Production Environment (Vercel import file)",
   "# ═══════════════════════════════════════════════════════════════",
   "# Import this whole file into BOTH Vercel projects:",
   "#   • Frontend project  → uses the VITE_* variables (baked at build time)",
@@ -43,7 +43,7 @@ const lines = [
   "JWT_SECRET=" + get("JWT_SECRET"),
   "JWT_EXPIRES_IN=7d",
   "",
-  "# ─── Redis (BullMQ worker — runs on VPS only; ignored by serverless) ──",
+  "# ─── Redis (BullMQ worker | runs on VPS only; ignored by serverless) ──",
   "REDIS_URL=" + (get("REDIS_URL") || "redis://localhost:6379"),
   "",
   "# ─── Email (SMTP) ───────────────────────────────────────────────",
@@ -72,7 +72,7 @@ const lines = [
   "AI_BASE_URL=" + (get("AI_BASE_URL") || "https://integrate.api.nvidia.com/v1"),
   "AI_MODEL=" + (get("AI_MODEL") || "meta/llama-3.1-8b-instruct"),
   "",
-  "# ═══ FRONTEND (VITE_* — used by the frontend Vercel project) ═══",
+  "# ═══ FRONTEND (VITE_* | used by the frontend Vercel project) ═══",
   "# Absolute URL of the backend Vercel project. Update it if Vercel assigns",
   "# the backend project a different subdomain, then redeploy the frontend.",
   "VITE_API_URL=" + API_URL + "/api",

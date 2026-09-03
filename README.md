@@ -1,8 +1,8 @@
-# Scholnexa — School Management System
+# Scholnexa | School Management System
 
 **Scholnexa** is a production-grade, white-label school management platform:
 students, teachers, groups, exams, grade reports (bulletins), monthly payments,
-internships (stages), planning and documents — in one application.
+internships (stages), planning and documents | in one application.
 
 It ships as a reusable **demo / white-label product**: the identity (name,
 logo, colours, contact details) is centralized in `frontend/src/lib/brand.ts`
@@ -53,18 +53,18 @@ and `frontend/public/` so any school can rebrand it in minutes (see
 
 ## Features
 
-- **Students** — full CRUD, import/export CSV, search/filter, statuses, risk flags
-- **Teachers (formateurs)** — profiles, grades, archives, group assignment
-- **Academic organisation** — filières, semesters, groups/classes, modules, rooms, time slots
-- **Exams & grade reports** — exam types, note entry, bulletins with mentions and decisions, publishing
-- **Payments** — monthly tuition tracking, receipts (stamped PDFs), recovery rates
-- **Internships (stages)** — partner structures, conventions and reports (stamped PDFs), validation
-- **Planning & calendar** — sessions, holidays, vacations, teacher availability
-- **Dashboard** — KPIs, charts, risk lists, action items
-- **AI assistant** — natural-language queries over the platform data
-- **Admin API** — `/api/admin/*` for multi-product integrations (X-API-Key protected)
+- **Students** | full CRUD, import/export CSV, search/filter, statuses, risk flags
+- **Teachers (formateurs)** | profiles, grades, archives, group assignment
+- **Academic organisation** | filières, semesters, groups/classes, modules, rooms, time slots
+- **Exams & grade reports** | exam types, note entry, bulletins with mentions and decisions, publishing
+- **Payments** | monthly tuition tracking, receipts (stamped PDFs), recovery rates
+- **Internships (stages)** | partner structures, conventions and reports (stamped PDFs), validation
+- **Planning & calendar** | sessions, holidays, vacations, teacher availability
+- **Dashboard** | KPIs, charts, risk lists, action items
+- **AI assistant** | natural-language queries over the platform data
+- **Admin API** | `/api/admin/*` for multi-product integrations (X-API-Key protected)
 - **WhatsApp / email / n8n integrations**, notifications, reminders, support
-- **i18n** — French & Arabic UI
+- **i18n** | French & Arabic UI
 
 ## Repository layout
 
@@ -125,9 +125,9 @@ Demo accounts (see `backend/scripts/seed-demo.ts`):
 See [ENVIRONMENT.md](./ENVIRONMENT.md) for the complete reference, and the
 `.env.example` files:
 
-- `backend/.env.example` — backend (local)
-- `frontend/.env.example` — frontend (local)
-- `.env.production.example` — VPS production stack
+- `backend/.env.example` | backend (local)
+- `frontend/.env.example` | frontend (local)
+- `.env.production.example` | VPS production stack
 
 Key variables:
 
@@ -145,14 +145,14 @@ Key variables:
 
 Two supported modes (details in [README-DEPLOY.md](./README-DEPLOY.md)):
 
-### Mode A — Vercel frontend + VPS backend (recommended)
+### Mode A | Vercel frontend + VPS backend (recommended)
 
 1. Deploy `frontend/` to Vercel (framework preset: Vite, output `dist`, SPA rewrites included in `vercel.json`).
 2. Set `VITE_API_URL=https://api.yourdomain.com/api` on Vercel.
 3. Deploy the backend stack to a VPS (`./deploy.sh`).
 4. Point the backend's `CORS_ORIGIN` at the Vercel domain.
 
-### Mode B — Full VPS (frontend + backend in Docker Swarm)
+### Mode B | Full VPS (frontend + backend in Docker Swarm)
 
 ```bash
 cp .env.production.example .env.production   # fill in values
@@ -160,7 +160,7 @@ cp .env.production.example .env.production   # fill in values
 ```
 
 Both modes keep the persistent infrastructure (PostgreSQL, Redis, BullMQ
-worker, MinIO, backups) on the VPS — the backend is **not** serverless and
+worker, MinIO, backups) on the VPS | the backend is **not** serverless and
 should not be deployed to function-as-a-service runtimes.
 
 ## Documentation

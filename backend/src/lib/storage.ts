@@ -1,5 +1,5 @@
 ﻿/**
- * Essor — document storage (Supabase Storage).
+ * Essor | document storage (Supabase Storage).
  *
  * Supabase object storage replaces the previous MinIO backend: the same
  * private bucket holds exam documents. The API remains the only access path

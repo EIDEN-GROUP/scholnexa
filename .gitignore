@@ -16,7 +16,7 @@ dist-ssr/
 .tanstack/
 .nitro
 # NOTE: backend/api/[...path].js (the Vercel function bundle) is intentionally
-# COMMITTED — Vercel validates api/ functions and the vercel.json `functions`
+# COMMITTED | Vercel validates api/ functions and the vercel.json `functions`
 # patterns BEFORE the build command runs, so the catch-all must exist in the
 # repo. npm run vercel-build regenerates it deterministically on every deploy.
 
