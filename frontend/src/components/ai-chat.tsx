@@ -1,14 +1,15 @@
-﻿import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
+import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Loader2, Check, Ban, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 import { softCard } from "@/lib/dash-ui";
 import {
   analyzeIntent,
   confirmAction,
   type ChatMessage,
   type ProposedAction,
-} from "@/lib/scholnexa-api";
+} from "@/lib/istpm-api";
 
 function formatActionResult(actionName: string, data: unknown): string {
   const label = actionName.replace(/_/g, " ");
@@ -141,9 +142,7 @@ function MessageBubble({ msg }: { msg: ChatMessage }) {
       <div
         className={cn(
           "max-w-[88%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
-          isUser
-            ? "bg-brand text-white"
-            : "bg-muted/70 text-foreground",
+          isUser ? "bg-brand text-white" : "bg-muted/70 text-foreground",
         )}
       >
         {msg.content}
@@ -161,24 +160,30 @@ function FloatingButton({ onClick, open }: { onClick: () => void; open: boolean 
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className={cn(
-        // `end-6` : le bouton suit le sens de lecture (droite en LTR, gauche en
-        // RTL). Sur mobile comme sur desktop, il est AU-DESSUS du sélecteur de
-        // langue (mobile : pilule à 5.5rem au-dessus de la barre d'onglets ;
-        // desktop : pilule à bottom-6).
-        "fixed bottom-[8.25rem] end-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-[0_16px_40px_-12px_rgb(var(--essor-shadow)/0.5)] transition-shadow hover:shadow-[0_20px_50px_-12px_rgb(var(--essor-shadow)/0.6)] lg:bottom-[4.25rem]",
-        open
-          ? "bg-muted text-foreground ring-1 ring-brand/20"
-          : "bg-gradient-to-b from-brand to-brand-dk text-white",
+        "fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-[0_16px_40px_-12px_rgb(var(--istpm-shadow)/0.5)] transition-shadow hover:shadow-[0_20px_50px_-12px_rgb(var(--istpm-shadow)/0.6)]",
+        open ? "bg-muted text-foreground ring-1 ring-brand/20" : "bg-ink",
       )}
     >
       <AnimatePresence mode="wait">
         {open ? (
-          <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
+          <motion.span
+            key="x"
+            initial={{ rotate: -90, opacity: 0 }}
+            animate={{ rotate: 0, opacity: 1 }}
+            exit={{ rotate: 90, opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
             <X className="h-5 w-5" />
           </motion.span>
         ) : (
-          <motion.span key="msg" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-            <MessageCircle className="h-5 w-5" />
+          <motion.span
+            key="msg"
+            initial={{ rotate: 90, opacity: 0 }}
+            animate={{ rotate: 0, opacity: 1 }}
+            exit={{ rotate: -90, opacity: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            <img src="/brand/essor-mark.png" alt="" className="h-6 w-6" />
           </motion.span>
         )}
       </AnimatePresence>
@@ -186,13 +191,15 @@ function FloatingButton({ onClick, open }: { onClick: () => void; open: boolean 
   );
 }
 
-const CHAT_STORAGE_KEY = "essor-ai-chat";
+const CHAT_STORAGE_KEY = "istpm-ai-chat";
 
 function loadChatHistory(): ChatMessage[] {
   try {
     const saved = localStorage.getItem(CHAT_STORAGE_KEY);
     if (saved) return JSON.parse(saved);
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return [
     {
       role: "assistant",
@@ -205,7 +212,9 @@ function loadChatHistory(): ChatMessage[] {
 function saveChatHistory(messages: ChatMessage[]) {
   try {
     localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 }
 
 export function AiChatFloating() {
@@ -247,6 +256,7 @@ export function AiChatFloating() {
     e?.preventDefault();
     const text = input.trim();
     if (!text || loading) return;
+    track("Assistant IA · message envoyé", { length: text.length });
     setInput("");
     setPendingActions([]);
 
@@ -258,10 +268,7 @@ export function AiChatFloating() {
     try {
       const result = await analyzeIntent(updated);
 
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: result.reasoning },
-      ]);
+      setMessages((prev) => [...prev, { role: "assistant", content: result.reasoning }]);
 
       if (result.proposedActions.length > 0) {
         const allRead = result.proposedActions.every(
@@ -300,12 +307,12 @@ export function AiChatFloating() {
       const hint = msg.includes("contacter le serveur")
         ? "\n\n💡 Vérifiez que le serveur backend est en cours d'exécution et que l'URL de l'API est correcte (VITE_API_URL)."
         : msg.includes("trop de temps")
-        ? "\n\n💡 Le serveur a mis trop de temps à répondre. Veuillez réessayer."
-        : msg.includes("modèle d'IA") || msg.includes("API IA")
-        ? "\n\n💡 La configuration de l'IA est incorrecte. Contactez l'administrateur."
-        : msg.includes("502") || msg.includes("Bad Gateway")
-        ? "\n\n💡 Le serveur IA a rencontré une erreur. Veuillez réessayer."
-        : "";
+          ? "\n\n💡 Le serveur a mis trop de temps à répondre. Veuillez réessayer."
+          : msg.includes("modèle d'IA") || msg.includes("API IA")
+            ? "\n\n💡 La configuration de l'IA est incorrecte. Contactez l'administrateur."
+            : msg.includes("502") || msg.includes("Bad Gateway")
+              ? "\n\n💡 Le serveur IA a rencontré une erreur. Veuillez réessayer."
+              : "";
       setMessages((prev) => [
         ...prev,
         {
@@ -366,11 +373,9 @@ export function AiChatFloating() {
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
               softCard,
-              // Panneau au-dessus du bouton, même côté logique (end) que lui.
-              // Hauteur responsive : laisse la place au bouton + pilule de langue
-              // empilés au-dessus de la barre d'onglets (mobile) ou du bord (desktop).
-              "fixed bottom-[12rem] end-6 z-50 flex h-[min(560px,calc(100dvh-13.5rem))] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden shadow-[0_32px_80px_-20px_rgb(var(--essor-shadow)/0.5)] lg:bottom-[8.25rem] lg:h-[min(560px,calc(100dvh-9.5rem))]",
+              "fixed bottom-24 right-6 z-50 flex w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden shadow-[0_32px_80px_-20px_rgb(var(--istpm-shadow)/0.5)]",
             )}
+            style={{ height: 560, maxHeight: "calc(100vh - 8rem)" }}
           >
             <div className="flex shrink-0 items-center gap-3 border-b border-brand/12 bg-gradient-to-r from-brand to-brand-dk px-5 py-4 text-white">
               <span className="grid h-9 w-9 place-items-center rounded-full bg-white/20">
@@ -390,7 +395,7 @@ export function AiChatFloating() {
               {pendingActions.length > 0 && (
                 <div className="space-y-3">
                   <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    Actions proposées   veuillez confirmer
+                    Actions proposées veuillez confirmer
                   </p>
                   {pendingActions.map((a, i) => (
                     <ActionCard

@@ -1,4 +1,4 @@
-﻿import {
+import {
   createContext,
   useCallback,
   useContext,
@@ -22,19 +22,18 @@ import {
 } from "lucide-react";
 import type { UserRole } from "@/lib/auth";
 import type { NavEntry, NavGroup, NavItem } from "@/components/dash-sidebar";
-import { fr as dateFnsFr, ar as dateFnsAr } from "date-fns/locale";
+import { fr as dateFnsFr } from "date-fns/locale";
 import frDashboard from "@/locales/dashboard/fr.json";
-import arDashboard from "@/locales/dashboard/ar.json";
-import { LOCALE_SYNC_EVENT, type LocaleSyncEventDetail } from "@/lib/landing-i18n";
 
+// French-only build. The AR/RTL path was dropped when the dashboard moved into
+// the Essor project; `ar` is kept in the type as an inert alias of `fr` so the
+// rest of the code (toggle, dir) still typechecks without branching everywhere.
 export type DashboardLocale = "fr" | "ar";
 export type DashboardTranslations = typeof frDashboard;
 
-const STORAGE_KEY = "essor-locale";
-
 const dashboardDictionaries: Record<DashboardLocale, DashboardTranslations> = {
   fr: frDashboard,
-  ar: arDashboard,
+  ar: frDashboard,
 };
 
 type DashboardI18nContextValue = {
@@ -46,79 +45,33 @@ type DashboardI18nContextValue = {
   dashboard: DashboardTranslations;
 };
 
-const DashboardI18nContext = createContext<DashboardI18nContextValue | null>(
-  null,
-);
+const DashboardI18nContext = createContext<DashboardI18nContextValue | null>(null);
 
-function readStoredLocale(): DashboardLocale {
-  if (typeof window === "undefined") return "fr";
-  const stored = localStorage.getItem(STORAGE_KEY);
-  return stored === "ar" ? "ar" : "fr";
-}
-
-export function getDateFnsLocale(locale: DashboardLocale) {
-  return locale === "ar" ? dateFnsAr : dateFnsFr;
+export function getDateFnsLocale(_locale: DashboardLocale) {
+  return dateFnsFr;
 }
 
 export function DashboardI18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<DashboardLocale>("fr");
+  const [locale] = useState<DashboardLocale>("fr");
 
-  useEffect(() => {
-    setLocaleState(readStoredLocale());
-  }, []);
-
-  const setLocale = useCallback((next: DashboardLocale) => {
-    setLocaleState(next);
-    localStorage.setItem(STORAGE_KEY, next);
-    // Broadcast so the landing i18n provider (root route) switches in lockstep.
-    window.dispatchEvent(
-      new CustomEvent<LocaleSyncEventDetail>(LOCALE_SYNC_EVENT, {
-        detail: { locale: next },
-      }),
-    );
-  }, []);
-
-  // Adopt locale changes made from the landing funnel / login toggles.
-  useEffect(() => {
-    const onSync = (e: Event) => {
-      const next = (e as CustomEvent<LocaleSyncEventDetail>).detail?.locale;
-      if (next === "fr" || next === "ar") setLocaleState(next);
-    };
-    window.addEventListener(LOCALE_SYNC_EVENT, onSync);
-    return () => window.removeEventListener(LOCALE_SYNC_EVENT, onSync);
-  }, []);
-
-  const toggleLocale = useCallback(() => {
-    setLocale(locale === "fr" ? "ar" : "fr");
-  }, [locale, setLocale]);
+  const setLocale = useCallback((_next: DashboardLocale) => {}, []);
+  const toggleLocale = useCallback(() => {}, []);
 
   const dashboard = dashboardDictionaries[locale];
-  const dir: "ltr" | "rtl" = locale === "ar" ? "rtl" : "ltr";
-  const numberLocale = locale === "ar" ? "ar-MA" : "fr-MA";
-
-  useEffect(() => {
-    document.documentElement.lang = locale;
-    document.documentElement.dir = dir;
-  }, [locale, dir]);
+  const dir: "ltr" | "rtl" = "ltr";
+  const numberLocale = "fr-MA";
 
   const value = useMemo(
     () => ({ locale, setLocale, toggleLocale, dir, numberLocale, dashboard }),
     [locale, setLocale, toggleLocale, dir, numberLocale, dashboard],
   );
 
-  return (
-    <DashboardI18nContext.Provider value={value}>
-      {children}
-    </DashboardI18nContext.Provider>
-  );
+  return <DashboardI18nContext.Provider value={value}>{children}</DashboardI18nContext.Provider>;
 }
 
 export function useDashboardI18n() {
   const ctx = useContext(DashboardI18nContext);
-  if (!ctx)
-    throw new Error(
-      "useDashboardI18n must be used within DashboardI18nProvider",
-    );
+  if (!ctx) throw new Error("useDashboardI18n must be used within DashboardI18nProvider");
   return { ...ctx, t: ctx.dashboard };
 }
 
@@ -186,56 +139,21 @@ export function useDashboardNav(role: UserRole | null) {
     // Examens and Bulletins are two halves of the same job (assess, then
     // publish results), so they live under one « Scolarité » section.
     const all: NavEntry[] = [
-      item(
-        "/dashboard",
-        t.nav.dashboard,
-        t.navShort.dashboard,
-        LayoutDashboard,
-      ),
-      item(
-        "/dashboard/calendar",
-        t.nav.planning,
-        t.navShort.planning,
-        CalendarDays,
-      ),
-      item(
-        "/dashboard/etudiants",
-        t.nav.etudiants,
-        t.navShort.etudiants,
-        GraduationCap,
-      ),
+      item("/dashboard", t.nav.dashboard, t.navShort.dashboard, LayoutDashboard),
+      item("/dashboard/calendar", t.nav.planning, t.navShort.planning, CalendarDays),
+      item("/dashboard/etudiants", t.nav.etudiants, t.navShort.etudiants, GraduationCap),
       {
         id: "scolarite",
         label: t.nav.scolarite,
         icon: BookOpen,
         children: [
-          item(
-            "/dashboard/examens",
-            t.nav.examens,
-            t.navShort.examens,
-            ClipboardList,
-          ),
-          item(
-            "/dashboard/bulletins",
-            t.nav.bulletins,
-            t.navShort.bulletins,
-            FileText,
-          ),
+          item("/dashboard/examens", t.nav.examens, t.navShort.examens, ClipboardList),
+          item("/dashboard/bulletins", t.nav.bulletins, t.navShort.bulletins, FileText),
         ],
       },
-      item(
-        "/dashboard/formateurs",
-        t.nav.formateurs,
-        t.navShort.formateurs,
-        Users,
-      ),
+      item("/dashboard/formateurs", t.nav.formateurs, t.navShort.formateurs, Users),
       item("/dashboard/stages", t.nav.stages, t.navShort.stages, Stethoscope),
-      item(
-        "/dashboard/paiements",
-        t.nav.paiements,
-        t.navShort.paiements,
-        CreditCard,
-      ),
+      item("/dashboard/paiements", t.nav.paiements, t.navShort.paiements, CreditCard),
       item("/dashboard/settings", t.nav.settings, t.navShort.settings, Settings),
     ];
 
@@ -262,11 +180,6 @@ function isGroupEntry(entry: NavEntry): entry is NavGroup {
   return "children" in entry;
 }
 
-export function interpolate(
-  template: string,
-  vars: Record<string, string | number>,
-) {
-  return template.replace(/\{\{(\w+)\}\}/g, (_, key: string) =>
-    String(vars[key] ?? ""),
-  );
+export function interpolate(template: string, vars: Record<string, string | number>) {
+  return template.replace(/\{\{(\w+)\}\}/g, (_, key: string) => String(vars[key] ?? ""));
 }

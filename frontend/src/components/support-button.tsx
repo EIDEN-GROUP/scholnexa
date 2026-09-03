@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { LifeBuoy, MessageCircle } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { dialogSurface, labelClass, softInput } from "@/lib/dash-ui";
@@ -68,10 +63,7 @@ export function SupportButton() {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={4}
-                  className={cn(
-                    softInput,
-                    "min-h-[100px] resize-y rounded-2xl px-4 py-3 text-sm",
-                  )}
+                  className={cn(softInput, "min-h-[100px] resize-y rounded-2xl px-4 py-3 text-sm")}
                   placeholder="Décrivez votre problème en quelques mots..."
                 />
               </div>

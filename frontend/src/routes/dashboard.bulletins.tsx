@@ -1,16 +1,15 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Eye, FileDown, Send, Pencil, SendHorizontal } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 import { getStamp } from "@/lib/stamp";
-import { useEssor, mentionFor, decisionFor } from "@/lib/scholnexa-store";
+import { useIstpm, mentionFor, decisionFor } from "@/lib/istpm-store";
 import {
   FILIERES,
   NIVEAUX,
   ANNEES_ETUDE,
-  ANNEES_UNIVERSITAIRES,
   anneeEtude,
   DECISION_TONE,
   MENTION_TONE,
@@ -20,7 +19,7 @@ import {
   type Decision,
   type SessionType,
   type StatutBulletin,
-} from "@/lib/scholnexa-data";
+} from "@/lib/istpm-data";
 import {
   primaryPill,
   ghostPill,
@@ -53,21 +52,11 @@ import {
   SelectField,
   FullWidth,
 } from "@/components/dash-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 const SESSIONS: SessionType[] = ["normale", "rattrapage"];
-const DECISIONS: Decision[] = [
-  "Admis",
-  "Admis avec dette",
-  "Rattrapage",
-  "Ajourné",
-];
+const DECISIONS: Decision[] = ["Admis", "Admis avec dette", "Rattrapage", "Ajourné"];
 const STATUTS: StatutBulletin[] = ["genere", "valide", "publie"];
 
 /**
@@ -108,29 +97,29 @@ function printBulletin(b: Bulletin, groupe?: string) {
   const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <title>Bulletin   ${b.prenom} ${b.nom}</title>
 <style>
-  body{font-family:system-ui,sans-serif;color:#0B1220;margin:40px;}
-  h1{color:#2563EB;font-size:20px;margin:0 0 4px;}
-  .sub{color:#64748B;font-size:12px;margin-bottom:24px;}
+  body{font-family:system-ui,sans-serif;color:#123b3a;margin:40px;}
+  h1{color:#029994;font-size:20px;margin:0 0 4px;}
+  .sub{color:#556;font-size:12px;margin-bottom:24px;}
   table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
-  th{text-align:left;background:#F7F9FC;color:#1E293B;font-size:11px;
+  th{text-align:left;background:#f1f9f9;color:#017a76;font-size:11px;
      text-transform:uppercase;letter-spacing:.06em;padding:8px;}
-  td{padding:8px;border-top:1px solid #E2E8F0;}
+  td{padding:8px;border-top:1px solid #d6efee;}
   .r{text-align:right;}
   .sum{margin-top:24px;font-size:13px;}
   .sum div{display:flex;justify-content:space-between;
-           border-bottom:1px solid #E2E8F0;padding:6px 0;}
-  .clin{background:#F7F9FC;font-weight:600;}
+           border-bottom:1px solid #d6efee;padding:6px 0;}
+  .clin{background:#f1f9f9;font-weight:600;}
   .calc{margin-top:28px;page-break-inside:avoid;}
-  .calc h2{color:#1E293B;font-size:14px;margin:0 0 6px;}
-  .formula{background:#F7F9FC;border:1px solid #E2E8F0;border-radius:8px;
-           padding:10px 12px;font-size:13px;color:#0B1220;margin:0 0 4px;}
-  .note{color:#64748B;font-size:11px;margin-top:6px;}
-  .cachet{margin-top:36px;text-align:right;page-break-inside:avoid;}
+  .calc h2{color:#017a76;font-size:14px;margin:0 0 6px;}
+  .formula{background:#eef7f6;border:1px solid #d6efee;border-radius:8px;
+           padding:10px 12px;font-size:13px;color:#123b3a;margin:0 0 4px;}
+  .note{color:#556;font-size:11px;margin-top:6px;}
+  .cachet{margin-top:36px;text-align:left;page-break-inside:avoid;}
   .cachet img{max-width:150px;max-height:120px;}
-  .cachet .lbl{color:#64748B;font-size:10px;margin-top:2px;
+  .cachet .lbl{color:#556;font-size:10px;margin-top:2px;
                text-transform:uppercase;letter-spacing:.06em;}
 </style></head><body>
-<h1>Essor - Bulletin de notes</h1>
+<h1>Essor Bulletin de notes</h1>
 <div class="sub">Institut spécialisé des techniques paramédicales</div>
 <div class="sum">
   <div><span>Étudiant</span><strong>${b.prenom} ${b.nom}</strong></div>
@@ -179,8 +168,14 @@ ${cachet}
 
 function BulletinsPage() {
   const { role } = useAuth();
-  const { bulletins, etudiants, formateurs, updateBulletin, publierBulletin, publierTousBulletins } =
-    useEssor();
+  const {
+    bulletins,
+    etudiants,
+    formateurs,
+    updateBulletin,
+    publierBulletin,
+    publierTousBulletins,
+  } = useIstpm();
   // Publishing transcripts is a student-administration act.
   const canPublish = role === "directeur" || role === "responsable";
 
@@ -189,7 +184,6 @@ function BulletinsPage() {
   const [niveau, setNiveau] = useState<string>(ALL);
   const [session, setSession] = useState<string>(ALL);
   const [annee, setAnnee] = useState<string>(ALL);
-  const [anneeScolaire, setAnneeScolaire] = useState<string>(ALL);
   const [groupe, setGroupe] = useState<string>(ALL);
   const [formateur, setFormateur] = useState<string>(ALL);
   const [statut, setStatut] = useState<string>(ALL);
@@ -201,10 +195,19 @@ function BulletinsPage() {
   // Le bulletin ne porte ni groupe ni formateur : on les rattache via l'étudiant
   // (groupe) et via les modules enseignés (formateur → notes du bulletin).
   const etuById = useMemo(() => new Map(etudiants.map((e) => [e.id, e])), [etudiants]);
-  const groupeOptions = useMemo(() => [...new Set(etudiants.map((e) => e.groupe))].sort(), [etudiants]);
+  const groupeOptions = useMemo(
+    () => [...new Set(etudiants.map((e) => e.groupe))].sort(),
+    [etudiants],
+  );
   const formateursActifs = useMemo(() => formateurs.filter((f) => !f.archived), [formateurs]);
-  const formateurOptions = useMemo(() => formateursActifs.map((f) => `${f.prenom} ${f.nom}`), [formateursActifs]);
-  const modulesParFormateur = useMemo(() => new Map(formateursActifs.map((f) => [`${f.prenom} ${f.nom}`, new Set(f.modules)])), [formateursActifs]);
+  const formateurOptions = useMemo(
+    () => formateursActifs.map((f) => `${f.prenom} ${f.nom}`),
+    [formateursActifs],
+  );
+  const modulesParFormateur = useMemo(
+    () => new Map(formateursActifs.map((f) => [`${f.prenom} ${f.nom}`, new Set(f.modules)])),
+    [formateursActifs],
+  );
   const statutOptions = useMemo(() => STATUTS.map((s) => STATUT_BULLETIN_LABEL[s]), []);
 
   const filtered = useMemo(() => {
@@ -214,8 +217,6 @@ function BulletinsPage() {
       if (niveau !== ALL && b.niveau !== niveau) return false;
       if (session !== ALL && b.session !== session) return false;
       if (annee !== ALL && anneeEtude(b.niveau) !== annee) return false;
-      // Le bulletin ne porte pas l'année scolaire : elle vient de l'étudiant.
-      if (anneeScolaire !== ALL && etuById.get(b.etudiantId)?.annee !== anneeScolaire) return false;
       if (groupe !== ALL && etuById.get(b.etudiantId)?.groupe !== groupe) return false;
       if (statut !== ALL && STATUT_BULLETIN_LABEL[b.statut] !== statut) return false;
       if (formateur !== ALL) {
@@ -225,9 +226,24 @@ function BulletinsPage() {
       if (!q) return true;
       return `${b.cne} ${b.prenom} ${b.nom}`.toLowerCase().includes(q);
     });
-  }, [bulletins, search, filiere, niveau, session, annee, anneeScolaire, groupe, statut, formateur, etuById, modulesParFormateur]);
+  }, [
+    bulletins,
+    search,
+    filiere,
+    niveau,
+    session,
+    annee,
+    groupe,
+    statut,
+    formateur,
+    etuById,
+    modulesParFormateur,
+  ]);
 
-  const pager = usePagination(filtered, `${search}|${filiere}|${niveau}|${session}|${annee}|${anneeScolaire}|${groupe}|${statut}|${formateur}`);
+  const pager = usePagination(
+    filtered,
+    `${search}|${filiere}|${niveau}|${session}|${annee}|${groupe}|${statut}|${formateur}`,
+  );
 
   const aPublier = bulletins.filter((b) => b.statut !== "publie").length;
 
@@ -285,18 +301,10 @@ function BulletinsPage() {
           },
           {
             id: "annee",
-            label: "Niveau",
+            label: "Année",
             value: annee,
             onChange: setAnnee,
             options: ANNEES_ETUDE,
-            allLabel: "Tous les niveaux",
-          },
-          {
-            id: "anneeScolaire",
-            label: "Année scolaire",
-            value: anneeScolaire,
-            onChange: setAnneeScolaire,
-            options: ANNEES_UNIVERSITAIRES,
             allLabel: "Toutes les années",
           },
           {
@@ -367,9 +375,7 @@ function BulletinsPage() {
             >
               {b.prenom} {b.nom}
             </td>
-            <td className="text-center tabular-nums text-muted-foreground">
-              {b.niveau}
-            </td>
+            <td className="text-center tabular-nums text-muted-foreground">{b.niveau}</td>
             <td
               className={cn(
                 "text-right font-semibold tabular-nums",
@@ -379,24 +385,17 @@ function BulletinsPage() {
               {b.moyenne.toFixed(2)}
             </td>
             <td>
-              <span className={toneBadge(MENTION_TONE[b.mention])}>
-                {b.mention}
-              </span>
+              <span className={toneBadge(MENTION_TONE[b.mention])}>{b.mention}</span>
             </td>
             <td>
-              <span className={toneBadge(DECISION_TONE[b.decision])}>
-                {b.decision}
-              </span>
+              <span className={toneBadge(DECISION_TONE[b.decision])}>{b.decision}</span>
             </td>
             <td>
               <span className={toneBadge(STATUT_BULLETIN_TONE[b.statut])}>
                 {STATUT_BULLETIN_LABEL[b.statut]}
               </span>
             </td>
-            <td
-              className="text-center"
-              onClick={(ev) => ev.stopPropagation()}
-            >
+            <td className="text-center" onClick={(ev) => ev.stopPropagation()}>
               <div className={rowActions}>
                 <button
                   className={iconButton}
@@ -427,9 +426,7 @@ function BulletinsPage() {
                       disabled={b.statut === "publie"}
                       onClick={() => {
                         publierBulletin(b.id);
-                        toast.success(
-                          `Bulletin publié   ${b.prenom} ${b.nom} (${b.niveau})`,
-                        );
+                        toast.success(`Bulletin publié   ${b.prenom} ${b.nom} (${b.niveau})`);
                       }}
                     >
                       <Send className="h-3.5 w-3.5" />
@@ -445,9 +442,7 @@ function BulletinsPage() {
       <Dialog open={!!detail} onOpenChange={(o) => !o && setDetail(null)}>
         <DialogContent className={dialogSurfaceWide}>
           <DialogTitle className="sr-only">Bulletin</DialogTitle>
-          <DialogDescription className="sr-only">
-            Détail des notes par module
-          </DialogDescription>
+          <DialogDescription className="sr-only">Détail des notes par module</DialogDescription>
           {detail ? (
             <BulletinDetail
               b={bulletins.find((x) => x.id === detail.id) ?? detail}
@@ -469,9 +464,7 @@ function BulletinsPage() {
           onCancel={() => setEditing(null)}
           onSubmit={(patch) => {
             updateBulletin(editing.id, patch);
-            toast.success(
-              `Bulletin mis à jour   ${editing.prenom} ${editing.nom}`,
-            );
+            toast.success(`Bulletin mis à jour   ${editing.prenom} ${editing.nom}`);
             setEditing(null);
           }}
         />
@@ -512,11 +505,7 @@ function BulletinForm({
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
 
   const submit = () => {
-    if (
-      f.evaluationClinique === "" ||
-      f.evaluationClinique < 0 ||
-      f.evaluationClinique > 20
-    ) {
+    if (f.evaluationClinique === "" || f.evaluationClinique < 0 || f.evaluationClinique > 20) {
       setErrors({ evaluationClinique: "Note entre 0 et 20" });
       toast.error("Veuillez corriger les champs signalés");
       return;
@@ -543,15 +532,9 @@ function BulletinForm({
       <FullWidth>
         <div className="rounded-2xl bg-muted px-4 py-3 text-xs text-muted-foreground">
           Moyenne calculée&nbsp;:{" "}
-          <strong className="text-foreground">
-            {initial.moyenne.toFixed(2)}/20
-          </strong>{" "}
-          · mention{" "}
-          <strong className="text-foreground">
-            {mentionFor(initial.moyenne)}
-          </strong>{" "}
-          · décision suggérée{" "}
-          <strong className="text-foreground">{suggestion}</strong>
+          <strong className="text-foreground">{initial.moyenne.toFixed(2)}/20</strong> · mention{" "}
+          <strong className="text-foreground">{mentionFor(initial.moyenne)}</strong> · décision
+          suggérée <strong className="text-foreground">{suggestion}</strong>
         </div>
       </FullWidth>
       <SelectField
@@ -606,9 +589,7 @@ function BulletinDetail({
   onPublish: (b: Bulletin) => void;
 }) {
   const totalCredits = b.notes.reduce((s, n) => s + n.credits, 0);
-  const creditsValides = b.notes
-    .filter((n) => n.note >= 10)
-    .reduce((s, n) => s + n.credits, 0);
+  const creditsValides = b.notes.filter((n) => n.note >= 10).reduce((s, n) => s + n.credits, 0);
 
   return (
     <DetailShell
@@ -617,12 +598,8 @@ function BulletinDetail({
       subtitle={`${b.cne} · ${b.filiere}`}
       badges={
         <>
-          <span className={toneBadge(DECISION_TONE[b.decision])}>
-            {b.decision}
-          </span>
-          <span className={toneBadge(MENTION_TONE[b.mention])}>
-            {b.mention}
-          </span>
+          <span className={toneBadge(DECISION_TONE[b.decision])}>{b.decision}</span>
+          <span className={toneBadge(MENTION_TONE[b.mention])}>{b.mention}</span>
           <span className={toneBadge(STATUT_BULLETIN_TONE[b.statut])}>
             {STATUT_BULLETIN_LABEL[b.statut]}
           </span>
@@ -630,10 +607,7 @@ function BulletinDetail({
       }
       footer={
         <div className="flex items-center justify-end gap-2">
-          <button
-            className={cn(ghostPill, "gap-1.5")}
-            onClick={() => printBulletin(b, groupe)}
-          >
+          <button className={cn(ghostPill, "gap-1.5")} onClick={() => printBulletin(b, groupe)}>
             <FileDown className="h-3.5 w-3.5" /> Imprimer / PDF
           </button>
           {canPublish && b.statut !== "publie" ? (
@@ -650,19 +624,13 @@ function BulletinDetail({
           <DetailField label="Filière" value={b.filiere} />
           {groupe ? <DetailField label="Groupe" value={groupe} /> : null}
           <DetailField label="Niveau" value={b.niveau} />
-          <DetailField
-            label="Session"
-            value={<span className="capitalize">{b.session}</span>}
-          />
+          <DetailField label="Session" value={<span className="capitalize">{b.session}</span>} />
           <DetailField
             label="Moyenne générale"
             value={`${b.moyenne.toFixed(2)} / 20`}
             tone={b.moyenne < 10 ? "negative" : "positive"}
           />
-          <DetailField
-            label="Crédits validés"
-            value={`${creditsValides} / ${totalCredits}`}
-          />
+          <DetailField label="Crédits validés" value={`${creditsValides} / ${totalCredits}`} />
         </DetailGrid>
       </DetailSection>
 
@@ -688,9 +656,7 @@ function BulletinDetail({
               >
                 {n.note.toFixed(2)}
               </td>
-              <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">
-                {n.coef}
-              </td>
+              <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">{n.coef}</td>
               <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">
                 {n.credits}
               </td>
@@ -699,9 +665,7 @@ function BulletinDetail({
           {/* The clinical/practical evaluation is graded separately from the
               taught modules but appears on the same transcript. */}
           <tr className="bg-brand/8">
-            <td className="px-3 py-2 font-medium">
-              Évaluation clinique / pratique
-            </td>
+            <td className="px-3 py-2 font-medium">Évaluation clinique / pratique</td>
             <td
               className={cn(
                 "px-3 py-2 text-right font-semibold tabular-nums",
@@ -710,12 +674,8 @@ function BulletinDetail({
             >
               {b.evaluationClinique.toFixed(2)}
             </td>
-            <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">
-              2
-            </td>
-            <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">
-              4
-            </td>
+            <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">2</td>
+            <td className="px-3 py-2 text-right tabular-nums text-muted-foreground">4</td>
           </tr>
         </DetailTable>
       </DetailSection>

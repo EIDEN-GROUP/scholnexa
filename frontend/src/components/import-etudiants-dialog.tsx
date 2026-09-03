@@ -1,19 +1,34 @@
-﻿import { useState, useRef, useCallback } from "react";
-import { Upload, FileUp, CheckCircle2, AlertCircle, AlertTriangle, Loader2, Download, ArrowLeft, FileText } from "lucide-react";
+import { useState, useRef, useCallback } from "react";
+import {
+  Upload,
+  FileUp,
+  CheckCircle2,
+  AlertCircle,
+  AlertTriangle,
+  Loader2,
+  Download,
+  ArrowLeft,
+  FileText,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ghostPill, primaryPill, dialogSurfaceWide } from "@/lib/dash-ui";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { previewImportEtudiants, executeImportEtudiants, type ImportPreviewResponse, type ImportPreviewRow } from "@/lib/scholnexa-api";
+import {
+  previewImportEtudiants,
+  executeImportEtudiants,
+  type ImportPreviewResponse,
+  type ImportPreviewRow,
+} from "@/lib/istpm-api";
 
 type Step = "upload" | "preview" | "confirming" | "result";
 
 /** Modèle CSV d'exemple pour l'import d'étudiants (entêtes + lignes types). */
 const EXEMPLE_ETUDIANTS_CSV = `cne,matricule,prenom,nom,filiere,niveau,annee,groupe,statut,paiement,telephone,email,dateNaissance,ville,fraisMensuels
-G134567890,SCHX-23-0142,Salma,El Amrani,Infirmier polyvalent,S5,3e annee,G1,inscrit,paye,+212 6 61 24 55 018,salma.elamrani@demo.essor.ma,2003-04-12,Agadir,3400
-J138245017,SCHX-23-0155,Youssef,Ait Taleb,Infirmier en anesthesie-reanimation,S5,3e annee,G1,inscrit,retard,+212 6 70 11 42 88,y.aittaleb@demo.essor.ma,2002-11-30,Inezgane,3800
-F145908712,SCHX-24-0203,Imane,Benkirane,Sage-femme,S3,2e annee,G2,inscrit,paye,+212 6 55 78 90 12,i.benkirane@demo.essor.ma,2004-02-18,Agadir,3200`;
+G134567890,ISTPM-23-0142,Salma,El Amrani,Infirmier polyvalent,S5,3e annee,G1,inscrit,paye,+212 6 61 24 55 018,salma.elamrani@istpm.ma,2003-04-12,Agadir,3400
+J138245017,ISTPM-23-0155,Youssef,Ait Taleb,Infirmier en anesthesie-reanimation,S5,3e annee,G1,inscrit,retard,+212 6 70 11 42 88,y.aittaleb@istpm.ma,2002-11-30,Inezgane,3800
+F145908712,ISTPM-24-0203,Imane,Benkirane,Sage-femme,S3,2e annee,G2,inscrit,paye,+212 6 55 78 90 12,i.benkirane@istpm.ma,2004-02-18,Agadir,3200`;
 
 /** Télécharge le modèle CSV d'exemple d'import étudiants (réutilisé par la page). */
 export function downloadExempleEtudiantsCsv() {
@@ -90,11 +105,14 @@ export function ImportEtudiantsDialog({
     }
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) handleFile(file);
-  }, [handleFile]);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      if (file) handleFile(file);
+    },
+    [handleFile],
+  );
 
   const handleImport = useCallback(async () => {
     if (!preview) return;
@@ -131,8 +149,23 @@ export function ImportEtudiantsDialog({
     const done = currentIdx > thisIdx;
     const active = currentIdx === thisIdx;
     return (
-      <div key={s} className={cn("flex items-center gap-2 text-xs", active ? "text-brand font-semibold" : done ? "text-teal-600" : "text-muted-foreground")}>
-        <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-full border", active ? "border-brand bg-brand/10" : done ? "border-teal-400 bg-teal-50 text-teal-600" : "border-muted-300 bg-muted/30")}>
+      <div
+        key={s}
+        className={cn(
+          "flex items-center gap-2 text-xs",
+          active ? "text-brand font-semibold" : done ? "text-teal-600" : "text-muted-foreground",
+        )}
+      >
+        <span
+          className={cn(
+            "grid h-6 w-6 shrink-0 place-items-center rounded-full border",
+            active
+              ? "border-brand bg-brand/10"
+              : done
+                ? "border-teal-400 bg-teal-50 text-teal-600"
+                : "border-muted-300 bg-muted/30",
+          )}
+        >
           {done ? <CheckCircle2 className="h-3.5 w-3.5" /> : icon}
         </span>
         <span className="hidden sm:inline">{label}</span>
@@ -142,7 +175,12 @@ export function ImportEtudiantsDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose(); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) handleClose();
+      }}
+    >
       <DialogContent className={cn(dialogSurfaceWide, "max-w-5xl")}>
         <DialogTitle className="sr-only">Importer des étudiants</DialogTitle>
 
@@ -179,7 +217,9 @@ export function ImportEtudiantsDialog({
                 {loading ? (
                   <div className="flex flex-col items-center gap-3 rounded-2xl border-2 border-dashed border-brand/20 bg-brand/3 px-6 py-16">
                     <Loader2 className="h-8 w-8 animate-spin text-brand" />
-                    <p className="text-sm font-medium text-foreground">Analyse du fichier en cours...</p>
+                    <p className="text-sm font-medium text-foreground">
+                      Analyse du fichier en cours...
+                    </p>
                   </div>
                 ) : (
                   <div
@@ -273,13 +313,20 @@ export function ImportEtudiantsDialog({
                   <table className="w-full text-xs">
                     <thead className="sticky top-0 z-10">
                       <tr className="bg-brand/5">
-                        <th className="w-12 px-2 py-2 text-left font-semibold text-muted-foreground">#</th>
+                        <th className="w-12 px-2 py-2 text-left font-semibold text-muted-foreground">
+                          #
+                        </th>
                         {allHeaders.map((h) => (
-                          <th key={h} className="px-2 py-2 text-left font-semibold text-foreground whitespace-nowrap">
+                          <th
+                            key={h}
+                            className="px-2 py-2 text-left font-semibold text-foreground whitespace-nowrap"
+                          >
                             {h}
                           </th>
                         ))}
-                        <th className="w-32 px-2 py-2 text-left font-semibold text-muted-foreground">Statut</th>
+                        <th className="w-32 px-2 py-2 text-left font-semibold text-muted-foreground">
+                          Statut
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -291,12 +338,21 @@ export function ImportEtudiantsDialog({
                             key={row.index}
                             className={cn(
                               "border-t border-brand/8 transition-colors",
-                              hasErrors ? "bg-red-50/60" : hasWarnings ? "bg-amber-50/40" : "hover:bg-brand/3",
+                              hasErrors
+                                ? "bg-red-50/60"
+                                : hasWarnings
+                                  ? "bg-amber-50/40"
+                                  : "hover:bg-brand/3",
                             )}
                           >
-                            <td className="px-2 py-1.5 text-muted-foreground font-mono">{row.index}</td>
+                            <td className="px-2 py-1.5 text-muted-foreground font-mono">
+                              {row.index}
+                            </td>
                             {allHeaders.map((h) => (
-                              <td key={h} className="max-w-48 truncate px-2 py-1.5 text-muted-foreground">
+                              <td
+                                key={h}
+                                className="max-w-48 truncate px-2 py-1.5 text-muted-foreground"
+                              >
                                 {row.data[h] || ""}
                               </td>
                             ))}
@@ -330,14 +386,24 @@ export function ImportEtudiantsDialog({
                       Détail des problèmes
                     </p>
                     {preview.rows.map((row) => {
-                      const issues = [...row.errors.map((e) => ({ type: "error" as const, msg: e })), ...row.warnings.map((w) => ({ type: "warning" as const, msg: w }))];
+                      const issues = [
+                        ...row.errors.map((e) => ({ type: "error" as const, msg: e })),
+                        ...row.warnings.map((w) => ({ type: "warning" as const, msg: w })),
+                      ];
                       if (issues.length === 0) return null;
                       return (
                         <div key={row.index} className="flex gap-2 text-[11px] leading-relaxed">
-                          <span className="shrink-0 font-mono font-semibold text-muted-foreground">Ligne {row.index}&nbsp;:</span>
+                          <span className="shrink-0 font-mono font-semibold text-muted-foreground">
+                            Ligne {row.index} :
+                          </span>
                           <div className="flex flex-wrap gap-x-3 gap-y-0.5">
                             {issues.map((iss, j) => (
-                              <span key={j} className={cn(iss.type === "error" ? "text-red-600" : "text-amber-600")}>
+                              <span
+                                key={j}
+                                className={cn(
+                                  iss.type === "error" ? "text-red-600" : "text-amber-600",
+                                )}
+                              >
                                 {iss.msg}
                               </span>
                             ))}
@@ -412,7 +478,8 @@ export function ImportEtudiantsDialog({
                   {result.failed > result.skipped && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
                       <AlertCircle className="h-3.5 w-3.5" />
-                      {result.failed - result.skipped} échec{(result.failed - result.skipped) > 1 ? "s" : ""}
+                      {result.failed - result.skipped} échec
+                      {result.failed - result.skipped > 1 ? "s" : ""}
                     </span>
                   )}
                   <span className="text-xs text-muted-foreground ml-auto">
@@ -427,7 +494,9 @@ export function ImportEtudiantsDialog({
                     </p>
                     {result.errors.map((err, i) => (
                       <div key={i} className="flex gap-2 text-[11px]">
-                        <span className="shrink-0 font-mono font-semibold text-red-600">Ligne {err.index}&nbsp;:</span>
+                        <span className="shrink-0 font-mono font-semibold text-red-600">
+                          Ligne {err.index} :
+                        </span>
                         <span className="text-red-700">{err.message}</span>
                       </div>
                     ))}

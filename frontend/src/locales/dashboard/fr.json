@@ -1,4 +1,4 @@
-﻿{
+{
   "shell": {
     "platform": "Plateforme",
     "brand": "Essor",
@@ -59,11 +59,11 @@
     "demoSuffix": "  démo",
     "open": "Ouvrir",
     "active": "Actif",
-    "crm": "Scolarité",
+    "crm": "CRM",
     "mad": "MAD",
     "allStatuses": "Tous les statuts",
     "allModes": "Tous les modes",
-    "allInvoices": "Tous les reçus",
+    "allInvoices": "Tous les factures",
     "select": "Sélectionner",
     "selectLevel": "Sélectionner un niveau",
     "mode": "Mode",
@@ -92,8 +92,8 @@
     "resultsPlural": "résultats",
     "family": "famille",
     "families": "familles",
-    "client": "famille",
-    "clients": "familles",
+    "client": "client",
+    "clients": "clients",
     "employee": "employé",
     "employees": "employés",
     "on": "sur",
@@ -137,7 +137,7 @@
     "amountMad": "Montant (MAD)",
     "paymentDate": "Date de paiement",
     "paymentMode": "Mode de paiement",
-    "crmStage": "Statut du dossier",
+    "crmStage": "Stade CRM",
     "contractType": "Type de contrat",
     "hireDate": "Date d'embauche",
     "fullName": "Nom complet",
@@ -163,19 +163,19 @@
     }
   },
   "home": {
-    "pageTitle": "Essor · Plateforme",
-    "eyebrow": "Vue d'ensemble · Direction",
+    "pageTitle": "CRM   Plateforme",
+    "eyebrow": "Vue d'ensemble   CRM",
     "titleBold": "Tableau",
     "titleItalic": "de bord",
-    "subtitle": "Vue d'ensemble de votre école en temps réel",
+    "subtitle": "Vue d'ensemble de votre gestion de la relation client",
     "tags": {
-      "clients": "FAMILLES",
+      "clients": "CLIENTS",
       "payments": "PAIEMENTS",
       "debt": "DETTE",
       "collection": "COLLECTE"
     },
     "metrics": {
-      "totalClients": "TOTAL FAMILLES",
+      "totalClients": "TOTAL CLIENTS",
       "paidThisMonth": "PAYÉS CE MOIS",
       "totalDebt": "DETTE TOTALE",
       "totalRevenue": "REVENU TOTAL",
@@ -193,46 +193,46 @@
     "quickNavItalic": "rapide",
     "quickActions": {
       "manageClients": {
-        "title": "Gérer les familles",
-        "desc": "Voir et modifier les dossiers des familles."
+        "title": "Gérer les clients",
+        "desc": "Voir et modifier les informations des clients."
       },
       "recordPayment": {
         "title": "Enregistrer un paiement",
         "desc": "Sélectionner un parent et enregistrer."
       },
       "lateClients": {
-        "title": "Familles en retard",
-        "desc": "Voir les familles avec des paiements en retard."
+        "title": "Clients en retard",
+        "desc": "Voir les clients avec des paiements en retard."
       },
       "addClient": {
-        "title": "Ajouter un étudiant",
-        "desc": "Créer un nouveau dossier étudiant depuis le tableau de bord."
+        "title": "Ajouter un client",
+        "desc": "Créer un nouveau client depuis le dashboard."
       }
     },
     "addClientModal": {
-      "srDesc": "Formulaire pour créer un nouveau dossier étudiant.",
-      "eyebrow": "· Nouvel étudiant",
-      "title": "Nouvel étudiant",
-      "submit": "Ajouter l'étudiant"
+      "srDesc": "Formulaire pour créer un nouveau client dans le CRM.",
+      "eyebrow": "  Ajouter un client",
+      "title": "Nouveau client CRM",
+      "submit": "Ajouter le client"
     },
     "cardOpenAria": "{{label}}: {{value}}. Ouvrir"
   },
   "familles": {
-    "pageTitle": "Parents · Scolarité",
-    "eyebrow": "Scolarité · Familles",
-    "titleBold": "Parents",
-    "titleItalic": "& étudiants",
-    "subtitle": "Dossiers, contacts et situation de paiement de chaque famille.",
-    "addClient": "Ajouter un étudiant",
+    "pageTitle": "Parents   CRM",
+    "eyebrow": "CRM   Gestion",
+    "titleBold": "Mes",
+    "titleItalic": "clients",
+    "subtitle": "Gérez vos clients et leur progression dans le pipeline de vente",
+    "addClient": "Ajouter un client",
     "searchPlaceholder": "Rechercher par nom, email, téléphone…",
-    "searchAria": "Recherche familles",
+    "searchAria": "Recherche clients",
     "filterStatusAria": "Filtrer par statut",
-    "clientList": "Liste des familles",
+    "clientList": "  Liste des clients",
     "table": {
       "parent": "Parent",
       "child": "Enfant",
       "contact": "Contact",
-      "crmStage": "Statut",
+      "crmStage": "Stade CRM",
       "status": "Status",
       "monthly": "Mensuel",
       "debt": "Dette",
@@ -240,35 +240,35 @@
     },
     "viewAria": "Voir {{name}}",
     "editAria": "Modifier {{name}}",
-    "noMatch": "Aucune famille ne correspond aux filtres.",
-    "clientsFoundOne": "1 famille trouvée",
-    "clientsFoundMany": "{{count}} familles trouvées",
+    "noMatch": "Aucun client ne correspond aux filtres.",
+    "clientsFoundOne": "1 client trouvé",
+    "clientsFoundMany": "{{count}} clients trouvés",
     "addModal": {
-      "srDesc": "Créer un nouveau dossier étudiant",
-      "eyebrow": "· Nouveau dossier",
-      "title": "Nouvel étudiant",
-      "submit": "Ajouter l'étudiant"
+      "srDesc": "Créer un nouveau client",
+      "eyebrow": "  Ajouter un client",
+      "title": "Nouveau client CRM",
+      "submit": "Ajouter le client"
     },
     "detailModal": {
-      "srDesc": "Détails de la famille {{name}}",
-      "title": "Détails de la famille",
+      "srDesc": "Détails du client {{name}}",
+      "title": "Détails du client",
       "recordPayment": "Enregistrer un paiement"
     },
     "paymentModal": {
       "srDesc": "Enregistrer un paiement pour {{name}}",
-      "eyebrow": "· Paiement",
+      "eyebrow": "  CRM",
       "title": "Enregistrer un paiement",
       "confirm": "Confirmer le paiement"
     },
     "editModal": {
-      "srDesc": "Modifier le dossier de la famille {{name}}",
-      "eyebrow": "· Modification",
-      "title": "Modifier le dossier"
+      "srDesc": "Modifier le client {{name}}",
+      "eyebrow": "  CRM",
+      "title": "Modifier le client"
     }
   },
   "rendezVous": {
-    "pageTitle": "Rendez-vous · Admissions",
-    "eyebrow": "Demandes · Admissions",
+    "pageTitle": "Rendez-vous   CRM",
+    "eyebrow": "Demandes   CRM",
     "titleBold": "Gestion des ",
     "titleItalic": "rendez-vous",
     "searchPlaceholder": "Rechercher par nom, email, téléphone ou sujet...",
@@ -278,28 +278,22 @@
     "noMatch": "Aucune demande ne correspond à ces critères.",
     "viewDetailAria": "Voir le détail",
     "replyAria": "Répondre",
-    "convertCrmAria": "Convertir la demande",
+    "convertCrmAria": "Convertir CRM",
     "resultsFooter": "{{count}} résultat",
     "resultsFooterPlural": "{{count}} résultats",
     "demandsNone": "Aucune demande affichée",
     "demandsOne": "1 demande affichée",
     "demandsMany": "{{count}} demandes affichées",
-    "csvHeaders": [
-      "Nom",
-      "Email",
-      "Téléphone",
-      "Date",
-      "Sujet"
-    ],
+    "csvHeaders": ["Nom", "Email", "Téléphone", "Date", "Sujet"],
     "detailModal": {
       "eyebrow": "  Détail   Rendez-vous",
       "childAge": "Âge de l'enfant",
-      "confirmConversion": "Confirmer la conversion"
+      "confirmConversion": "Confirmer la conversion CRM"
     },
     "crmModal": {
-      "eyebrow": "Conversion du prospect",
-      "title": "Fiche famille",
-      "intro": "Complétez les informations manquantes pour créer le dossier dans Essor. À l'enregistrement, la demande passe en Converti (démo).",
+      "eyebrow": "Conversion CRM",
+      "title": "Fiche client  ",
+      "intro": "Complétez les informations manquantes pour créer le dossier dans le CRM. À l'enregistrement, la demande passe en Converti (démo).",
       "submit": "Enregistrer et convertir"
     },
     "replyModal": {
@@ -326,8 +320,8 @@
     ]
   },
   "paiements": {
-    "pageTitle": "Paiements · Trésorerie",
-    "eyebrow": "Trésorerie · Paiements",
+    "pageTitle": "Paiements   CRM",
+    "eyebrow": "CRM   Paiements",
     "titleBold": "Historique des",
     "titleItalic": "paiements",
     "subtitle": "Historique et gestion des paiements parents",
@@ -350,7 +344,7 @@
   },
   "affiches": {
     "pageTitle": "Affiches   Équipe",
-    "eyebrow": "Personnel · Équipe",
+    "eyebrow": "Équipe   CRM",
     "titleBold": "Affiches",
     "titleItalic": "et personnel",
     "subtitle": "Liste des employés et leur statut (données de démonstration).",
@@ -381,11 +375,11 @@
     "editAria": "Modifier {{name}}"
   },
   "rapports": {
-    "pageTitle": "Rapports · Analyse",
-    "eyebrow": "Analyse · Rapports",
+    "pageTitle": "Rapports   CRM",
+    "eyebrow": "Analyse   CRM",
     "titleBold": "Rapports",
     "titleItalic": "et indicateurs",
-    "subtitle": "Synthèse des inscriptions et de l'activité scolaire.",
+    "subtitle": "Synthèse des inscriptions et de l'activité commerciale (données de démonstration).",
     "summary": "03   Synthèse",
     "paid": "Payé",
     "unpaid": "Impayé",
@@ -409,19 +403,11 @@
     "familiesDemoOne": "1 famille   démo",
     "familiesDemoMany": "{{count}} familles   démo",
     "noSearchMatch": "Aucune famille ne correspond à votre recherche.",
-    "months": [
-      "Sept",
-      "Oct",
-      "Nov",
-      "Déc",
-      "Jan",
-      "Fév",
-      "Mar"
-    ]
+    "months": ["Sept", "Oct", "Nov", "Déc", "Jan", "Fév", "Mar"]
   },
   "planifications": {
-    "pageTitle": "Planification · Emplois du temps",
-    "eyebrow": "Organisation · Planning",
+    "pageTitle": "Planifications   CRM",
+    "eyebrow": "Organisation   CRM",
     "titleBold": "Planifications",
     "titleItalic": "par créneaux",
     "subtitle": "Semaine type : les rendez-vous et réunions apparaissent directement dans la grille horaire (données de démonstration).",
@@ -584,106 +570,5 @@
     "fieldSource": "Source des champs",
     "manual": "Manuel",
     "aiMode": "IA"
-  },
-  "homeIndex": {
-    "greeting": {
-      "morning": "Bonjour",
-      "afternoon": "Bon après-midi",
-      "evening": "Bonsoir"
-    },
-    "roleFallback": "Tableau de bord",
-    "roleLabels": {
-      "directeur": "Directeur",
-      "enseignant": "Enseignant (formateur)",
-      "responsable": "Responsable planning"
-    },
-    "chips": {
-      "etudiants": "Étudiants",
-      "seancesAjd": "Séances ajd",
-      "reussite": "Réussite",
-      "groupes": "Groupes",
-      "aNoter": "À noter",
-      "sallesLibres": "Salles libres",
-      "conflits": "Conflits"
-    },
-    "tabs": {
-      "ensemble": "Vue d'ensemble",
-      "ensembleShort": "Ensemble",
-      "academique": "Académique",
-      "analyse": "Analyse",
-      "examens": "Examens",
-      "etudiantsBulletins": "Étudiants & Bulletins",
-      "etudiantsShort": "Étudiants",
-      "planification": "Planification",
-      "planningShort": "Planning"
-    },
-    "kpis": {
-      "etudiantsActifs": "Étudiants actifs",
-      "formateursActifs": "Formateurs actifs",
-      "examensAVenir": "Examens à venir",
-      "bulletinsAPublier": "Bulletins à publier",
-      "mesGroupes": "Mes groupes",
-      "mesModules": "Mes modules",
-      "seancesAujourdhui": "Séances aujourd'hui",
-      "mesExamens": "Mes examens",
-      "examensANoter": "Examens à noter",
-      "sallesOccupees": "Salles occupées",
-      "sallesDisponibles": "Salles disponibles",
-      "conflits": "Conflits",
-      "stagesAValider": "Stages à valider"
-    },
-    "metric": {
-      "reussite": "Taux de réussite",
-      "recouvrement": "Total à recouvrer",
-      "reussiteShort": "Réussite",
-      "recouvrementShort": "Recouvrement"
-    },
-    "sections": {
-      "aujourdhui": "Aujourd'hui",
-      "notifications": "Notifications",
-      "examensRecents": "Examens récents",
-      "nouveauxEtudiants": "Nouveaux étudiants",
-      "syntheseExamens": "Synthèse des examens",
-      "analyse": "Analyse",
-      "chargeFormateurs": "Charge des formateurs",
-      "monCalendrier": "Mon calendrier (7 jours)",
-      "mesSeances": "Mes séances aujourd'hui",
-      "mesExamens": "Mes examens",
-      "mesEtudiants": "Mes étudiants",
-      "bulletinsAttente": "Bulletins en attente de publication",
-      "alertesOrd": "Alertes d'ordonnancement",
-      "occupationSalles": "Occupation des salles"
-    },
-    "links": {
-      "voirPlanning": "Voir le planning",
-      "voirTout": "Voir tout",
-      "tousExamens": "Tous les examens",
-      "tousEtudiants": "Tous les étudiants",
-      "tousBulletins": "Tous les bulletins",
-      "monPlanning": "Mon planning",
-      "creerExamen": "Créer un examen"
-    },
-    "empty": {
-      "aucuneSeance": "Aucune séance prévue aujourd'hui.",
-      "aucuneSeanceAVenir": "Aucune séance à venir.",
-      "aucunFormateur": "Aucun formateur enregistré."
-    },
-    "recouvrementParts": {
-      "enAttente": "En attente",
-      "retard": "Retard",
-      "impaye": "Impayé"
-    },
-    "charts": {
-      "examensParStatut": "Examens par statut",
-      "examensParType": "Examens par type",
-      "examensParFormateur": "Examens par formateur",
-      "planifies": "Planifiés",
-      "faits": "Faits",
-      "repartitionFiliere": "Répartition par filière",
-      "repartitionNiveau": "Répartition par niveau",
-      "examensParMois": "Examens par mois",
-      "seancesParJour": "Séances par jour de la semaine",
-      "occupationSalles": "Occupation des salles"
-    }
   }
 }

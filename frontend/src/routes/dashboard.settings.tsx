@@ -1,4 +1,4 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import {
   Plus,
@@ -39,8 +39,8 @@ import {
   type ModuleRecord,
   type GroupConfig,
   type StructureAccueil,
-} from "@/lib/scholnexa-data";
-import { useEssor } from "@/lib/scholnexa-store";
+} from "@/lib/istpm-data";
+import { useIstpm } from "@/lib/istpm-store";
 import { useStamp, setStamp, prepareStampFromFile } from "@/lib/stamp";
 import {
   fetchSettings,
@@ -58,7 +58,7 @@ import {
   assignUserRole,
   type RoleRecord,
   type UserRecord,
-} from "@/lib/scholnexa-api";
+} from "@/lib/istpm-api";
 import {
   ConfirmDialog,
   FormDialog,
@@ -155,29 +155,135 @@ const META: Record<
   SectionId,
   { titre: string; desc: string; icone: typeof Users | typeof Hospital; groupe: string }
 > = {
-  annees: { titre: "Années universitaires", desc: "Années ouvertes à l'inscription", icone: CalendarRange, groupe: "Organisation pédagogique" },
-  semestres: { titre: "Semestres", desc: "Découpage du cycle de formation", icone: LayoutGrid, groupe: "Organisation pédagogique" },
-  groupes: { titre: "Groupes / classes", desc: "Groupes constitués par semestre", icone: Users, groupe: "Organisation pédagogique" },
-  modules: { titre: "Modules", desc: "Modules enseignés par filière", icone: BookOpen, groupe: "Organisation pédagogique" },
-  salles: { titre: "Salles", desc: "Salles, amphis et laboratoires", icone: DoorOpen, groupe: "Organisation pédagogique" },
-  creneaux: { titre: "Créneaux horaires", desc: "Plages horaires de l'emploi du temps", icone: Clock, groupe: "Organisation pédagogique" },
-  planning: { titre: "Configuration du planning", desc: "Jours ouvrés et amplitude horaire", icone: SlidersHorizontal, groupe: "Organisation pédagogique" },
-  filieres: { titre: "Filières / départements", desc: "Filières du cursus paramédical", icone: GraduationCap, groupe: "Structure de l'institut" },
-  formateurs: { titre: "Formateurs", desc: "Corps enseignant et grades", icone: GraduationCap, groupe: "Structure de l'institut" },
-  utilisateurs: { titre: "Utilisateurs", desc: "Comptes ayant accès au CRM", icone: Users, groupe: "Administration" },
-  roles: { titre: "Rôles & permissions", desc: "Droits accordés à chaque profil", icone: ShieldCheck, groupe: "Administration" },
-  examens: { titre: "Types d'examen", desc: "Natures d'épreuves évaluables", icone: ClipboardList, groupe: "Évaluation" },
-  bulletins: { titre: "Configuration des bulletins", desc: "Barème, mentions et décisions", icone: FileText, groupe: "Évaluation" },
-  institut: { titre: "Informations de l'institut", desc: "Identité et coordonnées", icone: Building2, groupe: "Administration" },
-  systeme: { titre: "Configuration système", desc: "Langue, devise et fuseau", icone: SlidersHorizontal, groupe: "Administration" },
-  securite: { titre: "Sécurité", desc: "Mots de passe et sessions", icone: Lock, groupe: "Administration" },
-  cachet: { titre: "Cachet officiel", desc: "Tampon apposé sur tous les PDF (bulletins, conventions, rapports)", icone: Stamp, groupe: "Administration" },
-  structures: { titre: "Structures d'accueil", desc: "CHU, hôpitaux et cliniques partenaires", icone: Hospital, groupe: "Organisation pédagogique" },
+  annees: {
+    titre: "Années universitaires",
+    desc: "Années ouvertes à l'inscription",
+    icone: CalendarRange,
+    groupe: "Organisation pédagogique",
+  },
+  semestres: {
+    titre: "Semestres",
+    desc: "Découpage du cycle de formation",
+    icone: LayoutGrid,
+    groupe: "Organisation pédagogique",
+  },
+  groupes: {
+    titre: "Groupes / classes",
+    desc: "Groupes constitués par semestre",
+    icone: Users,
+    groupe: "Organisation pédagogique",
+  },
+  modules: {
+    titre: "Modules",
+    desc: "Modules enseignés par filière",
+    icone: BookOpen,
+    groupe: "Organisation pédagogique",
+  },
+  salles: {
+    titre: "Salles",
+    desc: "Salles, amphis et laboratoires",
+    icone: DoorOpen,
+    groupe: "Organisation pédagogique",
+  },
+  creneaux: {
+    titre: "Créneaux horaires",
+    desc: "Plages horaires de l'emploi du temps",
+    icone: Clock,
+    groupe: "Organisation pédagogique",
+  },
+  planning: {
+    titre: "Configuration du planning",
+    desc: "Jours ouvrés et amplitude horaire",
+    icone: SlidersHorizontal,
+    groupe: "Organisation pédagogique",
+  },
+  filieres: {
+    titre: "Filières / départements",
+    desc: "Filières du cursus paramédical",
+    icone: GraduationCap,
+    groupe: "Structure de l'institut",
+  },
+  formateurs: {
+    titre: "Formateurs",
+    desc: "Corps enseignant et grades",
+    icone: GraduationCap,
+    groupe: "Structure de l'institut",
+  },
+  utilisateurs: {
+    titre: "Utilisateurs",
+    desc: "Comptes ayant accès au CRM",
+    icone: Users,
+    groupe: "Administration",
+  },
+  roles: {
+    titre: "Rôles & permissions",
+    desc: "Droits accordés à chaque profil",
+    icone: ShieldCheck,
+    groupe: "Administration",
+  },
+  examens: {
+    titre: "Types d'examen",
+    desc: "Natures d'épreuves évaluables",
+    icone: ClipboardList,
+    groupe: "Évaluation",
+  },
+  bulletins: {
+    titre: "Configuration des bulletins",
+    desc: "Barème, mentions et décisions",
+    icone: FileText,
+    groupe: "Évaluation",
+  },
+  institut: {
+    titre: "Informations de l'institut",
+    desc: "Identité et coordonnées",
+    icone: Building2,
+    groupe: "Administration",
+  },
+  systeme: {
+    titre: "Configuration système",
+    desc: "Langue, devise et fuseau",
+    icone: SlidersHorizontal,
+    groupe: "Administration",
+  },
+  securite: {
+    titre: "Sécurité",
+    desc: "Mots de passe et sessions",
+    icone: Lock,
+    groupe: "Administration",
+  },
+  cachet: {
+    titre: "Cachet officiel",
+    desc: "Tampon apposé sur tous les PDF (bulletins, conventions, rapports)",
+    icone: Stamp,
+    groupe: "Administration",
+  },
+  structures: {
+    titre: "Structures d'accueil",
+    desc: "CHU, hôpitaux et cliniques partenaires",
+    icone: Hospital,
+    groupe: "Organisation pédagogique",
+  },
 };
 
 /* ------------------------------------------------------------------ */
 /*  Blocs réutilisables                                                */
 /* ------------------------------------------------------------------ */
+
+/** Décor d'angle discret — une pièce différente par carte, très basse opacité. */
+const CARTE_DECOR = [
+  "/brand/decor/blob-lavender-corner.png",
+  "/brand/decor/blob-coral-accent.png",
+  "/brand/decor/cloud-soft-sky.png",
+  "/brand/decor/ring-outline-blue.png",
+  "/brand/decor/halftone-cloud.png",
+  "/brand/decor/hero-blob-secondary.png",
+] as const;
+
+function decorPour(id: string) {
+  let h = 0;
+  for (let i = 0; i < id.length; i += 1) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return CARTE_DECOR[h % CARTE_DECOR.length];
+}
 
 function Carte({
   id,
@@ -191,8 +297,14 @@ function Carte({
   const m = META[id];
   const Icone = m.icone;
   return (
-    <section className={cn(softCard, "p-5")}>
-      <div className="mb-4 flex items-start justify-between gap-3">
+    <section className={cn(softCard, "relative overflow-hidden p-5")}>
+      <img
+        src={decorPour(id)}
+        alt=""
+        aria-hidden
+        className="pointer-events-none absolute -right-8 -top-8 w-32 opacity-[0.06]"
+      />
+      <div className="relative mb-4 flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand/12 text-brand-dk">
             <Icone className="h-4 w-4" />
@@ -206,7 +318,7 @@ function Carte({
         </div>
         {action}
       </div>
-      {children}
+      <div className="relative">{children}</div>
     </section>
   );
 }
@@ -228,24 +340,13 @@ function StampSection() {
       return;
     }
     setBusy(true);
-    let dataUrl: string;
     try {
-      dataUrl = await prepareStampFromFile(file);
-    } catch {
-      toast.error("Impossible de lire cette image");
-      setBusy(false);
-      return;
-    }
-    setStamp(dataUrl);
-    // La persistance serveur est explicite : un échec doit être visible, sinon
-    // le cachet ne survit pas à un changement de poste ou de navigateur.
-    try {
-      await updateSetting("stamp_image", dataUrl);
+      const dataUrl = await prepareStampFromFile(file);
+      setStamp(dataUrl);
+      updateSetting("stamp_image", dataUrl).catch(() => {});
       toast.success("Cachet enregistré — il sera apposé sur tous les PDF");
     } catch {
-      toast.error(
-        "Cachet appliqué localement, mais la sauvegarde sur le serveur a échoué",
-      );
+      toast.error("Impossible de lire cette image");
     } finally {
       setBusy(false);
     }
@@ -255,9 +356,9 @@ function StampSection() {
     <Carte id="cachet">
       <div className="space-y-4">
         <p className="text-xs text-muted-foreground">
-          L'image est apposée automatiquement en bas des documents PDF générés
-          (bulletins, conventions et rapports de stage). Format conseillé : PNG
-          à fond transparent, environ 600&nbsp;px.
+          L'image est apposée automatiquement en bas des documents PDF générés (bulletins,
+          conventions et rapports de stage). Format conseillé : PNG à fond transparent, environ
+          600&nbsp;px.
         </p>
 
         <div className="flex flex-wrap items-center gap-4">
@@ -302,15 +403,8 @@ function StampSection() {
                 className={cn(ghostPill, "h-9 gap-1.5 px-4 text-sm text-alert")}
                 onClick={() => {
                   setStamp(null);
-                  // `settings.value` est `jsonb NOT NULL` : on efface avec une
-                  // chaîne vide plutôt qu'un `null` que la colonne refuserait.
-                  updateSetting("stamp_image", "")
-                    .then(() => toast.success("Cachet supprimé"))
-                    .catch(() =>
-                      toast.error(
-                        "Cachet retiré localement, mais la suppression sur le serveur a échoué",
-                      ),
-                    );
+                  updateSetting("stamp_image", null).catch(() => {});
+                  toast.success("Cachet supprimé");
                 }}
               >
                 <Trash2 className="h-4 w-4" /> Supprimer
@@ -443,10 +537,7 @@ function ListeEditable({
             placeholder={placeholder}
             className={cn(softInput, "h-9 flex-1")}
           />
-          <button
-            className={cn(ghostPill, "h-9 gap-1.5 px-3 py-0 text-xs")}
-            onClick={ajouter}
-          >
+          <button className={cn(ghostPill, "h-9 gap-1.5 px-3 py-0 text-xs")} onClick={ajouter}>
             <Plus className="h-3.5 w-3.5" /> Ajouter
           </button>
         </div>
@@ -479,9 +570,7 @@ function ChampReglage({
           onChange={(e) => onChange(e.target.value)}
           className={cn(softInput, "h-8 w-44 text-end text-sm")}
         />
-        {suffix ? (
-          <span className="text-xs text-muted-foreground">{suffix}</span>
-        ) : null}
+        {suffix ? <span className="text-xs text-muted-foreground">{suffix}</span> : null}
       </span>
     </div>
   );
@@ -515,7 +604,7 @@ const EMPTY_MODULE_FORM: ModuleForm = {
  * l'application ; un module ne peut être enregistré sans filière associée.
  */
 function ModulesSection({ filieres }: { filieres: string[] }) {
-  const { modules, addModule, updateModule, deleteModule } = useEssor();
+  const { modules, addModule, updateModule, deleteModule } = useIstpm();
   const [filtre, setFiltre] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<ModuleRecord | null>(null);
@@ -542,9 +631,7 @@ function ModulesSection({ filieres }: { filieres: string[] }) {
       code: m.code ?? "",
       volumeHoraire: m.volumeHoraire ?? "",
       coefficient:
-        m.coefficient === null || m.coefficient === undefined
-          ? ""
-          : Number(m.coefficient),
+        m.coefficient === null || m.coefficient === undefined ? "" : Number(m.coefficient),
       description: m.description ?? "",
     });
     setErrors({});
@@ -597,7 +684,11 @@ function ModulesSection({ filieres }: { filieres: string[] }) {
             type="button"
             onClick={openCreate}
             disabled={noFilieres}
-            className={cn(ghostPill, "h-7 gap-1 px-2.5 text-[11px]", noFilieres && "cursor-not-allowed opacity-50")}
+            className={cn(
+              ghostPill,
+              "h-7 gap-1 px-2.5 text-[11px]",
+              noFilieres && "cursor-not-allowed opacity-50",
+            )}
           >
             <Plus className="h-3 w-3" /> Ajouter
           </button>
@@ -630,9 +721,7 @@ function ModulesSection({ filieres }: { filieres: string[] }) {
 
           <div className="max-h-80 space-y-1.5 overflow-y-auto">
             {filtres.length === 0 ? (
-              <p className="py-3 text-center text-xs text-muted-foreground">
-                Aucun module.
-              </p>
+              <p className="py-3 text-center text-xs text-muted-foreground">Aucun module.</p>
             ) : (
               filtres.map((m) => (
                 <div
@@ -790,16 +879,30 @@ function RoleEditor({
     <div className="border-t border-brand/12 px-4 py-3">
       <div className="mb-3 flex gap-2">
         <div className="flex-1">
-          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Nom</label>
-          <Input value={name} onChange={(e) => setName(e.target.value)} className={cn(softInput, "h-8 text-sm")} />
+          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+            Nom
+          </label>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={cn(softInput, "h-8 text-sm")}
+          />
         </div>
         <div className="flex-[2]">
-          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Description</label>
-          <Input value={description} onChange={(e) => setDescription(e.target.value)} className={cn(softInput, "h-8 text-sm")} />
+          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+            Description
+          </label>
+          <Input
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className={cn(softInput, "h-8 text-sm")}
+          />
         </div>
       </div>
 
-      <label className="mb-1.5 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Permissions</label>
+      <label className="mb-1.5 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+        Permissions
+      </label>
       <div className="grid gap-1.5 sm:grid-cols-2">
         {permGroups.map((g) => (
           <div key={g.label} className="rounded-lg border border-brand/8 bg-brand/3 p-2">
@@ -903,16 +1006,32 @@ function NewRoleForm({
       <h4 className="mb-3 text-xs font-bold text-foreground">Nouveau rôle</h4>
       <div className="mb-3 flex gap-2">
         <div className="flex-1">
-          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Nom *</label>
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: Assistant" className={cn(softInput, "h-8 text-sm")} />
+          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+            Nom *
+          </label>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Ex: Assistant"
+            className={cn(softInput, "h-8 text-sm")}
+          />
         </div>
         <div className="flex-[2]">
-          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Description</label>
-          <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Accès limité..." className={cn(softInput, "h-8 text-sm")} />
+          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+            Description
+          </label>
+          <Input
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Accès limité..."
+            className={cn(softInput, "h-8 text-sm")}
+          />
         </div>
       </div>
 
-      <label className="mb-1.5 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Permissions</label>
+      <label className="mb-1.5 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+        Permissions
+      </label>
       <div className="grid gap-1.5 sm:grid-cols-2">
         {permGroups.map((g) => (
           <div key={g.label} className="rounded-lg border border-brand/8 bg-brand/3 p-2">
@@ -1011,26 +1130,48 @@ function NewUserForm({
       <h4 className="mb-3 text-xs font-bold text-foreground">Nouvel utilisateur</h4>
       <div className="mb-3 grid gap-2 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Nom *</label>
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nom complet" className={cn(softInput, "h-8 text-sm")} />
+          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+            Nom *
+          </label>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nom complet"
+            className={cn(softInput, "h-8 text-sm")}
+          />
         </div>
         <div>
-          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Email *</label>
-          <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="user@example.com" className={cn(softInput, "h-8 text-sm")} />
+          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+            Email *
+          </label>
+          <Input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="user@istpm.ma"
+            className={cn(softInput, "h-8 text-sm")}
+          />
         </div>
         <div>
-          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Mot de passe *</label>
-          <Input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="••••••" className={cn(softInput, "h-8 text-sm")} />
+          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+            Mot de passe *
+          </label>
+          <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            placeholder="••••••"
+            className={cn(softInput, "h-8 text-sm")}
+          />
         </div>
         <div>
-          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Rôle</label>
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className={selectClass}
-          >
+          <label className="mb-1 block text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+            Rôle
+          </label>
+          <select value={role} onChange={(e) => setRole(e.target.value)} className={selectClass}>
             {["directeur", "responsable", "enseignant", "admin"].map((r) => (
-              <option key={r} value={r}>{ROLE_META[r as UserRole]?.label ?? r}</option>
+              <option key={r} value={r}>
+                {ROLE_META[r as UserRole]?.label ?? r}
+              </option>
             ))}
           </select>
         </div>
@@ -1057,7 +1198,7 @@ function NewUserForm({
 /* ------------------------------------------------------------------ */
 
 function GroupesSection() {
-  const { groupConfigs, addGroupConfig, updateGroupConfig, deleteGroupConfig } = useEssor();
+  const { groupConfigs, addGroupConfig, updateGroupConfig, deleteGroupConfig } = useIstpm();
   const [activeSemester, setActiveSemester] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<GroupConfig | null>(null);
@@ -1165,9 +1306,7 @@ function GroupesSection() {
               className="flex items-center justify-between gap-3 rounded-xl border border-brand/12 px-3 py-2"
             >
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-medium text-foreground">
-                  {g.name}
-                </span>
+                <span className="block truncate text-sm font-medium text-foreground">{g.name}</span>
               </span>
               <span className="flex items-center gap-2 shrink-0">
                 <span className="text-xs text-muted-foreground">
@@ -1182,9 +1321,7 @@ function GroupesSection() {
                     className={cn(softInput, "h-7 w-16 text-center text-xs")}
                   />
                 </span>
-                <span className="text-[10px] text-muted-foreground min-w-[3ch]">
-                  étud.
-                </span>
+                <span className="text-[10px] text-muted-foreground min-w-[3ch]">étud.</span>
                 <button
                   type="button"
                   aria-label={`Modifier ${g.name}`}
@@ -1246,7 +1383,9 @@ function GroupesSection() {
 
       <ConfirmDialog
         open={toDelete !== null}
-        onOpenChange={(o) => { if (!o) setToDelete(null); }}
+        onOpenChange={(o) => {
+          if (!o) setToDelete(null);
+        }}
         title={toDelete ? `Supprimer le groupe "${toDelete.name}" ?` : ""}
         message="Cette action est irréversible."
         confirmLabel="Supprimer"
@@ -1274,11 +1413,7 @@ function SettingsPage() {
     updateStructureAccueil,
     deleteStructureAccueil,
     reset,
-    // Les créneaux ne sont pas un état local de cette page : l'emploi du temps
-    // en dérive sa grille horaire, ils vivent donc dans le store partagé.
-    creneauxLabels: creneaux,
-    setCreneaux,
-  } = useEssor();
+  } = useIstpm();
 
   const autorisees = role ? SECTIONS_PAR_ROLE[role] : [];
   const peut = (id: SectionId) => autorisees.includes(id);
@@ -1287,27 +1422,26 @@ function SettingsPage() {
   const [annees, setAnnees] = useState<string[]>([...ANNEES_UNIVERSITAIRES]);
   const [semestres, setSemestres] = useState<string[]>([...NIVEAUX]);
   const [salles, setSalles] = useState<string[]>([...SALLES]);
+  const [creneaux, setCreneaux] = useState<string[]>(CRENEAUX.map((c) => `${c.debut} – ${c.fin}`));
   const [listeFilieres, setListeFilieres] = useState<string[]>([...filieres]);
   const [listeStructures, setListeStructures] = useState<StructureAccueil[]>(
     structuresAccueil.map((s) => (typeof s === "string" ? { nom: s, capacite: 5 } : s)),
   );
   const [nouvelleStructure, setNouvelleStructure] = useState("");
-  const [typesExamen, setTypesExamen] = useState<string[]>(
-    Object.values(TYPE_EXAMEN_LABEL),
-  );
+  const [typesExamen, setTypesExamen] = useState<string[]>(Object.values(TYPE_EXAMEN_LABEL));
   const [resetOpen, setResetOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState(0);
 
   const [institut, setInstitut] = useState({
-    nom: "Essor",
+    nom: "Essor ",
     ville: "Agadir",
-    telephone: "+212 5 00 00 00 00",
-    email: "contact@eiden-group.com",
+    telephone: "+212 5 28 00 00 00",
+    email: "contact@istpm-agadir.ma",
   });
   const [systeme, setSysteme] = useState({
     langue: "Français",
     devise: "MAD",
-    fuseau: "Africa/Agadir",
+    fuseau: "Africa/Casablanca",
   });
   const [securite, setSecurite] = useState({
     longueurMdp: "8",
@@ -1333,13 +1467,10 @@ function SettingsPage() {
       .then((data) => {
         if (Array.isArray(data.annees_universitaires))
           setAnnees(data.annees_universitaires as string[]);
-        if (Array.isArray(data.semestres))
-          setSemestres(data.semestres as string[]);
-        if (Array.isArray(data.salles))
-          setSalles(data.salles as string[]);
-        // `creneaux` est hydraté par le store, qui les partage avec le planning.
-        if (Array.isArray(data.types_examen))
-          setTypesExamen(data.types_examen as string[]);
+        if (Array.isArray(data.semestres)) setSemestres(data.semestres as string[]);
+        if (Array.isArray(data.salles)) setSalles(data.salles as string[]);
+        if (Array.isArray(data.creneaux)) setCreneaux(data.creneaux as string[]);
+        if (Array.isArray(data.types_examen)) setTypesExamen(data.types_examen as string[]);
         if (typeof data.institut_nom === "string")
           setInstitut((p) => ({ ...p, nom: data.institut_nom as string }));
         if (typeof data.institut_ville === "string")
@@ -1357,7 +1488,10 @@ function SettingsPage() {
         if (typeof data.securite_longueurMdp === "string")
           setSecurite((p) => ({ ...p, longueurMdp: data.securite_longueurMdp as string }));
         if (typeof data.securite_expirationSession === "string")
-          setSecurite((p) => ({ ...p, expirationSession: data.securite_expirationSession as string }));
+          setSecurite((p) => ({
+            ...p,
+            expirationSession: data.securite_expirationSession as string,
+          }));
         if (typeof data.planning_joursOuvres === "string")
           setPlanning((p) => ({ ...p, joursOuvres: data.planning_joursOuvres as string }));
         if (typeof data.planning_heureDebut === "string")
@@ -1370,10 +1504,6 @@ function SettingsPage() {
           setBulletin((p) => ({ ...p, seuilAdmission: data.bulletin_seuilAdmission as string }));
         if (typeof data.bulletin_creditsSemestre === "string")
           setBulletin((p) => ({ ...p, creditsSemestre: data.bulletin_creditsSemestre as string }));
-        // Le cachet est stocké en base : on réhydrate le cache local afin qu'il
-        // suive l'utilisateur d'un poste ou d'un navigateur à l'autre.
-        if (typeof data.stamp_image === "string" && data.stamp_image)
-          setStamp(data.stamp_image);
       })
       .catch(() => {});
   }, []);
@@ -1384,7 +1514,11 @@ function SettingsPage() {
   const [editRole, setEditRole] = useState<RoleRecord | null>(null);
   const [showNewRole, setShowNewRole] = useState(false);
   const [showNewUser, setShowNewUser] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<{ type: "role" | "user"; id: string; name: string } | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    type: "role" | "user";
+    id: string;
+    name: string;
+  } | null>(null);
 
   useEffect(() => {
     fetchRoles()
@@ -1431,21 +1565,17 @@ function SettingsPage() {
           <span className="grid h-12 w-12 place-items-center rounded-2xl bg-muted text-muted-foreground">
             <Lock className="h-5 w-5" />
           </span>
-          <p className="font-display text-base font-bold text-foreground">
-            Accès non autorisé
-          </p>
+          <p className="font-display text-base font-bold text-foreground">Accès non autorisé</p>
           <p className="max-w-sm text-sm text-muted-foreground">
-            Le module Paramètres est réservé à la direction et au responsable
-            des affaires estudiantines.
+            Le module Paramètres est réservé à la direction et au responsable des affaires
+            estudiantines.
           </p>
         </section>
       </div>
     );
   }
 
-  const groupesAffiches = [
-    ...new Set(autorisees.map((id) => META[id].groupe)),
-  ];
+  const groupesAffiches = [...new Set(autorisees.map((id) => META[id].groupe))];
 
   return (
     <div className="space-y-6">
@@ -1462,9 +1592,8 @@ function SettingsPage() {
 
       {role === "responsable" ? (
         <p className="rounded-2xl bg-brand/8 px-4 py-3 text-xs text-brand-dk">
-          Vous administrez l'organisation pédagogique. Les comptes, les
-          permissions, la sécurité et les réglages de l'institut relèvent de la
-          direction.
+          Vous administrez l'organisation pédagogique. Les comptes, les permissions, la sécurité et
+          les réglages de l'institut relèvent de la direction.
         </p>
       ) : null}
 
@@ -1479,20 +1608,21 @@ function SettingsPage() {
       />
 
       {(() => {
-        const nomGroupe =
-          groupesAffiches[Math.min(activeGroup, groupesAffiches.length - 1)];
+        const nomGroupe = groupesAffiches[Math.min(activeGroup, groupesAffiches.length - 1)];
         return (
           <motion.div
             key={nomGroupe}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="grid gap-4 lg:grid-cols-2"
+            className="gap-4 lg:columns-2 lg:[column-gap:1rem]"
           >
             {autorisees
               .filter((id) => META[id].groupe === nomGroupe)
               .map((id) => (
-                <div key={id}>{renderSection(id)}</div>
+                <div key={id} className="mb-4 break-inside-avoid">
+                  {renderSection(id)}
+                </div>
               ))}
           </motion.div>
         );
@@ -1530,8 +1660,14 @@ function SettingsPage() {
 
       <ConfirmDialog
         open={deleteTarget !== null}
-        onOpenChange={(o) => { if (!o) setDeleteTarget(null); }}
-        title={deleteTarget ? `Supprimer ${deleteTarget.type === "role" ? "le rôle" : "l'utilisateur"} "${deleteTarget.name}" ?` : ""}
+        onOpenChange={(o) => {
+          if (!o) setDeleteTarget(null);
+        }}
+        title={
+          deleteTarget
+            ? `Supprimer ${deleteTarget.type === "role" ? "le rôle" : "l'utilisateur"} "${deleteTarget.name}" ?`
+            : ""
+        }
         message={`Cette action est irréversible. ${deleteTarget?.type === "role" ? "Les utilisateurs ayant ce rôle conserveront leur rôle actuel." : ""}`}
         confirmLabel="Supprimer"
         onConfirm={() => {
@@ -1539,15 +1675,17 @@ function SettingsPage() {
           const t = deleteTarget;
           setDeleteTarget(null);
           const del = t.type === "role" ? deleteRole(t.id) : deleteUser(t.id);
-          del.then(() => {
-            if (t.type === "role") {
-              setRolesList((prev) => prev.filter((r) => r.id !== t.id));
-              if (editRole?.id === t.id) setEditRole(null);
-            } else {
-              setUsersList((prev) => prev.filter((u) => u.id !== t.id));
-            }
-            toast.success(`${t.type === "role" ? "Rôle" : "Utilisateur"} supprimé`);
-          }).catch(() => toast.error("Erreur lors de la suppression"));
+          del
+            .then(() => {
+              if (t.type === "role") {
+                setRolesList((prev) => prev.filter((r) => r.id !== t.id));
+                if (editRole?.id === t.id) setEditRole(null);
+              } else {
+                setUsersList((prev) => prev.filter((u) => u.id !== t.id));
+              }
+              toast.success(`${t.type === "role" ? "Rôle" : "Utilisateur"} supprimé`);
+            })
+            .catch(() => toast.error("Erreur lors de la suppression"));
         }}
       />
     </div>
@@ -1561,7 +1699,10 @@ function SettingsPage() {
           <Carte id="annees">
             <ListeEditable
               valeurs={annees}
-              onChange={(v) => { setAnnees(v); updateSetting("annees_universitaires", v).catch(() => {}); }}
+              onChange={(v) => {
+                setAnnees(v);
+                updateSetting("annees_universitaires", v).catch(() => {});
+              }}
               placeholder="2026/2027"
             />
           </Carte>
@@ -1572,7 +1713,10 @@ function SettingsPage() {
           <Carte id="semestres">
             <ListeEditable
               valeurs={semestres}
-              onChange={(v) => { setSemestres(v); updateSetting("semestres", v).catch(() => {}); }}
+              onChange={(v) => {
+                setSemestres(v);
+                updateSetting("semestres", v).catch(() => {});
+              }}
               placeholder="S7"
             />
           </Carte>
@@ -1586,7 +1730,10 @@ function SettingsPage() {
           <Carte id="salles">
             <ListeEditable
               valeurs={salles}
-              onChange={(v) => { setSalles(v); updateSetting("salles", v).catch(() => {}); }}
+              onChange={(v) => {
+                setSalles(v);
+                updateSetting("salles", v).catch(() => {});
+              }}
               placeholder="Salle 14"
             />
           </Carte>
@@ -1595,17 +1742,14 @@ function SettingsPage() {
       case "creneaux":
         return (
           <Carte id="creneaux">
-            {/* `setCreneaux` du store écrit aussi le réglage côté serveur. */}
             <ListeEditable
               valeurs={creneaux}
-              onChange={setCreneaux}
+              onChange={(v) => {
+                setCreneaux(v);
+                updateSetting("creneaux", v).catch(() => {});
+              }}
               placeholder="19:15 – 20:45"
             />
-            <p className="mt-3 text-xs text-muted-foreground">
-              Ces plages pilotent la grille de l&rsquo;emploi du temps :
-              amplitude affichée, créneaux cliquables et aimantation des séances
-              déplacées.
-            </p>
           </Carte>
         );
 
@@ -1619,17 +1763,26 @@ function SettingsPage() {
               <ChampReglage
                 label="Jours ouvrés"
                 value={planning.joursOuvres}
-                onChange={(v) => { setPlanning({ ...planning, joursOuvres: v }); updateSetting("planning_joursOuvres", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setPlanning({ ...planning, joursOuvres: v });
+                  updateSetting("planning_joursOuvres", v).catch(() => {});
+                }}
               />
               <ChampReglage
                 label="Ouverture"
                 value={planning.heureDebut}
-                onChange={(v) => { setPlanning({ ...planning, heureDebut: v }); updateSetting("planning_heureDebut", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setPlanning({ ...planning, heureDebut: v });
+                  updateSetting("planning_heureDebut", v).catch(() => {});
+                }}
               />
               <ChampReglage
                 label="Fermeture"
                 value={planning.heureFin}
-                onChange={(v) => { setPlanning({ ...planning, heureFin: v }); updateSetting("planning_heureFin", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setPlanning({ ...planning, heureFin: v });
+                  updateSetting("planning_heureFin", v).catch(() => {});
+                }}
               />
             </div>
           </Carte>
@@ -1657,9 +1810,7 @@ function SettingsPage() {
         return (
           <Carte
             id="formateurs"
-            action={
-              <span className={toneBadge("neutral")}>{formateurs.length}</span>
-            }
+            action={<span className={toneBadge("neutral")}>{formateurs.length}</span>}
           >
             <ul className="space-y-1.5">
               {formateurs.slice(0, 5).map((f) => (
@@ -1670,9 +1821,7 @@ function SettingsPage() {
                   <span className="truncate">
                     {f.prenom} {f.nom}
                   </span>
-                  <span className="shrink-0 text-xs text-muted-foreground">
-                    {f.departement}
-                  </span>
+                  <span className="shrink-0 text-xs text-muted-foreground">{f.departement}</span>
                 </li>
               ))}
             </ul>
@@ -1716,12 +1865,14 @@ function SettingsPage() {
                     <select
                       value={u.role}
                       onChange={(e) => {
-                        assignUserRole(u.id, e.target.value).then(() => {
-                          setUsersList((prev) =>
-                            prev.map((x) => (x.id === u.id ? { ...x, role: e.target.value } : x)),
-                          );
-                          toast.success(`Rôle de ${u.name} mis à jour`);
-                        }).catch(() => toast.error("Erreur lors du changement de rôle"));
+                        assignUserRole(u.id, e.target.value)
+                          .then(() => {
+                            setUsersList((prev) =>
+                              prev.map((x) => (x.id === u.id ? { ...x, role: e.target.value } : x)),
+                            );
+                            toast.success(`Rôle de ${u.name} mis à jour`);
+                          })
+                          .catch(() => toast.error("Erreur lors du changement de rôle"));
                       }}
                       className={cn(
                         "h-7 rounded-lg border border-brand/12 bg-card px-2 text-xs font-medium text-foreground outline-none",
@@ -1746,7 +1897,15 @@ function SettingsPage() {
                 ))
               )}
             </div>
-            {showNewUser ? <NewUserForm onClose={() => setShowNewUser(false)} onCreated={(u) => { setUsersList((prev) => [...prev, u]); setShowNewUser(false); }} /> : null}
+            {showNewUser ? (
+              <NewUserForm
+                onClose={() => setShowNewUser(false)}
+                onCreated={(u) => {
+                  setUsersList((prev) => [...prev, u]);
+                  setShowNewUser(false);
+                }}
+              />
+            ) : null}
           </Carte>
         );
 
@@ -1774,7 +1933,9 @@ function SettingsPage() {
                       <div className="min-w-0 flex-1">
                         <span className="flex items-center gap-2">
                           <span className="text-sm font-bold text-foreground">{role.name}</span>
-                          {role.isSystem ? <span className={cn(toneBadge("neutral"), "text-[10px]")}>Système</span> : null}
+                          {role.isSystem ? (
+                            <span className={cn(toneBadge("neutral"), "text-[10px]")}>Système</span>
+                          ) : null}
                         </span>
                         <span className="block text-[11px] text-muted-foreground">
                           {role.description || "Aucune description"}
@@ -1792,7 +1953,9 @@ function SettingsPage() {
                           <button
                             type="button"
                             aria-label={`Supprimer ${role.name}`}
-                            onClick={() => setDeleteTarget({ type: "role", id: role.id, name: role.name })}
+                            onClick={() =>
+                              setDeleteTarget({ type: "role", id: role.id, name: role.name })
+                            }
                             className={cn(iconButtonDanger, "h-7 w-7")}
                           >
                             <Trash2 className="h-3 w-3" />
@@ -1808,11 +1971,15 @@ function SettingsPage() {
                         permLabel={PERM_LABEL}
                         permIcon={PERM_ICON}
                         onSave={(data) => {
-                          updateRole(role.id, data).then((updated) => {
-                            setRolesList((prev) => prev.map((r) => (r.id === role.id ? updated : r)));
-                            setEditRole(null);
-                            toast.success(`Rôle "${role.name}" mis à jour`);
-                          }).catch(() => toast.error("Erreur lors de la mise à jour"));
+                          updateRole(role.id, data)
+                            .then((updated) => {
+                              setRolesList((prev) =>
+                                prev.map((r) => (r.id === role.id ? updated : r)),
+                              );
+                              setEditRole(null);
+                              toast.success(`Rôle "${role.name}" mis à jour`);
+                            })
+                            .catch(() => toast.error("Erreur lors de la mise à jour"));
                         }}
                       />
                     ) : (
@@ -1821,13 +1988,21 @@ function SettingsPage() {
                           const active = g.perms.filter((p) => role.permissions.includes(p));
                           if (active.length === 0) return null;
                           return (
-                            <span key={g.label} className="inline-flex items-center gap-1 rounded-full bg-brand/8 px-2 py-0.5 text-[10px] font-medium text-brand-dk">
-                              {g.label}: {active.map((p) => PERM_LABEL[p.split(".")[1]] ?? p.split(".")[1]).join(", ")}
+                            <span
+                              key={g.label}
+                              className="inline-flex items-center gap-1 rounded-full bg-brand/8 px-2 py-0.5 text-[10px] font-medium text-brand-dk"
+                            >
+                              {g.label}:{" "}
+                              {active
+                                .map((p) => PERM_LABEL[p.split(".")[1]] ?? p.split(".")[1])
+                                .join(", ")}
                             </span>
                           );
                         })}
                         {role.permissions.length === 0 ? (
-                          <span className="text-[10px] text-muted-foreground">Aucune permission</span>
+                          <span className="text-[10px] text-muted-foreground">
+                            Aucune permission
+                          </span>
                         ) : null}
                       </div>
                     )}
@@ -1842,7 +2017,10 @@ function SettingsPage() {
                 permLabel={PERM_LABEL}
                 permIcon={PERM_ICON}
                 onClose={() => setShowNewRole(false)}
-                onCreated={(r) => { setRolesList((prev) => [...prev, r]); setShowNewRole(false); }}
+                onCreated={(r) => {
+                  setRolesList((prev) => [...prev, r]);
+                  setShowNewRole(false);
+                }}
               />
             ) : null}
 
@@ -1857,7 +2035,10 @@ function SettingsPage() {
           <Carte id="examens">
             <ListeEditable
               valeurs={typesExamen}
-              onChange={(v) => { setTypesExamen(v); updateSetting("types_examen", v).catch(() => {}); }}
+              onChange={(v) => {
+                setTypesExamen(v);
+                updateSetting("types_examen", v).catch(() => {});
+              }}
               placeholder="Oral"
             />
             <p className="mt-2 text-[11px] text-muted-foreground">
@@ -1873,19 +2054,28 @@ function SettingsPage() {
               <ChampReglage
                 label="Barème"
                 value={bulletin.bareme}
-                onChange={(v) => { setBulletin({ ...bulletin, bareme: v }); updateSetting("bulletin_bareme", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setBulletin({ ...bulletin, bareme: v });
+                  updateSetting("bulletin_bareme", v).catch(() => {});
+                }}
                 suffix="points"
               />
               <ChampReglage
                 label="Seuil d'admission"
                 value={bulletin.seuilAdmission}
-                onChange={(v) => { setBulletin({ ...bulletin, seuilAdmission: v }); updateSetting("bulletin_seuilAdmission", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setBulletin({ ...bulletin, seuilAdmission: v });
+                  updateSetting("bulletin_seuilAdmission", v).catch(() => {});
+                }}
                 suffix="/20"
               />
               <ChampReglage
                 label="Crédits par semestre"
                 value={bulletin.creditsSemestre}
-                onChange={(v) => { setBulletin({ ...bulletin, creditsSemestre: v }); updateSetting("bulletin_creditsSemestre", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setBulletin({ ...bulletin, creditsSemestre: v });
+                  updateSetting("bulletin_creditsSemestre", v).catch(() => {});
+                }}
               />
             </div>
           </Carte>
@@ -1898,22 +2088,34 @@ function SettingsPage() {
               <ChampReglage
                 label="Nom"
                 value={institut.nom}
-                onChange={(v) => { setInstitut({ ...institut, nom: v }); updateSetting("institut_nom", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setInstitut({ ...institut, nom: v });
+                  updateSetting("institut_nom", v).catch(() => {});
+                }}
               />
               <ChampReglage
                 label="Ville"
                 value={institut.ville}
-                onChange={(v) => { setInstitut({ ...institut, ville: v }); updateSetting("institut_ville", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setInstitut({ ...institut, ville: v });
+                  updateSetting("institut_ville", v).catch(() => {});
+                }}
               />
               <ChampReglage
                 label="Téléphone"
                 value={institut.telephone}
-                onChange={(v) => { setInstitut({ ...institut, telephone: v }); updateSetting("institut_telephone", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setInstitut({ ...institut, telephone: v });
+                  updateSetting("institut_telephone", v).catch(() => {});
+                }}
               />
               <ChampReglage
                 label="E-mail"
                 value={institut.email}
-                onChange={(v) => { setInstitut({ ...institut, email: v }); updateSetting("institut_email", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setInstitut({ ...institut, email: v });
+                  updateSetting("institut_email", v).catch(() => {});
+                }}
               />
             </div>
           </Carte>
@@ -1926,17 +2128,26 @@ function SettingsPage() {
               <ChampReglage
                 label="Langue par défaut"
                 value={systeme.langue}
-                onChange={(v) => { setSysteme({ ...systeme, langue: v }); updateSetting("systeme_langue", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setSysteme({ ...systeme, langue: v });
+                  updateSetting("systeme_langue", v).catch(() => {});
+                }}
               />
               <ChampReglage
                 label="Devise"
                 value={systeme.devise}
-                onChange={(v) => { setSysteme({ ...systeme, devise: v }); updateSetting("systeme_devise", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setSysteme({ ...systeme, devise: v });
+                  updateSetting("systeme_devise", v).catch(() => {});
+                }}
               />
               <ChampReglage
                 label="Fuseau horaire"
                 value={systeme.fuseau}
-                onChange={(v) => { setSysteme({ ...systeme, fuseau: v }); updateSetting("systeme_fuseau", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setSysteme({ ...systeme, fuseau: v });
+                  updateSetting("systeme_fuseau", v).catch(() => {});
+                }}
               />
             </div>
             <p className="mt-2 text-[11px] text-muted-foreground">
@@ -1958,13 +2169,19 @@ function SettingsPage() {
               <ChampReglage
                 label="Longueur minimale du mot de passe"
                 value={securite.longueurMdp}
-                onChange={(v) => { setSecurite({ ...securite, longueurMdp: v }); updateSetting("securite_longueurMdp", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setSecurite({ ...securite, longueurMdp: v });
+                  updateSetting("securite_longueurMdp", v).catch(() => {});
+                }}
                 suffix="car."
               />
               <ChampReglage
                 label="Expiration de session"
                 value={securite.expirationSession}
-                onChange={(v) => { setSecurite({ ...securite, expirationSession: v }); updateSetting("securite_expirationSession", v).catch(() => {}); }}
+                onChange={(v) => {
+                  setSecurite({ ...securite, expirationSession: v });
+                  updateSetting("securite_expirationSession", v).catch(() => {});
+                }}
                 suffix="min"
               />
             </div>
@@ -1982,8 +2199,13 @@ function SettingsPage() {
           <Carte id="structures">
             <div className="space-y-3">
               {listeStructures.map((s, i) => (
-                <div key={i} className="flex items-center gap-2 rounded-xl border border-brand/12 bg-card px-3 py-2">
-                  <span className="min-w-0 flex-1 text-sm font-medium text-foreground">{s.nom}</span>
+                <div
+                  key={i}
+                  className="flex items-center gap-2 rounded-xl border border-brand/12 bg-card px-3 py-2"
+                >
+                  <span className="min-w-0 flex-1 text-sm font-medium text-foreground">
+                    {s.nom}
+                  </span>
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <span>Cap.</span>
                     <Input

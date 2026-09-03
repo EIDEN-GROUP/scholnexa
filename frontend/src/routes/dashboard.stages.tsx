@@ -1,4 +1,4 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, type ReactNode } from "react";
 import { Eye, FileDown, FileText, Pencil, Trash2, Mail, Users, Building2 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -6,8 +6,6 @@ import {
   BarChart,
   Bar,
   Cell,
-  Pie,
-  PieChart,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -16,16 +14,11 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
-import { useEssor } from "@/lib/scholnexa-store";
-import {
-  makeStageDocPdf,
-  buildStageEmailHtml,
-  loadLogoDataUrl,
-} from "@/lib/branded-doc";
+import { useIstpm } from "@/lib/istpm-store";
+import { makeStageDocPdf, buildStageEmailHtml, loadLogoDataUrl } from "@/lib/branded-doc";
 import {
   FILIERES,
   NIVEAUX,
-  anneeEtude,
   STATUT_STAGE_LABEL,
   STATUT_STAGE_TONE,
   fmtDate,
@@ -34,8 +27,8 @@ import {
   type Filiere,
   type Niveau,
   type StatutStage,
-} from "@/lib/scholnexa-data";
-import { sendEmailApi } from "@/lib/scholnexa-api";
+} from "@/lib/istpm-data";
+import { sendEmailApi } from "@/lib/istpm-api";
 import {
   softCard,
   eyebrowClass,
@@ -52,7 +45,6 @@ import {
   TONE_COLORS,
   BRAND_CHART_COLORS,
   dashTooltip,
-  renderPieLabel,
 } from "@/lib/dash-ui";
 import {
   PageHeader,
@@ -61,7 +53,6 @@ import {
   DetailSection,
   DetailGrid,
   DetailField,
-
   DetailShell,
   ALL,
 } from "@/components/dash-page";
@@ -74,12 +65,7 @@ import {
   SelectField,
   FullWidth,
 } from "@/components/dash-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { AffectationStagesDialog } from "@/components/affectation-stages-dialog";
@@ -121,70 +107,19 @@ function ChartCard({
   title,
   children,
   height = 240,
-  action,
 }: {
   title: string;
   children: ReactNode;
   height?: number;
-  /** Contrôle optionnel aligné à droite du titre (bascule de vue, filtre…). */
-  action?: ReactNode;
 }) {
   return (
     <div className={cn(softCard, "p-4 sm:p-5")}>
-      <div className="flex items-start justify-between gap-3">
-        <p className={eyebrowClass}>{title}</p>
-        {action}
-      </div>
+      <p className={eyebrowClass}>{title}</p>
       <div className="mt-3 w-full" style={{ height }}>
         <ResponsiveContainer width="100%" height="100%">
           {children as React.ReactElement}
         </ResponsiveContainer>
       </div>
-    </div>
-  );
-}
-
-/**
- * Bascule segmentée entre deux angles d'analyse, sur le modèle du sélecteur
- * « Réussite / Recouvrement » du tableau de bord.
- */
-function ChartSwitch<T extends string>({
-  value,
-  onChange,
-  options,
-  label,
-}: {
-  value: T;
-  onChange: (v: T) => void;
-  options: readonly (readonly [T, string])[];
-  label: string;
-}) {
-  return (
-    <div
-      role="tablist"
-      aria-label={label}
-      className="flex shrink-0 items-center gap-1 rounded-full border border-brand/12 bg-muted/60 p-1"
-    >
-      {options.map(([key, tabLabel]) => {
-        const active = value === key;
-        return (
-          <button
-            key={key}
-            type="button"
-            role="tab"
-            aria-selected={active}
-            onClick={() => onChange(key)}
-            className={cn(
-              "rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors",
-              active
-                ? "bg-brand text-white shadow-[0_2px_8px_-3px_rgb(var(--essor-shadow)/0.5)]"
-                : "text-muted-foreground hover:text-brand-dk",
-            )}
-          >
-            {tabLabel}
-          </button>
-        );
-      })}
     </div>
   );
 }
@@ -207,32 +142,18 @@ function StagesAnalytics({
   onConvention: (etudiantId: string) => void;
 }) {
   const [eligibleOpen, setEligibleOpen] = useState(false);
-  // Les deux angles de lecture des stages partagent une carte : on bascule de
-  // « par structure » à « par statut » sans consommer deux emplacements. La
-  // répartition par structure est affichée en premier.
-  const [vueStages, setVueStages] = useState<"statut" | "structure">(
-    "structure",
-  );
 
   const eligible = useMemo(() => {
-    const activeIds = new Set(
-      stages
-        .filter((s) => s.statut !== "valide")
-        .map((s) => s.etudiantId),
-    );
+    const activeIds = new Set(stages.filter((s) => s.statut !== "valide").map((s) => s.etudiantId));
     return etudiants.filter(
-      (e) =>
-        (e.niveau === "S2" || e.niveau === "S4" || e.niveau === "S6") &&
-        !activeIds.has(e.id),
+      (e) => (e.niveau === "S2" || e.niveau === "S4" || e.niveau === "S6") && !activeIds.has(e.id),
     );
   }, [etudiants, stages]);
 
-  // Les semestres éligibles (S2, S4, S6) sont les fins d'année d'étude : on les
-  // libelle par année (« 1ère année »…) plutôt que par code de semestre.
   const eligibleParNiveau = useMemo(
     () =>
       (["S2", "S4", "S6"] as const).map((n) => ({
-        name: anneeEtude(n),
+        name: n,
         value: eligible.filter((e) => e.niveau === n).length,
       })),
     [eligible],
@@ -249,8 +170,7 @@ function StagesAnalytics({
 
   const parStructure = useMemo(() => {
     const map = new Map<string, number>();
-    for (const s of stages)
-      map.set(s.structure, (map.get(s.structure) ?? 0) + 1);
+    for (const s of stages) map.set(s.structure, (map.get(s.structure) ?? 0) + 1);
     return [...map.entries()]
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value);
@@ -260,33 +180,15 @@ function StagesAnalytics({
 
   return (
     <>
-    <section className="grid gap-4 md:grid-cols-1 2xl:grid-cols-[2fr_1fr]">
-      <ChartCard
-        title={
-          vueStages === "statut"
-            ? "Statistiques des stages (par statut)"
-            : "Stages par structure hospitalière"
-        }
-        height={260}
-        action={
-          <ChartSwitch
-            label="Choisir l'angle d'analyse des stages"
-            value={vueStages}
-            onChange={setVueStages}
-            options={[
-              ["structure", "Structure"],
-              ["statut", "Statut"],
-            ] as const}
-          />
-        }
-      >
-        {vueStages === "statut" ? (
-          <BarChart data={parStatut}>
-            <CartesianGrid stroke="var(--border)" vertical={false} />
+      <section className="grid gap-4 md:grid-cols-1 2xl:grid-cols-3">
+        <ChartCard title="Statistiques des stages (par statut)">
+          <BarChart data={parStatut} barCategoryGap="28%">
+            <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="name"
-              tick={{ fontSize: 10 }}
-              stroke="var(--muted-foreground)"
+              tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+              axisLine={false}
+              tickLine={false}
               interval={0}
               angle={-15}
               textAnchor="end"
@@ -294,137 +196,103 @@ function StagesAnalytics({
             />
             <YAxis
               allowDecimals={false}
-              tick={{ fontSize: 11 }}
-              stroke="var(--muted-foreground)"
-              width={28}
+              tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+              axisLine={false}
+              tickLine={false}
+              width={24}
             />
             <Tooltip contentStyle={dashTooltip} cursor={false} />
-            <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+            <Bar dataKey="value" radius={[5, 5, 0, 0]} maxBarSize={44}>
               {parStatut.map((_, i) => (
-                <Cell
-                  key={i}
-                  fill={BRAND_CHART_COLORS[i % BRAND_CHART_COLORS.length]}
-                />
+                <Cell key={i} fill={BRAND_CHART_COLORS[i % BRAND_CHART_COLORS.length]} />
               ))}
             </Bar>
           </BarChart>
-        ) : (
-          <BarChart data={parStructure} layout="vertical">
-            <CartesianGrid stroke="var(--border)" horizontal={false} />
+        </ChartCard>
+
+        <ChartCard title="Stages par structure hospitalière" height={260}>
+          <BarChart data={parStructure} layout="vertical" barCategoryGap="26%">
+            <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" horizontal={false} />
             <XAxis
               type="number"
               allowDecimals={false}
-              tick={{ fontSize: 11 }}
-              stroke="var(--muted-foreground)"
+              tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+              axisLine={false}
+              tickLine={false}
             />
             <YAxis
               type="category"
               dataKey="name"
-              tick={{ fontSize: 10 }}
-              stroke="var(--muted-foreground)"
+              tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+              axisLine={false}
+              tickLine={false}
               width={130}
             />
             <Tooltip contentStyle={dashTooltip} cursor={false} />
-            <Bar dataKey="value" radius={[0, 6, 6, 0]}>
+            <Bar dataKey="value" radius={[0, 5, 5, 0]} maxBarSize={22}>
               {parStructure.map((_, i) => (
-                <Cell
-                  key={i}
-                  fill={BRAND_CHART_COLORS[i % BRAND_CHART_COLORS.length]}
-                />
+                <Cell key={i} fill={BRAND_CHART_COLORS[i % BRAND_CHART_COLORS.length]} />
               ))}
             </Bar>
           </BarChart>
-        )}
-      </ChartCard>
-
-      {/* Carte des étudiants éligibles */}
-      <div
-        className={cn(
-          softCard,
-          "cursor-pointer p-4 transition hover:shadow-md sm:p-5",
-        )}
-        onClick={() => setEligibleOpen(true)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setEligibleOpen(true);
-          }
-        }}
-      >
-        <div className="flex items-baseline justify-between gap-2">
-          <p className={eyebrowClass}>Étudiants éligibles</p>
-          <span className="text-2xl font-bold tabular-nums leading-none text-brand-dk">
-            {eligible.length}
-          </span>
-        </div>
-        {/* Camembert plein (pas d'anneau) : la part de chaque année d'étude
-            dans le vivier d'étudiants encore à placer en stage. */}
-        <div className="mt-3 w-full" style={{ height: 200 }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={eligibleParNiveau}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                innerRadius={0}
-                outerRadius="92%"
-                paddingAngle={0}
-                startAngle={90}
-                endAngle={-270}
-                stroke="var(--card)"
-                strokeWidth={2}
-                labelLine={false}
-                label={renderPieLabel}
-              >
-                {eligibleParNiveau.map((_, i) => (
-                  <Cell
-                    key={i}
-                    fill={BRAND_CHART_COLORS[i % BRAND_CHART_COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip contentStyle={dashTooltip} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <ul className="mt-3 space-y-2">
-          {eligibleParNiveau.map((d, i) => (
-            <li
-              key={d.name}
-              className="flex items-center justify-between gap-2 text-sm"
-            >
-              <span className="flex min-w-0 items-center gap-2">
-                <span
-                  className="h-2.5 w-2.5 shrink-0 rounded-full"
-                  style={{
-                    backgroundColor:
-                      BRAND_CHART_COLORS[i % BRAND_CHART_COLORS.length],
-                  }}
+        </ChartCard>
+        {/* Carte des étudiants éligibles */}
+        <div
+          className={cn(softCard, "cursor-pointer p-4 transition hover:shadow-md sm:p-5")}
+          onClick={() => setEligibleOpen(true)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setEligibleOpen(true);
+            }
+          }}
+        >
+          <div className="flex items-baseline justify-between gap-2">
+            <p className={eyebrowClass}>Étudiants éligibles</p>
+            <span className="font-display text-2xl font-extrabold tabular-nums leading-none text-foreground">
+              {eligible.length}
+            </span>
+          </div>
+          <div className="mt-3 w-full" style={{ height: 240 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={eligibleParNiveau} barCategoryGap="34%">
+                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                  axisLine={false}
+                  tickLine={false}
                 />
-                <span className="truncate text-muted-foreground">{d.name}</span>
-              </span>
-              <span className="shrink-0 font-semibold tabular-nums text-foreground">
-                {d.value}
-              </span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-1 text-center text-xs text-muted-foreground">
-          Fin d&rsquo;année d&rsquo;étude (S2, S4, S6) sans stage actif
-        </p>
-      </div>
-    </section>
+                <YAxis
+                  allowDecimals={false}
+                  tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                  axisLine={false}
+                  tickLine={false}
+                  width={24}
+                />
+                <Tooltip contentStyle={dashTooltip} cursor={false} />
+                <Bar dataKey="value" radius={[5, 5, 0, 0]} maxBarSize={56}>
+                  {eligibleParNiveau.map((_, i) => (
+                    <Cell key={i} fill={BRAND_CHART_COLORS[i % BRAND_CHART_COLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="mt-1 text-center text-xs text-muted-foreground">
+            S2, S4, S6 sans stage actif
+          </p>
+        </div>
+      </section>
     </>
   );
 }
 
 function StagesPage() {
   const { role } = useAuth();
-  const { stages, etudiants, structuresAccueil, addStage, updateStage, deleteStage } = useEssor();
+  const { stages, etudiants, structuresAccueil, addStage, updateStage, deleteStage } = useIstpm();
   // Conventions are handled by student administration.
   const canManage = role === "directeur" || role === "responsable";
 
@@ -447,8 +315,7 @@ function StagesPage() {
     return stages.filter((s) => {
       if (filiere !== ALL && s.filiere !== filiere) return false;
       if (structure !== ALL && s.structure !== structure) return false;
-      if (statut !== ALL && STATUT_STAGE_LABEL[s.statut] !== statut)
-        return false;
+      if (statut !== ALL && STATUT_STAGE_LABEL[s.statut] !== statut) return false;
       if (!q) return true;
       return `${s.cne} ${s.prenom} ${s.nom} ${s.structure} ${s.service} ${s.encadrantClinique}`
         .toLowerCase()
@@ -466,14 +333,11 @@ function StagesPage() {
         actions={
           canManage ? (
             <>
-              <button
-                className={cn(ghostPill, "gap-1.5")}
-                onClick={() => setStructuresOpen(true)}
-              >
+              <button className={cn(ghostPill, "gap-1.5")} onClick={() => setStructuresOpen(true)}>
                 <Building2 className="h-3.5 w-3.5" /> Structures d'accueil
               </button>
               <button className={primaryPill} onClick={() => setAffectOpen(true)}>
-                <Users className="h-4 w-4" /> Affectation
+                <Users className="h-4 w-4" /> Affecter les étudiants
               </button>
             </>
           ) : undefined
@@ -557,9 +421,7 @@ function StagesPage() {
               {s.prenom} {s.nom}
             </td>
             <td className={cellTruncate}>{s.structure}</td>
-            <td className={cn("text-muted-foreground", cellTruncate)}>
-              {s.service}
-            </td>
+            <td className={cn("text-muted-foreground", cellTruncate)}>{s.service}</td>
             <td className="text-muted-foreground">
               {fmtDate(s.debut)} → {fmtDate(s.fin)}
             </td>
@@ -568,10 +430,7 @@ function StagesPage() {
                 {STATUT_STAGE_LABEL[s.statut]}
               </span>
             </td>
-            <td
-              className="text-center"
-              onClick={(ev) => ev.stopPropagation()}
-            >
+            <td className="text-center" onClick={(ev) => ev.stopPropagation()}>
               <div className={rowActions}>
                 <button
                   className={iconButton}
@@ -626,14 +485,8 @@ function StagesPage() {
                         <span className={toneBadge(STATUT_STAGE_TONE[s.statut])}>
                           {STATUT_STAGE_LABEL[s.statut]}
                         </span>
-                        <span
-                          className={toneBadge(
-                            s.conventionSignee ? "teal" : "red",
-                          )}
-                        >
-                          {s.conventionSignee
-                            ? "Convention signée"
-                            : "Convention en attente"}
+                        <span className={toneBadge(s.conventionSignee ? "teal" : "red")}>
+                          {s.conventionSignee ? "Convention signée" : "Convention en attente"}
                         </span>
                       </>
                     }
@@ -665,7 +518,9 @@ function StagesPage() {
                           className={cn(ghostPill, "gap-1.5 px-3.5 py-2 text-xs")}
                           onClick={() => {
                             setEmailTarget(s);
-                            setEmailTo(s.cne ? `${s.prenom}.${s.nom}@example.com`.toLowerCase() : "");
+                            setEmailTo(
+                              s.cne ? `${s.prenom}.${s.nom}@example.com`.toLowerCase() : "",
+                            );
                           }}
                         >
                           <Mail className="h-3.5 w-3.5" /> Envoyer
@@ -675,9 +530,7 @@ function StagesPage() {
                             className={primaryPill + " ms-auto"}
                             onClick={() => {
                               updateStage(s.id, { statut: "valide" });
-                              toast.success(
-                                `Stage validé   ${s.prenom} ${s.nom}`,
-                              );
+                              toast.success(`Stage validé   ${s.prenom} ${s.nom}`);
                             }}
                           >
                             Valider le stage
@@ -688,11 +541,7 @@ function StagesPage() {
                   >
                     <DetailSection title="Lieu de stage">
                       <DetailGrid>
-                        <DetailField
-                          label="Structure d'accueil"
-                          value={s.structure}
-                          full
-                        />
+                        <DetailField label="Structure d'accueil" value={s.structure} full />
                         <DetailField label="Service" value={s.service} />
                         <DetailField label="Niveau" value={s.niveau} />
                         <DetailField label="Début" value={fmtDate(s.debut)} />
@@ -702,14 +551,8 @@ function StagesPage() {
 
                     <DetailSection title="Encadrement">
                       <DetailGrid>
-                        <DetailField
-                          label="Tuteur clinique"
-                          value={s.encadrantClinique}
-                        />
-                        <DetailField
-                          label="Tuteur académique"
-                          value={s.tuteurAcademique}
-                        />
+                        <DetailField label="Tuteur clinique" value={s.encadrantClinique} />
+                        <DetailField label="Tuteur académique" value={s.tuteurAcademique} />
                       </DetailGrid>
                     </DetailSection>
 
@@ -740,7 +583,12 @@ function StagesPage() {
       </Dialog>
 
       {/* Email convention dialog */}
-      <Dialog open={!!emailTarget} onOpenChange={(o) => { if (!o) setEmailTarget(null); }}>
+      <Dialog
+        open={!!emailTarget}
+        onOpenChange={(o) => {
+          if (!o) setEmailTarget(null);
+        }}
+      >
         <DialogContent className={dialogSurface}>
           <DialogTitle className="sr-only">Envoyer la convention</DialogTitle>
           <DialogDescription className="sr-only">
@@ -753,64 +601,57 @@ function StagesPage() {
               subtitle={`${emailTarget.prenom} ${emailTarget.nom} · ${emailTarget.structure}`}
               footer={
                 <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  className={cn(ghostPill, "h-9 px-4 text-sm")}
-                  onClick={() => setEmailTarget(null)}
-                >
-                  Annuler
-                </button>
-                <button
-                  type="button"
-                  className={cn(primaryPill, "h-9 px-4 text-sm")}
-                  disabled={!emailTo.trim()}
-                  onClick={async () => {
-                    const to = emailTo.trim();
-                    if (!to) return;
-                    const s = emailTarget!;
-                    try {
-                      const [blob, logoDataUrl] = await Promise.all([
-                        makeStageDocPdf(s, "convention"),
-                        loadLogoDataUrl(),
-                      ]);
-                      const buf = await blob.arrayBuffer();
-                      const base64 = btoa(
-                        new Uint8Array(buf).reduce(
-                          (acc, b) => acc + String.fromCharCode(b),
-                          "",
-                        ),
-                      );
-                      const { html, text } = buildStageEmailHtml(
-                        s,
-                        "convention",
-                        logoDataUrl,
-                      );
-                      const res = await sendEmailApi({
-                        to,
-                        subject: `Convention de stage — ${s.prenom} ${s.nom}`,
-                        html,
-                        text,
-                        attachments: [
-                          {
-                            filename: `convention-${s.nom.toLowerCase()}-${s.cne}.pdf`,
-                            content: base64,
-                            contentType: "application/pdf",
-                          },
-                        ],
-                      });
-                      if (res.ok) {
-                        toast.success("Convention envoyée par email");
-                        setEmailTarget(null);
-                      } else {
-                        toast.error(res.error ?? "Échec de l'envoi");
+                  <button
+                    type="button"
+                    className={cn(ghostPill, "h-9 px-4 text-sm")}
+                    onClick={() => setEmailTarget(null)}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="button"
+                    className={cn(primaryPill, "h-9 px-4 text-sm")}
+                    disabled={!emailTo.trim()}
+                    onClick={async () => {
+                      const to = emailTo.trim();
+                      if (!to) return;
+                      const s = emailTarget!;
+                      try {
+                        const [blob, logoDataUrl] = await Promise.all([
+                          makeStageDocPdf(s, "convention"),
+                          loadLogoDataUrl(),
+                        ]);
+                        const buf = await blob.arrayBuffer();
+                        const base64 = btoa(
+                          new Uint8Array(buf).reduce((acc, b) => acc + String.fromCharCode(b), ""),
+                        );
+                        const { html, text } = buildStageEmailHtml(s, "convention", logoDataUrl);
+                        const res = await sendEmailApi({
+                          to,
+                          subject: `Convention de stage — ${s.prenom} ${s.nom}`,
+                          html,
+                          text,
+                          attachments: [
+                            {
+                              filename: `convention-${s.nom.toLowerCase()}-${s.cne}.pdf`,
+                              content: base64,
+                              contentType: "application/pdf",
+                            },
+                          ],
+                        });
+                        if (res.ok) {
+                          toast.success("Convention envoyée par email");
+                          setEmailTarget(null);
+                        } else {
+                          toast.error(res.error ?? "Échec de l'envoi");
+                        }
+                      } catch {
+                        toast.error("Erreur lors de l'envoi de l'email");
                       }
-                    } catch {
-                      toast.error("Erreur lors de l'envoi de l'email");
-                    }
-                  }}
-                >
-                  <Mail className="h-4 w-4" /> Envoyer
-                </button>
+                    }}
+                  >
+                    <Mail className="h-4 w-4" /> Envoyer
+                  </button>
                 </div>
               }
             >
@@ -875,18 +716,13 @@ function StagesPage() {
                 conventionSignee: false,
               });
             }
-            toast.success(
-              `${affectations.length} étudiant(s) affecté(s) à un stage`,
-            );
+            toast.success(`${affectations.length} étudiant(s) affecté(s) à un stage`);
           }}
         />
       ) : null}
 
       {structuresOpen ? (
-        <StructuresAccueilDialog
-          open={structuresOpen}
-          onOpenChange={setStructuresOpen}
-        />
+        <StructuresAccueilDialog open={structuresOpen} onOpenChange={setStructuresOpen} />
       ) : null}
 
       <ConfirmDialog
@@ -919,7 +755,7 @@ function StageForm({
   onCancel,
 }: {
   initial: Stage | null;
-  etudiants: ReturnType<typeof useEssor>["etudiants"];
+  etudiants: ReturnType<typeof useIstpm>["etudiants"];
   structuresAccueil: string[];
   onSubmit: (data: Omit<Stage, "id">) => void;
   onCancel: () => void;
@@ -954,8 +790,7 @@ function StageForm({
     if (!f.service.trim()) next.service = "Service obligatoire";
     if (!f.debut) next.debut = "Date de début obligatoire";
     if (!f.fin) next.fin = "Date de fin obligatoire";
-    if (f.debut && f.fin && f.fin < f.debut)
-      next.fin = "La fin doit suivre le début";
+    if (f.debut && f.fin && f.fin < f.debut) next.fin = "La fin doit suivre le début";
     if (f.noteSoutenance !== "" && (f.noteSoutenance < 0 || f.noteSoutenance > 20))
       next.noteSoutenance = "Note entre 0 et 20";
 
@@ -982,9 +817,7 @@ function StageForm({
       fin: f.fin,
       statut: f.statut,
       conventionSignee: f.conventionSignee === "oui",
-      ...(f.noteSoutenance === ""
-        ? {}
-        : { noteSoutenance: Number(f.noteSoutenance) }),
+      ...(f.noteSoutenance === "" ? {} : { noteSoutenance: Number(f.noteSoutenance) }),
     });
   };
 
@@ -1046,7 +879,7 @@ function StageForm({
         label="Encadrant clinique"
         value={f.encadrantClinique}
         onChange={(v) => set("encadrantClinique", v)}
-        placeholder="Dr. A. Bennis (Cadre infirmier)"
+        placeholder="M. A. Bennis (Cadre infirmier)"
       />
       <TextField
         label="Tuteur académique"

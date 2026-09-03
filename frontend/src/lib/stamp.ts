@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Cachet / tampon officiel de l'établissement.
  *
  * Le directeur téléverse une image (PNG/JPEG) depuis les Paramètres ; elle est
@@ -12,8 +12,8 @@
  */
 import { useEffect, useState } from "react";
 
-const STAMP_KEY = "essor:stamp";
-const EVT = "essor:stamp-changed";
+const STAMP_KEY = "istpm:stamp";
+const EVT = "istpm:stamp-changed";
 
 /** Cachet courant (data URL) ou `null` si aucun n'a été téléversé. */
 export function getStamp(): string | null {
@@ -63,10 +63,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
  * Lit un fichier image, le redimensionne (côté le plus long ≤ `maxDim`) et
  * renvoie une data URL PNG prête à être stockée comme cachet.
  */
-export async function prepareStampFromFile(
-  file: File,
-  maxDim = 600,
-): Promise<string> {
+export async function prepareStampFromFile(file: File, maxDim = 600): Promise<string> {
   const raw: string = await new Promise((resolve, reject) => {
     const r = new FileReader();
     r.onload = () => resolve(String(r.result));

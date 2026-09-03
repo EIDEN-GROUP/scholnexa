@@ -1,6 +1,6 @@
-﻿/**
+/**
  * Shared dashboard UI tokens   soft, rounded, professional look
- * expressed in the Essor brand palette (Electric Blue #2563EB · Deep Ink #0B1220 · White #FFFFFF).
+ * expressed in the ISTPM palette (teal #029994 · red #e51e26 · white #ffffff).
  *
  * Import these instead of re-declaring per-page magic strings so every dashboard
  * page shares one consistent surface / input / badge language.
@@ -9,12 +9,11 @@
  * `warn`, `info`, registered in `styles.css` under `@theme inline`) rather than
  * hex literals, so a future palette change is a one-file edit.
  */
-import type { BadgeTone } from "./scholnexa-data";
+import type { BadgeTone } from "./istpm-data";
 
 /** Primary surface   airy rounded card with a near-invisible hairline + soft,
  *  lit elevation (reference dashboard look). */
-export const softCard =
-  "rounded-3xl border border-brand/8 bg-card surface-2";
+export const softCard = "rounded-3xl border border-brand/8 bg-card surface-2";
 
 /** Interactive surface   same as softCard but lifts smoothly on hover (clickable cards). */
 export const softCardHover =
@@ -37,8 +36,7 @@ export const softSelectTrigger =
 export const softSelectContent = "rounded-2xl border-brand/15";
 
 /** Small uppercase field label. */
-export const labelClass =
-  "text-[10px] font-medium uppercase tracking-wider text-muted-foreground";
+export const labelClass = "text-[10px] font-medium uppercase tracking-wider text-muted-foreground";
 
 /** Section eyebrow (uppercase, wide tracking). */
 export const eyebrowClass =
@@ -50,12 +48,12 @@ const focusRing =
 
 /** Primary pill button   solid teal, one colour, with a light shadow. Main CTA. */
 export const primaryPill =
-  "inline-flex items-center gap-2 rounded-full bg-med px-5 py-2.5 text-sm font-bold text-white shadow-[0_4px_12px_-4px_rgb(var(--essor-shadow)/0.3)] transition-all duration-200 hover:bg-med-dk active:scale-[0.98] " +
+  "inline-flex items-center gap-2 rounded-full bg-med px-5 py-2.5 text-sm font-bold text-white shadow-[0_4px_12px_-4px_rgb(var(--istpm-shadow)/0.3)] transition-all duration-200 hover:bg-med-dk active:scale-[0.98] " +
   focusRing;
 
 /** Solid dark-teal pill button (secondary emphasis). */
 export const navyPill =
-  "inline-flex items-center gap-2 rounded-full bg-brand-dk px-5 py-2.5 text-sm font-medium text-white shadow-[0_4px_12px_-4px_rgb(var(--essor-shadow)/0.28)] transition-all duration-200 hover:bg-brand-md active:scale-[0.98] " +
+  "inline-flex items-center gap-2 rounded-full bg-brand-dk px-5 py-2.5 text-sm font-medium text-white shadow-[0_4px_12px_-4px_rgb(var(--istpm-shadow)/0.28)] transition-all duration-200 hover:bg-brand-md active:scale-[0.98] " +
   focusRing;
 
 /** Destructive pill button   solid red, reserved for irreversible actions. */
@@ -106,7 +104,7 @@ export const dashTooltip = {
   background: "color-mix(in srgb, var(--card) 88%, transparent)",
   backdropFilter: "blur(8px)",
   WebkitBackdropFilter: "blur(8px)",
-  border: "1px solid rgb(var(--essor-shadow) / 0.16)",
+  border: "1px solid rgb(var(--istpm-shadow) / 0.16)",
   borderRadius: 14,
   boxShadow: "var(--elevation-3)",
   color: "var(--foreground)",
@@ -114,7 +112,7 @@ export const dashTooltip = {
 } as const;
 
 /** Shared Recharts cursor fill for hovered bars/areas   faint teal wash. */
-export const dashCursor = { fill: "rgb(var(--essor-shadow) / 0.06)" } as const;
+export const dashCursor = { fill: "rgb(var(--istpm-shadow) / 0.06)" } as const;
 
 /** Ordered chart palette   teal family first, red last so it stays meaningful. */
 export const CHART_COLORS = [
@@ -134,13 +132,13 @@ export const CHART_COLORS = [
  * the `palette` prop   used on the director "Analyse" dashboard.
  */
 export const BRAND_CHART_COLORS = [
-  "var(--essor-blue)",
-  "var(--essor-sky)",
-  "var(--essor-amber)",
-  "var(--essor-violet)",
-  "var(--essor-sage)",
-  "var(--essor-coral)",
-  "var(--essor-red)",
+  "var(--istpm-teal)",
+  "var(--istpm-blue)",
+  "var(--istpm-amber)",
+  "var(--istpm-violet)",
+  "var(--istpm-sage)",
+  "var(--istpm-coral)",
+  "var(--istpm-red)",
 ] as const;
 
 /**
@@ -148,23 +146,23 @@ export const BRAND_CHART_COLORS = [
  * where a class name will not do.
  */
 export const TONE_COLORS: Record<BadgeTone, string> = {
-  teal: "var(--essor-blue)",
-  red: "var(--essor-red)",
-  amber: "var(--essor-amber)",
-  blue: "var(--essor-sky)",
-  neutral: "var(--essor-blue-lt)",
+  teal: "var(--istpm-teal)",
+  red: "var(--istpm-red)",
+  amber: "var(--istpm-amber)",
+  blue: "var(--istpm-blue)",
+  neutral: "var(--istpm-teal-lt)",
 };
 
 /** Status colours   payé / en attente / retard / impayé (shared across pages). */
 export const STATUS_COLORS = {
-  paye: "var(--essor-blue)",
-  en_attente: "var(--essor-amber)",
-  retard: "var(--essor-red)",
-  impaye: "var(--essor-red-dk)",
+  paye: "var(--istpm-teal)",
+  en_attente: "var(--istpm-amber)",
+  retard: "var(--istpm-red)",
+  impaye: "var(--istpm-red-dk)",
 } as const;
 
 /**
- * Rounded status badge keyed to the `BadgeTone` union exported by `scholnexa-data`.
+ * Rounded status badge keyed to the `BadgeTone` union exported by `istpm-data`.
  *
  * teal   = positive   payé · admis · validé · inscrit · publié
  * red    = negative   impayé · retard · ajourné · abandon · à risque
@@ -186,9 +184,7 @@ export function toneBadge(tone: BadgeTone) {
  * Legacy payment-status pill. Kept so existing pages keep compiling; delegates
  * to `toneBadge` so there is a single source of badge truth.
  */
-export function statusPill(
-  tone: "paye" | "en_attente" | "retard" | "impaye" | "neutral",
-) {
+export function statusPill(tone: "paye" | "en_attente" | "retard" | "impaye" | "neutral") {
   const toTone: Record<typeof tone, BadgeTone> = {
     paye: "teal",
     en_attente: "amber",

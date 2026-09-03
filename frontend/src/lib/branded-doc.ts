@@ -1,47 +1,31 @@
-﻿/**
+/**
  * Documents de marque Essor — PDF et e-mail.
  *
  * Un seul endroit produit les livrables « officiels » (convention / rapport de
- * stage) pour qu'ils partagent le logo `public/essor-logo-mark.svg` et la
- * palette de marque, aussi bien dans le PDF téléchargé que dans le corps de
- * l'e-mail.
+ * stage) pour qu'ils partagent le logo `public/istpm-logo.svg` et la palette de
+ * marque, aussi bien dans le PDF téléchargé que dans le corps de l'e-mail.
  *
- * Le logo est rasterisé une fois dans le navigateur (canvas → JPEG) puis
- * mémorisé. Le JPEG sert à la fois de `data:` URL pour l'e-mail et de flux
- * `DCTDecode` embarqué dans le PDF.
+ * Le logo est un SVG : il est rasterisé une fois dans le navigateur (canvas →
+ * JPEG) puis mémorisé. Le JPEG sert à la fois de `data:` URL pour l'e-mail et de
+ * flux `DCTDecode` embarqué dans le PDF.
  */
 
-import {
-  fmtDate,
-  STATUT_PAIEMENT_LABEL,
-  type Stage,
-  type StatutPaiement,
-} from "@/lib/scholnexa-data";
+import { fmtDate, STATUT_PAIEMENT_LABEL, type Stage, type StatutPaiement } from "@/lib/istpm-data";
 import { getStamp } from "@/lib/stamp";
-import { BRAND } from "@/lib/brand";
 
 /* ------------------------------------------------------------------ */
 /*  Palette de marque (miroir de styles.css)                           */
 /* ------------------------------------------------------------------ */
 
-export const PALETTE = {
-  // Essor brand palette — kept in sync with styles.css and the email templates.
-  // Used to colour the brand band, text and accent strips on generated PDFs.
-  blue: "#2563EB",
-  blueDk: "#1E40AF",
-  blueMd: "#1E40AF",
-  blueLt: "#60A5FA",
-  bluePale: "#DBEAFE",
-  blueWash: "#EFF6FF",
-  coral: "#FF6B4A",
-  coralDk: "#E25537",
-  ink: "#0B1220",
-  ink2: "#1E293B",
-  ink3: "#475569",
-  red: "#E11D48",
+export const BRAND = {
+  teal: "#029994",
+  tealDk: "#017a76",
+  tealMd: "#02807c",
+  tealPale: "#d6efee",
+  tealWash: "#eef7f6",
+  red: "#e51e26",
+  ink: "#123b3a",
   white: "#ffffff",
-  mist: "#F3F5F9",
-  border: "#E2E8F0",
 } as const;
 
 type Kind = "convention" | "rapport";
@@ -54,6 +38,8 @@ const KIND_TITLE: Record<Kind, string> = {
 /* ------------------------------------------------------------------ */
 /*  Rasterisation du logo                                              */
 /* ------------------------------------------------------------------ */
+
+const LOGO_ASPECT = 1100.48 / 953.38;
 
 type LogoRaster = { dataUrl: string; jpeg: Uint8Array; w: number; h: number };
 
@@ -79,14 +65,16 @@ async function loadLogo(): Promise<LogoRaster | null> {
   if (logoPromise) return logoPromise;
   logoPromise = (async () => {
     try {
-      const img = await loadImage(
-        `${import.meta.env.BASE_URL}essor-logo-mark.svg`,
-      );
+      const res = await fetch(`${import.meta.env.BASE_URL}istpm-logo.svg`);
+      if (!res.ok) return null;
+      let svg = await res.text();
       const wPx = 320;
-      // Respect the mark's real aspect ratio (square-only placeholders are a
-      // thing of the past — the current mark is 512×394).
-      const aspect = img.naturalWidth / img.naturalHeight || 1;
-      const hPx = Math.max(1, Math.round(wPx / aspect));
+      const hPx = Math.round(wPx / LOGO_ASPECT);
+      if (!/<svg[^>]*\swidth=/.test(svg)) {
+        svg = svg.replace(/<svg/, `<svg width="${wPx}" height="${hPx}"`);
+      }
+      const svgUrl = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svg)));
+      const img = await loadImage(svgUrl);
 
       const scale = 2;
       const canvas = document.createElement("canvas");
@@ -116,10 +104,7 @@ export async function loadLogoDataUrl(): Promise<string | null> {
  * Rasterise une data URL image quelconque (cachet téléversé) en JPEG, pour
  * l'embarquer dans le PDF comme le logo. La transparence est aplatie sur blanc.
  */
-async function rasterizeDataUrl(
-  dataUrl: string,
-  wPx: number,
-): Promise<LogoRaster | null> {
+async function rasterizeDataUrl(dataUrl: string, wPx: number): Promise<LogoRaster | null> {
   try {
     const img = await loadImage(dataUrl);
     const aspect = img.width && img.height ? img.width / img.height : 1;
@@ -196,9 +181,7 @@ function stageSections(s: Stage, kind: Kind): Section[] {
           rows: [
             {
               label: "Statut",
-              value: s.conventionSignee
-                ? "Signée"
-                : "En attente de signature",
+              value: s.conventionSignee ? "Signée" : "En attente de signature",
             },
           ],
         },
@@ -235,14 +218,14 @@ function hexToPdfRgb(hex: string): string {
 }
 
 const PDF = {
-  blue: hexToPdfRgb(PALETTE.blue),
-  blueDk: hexToPdfRgb(PALETTE.blueDk),
-  blueMd: hexToPdfRgb(PALETTE.blueMd),
-  red: hexToPdfRgb(PALETTE.red),
-  ink: hexToPdfRgb(PALETTE.ink),
+  teal: hexToPdfRgb(BRAND.teal),
+  tealDk: hexToPdfRgb(BRAND.tealDk),
+  tealMd: hexToPdfRgb(BRAND.tealMd),
+  red: hexToPdfRgb(BRAND.red),
+  ink: hexToPdfRgb(BRAND.ink),
   white: "1 1 1",
-  muted: "0.30 0.38 0.55",
-  pale: hexToPdfRgb(PALETTE.bluePale),
+  muted: "0.42 0.52 0.51",
+  pale: hexToPdfRgb(BRAND.tealPale),
 };
 
 function buildContentStream(
@@ -256,8 +239,8 @@ function buildContentStream(
   const ops: string[] = [];
   const PAGE_W = 595;
 
-  ops.push(`${PDF.blueDk} rg 0 746 ${PAGE_W} 96 re f`);
-  ops.push(`${PDF.blueMd} rg 0 742 ${PAGE_W} 4 re f`);
+  ops.push(`${PDF.tealDk} rg 0 746 ${PAGE_W} 96 re f`);
+  ops.push(`${PDF.red} rg 0 742 ${PAGE_W} 4 re f`);
 
   let textX = 44;
   if (hasLogo) {
@@ -273,25 +256,19 @@ function buildContentStream(
     const ix = chipX + (CHIP - dw) / 2;
     const iy = chipY + (CHIP - dh) / 2;
     ops.push(
-      `q ${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${ix.toFixed(2)} ${iy.toFixed(
-        2,
-      )} cm /Im0 Do Q`,
+      `q ${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${ix.toFixed(2)} ${iy.toFixed(2)} cm /Im0 Do Q`,
     );
     textX = chipX + CHIP + 18;
   }
 
-  ops.push(
-    `${PDF.white} rg BT /F2 17 Tf ${textX} 802 Td (${pdfText(title)}) Tj ET`,
-  );
+  ops.push(`${PDF.white} rg BT /F2 17 Tf ${textX} 802 Td (${pdfText(title)}) Tj ET`);
   ops.push(
     `${PDF.pale} rg BT /F1 9.5 Tf ${textX} 784 Td (${pdfText(
-      `${BRAND.name} - ${BRAND.academicLabel}`,
+      "Essor - Institut specialise des techniques paramedicales",
     )}) Tj ET`,
   );
   ops.push(
-    `${PDF.pale} rg BT /F1 9.5 Tf ${textX} 770 Td (${pdfText(
-      BRAND.tagline,
-    )}) Tj ET`,
+    `${PDF.pale} rg BT /F1 9.5 Tf ${textX} 770 Td (${pdfText("Techniques paramedicales")}) Tj ET`,
   );
 
   const LEFT = 60;
@@ -300,57 +277,38 @@ function buildContentStream(
   let y = 694;
   for (const sec of sections) {
     ops.push(
-      `${PDF.blueMd} rg BT /F2 11 Tf ${LEFT} ${y} Td (${pdfText(
-        sec.title.toUpperCase(),
-      )}) Tj ET`,
+      `${PDF.tealMd} rg BT /F2 11 Tf ${LEFT} ${y} Td (${pdfText(sec.title.toUpperCase())}) Tj ET`,
     );
     ops.push(`${PDF.pale} rg ${LEFT} ${y - 7} ${RIGHT - LEFT} 1 re f`);
     y -= 26;
     for (const row of sec.rows) {
-      ops.push(
-        `${PDF.muted} rg BT /F1 10 Tf ${LEFT} ${y} Td (${pdfText(
-          row.label,
-        )}) Tj ET`,
-      );
-      ops.push(
-        `${PDF.ink} rg BT /F2 11 Tf ${VALUE_X} ${y} Td (${pdfText(
-          row.value,
-        )}) Tj ET`,
-      );
+      ops.push(`${PDF.muted} rg BT /F1 10 Tf ${LEFT} ${y} Td (${pdfText(row.label)}) Tj ET`);
+      ops.push(`${PDF.ink} rg BT /F2 11 Tf ${VALUE_X} ${y} Td (${pdfText(row.value)}) Tj ET`);
       y -= 24;
     }
     y -= 16;
   }
 
-  // Cachet officiel de l'établissement, apposé en bas à droite au-dessus du
-  // pied de page — l'emplacement usuel d'une signature sur un document officiel.
+  // Cachet officiel de l'établissement, apposé en bas à gauche au-dessus du pied.
   if (hasStamp) {
     const BOX = 92;
     let dw = BOX;
     let dh = BOX;
     if (stampAspect > 1) dh = BOX / stampAspect;
     else dw = BOX * stampAspect;
-    // Le bloc est calé sur la marge droite : l'image est centrée sur la
-    // largeur de la légende, elle-même alignée à droite.
-    const CAPTION = "Cachet de l'etablissement";
-    const captionW = CAPTION.length * 8 * 0.5; // largeur approx. en Helvetica 8 pt
-    const blockW = Math.max(dw, captionW);
-    const blockX = RIGHT - blockW;
-    const sx = blockX + (blockW - dw) / 2;
+    const sx = LEFT;
     const sy = 112;
     ops.push(
-      `q ${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${sx.toFixed(2)} ${sy.toFixed(
-        2,
-      )} cm /Im1 Do Q`,
+      `q ${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${sx.toFixed(2)} ${sy.toFixed(2)} cm /Im1 Do Q`,
     );
     ops.push(
-      `${PDF.muted} rg BT /F1 8 Tf ${(RIGHT - captionW).toFixed(2)} ${(
-        sy - 12
-      ).toFixed(2)} Td (${pdfText(CAPTION)}) Tj ET`,
+      `${PDF.muted} rg BT /F1 8 Tf ${sx.toFixed(2)} ${(sy - 12).toFixed(
+        2,
+      )} Td (${pdfText("Cachet de l'etablissement")}) Tj ET`,
     );
   }
 
-  ops.push(`${PDF.blue} rg ${LEFT} 96 ${RIGHT - LEFT} 2 re f`);
+  ops.push(`${PDF.teal} rg ${LEFT} 96 ${RIGHT - LEFT} 2 re f`);
   ops.push(
     `${PDF.muted} rg BT /F1 8 Tf ${LEFT} 80 Td (${pdfText(
       "Document genere par la plateforme Essor - usage interne.",
@@ -411,9 +369,7 @@ export async function makeStageDocPdf(s: Stage, kind: Kind): Promise<Blob> {
   startObject(2);
   push("2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n");
 
-  const xobjs = images
-    .map((im) => `/${im.name} ${imgObjNum[im.name]} 0 R`)
-    .join(" ");
+  const xobjs = images.map((im) => `/${im.name} ${imgObjNum[im.name]} 0 R`).join(" ");
   const resources = images.length
     ? `/Font << /F1 5 0 R /F2 6 0 R >> /XObject << ${xobjs} >>`
     : "/Font << /F1 5 0 R /F2 6 0 R >>";
@@ -429,14 +385,10 @@ export async function makeStageDocPdf(s: Stage, kind: Kind): Promise<Blob> {
   push("\nendstream\nendobj\n");
 
   startObject(5);
-  push(
-    "5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n",
-  );
+  push("5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n");
 
   startObject(6);
-  push(
-    "6 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj\n",
-  );
+  push("6 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj\n");
 
   for (const im of images) {
     const n = imgObjNum[im.name];
@@ -457,10 +409,7 @@ export async function makeStageDocPdf(s: Stage, kind: Kind): Promise<Blob> {
     xref += `${String(offsets[i]).padStart(10, "0")} 00000 n \n`;
   }
   push(xref);
-  push(
-    `trailer\n<< /Size ${count + 1} /Root 1 0 R >>\n` +
-      `startxref\n${xrefStart}\n%%EOF\n`,
-  );
+  push(`trailer\n<< /Size ${count + 1} /Root 1 0 R >>\n` + `startxref\n${xrefStart}\n%%EOF\n`);
 
   return new Blob(parts as BlobPart[], { type: "application/pdf" });
 }
@@ -552,9 +501,7 @@ export async function makePaiementDocPdf(params: {
   startObject(2);
   push("2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n");
 
-  const xobjs = images
-    .map((im) => `/${im.name} ${imgObjNum[im.name]} 0 R`)
-    .join(" ");
+  const xobjs = images.map((im) => `/${im.name} ${imgObjNum[im.name]} 0 R`).join(" ");
   const resources = images.length
     ? `/Font << /F1 5 0 R /F2 6 0 R >> /XObject << ${xobjs} >>`
     : "/Font << /F1 5 0 R /F2 6 0 R >>";
@@ -570,14 +517,10 @@ export async function makePaiementDocPdf(params: {
   push("\nendstream\nendobj\n");
 
   startObject(5);
-  push(
-    "5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n",
-  );
+  push("5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n");
 
   startObject(6);
-  push(
-    "6 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj\n",
-  );
+  push("6 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj\n");
 
   for (const im of images) {
     const n = imgObjNum[im.name];
@@ -598,10 +541,7 @@ export async function makePaiementDocPdf(params: {
     xref += `${String(offsets[i]).padStart(10, "0")} 00000 n \n`;
   }
   push(xref);
-  push(
-    `trailer\n<< /Size ${count + 1} /Root 1 0 R >>\n` +
-      `startxref\n${xrefStart}\n%%EOF\n`,
-  );
+  push(`trailer\n<< /Size ${count + 1} /Root 1 0 R >>\n` + `startxref\n${xrefStart}\n%%EOF\n`);
 
   return new Blob(parts as BlobPart[], { type: "application/pdf" });
 }
@@ -611,11 +551,7 @@ export async function makePaiementDocPdf(params: {
 /* ------------------------------------------------------------------ */
 
 const escapeHtml = (s: string) =>
-  s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 export function buildStageEmailHtml(
   s: Stage,
@@ -625,21 +561,19 @@ export function buildStageEmailHtml(
   const title = KIND_TITLE[kind];
   const sections = stageSections(s, kind);
 
-  // The mark raster is 1.3:1 (512×394 source); 46×35 keeps that aspect in
-  // email clients that don't honor auto height.
   const logoCell = logoDataUrl
-    ? `<img src="${logoDataUrl}" width="46" height="35" alt="Essor" style="display:block;border:0;" />`
-    : `<span style="font:700 20px/1 Arial,Helvetica,sans-serif;color:${PALETTE.blue};">Essor</span>`;
+    ? `<img src="${logoDataUrl}" width="46" height="40" alt="Essor " style="display:block;border:0;" />`
+    : `<span style="font:700 20px/1 Arial,Helvetica,sans-serif;color:${BRAND.teal};">Essor</span>`;
 
   const rowsHtml = sections
     .map(
       (sec) => `
       <tr><td style="padding:22px 32px 0;">
         <p style="margin:0 0 4px;font:700 11px/1.4 Arial,Helvetica,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:${
-          PALETTE.blueMd
+          BRAND.tealMd
         };">${escapeHtml(sec.title)}</p>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid ${
-          PALETTE.bluePale
+          BRAND.tealPale
         };">
           ${sec.rows
             .map(
@@ -649,7 +583,7 @@ export function buildStageEmailHtml(
               r.label,
             )}</td>
             <td style="padding:9px 0;font:600 13px/1.4 Arial,Helvetica,sans-serif;color:${
-              PALETTE.ink
+              BRAND.ink
             };text-align:right;">${escapeHtml(r.value)}</td>
           </tr>`,
             )
@@ -662,44 +596,40 @@ export function buildStageEmailHtml(
   const html = `<!doctype html>
 <html lang="fr">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:${PALETTE.blueWash};">
+<body style="margin:0;padding:0;background:${BRAND.tealWash};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${
-    PALETTE.blueWash
+    BRAND.tealWash
   };padding:28px 12px;">
     <tr><td align="center">
-      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -12px rgba(20,33,61,.35);">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -12px rgba(18,59,58,.35);">
 
         <tr><td style="padding:24px 32px 20px;background:#ffffff;">
           <table role="presentation" cellpadding="0" cellspacing="0"><tr>
             <td style="padding-right:14px;vertical-align:middle;">${logoCell}</td>
             <td style="vertical-align:middle;">
               <div style="font:700 17px/1.2 Arial,Helvetica,sans-serif;color:${
-                PALETTE.ink
-              };">Essor</div>
-              <div style="font:400 11px/1.3 Arial,Helvetica,sans-serif;color:#6b7d7c;letter-spacing:.04em;">${BRAND.tagline}</div>
+                BRAND.ink
+              };">Essor </div>
+              <div style="font:400 11px/1.3 Arial,Helvetica,sans-serif;color:#6b7d7c;letter-spacing:.04em;">Techniques paramédicales</div>
             </td>
           </tr></table>
         </td></tr>
-        <tr><td style="height:4px;background:${PALETTE.blue};font-size:0;line-height:0;">&nbsp;</td></tr>
-        <tr><td style="height:6px;background:${PALETTE.bluePale};font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr><td style="height:4px;background:${BRAND.red};font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr><td style="height:6px;background:${
+          BRAND.teal
+        };font-size:0;line-height:0;">&nbsp;</td></tr>
 
         <tr><td style="padding:26px 32px 4px;">
           <h1 style="margin:0;font:700 20px/1.3 Arial,Helvetica,sans-serif;color:${
-            PALETTE.ink
+            BRAND.ink
           };">${escapeHtml(title)}</h1>
           <p style="margin:8px 0 0;font:400 14px/1.6 Arial,Helvetica,sans-serif;color:#5a6d6c;">
             Bonjour,<br>
             Veuillez trouver ci-joint ${
-              kind === "convention"
-                ? "la convention de stage"
-                : "le rapport de stage"
-            } de <strong style="color:${PALETTE.ink};">${escapeHtml(
+              kind === "convention" ? "la convention de stage" : "le rapport de stage"
+            } de <strong style="color:${BRAND.ink};">${escapeHtml(
               `${s.prenom} ${s.nom}`,
-            )}</strong>${
-              s.structure
-                ? ` (${escapeHtml(s.structure)})`
-                : ""
-            }.
+            )}</strong>${s.structure ? ` (${escapeHtml(s.structure)})` : ""}.
           </p>
         </td></tr>
 
@@ -707,25 +637,23 @@ export function buildStageEmailHtml(
 
         <tr><td style="padding:24px 32px 4px;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${
-            PALETTE.blueWash
-          };border:1px solid ${PALETTE.bluePale};border-radius:12px;">
+            BRAND.tealWash
+          };border:1px solid ${BRAND.tealPale};border-radius:12px;">
             <tr><td style="padding:14px 16px;font:600 13px/1.4 Arial,Helvetica,sans-serif;color:${
-              PALETTE.blueMd
+              BRAND.tealMd
             };">
               📎 ${escapeHtml(title)} — document PDF joint à cet e-mail.
             </td></tr>
           </table>
         </td></tr>
 
-        <tr><td style="padding:26px 32px;background:${
-          PALETTE.ink
-        };margin-top:24px;">
-          <div style="font:700 13px/1.4 Arial,Helvetica,sans-serif;color:#ffffff;">Essor</div>
+        <tr><td style="padding:26px 32px;background:${BRAND.ink};margin-top:24px;">
+          <div style="font:700 13px/1.4 Arial,Helvetica,sans-serif;color:#ffffff;">Essor </div>
           <div style="font:400 12px/1.6 Arial,Helvetica,sans-serif;color:${
-            PALETTE.bluePale
-          };">${BRAND.academicLabel}</div>
+            BRAND.tealPale
+          };">Institut spécialisé des techniques paramédicales</div>
           <div style="margin-top:8px;font:400 11px/1.5 Arial,Helvetica,sans-serif;color:#8fb3b1;">
-            ${BRAND.emailFooter}
+            E-mail automatique — merci de ne pas y répondre.
           </div>
         </td></tr>
 
@@ -736,7 +664,7 @@ export function buildStageEmailHtml(
 </html>`;
 
   const text = [
-    `${BRAND.name} — ${BRAND.tagline}`,
+    "Essor — Techniques paramédicales",
     "",
     title,
     "",
@@ -751,7 +679,7 @@ export function buildStageEmailHtml(
     ]),
     "Document PDF joint à cet e-mail.",
     "",
-    BRAND.emailFooter,
+    "Essor — e-mail automatique, merci de ne pas y répondre.",
   ].join("\n");
 
   return { html, text };

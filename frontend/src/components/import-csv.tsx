@@ -3,12 +3,7 @@ import { Upload, FileUp, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ghostPill, primaryPill, dialogSurface } from "@/lib/dash-ui";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
 export type ImportColumn = {
   key: string;
@@ -27,9 +22,7 @@ type Props = {
   validate: (values: Record<string, string>) => string[];
 };
 
-type ResultRow =
-  | { ok: true; data: Record<string, string> }
-  | { ok: false; erreurs: string[] };
+type ResultRow = { ok: true; data: Record<string, string> } | { ok: false; erreurs: string[] };
 
 function parseCsv(text: string): string[][] {
   const lignes: string[][] = [];
@@ -104,7 +97,10 @@ function autoMapHeaders(
 ): Record<string, string> {
   const mapping: Record<string, string> = {};
   for (const h of entetes) {
-    const key = h.toLowerCase().trim().replace(/[_\s-]+/g, " ");
+    const key = h
+      .toLowerCase()
+      .trim()
+      .replace(/[_\s-]+/g, " ");
     const target = aliasMap[key];
     if (target) mapping[target] = h;
   }
@@ -161,7 +157,9 @@ export function ImportCsvDialog({
       const clean = text.replace(/^\uFEFF/, "");
       const toutes = parseCsv(clean);
       if (toutes.length < 2) {
-        toast.error("Le fichier doit contenir au moins une ligne d'en-tête et une ligne de données");
+        toast.error(
+          "Le fichier doit contenir au moins une ligne d'en-tête et une ligne de données",
+        );
         return;
       }
       const ent = toutes[0].map((h) => h.trim());
@@ -231,7 +229,13 @@ export function ImportCsvDialog({
   const colonneDispo = entetes;
 
   return (
-    <Dialog open={open} onOpenChange={(o) => { if (!o) reset(); onOpenChange(o); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) reset();
+        onOpenChange(o);
+      }}
+    >
       <DialogContent className={cn(dialogSurface, "max-w-4xl")}>
         <DialogTitle className="sr-only">{title}</DialogTitle>
         <DialogDescription className="sr-only">{description}</DialogDescription>
@@ -299,7 +303,10 @@ export function ImportCsvDialog({
                       {lignesApercu.map((l, i) => (
                         <tr key={i} className="border-t border-brand/8">
                           {entetes.map((h) => (
-                            <td key={h} className="max-w-40 truncate px-3 py-1.5 text-muted-foreground">
+                            <td
+                              key={h}
+                              className="max-w-40 truncate px-3 py-1.5 text-muted-foreground"
+                            >
                               {l[h] || ""}
                             </td>
                           ))}
@@ -319,7 +326,9 @@ export function ImportCsvDialog({
                     <div key={col.key} className="flex items-center gap-2">
                       <span className="w-36 shrink-0 text-xs font-medium text-foreground">
                         {col.required ? (
-                          <span>{col.label} <span className="text-alert">*</span></span>
+                          <span>
+                            {col.label} <span className="text-alert">*</span>
+                          </span>
                         ) : (
                           col.label
                         )}
@@ -333,7 +342,7 @@ export function ImportCsvDialog({
                           mapping[col.key] ? "" : "border-alert/40 text-alert",
                         )}
                       >
-                        <option value="">  Non mappé  </option>
+                        <option value=""> Non mappé </option>
                         {colonneDispo.map((h) => (
                           <option key={h} value={h}>
                             {h}
@@ -360,7 +369,10 @@ export function ImportCsvDialog({
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => { reset(); onOpenChange(false); }}
+                    onClick={() => {
+                      reset();
+                      onOpenChange(false);
+                    }}
                     className={cn(ghostPill, "h-8 px-3 text-xs")}
                   >
                     Annuler
@@ -376,18 +388,14 @@ export function ImportCsvDialog({
                 </div>
               </div>
 
-              <p className="text-[11px] text-muted-foreground">
-                Fichier : {fichier}
-              </p>
+              <p className="text-[11px] text-muted-foreground">Fichier : {fichier}</p>
             </>
           )}
 
           {etape === "resultat" && (
             <>
               <div className="space-y-2">
-                <p className="text-sm font-semibold text-foreground">
-                  Résultat de l'importation
-                </p>
+                <p className="text-sm font-semibold text-foreground">Résultat de l'importation</p>
                 <div className="flex items-center gap-4 text-xs">
                   <span className="inline-flex items-center gap-1 font-semibold text-teal-600">
                     <CheckCircle2 className="h-3.5 w-3.5" />
@@ -407,12 +415,8 @@ export function ImportCsvDialog({
                   {resultats.map((r, i) =>
                     r.ok ? null : (
                       <div key={i} className="flex gap-2 text-xs">
-                        <span className="shrink-0 font-semibold text-alert">
-                          Ligne {i + 2}:
-                        </span>
-                        <span className="text-muted-foreground">
-                          {r.erreurs.join(" · ")}
-                        </span>
+                        <span className="shrink-0 font-semibold text-alert">Ligne {i + 2}:</span>
+                        <span className="text-muted-foreground">{r.erreurs.join(" · ")}</span>
                       </div>
                     ),
                   )}
@@ -421,7 +425,10 @@ export function ImportCsvDialog({
 
               <div className="flex justify-end gap-2">
                 <button
-                  onClick={() => { reset(); onOpenChange(false); }}
+                  onClick={() => {
+                    reset();
+                    onOpenChange(false);
+                  }}
                   className={cn(ghostPill, "h-8 px-3 text-xs")}
                 >
                   Fermer

@@ -1,12 +1,7 @@
 import { useRef, useState, type ReactNode } from "react";
 import { AlertTriangle, Check, ChevronsUpDown, FileText, Upload, X } from "lucide-react";
 import { motion } from "framer-motion";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,11 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -133,9 +124,7 @@ export function NumberField({
           max={max}
           step={step}
           value={value}
-          onChange={(e) =>
-            onChange(e.target.value === "" ? "" : Number(e.target.value))
-          }
+          onChange={(e) => onChange(e.target.value === "" ? "" : Number(e.target.value))}
           className={cn(
             softInput,
             suffix && "pr-14",
@@ -175,13 +164,7 @@ export function SelectField<T extends string>({
   return (
     <FieldShell label={label} error={error} required={required}>
       <Select value={value || undefined} onValueChange={(v) => onChange(v as T)}>
-        <SelectTrigger
-          className={cn(
-            softSelectTrigger,
-            "w-full",
-            error && "border-alert",
-          )}
-        >
+        <SelectTrigger className={cn(softSelectTrigger, "w-full", error && "border-alert")}>
           <SelectValue placeholder={placeholder ?? "Sélectionner…"} />
         </SelectTrigger>
         <SelectContent className={softSelectContent}>
@@ -313,9 +296,7 @@ export function MultiSelectField({
     .filter(Boolean);
 
   const toggle = (v: string) => {
-    const next = selected.includes(v)
-      ? selected.filter((s) => s !== v)
-      : [...selected, v];
+    const next = selected.includes(v) ? selected.filter((s) => s !== v) : [...selected, v];
     onChange(next.join(", "));
   };
 
@@ -345,9 +326,7 @@ export function MultiSelectField({
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggle(
-                        options.find((o) => o.label === l)?.value ?? l,
-                      );
+                      toggle(options.find((o) => o.label === l)?.value ?? l);
                     }}
                     className="hover:text-alert transition-colors"
                   >
@@ -373,17 +352,11 @@ export function MultiSelectField({
                 {options.map((o) => {
                   const isSelected = selected.includes(o.value);
                   return (
-                    <CommandItem
-                      key={o.value}
-                      value={o.label}
-                      onSelect={() => toggle(o.value)}
-                    >
+                    <CommandItem key={o.value} value={o.label} onSelect={() => toggle(o.value)}>
                       <div
                         className={cn(
                           "me-2 flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-colors",
-                          isSelected
-                            ? "border-brand bg-brand text-white"
-                            : "border-border",
+                          isSelected ? "border-brand bg-brand text-white" : "border-border",
                         )}
                       >
                         {isSelected && <Check className="h-3 w-3" />}
@@ -424,9 +397,7 @@ export function ListField({
         onChange={(e) => onChange(e.target.value)}
         className={cn(softInput, error && "border-alert")}
       />
-      <p className="text-[11px] text-muted-foreground">
-        {hint ?? "Séparer par des virgules."}
-      </p>
+      <p className="text-[11px] text-muted-foreground">{hint ?? "Séparer par des virgules."}</p>
     </FieldShell>
   );
 }
@@ -516,9 +487,7 @@ export function FileField({
         </button>
       )}
 
-      <p className="text-[11px] text-muted-foreground">
-        {hint ?? "PDF ou Word, 10 Mo maximum."}
-      </p>
+      <p className="text-[11px] text-muted-foreground">{hint ?? "PDF ou Word, 10 Mo maximum."}</p>
     </FieldShell>
   );
 }
@@ -535,6 +504,7 @@ export function FormDialog({
   title,
   subtitle,
   submitLabel = "Enregistrer",
+  submitDisabled,
   onSubmit,
   wide,
   children,
@@ -544,6 +514,7 @@ export function FormDialog({
   title: string;
   subtitle?: string;
   submitLabel?: string;
+  submitDisabled?: boolean;
   onSubmit: () => void;
   wide?: boolean;
   children: ReactNode;
@@ -552,27 +523,22 @@ export function FormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={wide ? dialogSurfaceWide : dialogSurface}>
         <DialogTitle className="sr-only">{title}</DialogTitle>
-        <DialogDescription className="sr-only">
-          {subtitle ?? title}
-        </DialogDescription>
+        <DialogDescription className="sr-only">{subtitle ?? title}</DialogDescription>
         <DetailShell
           title={title}
           subtitle={subtitle}
           footer={
             <div className="flex items-center justify-end gap-2">
-              <button
-                type="button"
-                className={ghostPill}
-                onClick={() => onOpenChange(false)}
-              >
+              <button type="button" className={ghostPill} onClick={() => onOpenChange(false)}>
                 Annuler
               </button>
               <motion.button
                 type="button"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={primaryPill}
-                onClick={onSubmit}
+                whileHover={submitDisabled ? undefined : { scale: 1.02 }}
+                whileTap={submitDisabled ? undefined : { scale: 0.98 }}
+                className={cn(primaryPill, submitDisabled && "pointer-events-none opacity-50")}
+                aria-disabled={submitDisabled}
+                onClick={submitDisabled ? undefined : onSubmit}
               >
                 {submitLabel}
               </motion.button>
@@ -621,11 +587,7 @@ export function ConfirmDialog({
           title={title}
           footer={
             <div className="flex items-center justify-end gap-2">
-              <button
-                type="button"
-                className={ghostPill}
-                onClick={() => onOpenChange(false)}
-              >
+              <button type="button" className={ghostPill} onClick={() => onOpenChange(false)}>
                 Annuler
               </button>
               <motion.button

@@ -1,21 +1,12 @@
-﻿import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
-import { FORMATEURS } from "@/lib/scholnexa-data";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { FORMATEURS } from "@/lib/istpm-data";
+import { identifyUser, track, resetAnalytics } from "@/lib/analytics";
 
 export type UserRole = "directeur" | "enseignant" | "responsable";
 
 export const ROLES: UserRole[] = ["directeur", "enseignant", "responsable"];
 
-export const ROLE_META: Record<
-  UserRole,
-  { label: string; short: string; description: string }
-> = {
+export const ROLE_META: Record<UserRole, { label: string; short: string; description: string }> = {
   directeur: {
     label: "Directeur",
     short: "Directeur",
@@ -38,20 +29,18 @@ export const DEMO_FORMATEUR_ID = "fo-1";
 const demoFormateur = FORMATEURS.find((f) => f.id === DEMO_FORMATEUR_ID);
 
 const ROLE_USER: Record<UserRole, { name: string; email: string }> = {
-  directeur: { name: "Dr. Youssef Benali", email: "direction@demo.essor.ma" },
+  directeur: { name: "M. Youssef Benali", email: "direction@istpm-agadir.ma" },
   enseignant: {
-    name: demoFormateur
-      ? `${demoFormateur.prenom} ${demoFormateur.nom}`
-      : "Formateur",
-    email: demoFormateur?.email ?? "formateur@demo.essor.ma",
+    name: demoFormateur ? `${demoFormateur.prenom} ${demoFormateur.nom}` : "Formateur",
+    email: demoFormateur?.email ?? "formateur@istpm-agadir.ma",
   },
-  responsable: { name: "M. Rachid El Ouafi", email: "scolarite@demo.essor.ma" },
+  responsable: { name: "M. Rachid El Ouafi", email: "scolarite@istpm-agadir.ma" },
 };
 
-const ROLE_STORAGE_KEY = "essor-role";
-const TOKEN_STORAGE_KEY = "essor-token";
-const USER_STORAGE_KEY = "essor-user";
-export const FORMATEUR_STORAGE_KEY = "essor-selected-formateur";
+const ROLE_STORAGE_KEY = "istpm-role";
+const TOKEN_STORAGE_KEY = "istpm-token";
+const USER_STORAGE_KEY = "istpm-user";
+export const FORMATEUR_STORAGE_KEY = "istpm-selected-formateur";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
@@ -68,7 +57,7 @@ function readStoredRole(): UserRole | null {
     try {
       const u = JSON.parse(userData);
       if (isRole(u.role)) return u.role;
-    } catch { /* ignore malformed stored session */ }
+    } catch {}
   }
   return null;
 }
@@ -148,6 +137,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         setRoleState("enseignant");
         setUserState(authUser);
+        identifyUser(authUser);
+        track("Formateur Selected", { formateurId: fo.id });
       }
     }
   }, []);
@@ -157,15 +148,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (stored) {
       setRoleState(stored);
       const userData = window.localStorage.getItem(USER_STORAGE_KEY);
+      let resolved: AuthUser;
       if (userData) {
         try {
-          setUserState(JSON.parse(userData));
+          resolved = JSON.parse(userData) as AuthUser;
         } catch {
-          setUserState(userFor(stored));
+          resolved = userFor(stored);
         }
       } else {
-        setUserState(userFor(stored));
+        resolved = userFor(stored);
       }
+      setUserState(resolved);
+      identifyUser(resolved);
     }
     setLoading(false);
   }, []);
@@ -192,6 +186,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: "Erreur de connexion" }));
+        track("Login Failed", { status: res.status });
         throw new Error(err.error || "Email ou mot de passe incorrect");
       }
       const data = await res.json();
@@ -206,12 +201,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
       window.localStorage.setItem(TOKEN_STORAGE_KEY, token);
       persistRole(mappedRole, authUser);
+      identifyUser(authUser);
+      track("Logged In", { method: "password", role: mappedRole });
     },
     [persistRole],
   );
 
   const setRole = useCallback(
-    (next: UserRole) => persistRole(next),
+    (next: UserRole) => {
+      persistRole(next);
+      identifyUser({ ...userFor(next) });
+      track("Demo Access Used", { role: next });
+    },
     [persistRole],
   );
 
@@ -223,6 +224,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setRoleState(null);
     setUserState(null);
     setSelectedFormateurId(null);
+    track("Logged Out");
+    resetAnalytics();
   }, []);
 
   return (

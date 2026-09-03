@@ -11,19 +11,13 @@ type RequestOptions = {
 
 const FETCH_TIMEOUT = 30000;
 
-async function request<T>(
-  path: string,
-  options: RequestOptions = {},
-): Promise<T> {
+async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const token = getStoredToken();
   const url = `${API_BASE}${path}`;
   const queryParams = options.params
     ? "?" +
       new URLSearchParams(
-        Object.entries(options.params).filter(([_, v]) => v !== undefined) as [
-          string,
-          string,
-        ][],
+        Object.entries(options.params).filter(([_, v]) => v !== undefined) as [string, string][],
       ).toString()
     : "";
 
@@ -73,11 +67,9 @@ export const api = {
   get: <T>(path: string, params?: Record<string, string | undefined>) =>
     request<T>(path, { params }),
 
-  post: <T>(path: string, body?: unknown) =>
-    request<T>(path, { method: "POST", body }),
+  post: <T>(path: string, body?: unknown) => request<T>(path, { method: "POST", body }),
 
-  put: <T>(path: string, body?: unknown) =>
-    request<T>(path, { method: "PUT", body }),
+  put: <T>(path: string, body?: unknown) => request<T>(path, { method: "PUT", body }),
 
   delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
 };

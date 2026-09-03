@@ -4,13 +4,48 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Design system definition.
+ *
+ * The @theme inline block maps CSS custom properties to Tailwind utility
+ * classes (e.g. --color-primary -> bg-primary, text-primary).
+ *
+ * The :root and .dark blocks define the actual color values using oklch.
+ * All colors MUST use oklch format.
+ *
+ * To add a new semantic color:
+ * 1. Add the variable to :root (light value) and .dark (dark value)
+ * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ */
+
 @theme inline {
+  --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-blue: var(--blue);
+  --color-coral: var(--coral);
+  --color-lavender: var(--lavender);
+  --color-sky: var(--sky);
+  --color-mist: var(--mist);
+  --color-paper: var(--paper);
+  --color-panel-blue: var(--panel-blue);
+  --color-panel-coral: var(--panel-coral);
+  --color-panel-lavender: var(--panel-lavender);
+  --color-panel-sky: var(--panel-sky);
+  --shadow-float:
+    0 24px 60px -28px oklch(0.1831 0.0309 263.38 / 0.28),
+    0 2px 6px -2px oklch(0.1831 0.0309 263.38 / 0.08);
+  --shadow-card: 0 12px 32px -18px oklch(0.1831 0.0309 263.38 / 0.24);
+  --shadow-pill: 0 8px 22px -12px oklch(0.1831 0.0309 263.38 / 0.3);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -30,47 +65,12 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-sun: var(--sun);
-  --color-sky: var(--sky);
-  --color-leaf: var(--leaf);
-  --color-coral: var(--coral);
+  --color-ring-offset-background: var(--background);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --color-chart-6: var(--chart-6);
-  --color-chart-7: var(--chart-7);
-  /* Essor brand utilities — bg-brand, border-brand/15, text-alert, ... */
-  --color-brand: var(--essor-blue);
-  --color-brand-dk: var(--essor-blue-dk);
-  --color-brand-md: var(--essor-blue-md);
-  --color-brand-lt: var(--essor-blue-lt);
-  --color-brand-pale: var(--essor-blue-pale);
-  --color-brand-wash: var(--essor-blue-wash);
-  --color-alert: var(--essor-red);
-  --color-alert-dk: var(--essor-red-dk);
-  --color-alert-pale: var(--essor-red-pale);
-  /* Brand accent — Electric Blue, used on active nav, primary CTAs and the
-     lead KPI, so coral stays reserved for highlights, not destructive states. */
-  --color-med: var(--essor-accent);
-  --color-med-dk: var(--essor-accent-dk);
-  --color-med-lt: var(--essor-accent-lt);
-  --color-med-pale: var(--essor-accent-pale);
-  --color-warn: var(--essor-amber);
-  --color-warn-pale: var(--essor-amber-pale);
-  --color-info: var(--essor-sky);
-  --color-info-pale: var(--essor-sky-pale);
-  /* Secondary accent — Lavender, used sparingly next to the brand for
-     highlights and charts. */
-  --color-accent2: var(--essor-lavender);
-  --color-accent2-dk: var(--essor-lavender-dk);
-  --color-accent2-lt: var(--essor-lavender-lt);
-  --color-accent2-pale: var(--essor-lavender-pale);
-  --color-coral-brand: var(--essor-coral);
-  --color-coral-dk: var(--essor-coral-dk);
-  --color-coral-pale: var(--essor-coral-pale);
-  --color-ink: var(--essor-ink);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -79,346 +79,370 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  /* Essor — Brand Identity (Manrope / Inter) */
-  --font-display: "Manrope", "Inter", system-ui, -apple-system, sans-serif;
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --animate-brand-progress: brand-progress 1.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 }
 
 :root {
   --radius: 0.875rem;
 
-  /* ------------------------------------------------------------------
-   * Essor brand palette v1.0 — derived from the Brand Book (May 2026).
-   * Deep Ink (#0B1220) is the dominant text colour; Electric Blue
-   * (#2563EB) drives primary CTAs, navigation, and the lead KPI.
-   * Coral (#FF6B4A) is reserved for highlights and the logo's accent
-   * dot. Lavender and Sky provide secondary categorical hues.
-   * Red (#E11D48) stays reserved for errors and negative states.
-   * ------------------------------------------------------------------ */
-  --essor-blue: #2563EB;
-  --essor-blue-dk: #1E40AF;
-  --essor-blue-md: #1E40AF;
-  --essor-blue-lt: #60A5FA;
-  --essor-blue-pale: #DBEAFE;
-  --essor-blue-wash: #EFF6FF;
+  /* Essor brand core */
+  --ink: oklch(25.575% 0.06083 261.868);
+  --ink-soft: oklch(0.3 0.032 263.38);
+  --blue: oklch(0.5461 0.2152 262.88);
+  --coral: oklch(0.7066 0.1875 34.08);
+  --lavender: oklch(0.599 0.2299 286.2);
+  --sky: oklch(0.7971 0.1339 211.53);
+  --mist: oklch(0.9698 0.0057 264.53);
+  --paper: oklch(0.9853 0.0029 84.56);
+  --panel-blue: oklch(0.9162 0.0401 268.53);
+  --panel-coral: oklch(0.9498 0.0259 38.46);
+  --panel-lavender: oklch(0.9355 0.0338 293.08);
+  --panel-sky: oklch(0.9578 0.025 212.24);
 
-  --essor-red: #E11D48;
-  --essor-red-dk: #BE123C;
-  --essor-red-lt: #FB7185;
-  --essor-red-pale: #FFE4E6;
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--ink);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: oklch(0.9853 0.0029 84.56);
+  --secondary: var(--mist);
+  --secondary-foreground: var(--ink);
+  --muted: var(--mist);
+  --muted-foreground: oklch(0.52 0.028 263.38);
+  --accent: var(--panel-blue);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.984 0.003 247.858);
+  --border: oklch(0.9 0.008 264.53);
+  --input: oklch(0.9 0.008 264.53);
+  --ring: var(--blue);
 
-  /* Brand accent — the blue from the logo's three petals, used on the
-     active nav tile, the lead KPI, primary CTAs and highlights. */
-  --essor-accent: #2563EB;
-  --essor-accent-dk: #1E40AF;
-  --essor-accent-lt: #60A5FA;
-  --essor-accent-pale: #DBEAFE;
-
-  --essor-amber: #D97706;
-  --essor-amber-pale: #FEF3C7;
-  --essor-sky: #22D3EE;
-  --essor-sky-pale: #CFFAFE;
-  --essor-sky-dk: #0891B2;
-
-  /* Coral — Essor's brand highlight colour, drawn straight from the
-     logo's accent dot. Used sparingly on marketing and as a "highlight"
-     chip in charts. */
-  --essor-coral: #FF6B4A;
-  --essor-coral-dk: #E25537;
-  --essor-coral-lt: #FF8A6E;
-  --essor-coral-pale: #FFE2D9;
-
-  /* Lavender — secondary brand accent, drawn from the brand book. */
-  --essor-lavender: #7C5CFF;
-  --essor-lavender-dk: #5B3FE6;
-  --essor-lavender-lt: #A78BFA;
-  --essor-lavender-pale: #EDE9FE;
-
-  --essor-ink: #0B1220;
-  --essor-ink-2: #1E293B;
-  --essor-ink-3: #475569;
-  --essor-white: #ffffff;
-
-  /* App canvas — a soft, neutral mist backdrop with a hint of cool
-     blue in the corners. White cards lift off it without competing
-     colour. */
-  --app-canvas-top: #F7F9FC;
-  --app-canvas-bottom: #EEF2F8;
-
-  /* Shadow channels (space-separated for `rgb(... / a)` alpha syntax) used by the
-     soft-card shadow language. Kept NEUTRAL grey on purpose: coloured (blue)
-     shadows read as artificial, so elevation stays a plain, human drop shadow. */
-  --essor-shadow: 11 18 32;
-  /* Neutral ink channels for crisp, colour-neutral elevation on white. */
-  --essor-ink-rgb: 11 18 32;
-
-  /* Landing — deep ink hero slab; electric blue CTAs with white text. */
-  --landing-hero-bg: linear-gradient(135deg, #0B1220 0%, #1E293B 100%);
-  --landing-cta-primary: #2563EB;
-  --landing-cta-primary-hover: #1E40AF;
-  --landing-cta-on-primary: #FFFFFF;
-  
-  /* Landing page backgrounds */
-  --landing-bg-white: #FFFFFF;
-  --landing-bg-mist: #F7F9FC;
-  --landing-bg-gradient: linear-gradient(180deg, #FFFFFF 0%, #F7F9FC 50%, #FFFFFF 100%);
-  
-  /* Landing page cards */
-  --landing-card-bg: #FFFFFF;
-  --landing-card-border: rgb(11 18 32 / 0.08);
-  --landing-card-shadow: 0 4px 20px -4px rgb(11 18 32 / 0.1);
-  --landing-card-shadow-hover: 0 20px 40px -10px rgb(11 18 32 / 0.15);
-  --landing-card-radius: 1.5rem;
-
-  --background: var(--essor-white);
-  --foreground: var(--essor-ink);
-  --hover-menu-foreground: var(--essor-ink);
-
-  --card: var(--essor-white);
-  --card-foreground: var(--essor-ink);
-  --popover: var(--essor-white);
-  --popover-foreground: var(--essor-ink);
-
-  /* Brand primary — Electric Blue with white text */
-  --primary: var(--essor-blue);
-  --primary-foreground: var(--essor-white);
-
-  --secondary: var(--essor-blue-pale);
-  --secondary-foreground: var(--essor-blue-dk);
-
-  --muted: var(--essor-blue-wash);
-  --muted-foreground: color-mix(in srgb, var(--essor-ink) 62%, var(--essor-blue) 38%);
-
-  --accent: var(--essor-blue-pale);
-  --accent-foreground: var(--essor-blue-dk);
-
-  --destructive: var(--essor-red);
-  --destructive-foreground: var(--essor-white);
-
-  --border: color-mix(in srgb, var(--essor-blue) 18%, var(--essor-white) 82%);
-  --input: color-mix(in srgb, var(--essor-blue) 22%, var(--essor-white) 78%);
-  --ring: var(--essor-blue);
-
-  /* Supporting accents (charts, badges, utilities) */
-  --sun: var(--essor-amber);
-  --sky: var(--essor-sky);
-  --leaf: var(--essor-blue-lt);
-  --coral: var(--essor-coral);
-
-  /* Monochrome brand ramp — shades of Electric Blue, deep → light, closing
-     on the coral accent. All charts/graphs stay in the logo family per the
-     brand; red (#E11D48) stays reserved for UI error states, not graphs. */
-  --chart-1: #1E40AF;
-  --chart-2: #2563EB;
-  --chart-3: #60A5FA;
-  --chart-4: #93C5FD;
-  --chart-5: #BFDBFE;
-  --chart-6: #FF6B4A;
-  --chart-7: #7C5CFF;
-
-  --sidebar: var(--essor-white);
-  --sidebar-foreground: var(--essor-ink);
-  --sidebar-primary: var(--essor-blue);
-  --sidebar-primary-foreground: var(--essor-white);
-  --sidebar-accent: var(--essor-blue-pale);
-  --sidebar-accent-foreground: var(--essor-blue-dk);
-  --sidebar-border: color-mix(in srgb, var(--essor-blue) 18%, var(--essor-white) 82%);
-  --sidebar-ring: var(--essor-blue);
-
-  --scrollbar-thumb: color-mix(in srgb, var(--essor-blue) 40%, transparent);
-  --scrollbar-thumb-hover: color-mix(in srgb, var(--essor-blue) 62%, transparent);
-
-  --gradient-hero: linear-gradient(135deg, var(--essor-blue-dk) 0%, var(--essor-blue) 55%, var(--essor-blue-lt) 100%);
-  --shadow-elegant: 0 20px 60px -20px rgb(var(--essor-shadow) / 0.34);
-  --shadow-soft: 0 8px 30px -10px rgb(var(--essor-shadow) / 0.22);
-
-  /* ------------------------------------------------------------------
-   * Refined elevation ladder — layered, colour-neutral shadows in the
-   * spirit of Linear / Stripe. Each step stacks a tight contact shadow
-   * with a soft ambient one plus a hairline top highlight, so surfaces
-   * read as physically lifted rather than blurred.
-   * ------------------------------------------------------------------ */
-  --elevation-1:
-    0 1px 2px -1px rgb(var(--essor-ink-rgb) / 0.08),
-    0 1px 3px 0 rgb(var(--essor-ink-rgb) / 0.06);
-  --elevation-2:
-    0 1px 2px -1px rgb(var(--essor-ink-rgb) / 0.06),
-    0 6px 16px -8px rgb(var(--essor-ink-rgb) / 0.10);
-  --elevation-3:
-    0 4px 10px -6px rgb(var(--essor-ink-rgb) / 0.09),
-    0 14px 28px -14px rgb(var(--essor-ink-rgb) / 0.13);
-  --elevation-4:
-    0 8px 18px -10px rgb(var(--essor-ink-rgb) / 0.10),
-    0 26px 50px -22px rgb(var(--essor-ink-rgb) / 0.18);
-  /* Highlight applied inset at a card's top edge for a "lit from above" feel. */
-  --edge-highlight: inset 0 1px 0 rgb(255 255 255 / 0.7);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.984 0.003 247.858);
+  --sidebar-foreground: oklch(0.129 0.042 264.695);
+  --sidebar-primary: oklch(0.208 0.042 265.755);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.968 0.007 247.896);
+  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-border: oklch(0.929 0.013 255.508);
+  --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
 .dark {
-  --background: #0B1220;
-  --foreground: #F8FAFC;
-  --card: #111A2E;
-  --card-foreground: #F8FAFC;
-  --popover: #111A2E;
-  --popover-foreground: #F8FAFC;
-  --primary: #60A5FA;
-  --primary-foreground: #0B1220;
-  --secondary: #1E293B;
-  --secondary-foreground: #F8FAFC;
-  --muted: #1E293B;
-  --muted-foreground: #94A3B8;
-  --accent: #1E293B;
-  --accent-foreground: #F8FAFC;
-  --destructive: #FB7185;
-  --destructive-foreground: #0B1220;
-  --border: #1E293B;
-  --input: #1E293B;
-  --ring: #60A5FA;
-  --sidebar: #0B1220;
-  --sidebar-foreground: #F8FAFC;
-  --sidebar-primary: #60A5FA;
-  --sidebar-primary-foreground: #0B1220;
-  --sidebar-accent: #1E293B;
-  --sidebar-accent-foreground: #F8FAFC;
-  --sidebar-border: #1E293B;
-  --sidebar-ring: #60A5FA;
-
-  --sun: #FBBF24;
-  --sky: #22D3EE;
-  --leaf: #60A5FA;
-  --coral: #FF8A6E;
-
-  --chart-1: #60A5FA;
-  --chart-2: #93C5FD;
-  --chart-3: #60A5FA;
-  --chart-4: #FF6B4A;
-  --chart-5: #7C5CFF;
-  --chart-6: #22D3EE;
-  --chart-7: #FB7185;
-
-  --scrollbar-thumb: color-mix(in srgb, var(--essor-blue) 42%, transparent);
-  --scrollbar-thumb-hover: color-mix(in srgb, var(--essor-blue) 52%, transparent);
-
-  --gradient-hero: linear-gradient(135deg, #0B1220 0%, #1E293B 45%, #2563EB 100%);
-  --shadow-elegant: 0 20px 60px -20px color-mix(in srgb, black 55%, transparent);
-  --shadow-soft: 0 8px 30px -10px color-mix(in srgb, var(--essor-blue) 28%, transparent);
-
-  /* Dark elevation leans on black ambient + a faint light top edge. */
-  --elevation-1: 0 1px 2px -1px rgb(0 0 0 / 0.5), 0 1px 3px rgb(0 0 0 / 0.4);
-  --elevation-2: 0 2px 4px -2px rgb(0 0 0 / 0.5), 0 6px 16px -6px rgb(0 0 0 / 0.45);
-  --elevation-3: 0 4px 8px -4px rgb(0 0 0 / 0.5), 0 16px 32px -12px rgb(0 0 0 / 0.55);
-  --elevation-4: 0 8px 16px -8px rgb(0 0 0 / 0.55), 0 28px 56px -20px rgb(0 0 0 / 0.6);
-  --edge-highlight: inset 0 1px 0 rgb(255 255 255 / 0.06);
-}
-
-/* Anti-FOUC reveal. Higher specificity than the inline `#root { opacity: 0 }` in
-   index.html (and unlayered), so once this bundled stylesheet applies — whenever
-   that is — it wins and the app fades in instead of flashing unstyled content. */
-html #root {
-  opacity: 1;
-  transition: opacity 0.25s ease;
+  --background: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.984 0.003 247.858);
+  --card: oklch(0.208 0.042 265.755);
+  --card-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.929 0.013 255.508);
+  --primary-foreground: oklch(0.208 0.042 265.755);
+  --secondary: oklch(0.279 0.041 260.031);
+  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(0.279 0.041 260.031);
+  --muted-foreground: oklch(0.704 0.04 256.788);
+  --accent: oklch(0.279 0.041 260.031);
+  --accent-foreground: oklch(0.984 0.003 247.858);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.984 0.003 247.858);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.551 0.027 264.364);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.208 0.042 265.755);
+  --sidebar-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.279 0.041 260.031);
+  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
 @layer base {
   * {
     border-color: var(--color-border);
-    scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) transparent;
   }
+
   html {
     scroll-behavior: smooth;
   }
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
-  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11";
-    text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-  }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
-
-  /**
-   * App-wide smooth motion for interactive controls: hover / focus / active
-   * colour and shadow changes ease in one shared curve instead of snapping.
-   * `transform` and `opacity` are deliberately left out so this never fights
-   * framer-motion's JS-driven animations. Per-element Tailwind `transition-*`
-   * utilities still win, and the prefers-reduced-motion block below disables it.
-   */
-  a, button, summary, label,
-  input, select, textarea,
-  [role="button"], [role="tab"], [role="switch"], [role="menuitem"] {
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, box-shadow, outline-color;
-    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-    transition-duration: 200ms;
+    text-rendering: optimizeLegibility;
   }
 
-  /**
-   * App-wide scrollbars (overflow areas + main document).
-   * Firefox: scrollbar-color on * above
-   * WebKit: track transparent, rounded thumb
-   */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.028em;
+    font-weight: 800;
+    line-height: 0.98;
+  }
+
+  ::selection {
+    background: var(--coral);
+    color: oklch(1 0 0);
+  }
+}
+
+/* Editorial eyebrow used above every section title */
+@utility overline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Very fine paper grain - keeps large flat areas from looking flat/synthetic */
+@utility grain {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* Soft chromatic bloom behind the hero, from the brand's blue + coral */
+@utility bloom {
+  background:
+    radial-gradient(60% 55% at 18% 12%, oklch(0.5461 0.2152 262.88 / 0.14), transparent 70%),
+    radial-gradient(50% 50% at 88% 4%, oklch(0.7066 0.1875 34.08 / 0.12), transparent 68%),
+    radial-gradient(70% 60% at 50% 110%, oklch(0.7971 0.1339 211.53 / 0.16), transparent 72%);
+}
+
+@utility rise {
+  animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@utility drift {
+  animation: drift 7s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility marquee-track {
+  animation: marquee 32s linear infinite;
+}
+
+/* ==================================================================
+ * DASHBOARD DESIGN SYSTEM
+ *
+ * The ISTEPM dashboard (routes /dashboard/*) was built against its own
+ * token set (`bg-brand`, `text-alert`, `surface-2`, `app-canvas`, the
+ * `anim-*` / `animate-*` families, an elevation ladder…). This block
+ * ports those primitives, with every colour repointed to the Essor
+ * palette so the dashboard reads as the same product as the landing.
+ * ================================================================== */
+
+@theme {
+  /* dashboard brand utilities → Essor palette */
+  --color-brand: var(--brand);
+  --color-brand-dk: var(--brand-dk);
+  --color-brand-md: var(--brand-md);
+  --color-brand-lt: var(--brand-lt);
+  --color-brand-pale: var(--brand-pale);
+  --color-brand-wash: var(--brand-wash);
+  --color-alert: var(--alert);
+  --color-alert-dk: var(--alert-dk);
+  --color-alert-pale: var(--alert-pale);
+  --color-med: var(--brand);
+  --color-med-dk: var(--brand-dk);
+  --color-med-lt: var(--brand-lt);
+  --color-med-pale: var(--brand-pale);
+  --color-warn: var(--coral);
+  --color-warn-pale: var(--panel-coral);
+  --color-info: var(--sky);
+  --color-info-pale: var(--panel-sky);
+  --color-accent2: var(--lavender);
+  --color-accent2-dk: var(--accent2-dk);
+  --color-accent2-lt: var(--accent2-lt);
+  --color-accent2-pale: var(--panel-lavender);
+  --color-sun: var(--coral);
+  --color-leaf: var(--sky);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --animate-brand-progress: brand-progress 1.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+:root {
+  /* Dashboard primary = deep navy #05142A (active nav tiles, primary buttons,
+     hover states). Blue / lavender / sky stay reserved for data-viz and the
+     coloured nav icons. */
+  --brand: #05142a;
+  --brand-dk: #030c1c;
+  --brand-md: #05142a;
+  --brand-lt: var(--ink-soft);
+  --brand-pale: var(--mist);
+  --brand-wash: oklch(0.976 0.003 264.53);
+
+  --alert: var(--destructive);
+  --alert-dk: oklch(0.48 0.224 27.325);
+  --alert-pale: oklch(0.941 0.045 27.325);
+
+  --accent2-dk: oklch(0.505 0.24 286.2);
+  --accent2-lt: oklch(0.73 0.16 286.2);
+
+  /* legacy --istpm-* aliases: a few transplanted files use them inline */
+  --istpm-teal: var(--blue);
+  --istpm-teal-dk: var(--brand-dk);
+  --istpm-teal-lt: var(--brand-lt);
+  --istpm-teal-pale: var(--panel-blue);
+  --istpm-teal-dk: var(--brand-dk);
+  --istpm-red: var(--destructive);
+  --istpm-red-dk: oklch(0.48 0.224 27.325);
+  --istpm-ink: var(--ink);
+  --istpm-shadow: 23 23 26;
+  --istpm-ink-rgb: 11 18 32;
+  /* categorical chart hues (dash-ui.tsx CATEGORICAL) → Essor family */
+  --istpm-amber: var(--coral);
+  --istpm-blue: var(--sky);
+  --istpm-violet: var(--lavender);
+  --istpm-sage: oklch(0.72 0.09 200);
+  --istpm-coral: var(--coral);
+  --istpm-gold: oklch(0.8 0.13 75);
+
+  /* warm canvas → Essor paper/mist */
+  --app-cream-top: var(--paper);
+  --app-cream-bottom: var(--mist);
+
+  /* chart ramp → Essor blue → lavender → sky sequence */
+  --chart-1: oklch(0.462 0.204 262.88);
+  --chart-2: var(--blue);
+  --chart-3: oklch(0.62 0.2 280);
+  --chart-4: var(--lavender);
+  --chart-5: oklch(0.7 0.16 240);
+  --chart-6: var(--sky);
+  --chart-7: oklch(0.85 0.1 210);
+
+  /* elevation ladder - neutral, colour-free */
+  --edge-highlight: inset 0 1px 0 rgb(255 255 255 / 0.7);
+  --elevation-1:
+    0 1px 2px -1px rgb(var(--istpm-ink-rgb) / 0.08), 0 1px 3px 0 rgb(var(--istpm-ink-rgb) / 0.06);
+  --elevation-2:
+    0 1px 2px -1px rgb(var(--istpm-ink-rgb) / 0.06), 0 6px 16px -8px rgb(var(--istpm-ink-rgb) / 0.1);
+  --elevation-3:
+    0 4px 10px -6px rgb(var(--istpm-ink-rgb) / 0.09),
+    0 14px 28px -14px rgb(var(--istpm-ink-rgb) / 0.13);
+  --elevation-4:
+    0 8px 18px -10px rgb(var(--istpm-ink-rgb) / 0.1),
+    0 26px 50px -22px rgb(var(--istpm-ink-rgb) / 0.18);
+
+  --scrollbar-thumb: color-mix(in srgb, var(--blue) 34%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--blue) 55%, transparent);
+}
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+  body {
+    font-feature-settings: "ss01", "cv11";
+  }
   *::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
-
   *::-webkit-scrollbar-track {
     background: transparent;
   }
-
   *::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-thumb);
     border-radius: 9999px;
     border: 2px solid transparent;
     background-clip: content-box;
   }
-
   *::-webkit-scrollbar-thumb:hover {
     background-color: var(--scrollbar-thumb-hover);
-  }
-
-  *::-webkit-scrollbar-corner {
-    background: transparent;
   }
 }
 
 @layer utilities {
-  /** Momentum scrolling + less scroll chaining on iOS / nested areas */
-  .scroll-touch {
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-  }
   .bg-grid {
-    background-image:
-      radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--foreground) 8%, transparent) 1px, transparent 0);
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      color-mix(in oklab, var(--foreground) 8%, transparent) 1px,
+      transparent 0
+    );
     background-size: 28px 28px;
   }
   .gradient-warm {
-    background: linear-gradient(135deg,
+    background: linear-gradient(
+      135deg,
       color-mix(in oklab, var(--foreground) 6%, var(--background)) 0%,
       color-mix(in oklab, var(--foreground) 10%, var(--background)) 50%,
-      color-mix(in oklab, var(--foreground) 4%, var(--background)) 100%);
+      color-mix(in oklab, var(--foreground) 4%, var(--background)) 100%
+    );
   }
   .gradient-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, color-mix(in oklab, var(--primary) 55%, var(--background)) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--primary) 0%,
+      color-mix(in oklab, var(--primary) 55%, var(--background)) 100%
+    );
   }
 
-  /* ------------------------------------------------------------------
-   * Premium surface system — layered elevation + a lit top edge.
-   * `surface-2` is the default card; `surface-3/4` for popovers/dialogs.
-   * `surface-interactive` adds a smooth lift on hover for clickable cards.
-   * ------------------------------------------------------------------ */
-  .surface-1 { box-shadow: var(--edge-highlight), var(--elevation-1); }
-  .surface-2 { box-shadow: var(--edge-highlight), var(--elevation-2); }
-  .surface-3 { box-shadow: var(--edge-highlight), var(--elevation-3); }
-  .surface-4 { box-shadow: var(--edge-highlight), var(--elevation-4); }
+  .surface-1 {
+    box-shadow: var(--edge-highlight), var(--elevation-1);
+  }
+  .surface-2 {
+    box-shadow: var(--edge-highlight), var(--elevation-2);
+  }
+  .surface-3 {
+    box-shadow: var(--edge-highlight), var(--elevation-3);
+  }
+  .surface-4 {
+    box-shadow: var(--edge-highlight), var(--elevation-4);
+  }
   .surface-interactive {
     box-shadow: var(--edge-highlight), var(--elevation-2);
     transition:
@@ -431,38 +455,43 @@ html #root {
     box-shadow: var(--edge-highlight), var(--elevation-4);
   }
 
-  /* App canvas — a soft, neutral mist backdrop with a hint of cool
-     blue in the corners. White cards lift off it without competing
-     colour. */
+  /* Dashboard canvas - Essor mist with a whisper of blue in the top corners */
   .app-canvas {
     background:
-      radial-gradient(1000px 480px at 100% -10%, color-mix(in srgb, var(--essor-blue) 6%, transparent) 0%, transparent 60%),
-      radial-gradient(900px 460px at -6% 0%, color-mix(in srgb, var(--essor-coral) 4%, transparent) 0%, transparent 55%),
-      linear-gradient(180deg, var(--app-canvas-top) 0%, var(--app-canvas-bottom) 100%);
-  }
-  :is(.dark) .app-canvas {
-    background:
-      radial-gradient(1100px 520px at 100% -8%, color-mix(in srgb, var(--essor-lavender) 16%, transparent) 0%, transparent 58%),
-      radial-gradient(1000px 500px at -8% 0%, color-mix(in srgb, var(--essor-blue) 12%, transparent) 0%, transparent 55%),
-      var(--background);
+      radial-gradient(
+        1000px 480px at 100% -10%,
+        color-mix(in srgb, var(--blue) 7%, transparent) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        900px 460px at -6% 0%,
+        color-mix(in srgb, var(--lavender) 6%, transparent) 0%,
+        transparent 55%
+      ),
+      linear-gradient(180deg, var(--app-cream-top) 0%, var(--app-cream-bottom) 100%);
   }
 
-  /* Frosted top bar / sticky headers over scrolling content. */
   .glass-bar {
     background: color-mix(in srgb, var(--card) 72%, transparent);
     -webkit-backdrop-filter: blur(14px) saturate(1.5);
     backdrop-filter: blur(14px) saturate(1.5);
   }
 
-  /* Subtle brand aura — a soft radial wash used behind hero KPIs / headers. */
   .brand-aura {
     background:
-      radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--essor-blue) 10%, transparent) 0%, transparent 45%),
-      radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--essor-lavender) 9%, transparent) 0%, transparent 45%),
+      radial-gradient(
+        120% 120% at 0% 0%,
+        color-mix(in srgb, var(--blue) 10%, transparent) 0%,
+        transparent 45%
+      ),
+      radial-gradient(
+        120% 120% at 100% 0%,
+        color-mix(in srgb, var(--lavender) 9%, transparent) 0%,
+        transparent 45%
+      ),
       var(--card);
   }
 
-  /* Loading skeleton — soft shimmer sweep. */
   .skeleton {
     position: relative;
     overflow: hidden;
@@ -483,7 +512,9 @@ html #root {
     animation: skeleton-sweep 1.6s ease-in-out infinite;
   }
 
-  .text-balance { text-wrap: balance; }
+  .text-balance {
+    text-wrap: balance;
+  }
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -491,228 +522,276 @@ html #root {
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
-
-  /* Landing mesh grid (login keeps dot `bg-grid` above) */
-  .hero-mesh-grid {
-    background-image:
-      linear-gradient(to right, color-mix(in oklab, var(--foreground) 7%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 7%, transparent) 1px, transparent 1px);
-    background-size: 56px 56px;
+  .hover-lift {
+    transition:
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .hero-mesh-fade {
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 100%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 100%);
-  }
-
-  /* Landing hero — flat dark slab */
-  .hero-promo-section {
-    border-bottom: 1px solid rgb(255 255 255 / 0.08);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
-  }
-
-  .hero-backdrop-aurora {
-    background: var(--landing-hero-bg);
-  }
-
-  .text-shimmer {
-    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 50%, var(--primary) 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: landing-shimmer 4s linear infinite;
-  }
-
-  .text-shimmer-neon {
-    background: linear-gradient(
-      90deg,
-      var(--essor-coral) 0%,
-      var(--essor-coral) 35%,
-      var(--essor-coral-pale) 52%,
-      var(--essor-coral) 70%,
-      var(--essor-coral) 100%
-    );
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: landing-shimmer 4.5s linear infinite;
-    text-shadow: 0 0 20px color-mix(in srgb, var(--essor-coral) 35%, transparent);
-    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--essor-coral) 30%, transparent));
-  }
-
-  .landing-cta-primary {
-    background-color: var(--landing-cta-primary);
-    color: var(--landing-cta-on-primary);
-    border: 1px solid color-mix(in srgb, var(--landing-cta-primary) 78%, var(--essor-ink) 22%);
-    border-radius: 9999px !important;
-    box-shadow: 0 16px 36px -14px color-mix(in srgb, var(--landing-cta-primary) 65%, var(--essor-ink) 35%);
-  }
-
-  .landing-cta-primary:hover {
-    background-color: var(--landing-cta-primary-hover);
-  }
-
-  .landing-cta-secondary-dark {
-    border: 1px solid rgb(255 255 255 / 0.38);
-    border-radius: 9999px !important;
-    background-color: transparent;
-    color: rgb(248 250 252);
-  }
-
-  .landing-cta-secondary-dark:hover {
-    border-color: rgb(255 255 255 / 0.55);
-    background-color: rgb(255 255 255 / 0.06);
-  }
-
-  .landing-cta-secondary-light {
-    border: 1px solid color-mix(in srgb, var(--foreground) 28%, transparent);
-    border-radius: 9999px !important;
-    background-color: color-mix(in srgb, #ffffff 70%, transparent);
-    color: var(--foreground);
-  }
-
-  /* Frosted-glass floating tile (hero decoration) */
-  .glass-tile {
-    background: linear-gradient(135deg, rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.14));
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgb(255 255 255 / 0.65);
-    border-radius: 1.4rem;
-    box-shadow:
-      0 24px 48px -20px rgb(var(--essor-shadow) / 0.28),
-      inset 0 1px 0 rgb(255 255 255 / 0.8);
-  }
-
-  .landing-cta-secondary-light:hover {
-    border-color: color-mix(in srgb, var(--foreground) 48%, transparent);
-    background-color: color-mix(in srgb, var(--muted) 40%, transparent);
+  .hover-lift:hover {
+    transform: translateY(-3px);
   }
 }
 
-@keyframes landing-shimmer {
+/* ---- dashboard animation system ---- */
+@keyframes skeleton-sweep {
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes brand-progress {
   0% {
-    background-position: -200% 0;
+    transform: translateX(-100%);
   }
   100% {
-    background-position: 200% 0;
+    transform: translateX(320%);
   }
 }
-
-@keyframes landing-blob {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
-  33% {
-    transform: translate(30px, -40px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.95);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
-
-.animate-blob {
-  animation: landing-blob 14s ease-in-out infinite;
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
-
-@keyframes landing-marquee {
-  0% {
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
     transform: translateX(0);
   }
-  100% {
-    transform: translateX(-50%);
+}
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
-
-.animate-marquee {
-  animation: landing-marquee 40s linear infinite;
+@keyframes kpi-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out both;
+}
+.animate-fade-in-scale {
+  animation: fade-in-scale 0.3s ease-out both;
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.35s ease-out both;
+}
+.animate-slide-in-left {
+  animation: slide-in-left 0.35s ease-out both;
+}
+.animate-kpi-enter {
+  animation: kpi-enter 0.5s ease-out both;
+}
+.animate-stagger-1 {
+  animation-delay: 0.05s;
+}
+.animate-stagger-2 {
+  animation-delay: 0.1s;
+}
+.animate-stagger-3 {
+  animation-delay: 0.15s;
+}
+.animate-stagger-4 {
+  animation-delay: 0.2s;
+}
+.animate-stagger-5 {
+  animation-delay: 0.25s;
+}
+.animate-stagger-6 {
+  animation-delay: 0.3s;
+}
+.animate-stagger-7 {
+  animation-delay: 0.35s;
+}
+.animate-stagger-8 {
+  animation-delay: 0.4s;
+}
+.animate-stagger-9 {
+  animation-delay: 0.45s;
+}
+.animate-stagger-10 {
+  animation-delay: 0.5s;
+}
+.table-row-enter {
+  animation: fade-in-up 0.35s ease-out both;
+}
+.dialog-enter {
+  animation: fade-in-scale 0.25s ease-out both;
 }
 
-/**
- * CRM dashboard (topnav) — mobile / tablet < lg: slightly smaller, denser type
- * Scoped via [data-dashboard-main] on DashShell main (children only; modals in portal unchanged).
- */
+@keyframes istpm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes istpm-rise-sm {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes istpm-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes istpm-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes istpm-shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-4px);
+  }
+  40%,
+  60% {
+    transform: translateX(4px);
+  }
+}
+@keyframes istpm-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -20px, 0) rotate(3deg);
+  }
+}
+@keyframes istpm-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.anim-rise {
+  animation: istpm-rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.anim-rise-sm {
+  animation: istpm-rise-sm 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+.anim-fade {
+  animation: istpm-fade 0.6s ease both;
+}
+.anim-scale {
+  animation: istpm-scale 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.anim-shake {
+  animation: istpm-shake 0.5s both;
+}
+.anim-pop {
+  animation: istpm-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.anim-drift {
+  animation: istpm-drift 18s ease-in-out infinite;
+}
+.anim-drift-slow {
+  animation: istpm-drift 26s ease-in-out infinite reverse;
+}
+
+/* ---- dashboard mobile scaling + table→cards ---- */
 @media (max-width: 1023px) {
   [data-dashboard-main] {
     font-size: 0.8125rem;
     line-height: 1.45;
   }
-
   [data-dashboard-main] :where(table) {
     font-size: 0.75rem;
     line-height: 1.35;
   }
-
   [data-dashboard-main] :where(table th) {
     font-size: 0.625rem !important;
     letter-spacing: 0.06em;
   }
-
   [data-dashboard-main] :where(table td) {
     font-size: 0.75rem !important;
   }
-
-  /* Display utility sizes (KPIs, titles that use classes instead of h1–h3) */
   [data-dashboard-main] :where(.text-3xl) {
     font-size: clamp(1.2rem, 5.2vw, 1.6rem) !important;
     line-height: 1.1;
   }
-
   [data-dashboard-main] :where(.text-2xl) {
     font-size: clamp(1.05rem, 3.8vw, 1.3rem) !important;
     line-height: 1.15;
   }
-
-  [data-dashboard-main] :where(.text-xl) {
-    font-size: clamp(0.95rem, 2.4vw + 0.5rem, 1.125rem) !important;
-    line-height: 1.2;
-  }
-
   [data-dashboard-main] :where(h1) {
     font-size: clamp(1.3rem, 4.5vw + 0.55rem, 1.8125rem) !important;
     line-height: 1.12;
-    letter-spacing: -0.02em;
   }
-
   [data-dashboard-main] :where(h2) {
     font-size: clamp(1.05rem, 2.6vw + 0.55rem, 1.25rem) !important;
     line-height: 1.2;
-    letter-spacing: -0.015em;
   }
-
   [data-dashboard-main] :where(h3) {
     font-size: 1rem !important;
     line-height: 1.25;
   }
-
-  /* Form controls: keep ≥16px where possible to limit iOS zoom on focus */
   [data-dashboard-main] :where(input:not([type="checkbox"]):not([type="radio"]), textarea) {
     font-size: max(0.875rem, 16px);
   }
-
-  /* Placeholders & select empty state — slightly smaller than field text on mobile */
-  [data-dashboard-main] input::placeholder,
-  [data-dashboard-main] textarea::placeholder {
-    font-size: 0.75rem !important;
-    line-height: 1.35;
-  }
-
-  [data-dashboard-main] button[data-placeholder] span {
-    font-size: 0.75rem !important;
-    line-height: 1.35;
-  }
 }
 
-/* ------------------------------------------------------------------
- * Tableaux → cartes empilées sur téléphone (≤ 639px).
- *
- * Les tables de liste sont denses et larges (min-width 900px) : sur mobile,
- * plutôt qu'un défilement horizontal, chaque ligne devient une carte et
- * chaque cellule affiche son intitulé de colonne (injecté en `data-label`
- * par `DataTable`). Les tablettes (640–1023px) gardent la table compacte
- * défilante définie plus haut. Portée : `.dash-table` sous le main du CRM.
- * ------------------------------------------------------------------ */
 @media (max-width: 639px) {
   [data-dashboard-main] table.dash-table {
     display: block;
@@ -743,7 +822,6 @@ html #root {
     gap: 1rem;
     width: auto !important;
     max-width: none !important;
-    min-width: 0;
     white-space: normal !important;
     border: 0 !important;
     padding: 0.42rem 0 !important;
@@ -763,387 +841,15 @@ html #root {
     color: var(--muted-foreground);
     text-align: start;
   }
-  [data-dashboard-main] table.dash-table tbody td:not([data-label]) {
-    justify-content: flex-end;
-  }
-  [data-dashboard-main] table.dash-table tbody td > .truncate,
-  [data-dashboard-main] table.dash-table tbody td .max-w-\[15rem\] {
-    max-width: none !important;
-    overflow: visible;
-    white-space: normal;
-    text-overflow: clip;
-  }
 }
-
-/* Barre de progression indéterminée — va-et-vient continu (rideau de transition). */
-@keyframes brand-progress {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(320%);
-  }
-}
-
-html[dir="rtl"] .landing-page {
-  direction: rtl;
-}
-
-html[dir="rtl"] [data-dashboard-main] {
-  direction: rtl;
-}
-
-/* ------------------------------------------------------------------ */
-/*  Animation utilities — smooth CRM transitions                        */
-/* ------------------------------------------------------------------ */
-
-@keyframes skeleton-sweep {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-scale {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slide-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes kpi-enter {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.4s ease-out both;
-}
-
-.animate-fade-in-scale {
-  animation: fade-in-scale 0.3s ease-out both;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.35s ease-out both;
-}
-
-.animate-slide-in-left {
-  animation: slide-in-left 0.35s ease-out both;
-}
-
-.animate-kpi-enter {
-  animation: kpi-enter 0.5s ease-out both;
-}
-
-.animate-stagger-1 { animation-delay: 0.05s; }
-.animate-stagger-2 { animation-delay: 0.1s; }
-.animate-stagger-3 { animation-delay: 0.15s; }
-.animate-stagger-4 { animation-delay: 0.2s; }
-.animate-stagger-5 { animation-delay: 0.25s; }
-.animate-stagger-6 { animation-delay: 0.3s; }
-.animate-stagger-7 { animation-delay: 0.35s; }
-.animate-stagger-8 { animation-delay: 0.4s; }
-.animate-stagger-9 { animation-delay: 0.45s; }
-.animate-stagger-10 { animation-delay: 0.5s; }
-
-.table-row-enter {
-  animation: fade-in-up 0.35s ease-out both;
-}
-
-.dialog-enter {
-  animation: fade-in-scale 0.25s ease-out both;
-}
-
-/* ==================================================================
- * Animations — système de mouvement partagé
- *
- * Une seule courbe d'accélération (« ease-out » prononcée) et des durées
- * courtes : le mouvement doit accompagner la lecture, pas la retarder.
- * Tout est désactivé si l'utilisateur a demandé moins d'animations.
- * ================================================================== */
-
-@keyframes essor-rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: none; }
-}
-@keyframes essor-rise-sm {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: none; }
-}
-@keyframes essor-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes essor-scale {
-  from { opacity: 0; transform: scale(0.96); }
-  to   { opacity: 1; transform: none; }
-}
-@keyframes essor-shake {
-  10%, 90% { transform: translateX(-1px); }
-  20%, 80% { transform: translateX(2px); }
-  30%, 50%, 70% { transform: translateX(-4px); }
-  40%, 60% { transform: translateX(4px); }
-}
-@keyframes essor-drift {
-  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-  50%      { transform: translate3d(0, -20px, 0) rotate(3deg); }
-}
-@keyframes essor-pop {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.14); }
-  100% { transform: scale(1); }
-}
-
-.anim-rise     { animation: essor-rise .55s cubic-bezier(.16, 1, .3, 1) both; }
-.anim-rise-sm  { animation: essor-rise-sm .5s cubic-bezier(.16, 1, .3, 1) .08s both; }
-.anim-fade     { animation: essor-fade .6s ease both; }
-.anim-scale    { animation: essor-scale .4s cubic-bezier(.16, 1, .3, 1) both; }
-.anim-shake    { animation: essor-shake .5s both; }
-.anim-pop      { animation: essor-pop .45s cubic-bezier(.16, 1, .3, 1); }
-.anim-drift      { animation: essor-drift 18s ease-in-out infinite; }
-.anim-drift-slow { animation: essor-drift 26s ease-in-out infinite reverse; }
-
-/* Note : à l'intérieur du CRM, l'entrée des en-têtes, panneaux, tableaux et
- * lignes est animée par framer-motion (voir dash-page.tsx et les pages). Les
- * classes ci-dessus servent à l'écran de connexion, hors de ce système. */
-
-/* Survol de carte cliquable. */
-.hover-lift {
-  transition: transform .3s cubic-bezier(.16, 1, .3, 1),
-              box-shadow .3s cubic-bezier(.16, 1, .3, 1);
-}
-.hover-lift:hover { transform: translateY(-3px); }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-}
-
-
-
-/* ================================================================
- * Landing Page Utilities - Standardized Design System
- * ================================================================ */
-
-/* Section Backgrounds */
-.landing-section-white {
-  background: var(--landing-bg-white);
-}
-
-.landing-section-mist {
-  background: var(--landing-bg-mist);
-}
-
-.landing-section-gradient {
-  background: var(--landing-bg-gradient);
-}
-
-/* Feature Cards - Standardized */
-.landing-card {
-  background: var(--landing-card-bg);
-  border: 1px solid var(--landing-card-border);
-  border-radius: var(--landing-card-radius);
-  padding: 2rem;
-  box-shadow: var(--landing-card-shadow);
-  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.landing-card:hover {
-  border-color: rgb(37 99 235 / 0.3);
-  box-shadow: var(--landing-card-shadow-hover);
-  transform: translateY(-4px);
-}
-
-/* Buttons - Standardized */
-.landing-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--landing-cta-on-primary);
-  background: linear-gradient(135deg, var(--landing-cta-primary) 0%, var(--landing-cta-primary-hover) 100%);
-  border-radius: 9999px;
-  box-shadow: 0 8px 30px -10px rgb(37 99 235 / 0.4);
-  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  border: none;
-}
-
-.landing-btn-primary:hover {
-  box-shadow: 0 20px 60px -20px rgb(37 99 235 / 0.5);
-  transform: translateY(-2px) scale(1.02);
-}
-
-.landing-btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--essor-ink);
-  background: white;
-  border: 1px solid rgb(11 18 32 / 0.15);
-  border-radius: 9999px;
-  box-shadow: 0 1px 3px 0 rgb(11 18 32 / 0.1);
-  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-}
-
-.landing-btn-secondary:hover {
-  border-color: rgb(37 99 235 / 0.3);
-  background: #F8FAFC;
-}
-
-/* Typography - Standardized */
-.landing-section-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.375rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--essor-blue);
-  background: rgb(37 99 235 / 0.1);
-  border: 1px solid rgb(37 99 235 / 0.2);
-  border-radius: 9999px;
-}
-
-.landing-section-title {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
-  color: var(--essor-ink);
-}
-
-.landing-section-description {
-  font-size: 1.125rem;
-  line-height: 1.625;
-  color: rgb(11 18 32 / 0.7);
-}
-
-/* Dark Section Styling */
-.landing-dark-section {
-  background: linear-gradient(135deg, #0B1220 0%, #1E293B 100%);
-  color: white;
-}
-
-.landing-dark-section .landing-card {
-  background: rgb(255 255 255 / 0.05);
-  border-color: rgb(255 255 255 / 0.1);
-  backdrop-filter: blur(10px);
-}
-
-.landing-dark-section .landing-card:hover {
-  background: rgb(255 255 255 / 0.08);
-  border-color: rgb(37 99 235 / 0.3);
-}
-
-/* Stats Cards */
-.landing-stat-card {
-  padding: 1.5rem;
-  text-align: center;
-  background: white;
-  border: 1px solid rgb(11 18 32 / 0.08);
-  border-radius: 1rem;
-}
-
-.landing-stat-value {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--essor-ink);
-}
-
-.landing-stat-label {
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: rgb(11 18 32 / 0.6);
-}
-
-/* Icon Containers */
-.landing-icon-container {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, rgb(37 99 235 / 0.15) 0%, rgb(37 99 235 / 0.05) 100%);
-  border: 1px solid rgb(37 99 235 / 0.2);
-  color: var(--essor-blue);
-}
-
-/* Responsive Spacing */
-@media (min-width: 640px) {
-  .landing-card {
-    padding: 2.5rem;
-  }
-  
-  .landing-section-title {
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
-  }
-}
-
-@media (min-width: 1024px) {
-  .landing-card {
-    padding: 3rem;
   }
 }

@@ -1,17 +1,29 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useRef } from "react";
-import { Plus, Pencil, Eye, Download, Archive, RotateCcw, Upload, ListFilter, ChevronDown, FileUp } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Eye,
+  Download,
+  Archive,
+  RotateCcw,
+  Upload,
+  ListFilter,
+  ChevronDown,
+  FileUp,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
-import { BRAND } from "@/lib/brand";
-import { useEssor, useCurrentFormateur, type NouvelEtudiant } from "@/lib/scholnexa-store";
-import { ImportEtudiantsDialog, downloadExempleEtudiantsCsv } from "@/components/import-etudiants-dialog";
-import { fetchStudentSemestres, exportEtudiantsCsv } from "@/lib/scholnexa-api";
+import { useIstpm, useCurrentFormateur, type NouvelEtudiant } from "@/lib/istpm-store";
+import {
+  ImportEtudiantsDialog,
+  downloadExempleEtudiantsCsv,
+} from "@/components/import-etudiants-dialog";
+import { fetchStudentSemestres, exportEtudiantsCsv } from "@/lib/istpm-api";
 import {
   FILIERES,
   NIVEAUX,
-  ANNEES_UNIVERSITAIRES,
   STATUT_ETUDIANT_LABEL,
   STATUT_ETUDIANT_TONE,
   STATUT_PAIEMENT_LABEL,
@@ -23,7 +35,7 @@ import {
   type Niveau,
   type StatutEtudiant,
   type StatutPaiement,
-} from "@/lib/scholnexa-data";
+} from "@/lib/istpm-data";
 import {
   primaryPill,
   ghostPill,
@@ -60,30 +72,15 @@ import {
   SelectField,
   FullWidth,
 } from "@/components/dash-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-const STATUTS: StatutEtudiant[] = [
-  "inscrit",
-  "en_attente",
-  "diplome",
-  "abandon",
-];
-const STATUTS_PAIEMENT: StatutPaiement[] = [
-  "paye",
-  "en_attente",
-  "retard",
-  "impaye",
-];
+const STATUTS: StatutEtudiant[] = ["inscrit", "en_attente", "diplome", "abandon"];
+const STATUTS_PAIEMENT: StatutPaiement[] = ["paye", "en_attente", "retard", "impaye"];
 
 function EtudiantsPage() {
   const { role, selectedFormateurId } = useAuth();
-  const { etudiants, addEtudiant, updateEtudiant, deleteEtudiant, restoreEtudiant } = useEssor();
+  const { etudiants, addEtudiant, updateEtudiant, deleteEtudiant, restoreEtudiant } = useIstpm();
   // Teachers get a read-only view; student administration is the responsable's
   // and the directeur's job.
   const canEdit = role === "directeur" || role === "responsable";
@@ -101,9 +98,7 @@ function EtudiantsPage() {
     // Semestres enseignés par le formateur, déduits du préfixe de ses groupes
     // (« S5-G1 » → « S5 »). Le formateur voit TOUS les étudiants de sa filière
     // dans ces semestres, quel que soit le sous-groupe (G1/G2).
-    const niveaux = [
-      ...new Set(currentFormateur.groupes.map((g) => g.split("-")[0])),
-    ];
+    const niveaux = [...new Set(currentFormateur.groupes.map((g) => g.split("-")[0]))];
     return {
       filiere: currentFormateur.departement,
       niveaux,
@@ -115,7 +110,6 @@ function EtudiantsPage() {
   const [search, setSearch] = useState("");
   const [filiere, setFiliere] = useState<string>(ALL);
   const [niveau, setNiveau] = useState<string>(ALL);
-  const [anneeScolaire, setAnneeScolaire] = useState<string>(ALL);
   const [groupe, setGroupe] = useState<string>(ALL);
   const [statut, setStatut] = useState<string>(ALL);
   const [moduleFilter, setModuleFilter] = useState<string>(ALL);
@@ -184,28 +178,23 @@ function EtudiantsPage() {
       // Enseignant scope: only show students in assigned filiere & groupes
       if (enseignantScope) {
         if (e.filiere !== enseignantScope.filiere) return false;
-        if (
-          enseignantScope.niveaux.length > 0 &&
-          !enseignantScope.niveaux.includes(e.niveau)
-        )
+        if (enseignantScope.niveaux.length > 0 && !enseignantScope.niveaux.includes(e.niveau))
           return false;
       }
       if (filiere !== ALL && e.filiere !== filiere) return false;
       if (niveau !== ALL && e.niveau !== niveau) return false;
-      if (anneeScolaire !== ALL && e.annee !== anneeScolaire) return false;
       if (groupe !== ALL && e.groupe !== groupe) return false;
-      if (statut !== ALL && STATUT_ETUDIANT_LABEL[e.statut] !== statut)
-        return false;
+      if (statut !== ALL && STATUT_ETUDIANT_LABEL[e.statut] !== statut) return false;
       if (!q) return true;
       return `${e.cne} ${e.matricule} ${e.prenom} ${e.nom} ${e.groupe} ${e.ville}`
         .toLowerCase()
         .includes(q);
     });
-  }, [etudiants, search, showArchived, enseignantScope, filiere, niveau, anneeScolaire, groupe, statut]);
+  }, [etudiants, search, showArchived, enseignantScope, filiere, niveau, groupe, statut]);
 
   const pager = usePagination(
     filtered,
-    `${search}|${showArchived}|${filiere}|${niveau}|${anneeScolaire}|${groupe}|${statut}`,
+    `${search}|${showArchived}|${filiere}|${niveau}|${groupe}|${statut}`,
   );
 
   const openCreate = () => {
@@ -311,14 +300,6 @@ function EtudiantsPage() {
                   allLabel: "Tous les semestres",
                 },
                 {
-                  id: "anneeScolaire",
-                  label: "Année scolaire",
-                  value: anneeScolaire,
-                  onChange: setAnneeScolaire,
-                  options: ANNEES_UNIVERSITAIRES,
-                  allLabel: "Toutes les années",
-                },
-                {
                   id: "groupe",
                   label: "Groupe",
                   value: groupe,
@@ -353,14 +334,6 @@ function EtudiantsPage() {
                   allLabel: isTeacher ? "Choisir un semestre" : "Tous les semestres",
                 },
                 {
-                  id: "anneeScolaire",
-                  label: "Année scolaire",
-                  value: anneeScolaire,
-                  onChange: setAnneeScolaire,
-                  options: ANNEES_UNIVERSITAIRES,
-                  allLabel: "Toutes les années",
-                },
-                {
                   id: "groupe",
                   label: "Groupe",
                   value: groupe,
@@ -390,16 +363,17 @@ function EtudiantsPage() {
           ) : enseignantScope ? (
             <div className="flex items-center gap-3">
               <span>
-                <strong className="font-semibold text-foreground">
-                  {filtered.length}
-                </strong>{" "}
+                <strong className="font-semibold text-foreground">{filtered.length}</strong>{" "}
                 étudiant{filtered.length > 1 ? "s" : ""}
               </span>
               <span className="rounded-full bg-brand/10 px-2.5 py-0.5 text-[10px] font-medium text-brand-dk">
                 {enseignantScope.filiere}
               </span>
               {enseignantScope.niveaux.map((n) => (
-                <span key={n} className="rounded-full bg-brand/10 px-2.5 py-0.5 text-[10px] font-medium text-brand-dk">
+                <span
+                  key={n}
+                  className="rounded-full bg-brand/10 px-2.5 py-0.5 text-[10px] font-medium text-brand-dk"
+                >
                   {n}
                 </span>
               ))}
@@ -416,9 +390,7 @@ function EtudiantsPage() {
           ) : (
             <div className="flex items-center gap-3">
               <span>
-                <strong className="font-semibold text-foreground">
-                  {filtered.length}
-                </strong>{" "}
+                <strong className="font-semibold text-foreground">{filtered.length}</strong>{" "}
                 étudiant{filtered.length > 1 ? "s" : ""}
                 {isTeacher ? "" : ` sur ${etudiants.length}`}
               </span>
@@ -433,164 +405,162 @@ function EtudiantsPage() {
             Veuillez sélectionner un formateur dans le menu de navigation
           </p>
           <p className="mt-1 text-xs text-muted-foreground/60">
-            Cliquez sur le sélecteur de profil dans la barre latérale et choisissez "Enseignant (formateur)"
+            Cliquez sur le sélecteur de profil dans la barre latérale et choisissez "Enseignant
+            (formateur)"
           </p>
         </div>
       ) : needsSelection ? (
         <SelectionPrompt scoped={!!enseignantScope} />
       ) : (
-      <>
-      <div className="flex items-center gap-3 rounded-2xl border border-brand/12 bg-card px-4 py-3">
-        <span className="text-xs text-muted-foreground">
-          <strong className="font-semibold text-foreground">{etudiants.filter(e => e.archived).length}</strong> étudiant(s) archivé(s)
-        </span>
-        <span className="h-4 w-px bg-brand/12" />
-        <label className="flex items-center gap-2 text-xs font-medium text-foreground cursor-pointer select-none">
-          <input
-            type="checkbox"
-            checked={showArchived}
-            onChange={() => setShowArchived((v) => !v)}
-            className="h-4 w-4 rounded border-muted-300 accent-brand"
-          />
-          Afficher les archivés
-        </label>
-      </div>
-      <DataTable
-        isEmpty={filtered.length === 0}
-        empty="Aucun étudiant ne correspond à ces critères."
-        footer={
-          <TablePagination
-            page={pager.page}
-            pageCount={pager.pageCount}
-            total={pager.total}
-            pageSize={pager.pageSize}
-            onPage={pager.setPage}
-            label="étudiants"
-          />
-        }
-        head={
-          <>
-            <th>CNE</th>
-            <th>Nom &amp; prénom</th>
-            <th>Filière</th>
-            <th className="text-center">Niveau</th>
-            <th>Statut</th>
-            {enseignantScope ? (
+        <>
+          <div className="flex items-center gap-3 rounded-2xl border border-brand/12 bg-card px-4 py-3">
+            <span className="text-xs text-muted-foreground">
+              <strong className="font-semibold text-foreground">
+                {etudiants.filter((e) => e.archived).length}
+              </strong>{" "}
+              étudiant(s) archivé(s)
+            </span>
+            <span className="h-4 w-px bg-brand/12" />
+            <label className="flex items-center gap-2 text-xs font-medium text-foreground cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={showArchived}
+                onChange={() => setShowArchived((v) => !v)}
+                className="h-4 w-4 rounded border-muted-300 accent-brand"
+              />
+              Afficher les archivés
+            </label>
+          </div>
+          <DataTable
+            isEmpty={filtered.length === 0}
+            empty="Aucun étudiant ne correspond à ces critères."
+            footer={
+              <TablePagination
+                page={pager.page}
+                pageCount={pager.pageCount}
+                total={pager.total}
+                pageSize={pager.pageSize}
+                onPage={pager.setPage}
+                label="étudiants"
+              />
+            }
+            head={
               <>
-                <th className="text-center">Note</th>
-                <th className="text-right">Moyenne</th>
-              </>
-            ) : (
-              <th>Paiement</th>
-            )}
-            <th className="w-28 text-center">Actions</th>
-          </>
-        }
-      >
-        {pager.pageItems.map((e, i) => (
-          <motion.tr
-            key={e.id}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.25, delay: i * 0.03, ease: "easeOut" }}
-            className={cn(tableRow, e.archived && "opacity-50")}
-          >
-            <td
-              className="border-l-[3px] font-medium tabular-nums"
-              style={{
-                borderLeftColor: TONE_COLORS[STATUT_PAIEMENT_TONE[e.paiement]],
-              }}
-            >
-              {e.cne}
-            </td>
-            <td>
-              <span className="flex items-center gap-2.5">
-                <span className={avatarChip}>
-                  {initials(`${e.prenom} ${e.nom}`)}
-                </span>
-                <span className={cn("font-medium", cellTruncate)}>
-                  {e.prenom} {e.nom}
-                </span>
-              </span>
-            </td>
-            <td className={cn("text-muted-foreground", cellTruncate)}>
-              {e.filiere}
-            </td>
-            <td className="text-center tabular-nums">{e.niveau}</td>
-            <td>
-              <span className={toneBadge(STATUT_ETUDIANT_TONE[e.statut])}>
-                {STATUT_ETUDIANT_LABEL[e.statut]}
-              </span>
-            </td>
-            {enseignantScope ? (
-              <>
-                <td className="text-center">
-                  {(() => {
-                    const mNote = moduleFilter !== ALL
-                      ? e.notes.find((n) => n.module === moduleFilter)
-                      : null;
-                    return (
-                      <span className={toneBadge(mNote ? "teal" : "neutral")}>
-                        {mNote ? `${mNote.note.toFixed(1)}/20` : "—"}
-                      </span>
-                    );
-                  })()}
-                </td>
-                <td className="text-right tabular-nums">
-                  {e.moyenne > 0 ? (
-                    <span className="font-medium">{e.moyenne.toFixed(2)}</span>
-                  ) : (
-                    <span className="text-muted-foreground">—</span>
-                  )}
-                </td>
-              </>
-            ) : (
-              <td>
-                <span className={toneBadge(STATUT_PAIEMENT_TONE[e.paiement])}>
-                  {STATUT_PAIEMENT_LABEL[e.paiement]}
-                </span>
-              </td>
-            )}
-            <td
-              className="text-center"
-              onClick={(ev) => ev.stopPropagation()}
-            >
-              <div className={rowActions}>
-                <button
-                  className={iconButton}
-                  aria-label="Voir la fiche"
-                  onClick={() => setDetail(e)}
-                >
-                  <Eye className="h-3.5 w-3.5" />
-                </button>
-                {canEdit ? (
+                <th>CNE</th>
+                <th>Nom &amp; prénom</th>
+                <th>Filière</th>
+                <th className="text-center">Niveau</th>
+                <th>Statut</th>
+                {enseignantScope ? (
                   <>
+                    <th className="text-center">Note</th>
+                    <th className="text-right">Moyenne</th>
+                  </>
+                ) : (
+                  <th>Paiement</th>
+                )}
+                <th className="w-28 text-center">Actions</th>
+              </>
+            }
+          >
+            {pager.pageItems.map((e, i) => (
+              <motion.tr
+                key={e.id}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.25, delay: i * 0.03, ease: "easeOut" }}
+                className={cn(tableRow, e.archived && "opacity-50")}
+              >
+                <td
+                  className="border-l-[3px] font-medium tabular-nums"
+                  style={{
+                    borderLeftColor: TONE_COLORS[STATUT_PAIEMENT_TONE[e.paiement]],
+                  }}
+                >
+                  {e.cne}
+                </td>
+                <td>
+                  <span className="flex items-center gap-2.5">
+                    <span className={avatarChip}>{initials(`${e.prenom} ${e.nom}`)}</span>
+                    <span className={cn("font-medium", cellTruncate)}>
+                      {e.prenom} {e.nom}
+                    </span>
+                  </span>
+                </td>
+                <td className={cn("text-muted-foreground", cellTruncate)}>{e.filiere}</td>
+                <td className="text-center tabular-nums">{e.niveau}</td>
+                <td>
+                  <span className={toneBadge(STATUT_ETUDIANT_TONE[e.statut])}>
+                    {STATUT_ETUDIANT_LABEL[e.statut]}
+                  </span>
+                </td>
+                {enseignantScope ? (
+                  <>
+                    <td className="text-center">
+                      {(() => {
+                        const mNote =
+                          moduleFilter !== ALL
+                            ? e.notes.find((n) => n.module === moduleFilter)
+                            : null;
+                        return (
+                          <span className={toneBadge(mNote ? "teal" : "neutral")}>
+                            {mNote ? `${mNote.note.toFixed(1)}/20` : "—"}
+                          </span>
+                        );
+                      })()}
+                    </td>
+                    <td className="text-right tabular-nums">
+                      {e.moyenne > 0 ? (
+                        <span className="font-medium">{e.moyenne.toFixed(2)}</span>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
+                    </td>
+                  </>
+                ) : (
+                  <td>
+                    <span className={toneBadge(STATUT_PAIEMENT_TONE[e.paiement])}>
+                      {STATUT_PAIEMENT_LABEL[e.paiement]}
+                    </span>
+                  </td>
+                )}
+                <td className="text-center" onClick={(ev) => ev.stopPropagation()}>
+                  <div className={rowActions}>
                     <button
                       className={iconButton}
-                      aria-label="Modifier"
-                      onClick={() => openEdit(e)}
+                      aria-label="Voir la fiche"
+                      onClick={() => setDetail(e)}
                     >
-                      <Pencil className="h-3.5 w-3.5" />
+                      <Eye className="h-3.5 w-3.5" />
                     </button>
-                    <button
-                      className={e.archived ? iconButton : iconButtonDanger}
-                      aria-label={e.archived ? "Restaurer" : "Archiver"}
-                      onClick={() => (e.archived ? restoreEtudiant(e.id) : setToDelete(e))}
-                    >
-                      {e.archived ? (
-                        <RotateCcw className="h-3.5 w-3.5" />
-                      ) : (
-                        <Archive className="h-3.5 w-3.5" />
-                      )}
-                    </button>
-                  </>
-                ) : null}
-              </div>
-            </td>
-          </motion.tr>
-        ))}
-      </DataTable>
-      </>
+                    {canEdit ? (
+                      <>
+                        <button
+                          className={iconButton}
+                          aria-label="Modifier"
+                          onClick={() => openEdit(e)}
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          className={e.archived ? iconButton : iconButtonDanger}
+                          aria-label={e.archived ? "Restaurer" : "Archiver"}
+                          onClick={() => (e.archived ? restoreEtudiant(e.id) : setToDelete(e))}
+                        >
+                          {e.archived ? (
+                            <RotateCcw className="h-3.5 w-3.5" />
+                          ) : (
+                            <Archive className="h-3.5 w-3.5" />
+                          )}
+                        </button>
+                      </>
+                    ) : null}
+                  </div>
+                </td>
+              </motion.tr>
+            ))}
+          </DataTable>
+        </>
       )}
 
       {/* Fiche détaillée */}
@@ -602,9 +572,7 @@ function EtudiantsPage() {
           </DialogDescription>
           {detail ? (
             // Re-read from the store so the dialog reflects live edits.
-            <EtudiantDetail
-              e={etudiants.find((x) => x.id === detail.id) ?? detail}
-            />
+            <EtudiantDetail e={etudiants.find((x) => x.id === detail.id) ?? detail} />
           ) : null}
         </DialogContent>
       </Dialog>
@@ -681,10 +649,10 @@ function SelectionPrompt({ scoped = false }: { scoped?: boolean }) {
         <p className="text-sm leading-relaxed text-muted-foreground">
           {scoped ? (
             <>
-              Choisissez un <strong className="font-semibold text-foreground">semestre</strong>,
-              un <strong className="font-semibold text-foreground">groupe</strong>{" "}
-              (et éventuellement un <strong className="font-semibold text-foreground">module</strong>)
-              {" "}ci-dessus pour afficher les étudiants que vous enseignez.
+              Choisissez un <strong className="font-semibold text-foreground">semestre</strong>, un{" "}
+              <strong className="font-semibold text-foreground">groupe</strong> (et éventuellement
+              un <strong className="font-semibold text-foreground">module</strong>) ci-dessus pour
+              afficher les étudiants que vous enseignez.
             </>
           ) : (
             <>
@@ -728,11 +696,13 @@ function EtudiantForm({
   onCancel,
 }: {
   initial: Etudiant | null;
-  onSubmit: (data: Omit<FormState, "fraisMensuels"> & {
-    filiere: Filiere;
-    niveau: Niveau;
-    fraisMensuels: number;
-  }) => void;
+  onSubmit: (
+    data: Omit<FormState, "fraisMensuels"> & {
+      filiere: Filiere;
+      niveau: Niveau;
+      fraisMensuels: number;
+    },
+  ) => void;
   onCancel: () => void;
 }) {
   const [f, setF] = useState<FormState>(() => ({
@@ -740,7 +710,7 @@ function EtudiantForm({
     // Suggest a matricule in the house format for new records.
     matricule:
       initial?.matricule ??
-      `${BRAND.matriculePrefix}-${new Date().getFullYear().toString().slice(2)}-${String(
+      `ISTPM-${new Date().getFullYear().toString().slice(2)}-${String(
         Math.floor(Math.random() * 900) + 100,
       )}`,
     prenom: initial?.prenom ?? "",
@@ -757,9 +727,7 @@ function EtudiantForm({
     ville: initial?.ville ?? "",
     fraisMensuels: initial?.fraisMensuels ?? 3400,
   }));
-  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>(
-    {},
-  );
+  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => {
     setF((prev) => ({ ...prev, [k]: v }));
@@ -814,11 +782,7 @@ function EtudiantForm({
         placeholder="G134567890"
         error={errors.cne}
       />
-      <TextField
-        label="Matricule"
-        value={f.matricule}
-        onChange={(v) => set("matricule", v)}
-      />
+      <TextField label="Matricule" value={f.matricule} onChange={(v) => set("matricule", v)} />
       <TextField
         label="Prénom"
         required
@@ -900,11 +864,7 @@ function EtudiantForm({
         onChange={(v) => set("ville", v)}
         placeholder="Agadir"
       />
-      <TextField
-        label="Année universitaire"
-        value={f.annee}
-        onChange={(v) => set("annee", v)}
-      />
+      <TextField label="Année universitaire" value={f.annee} onChange={(v) => set("annee", v)} />
       <NumberField
         label="Frais mensuels"
         required
@@ -964,11 +924,8 @@ function historiqueSemestres(e: Etudiant): SemestreResume[] {
       return { module, note };
     });
     const moyenne =
-      Math.round(
-        (modules.reduce((s, m) => s + m.note, 0) / modules.length) * 100,
-      ) / 100;
-    const resultat =
-      moyenne >= 12 ? "Admis" : moyenne >= 10 ? "Rattrapage" : "Ajourné";
+      Math.round((modules.reduce((s, m) => s + m.note, 0) / modules.length) * 100) / 100;
+    const resultat = moyenne >= 12 ? "Admis" : moyenne >= 10 ? "Rattrapage" : "Ajourné";
     out.push({ semestre, modules, moyenne, resultat });
   }
   return out;
@@ -1026,10 +983,7 @@ function EtudiantDetail({ e }: { e: Etudiant }) {
 
       <DetailSection title="Coordonnées">
         <DetailGrid>
-          <DetailField
-            label="Date de naissance"
-            value={fmtDate(e.dateNaissance)}
-          />
+          <DetailField label="Date de naissance" value={fmtDate(e.dateNaissance)} />
           <DetailField label="Ville" value={e.ville} />
           <DetailField label="Téléphone" value={e.telephone} />
           <DetailField label="E-mail" value={e.email} />
@@ -1097,9 +1051,7 @@ function EtudiantDetail({ e }: { e: Etudiant }) {
             {semestres.map((s) => (
               <tr key={s.semestre}>
                 <td className="px-3 py-2 font-medium">{s.semestre}</td>
-                <td className="px-3 py-2 text-muted-foreground">
-                  {s.modules.length} modules
-                </td>
+                <td className="px-3 py-2 text-muted-foreground">{s.modules.length} modules</td>
                 <td className="px-3 py-2 text-muted-foreground">
                   {s.modules
                     .map((m) => `${m.module.split(" ")[0]} ${m.note.toFixed(1)}`)
@@ -1114,17 +1066,13 @@ function EtudiantDetail({ e }: { e: Etudiant }) {
                   {s.moyenne.toFixed(2)}
                 </td>
                 <td className="px-3 py-2">
-                  <span className={toneBadge(RESULTAT_TONE[s.resultat])}>
-                    {s.resultat}
-                  </span>
+                  <span className={toneBadge(RESULTAT_TONE[s.resultat])}>{s.resultat}</span>
                 </td>
               </tr>
             ))}
           </DetailTable>
         ) : (
-          <DetailEmpty>
-            Aucun semestre antérieur   l'étudiant est en première période.
-          </DetailEmpty>
+          <DetailEmpty>Aucun semestre antérieur l'étudiant est en première période.</DetailEmpty>
         )}
       </DetailSection>
 
@@ -1169,9 +1117,7 @@ function EtudiantDetail({ e }: { e: Etudiant }) {
           >
             {e.paiementsMensuelsRecords.map((r) => (
               <tr key={r.id}>
-                <td className="whitespace-nowrap px-3 py-2 font-medium capitalize">
-                  {r.mois}
-                </td>
+                <td className="whitespace-nowrap px-3 py-2 font-medium capitalize">{r.mois}</td>
                 <td className="px-3 py-2 text-right font-medium tabular-nums">
                   {fmtMAD(r.montantPaye)} / {fmtMAD(r.montantDu)}
                 </td>

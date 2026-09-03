@@ -11,10 +11,8 @@ const Toaster = () => {
         classNames: {
           toast:
             "group toast !rounded-2xl !border !border-brand/12 !bg-card !px-5 !py-4 !font-sans !shadow-[0_14px_30px_-14px_rgba(0,0,0,0.15)]",
-          title:
-            "!font-display !text-sm !font-semibold !tracking-tight !text-foreground",
-          description:
-            "!mt-0.5 !text-xs !leading-relaxed !text-muted-foreground",
+          title: "!font-display !text-sm !font-semibold !tracking-tight !text-foreground",
+          description: "!mt-0.5 !text-xs !leading-relaxed !text-muted-foreground",
           success: "!border-l-[3px] !border-l-emerald-500",
           error: "!border-l-[3px] !border-l-red-500",
           warning: "!border-l-[3px] !border-l-amber-500",

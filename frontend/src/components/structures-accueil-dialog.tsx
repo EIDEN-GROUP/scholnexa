@@ -1,22 +1,11 @@
-﻿import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Building2, Plus, Trash2, Save } from "lucide-react";
-import { useEssor } from "@/lib/scholnexa-store";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { useIstpm } from "@/lib/istpm-store";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { DetailShell } from "@/components/dash-page";
 import { Input } from "@/components/ui/input";
-import {
-  dialogSurface,
-  primaryPill,
-  ghostPill,
-  toneBadge,
-  softInput,
-} from "@/lib/dash-ui";
+import { dialogSurface, primaryPill, ghostPill, toneBadge, softInput } from "@/lib/dash-ui";
 import { cn } from "@/lib/utils";
 
 type Row = {
@@ -37,14 +26,11 @@ export function StructuresAccueilDialog({
     addStructureAccueil,
     updateStructureAccueil,
     deleteStructureAccueil,
-  } = useEssor();
+  } = useIstpm();
 
-  const normalize = (s: unknown) =>
-    typeof s === "string" ? { nom: s, capacite: 5 } : (s as Row);
+  const normalize = (s: unknown) => (typeof s === "string" ? { nom: s, capacite: 5 } : (s as Row));
 
-  const [rows, setRows] = useState<Row[]>(() =>
-    structuresAccueil.map(normalize),
-  );
+  const [rows, setRows] = useState<Row[]>(() => structuresAccueil.map(normalize));
   const [nouveauNom, setNouveauNom] = useState("");
   const [nouvelleCapacite, setNouvelleCapacite] = useState(5);
 
@@ -107,11 +93,7 @@ export function StructuresAccueilDialog({
     }
     const cap = Math.max(1, nouvelleCapacite || 1);
     addStructureAccueil(nom, cap);
-    setRows((prev) =>
-      [...prev, { nom, capacite: cap }].sort((a, b) =>
-        a.nom.localeCompare(b.nom),
-      ),
-    );
+    setRows((prev) => [...prev, { nom, capacite: cap }].sort((a, b) => a.nom.localeCompare(b.nom)));
     setNouveauNom("");
     setNouvelleCapacite(5);
     toast.success(`Ajoutée · ${nom}`);
@@ -171,10 +153,7 @@ export function StructuresAccueilDialog({
                   </div>
                   <button
                     type="button"
-                    className={cn(
-                      ghostPill,
-                      "h-9 w-9 justify-center p-0 text-alert",
-                    )}
+                    className={cn(ghostPill, "h-9 w-9 justify-center p-0 text-alert")}
                     onClick={() => removeRow(i)}
                     aria-label={`Supprimer ${r.nom}`}
                   >
@@ -221,9 +200,7 @@ export function StructuresAccueilDialog({
                   type="number"
                   min={1}
                   value={nouvelleCapacite}
-                  onChange={(e) =>
-                    setNouvelleCapacite(Number(e.target.value))
-                  }
+                  onChange={(e) => setNouvelleCapacite(Number(e.target.value))}
                   className="h-9 w-16 rounded-lg border-brand/20 text-center text-xs tabular-nums"
                   aria-label="Capacité de la nouvelle structure"
                 />

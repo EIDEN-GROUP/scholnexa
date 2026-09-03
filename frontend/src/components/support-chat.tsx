@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { useDashboardI18n } from "@/lib/dashboard-i18n";
-import { MessageCircle, X, Send } from "lucide-react";
+import { LifeBuoy, X, Send, Plus, MessageCircle, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
 
@@ -40,7 +40,7 @@ export function SupportChat() {
   const loadMessages = useCallback(async (sid: string) => {
     try {
       setMessages(await api.get<any[]>(`/support/sessions/${sid}/messages`));
-    } catch { /* ignore */ }
+    } catch {}
   }, []);
 
   useEffect(() => {
@@ -66,15 +66,14 @@ export function SupportChat() {
       });
       setInput("");
       loadMessages(sessionId);
-    } catch { /* ignore */ }
+    } catch {}
   };
 
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        aria-label={t?.common?.open ?? "Support"}
-        className="fixed bottom-6 end-6 z-50 grid h-12 w-12 place-items-center rounded-full bg-brand text-white shadow-lg hover:bg-brand-dk lg:bottom-[4.25rem]"
+        className="fixed bottom-6 right-6 z-50 grid h-12 w-12 place-items-center rounded-full bg-brand text-white shadow-lg hover:bg-brand-dk"
       >
         <MessageCircle className="h-5 w-5" />
       </button>
@@ -84,7 +83,7 @@ export function SupportChat() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-24 end-6 z-50 flex w-80 flex-col rounded-2xl border border-border bg-card shadow-2xl lg:bottom-[8.25rem]"
+            className="fixed bottom-24 right-6 z-50 flex w-80 flex-col rounded-2xl border border-border bg-card shadow-2xl"
           >
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <p className="text-sm font-semibold text-foreground">Support</p>
@@ -96,7 +95,7 @@ export function SupportChat() {
               </button>
             </div>
             <div className="flex max-h-96 min-h-[200px] flex-col overflow-y-auto p-4">
-              {messages.map((m: { id: number; senderRole: string; content: string; createdAt: string }) => (
+              {messages.map((m: any) => (
                 <div
                   key={m.id}
                   className={cn(
@@ -107,9 +106,7 @@ export function SupportChat() {
                   )}
                 >
                   <p>{m.content}</p>
-                  <p className="mt-0.5 text-[10px] opacity-60">
-                    {msgTime(m.createdAt)}
-                  </p>
+                  <p className="mt-0.5 text-[10px] opacity-60">{msgTime(m.createdAt)}</p>
                 </div>
               ))}
               <div ref={bottomRef} />

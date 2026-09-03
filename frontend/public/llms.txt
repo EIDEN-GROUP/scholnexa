@@ -1,0 +1,47 @@
+# Essor
+
+> Essor is a French-language school and training-center management platform by Eiden Group,
+> built for private paramedical schools in Morocco. It brings student records and enrollment,
+> timetabling, monthly payments and reminders, exams, report cards, and clinical-placement
+> tracking into a single web app. Tagline: "Zéro Excel, zéro chaos."
+
+## What Essor does
+
+- **Étudiants / enrollment**: student files, enrollment by filière (Infirmier polyvalent, Prothèse dentaire, Kinésithérapie, Sage-femme…) and semester.
+- **Planning**: weekly timetable, session scheduling, room and trainer assignment, double-booking prevention.
+- **Paiements**: per-student monthly installments, automatic late/unpaid flags, receipts (PDF), email reminders, real-time outstanding-balance view for the director.
+- **Examens & bulletins**: exam planning, grade entry, weighted averages, report cards and transcripts with a decision (Admis / Rattrapage / Ajourné).
+- **Stages cliniques**: assignment of students to host structures (hospitals, clinics), capacity tracking per service, generation and signature of internship agreements (conventions).
+- **Rôles**: separate accounts for direction, affaires estudiantines, and formateurs.
+
+## Who it is for
+
+Directors of private health-training schools, student-affairs managers, and trainers. Works for a single center or a multi-campus network.
+
+## Pricing
+
+- **Essentiel** — from 1,000 MAD HT / month, single administrator.
+- **Pro** — from 2,000 MAD HT / month, multi-role team, payments, report cards, placements.
+- **Réseau** — custom quote, multi-campus.
+- Price scales per 100-student tier. Annual billing gives 2 months free. No setup or hidden fees; onboarding, training, updates and support included. No lock-in (monthly plans have no commitment).
+
+## Key facts
+
+- Language: French only. Interface adapted to the Moroccan context.
+- Hosting: European infrastructure; encrypted in transit and at rest; data isolated per school.
+- Data portability: export students, payments, grades and report cards to Excel/PDF at any time.
+- Setup: nothing to install (runs in the browser); importing a multi-hundred-student roster from Excel takes about a morning.
+- Demo: 20-minute guided demo on the school's own data, requested via the pricing → contact form.
+
+## Company
+
+Eiden Group — Agadir Bay, Technopole 1 Bloc B, Agadir 80000, Morocco.
+Contact: contact@eiden-group.com · +212 7 77 77 74 28
+
+## Pages
+
+- Home / product overview: https://essor.eiden-group.com/
+- FAQ: https://essor.eiden-group.com/#faq
+- Pricing: https://essor.eiden-group.com/#tarifs
+- Request a demo: https://essor.eiden-group.com/#contact
+- Privacy policy: https://essor.eiden-group.com/confidentialite

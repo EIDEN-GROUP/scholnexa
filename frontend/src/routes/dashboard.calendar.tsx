@@ -1,5 +1,5 @@
-﻿import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useCallback, useMemo, useState } from "react";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import {
   Plus,
   ChevronLeft,
@@ -24,11 +24,11 @@ import { toast } from "sonner";
 import { useAuth, DEMO_FORMATEUR_ID, getStoredRole } from "@/lib/auth";
 import { canAccess } from "@/lib/dashboard-i18n";
 import {
-  useEssor,
+  useIstpm,
   useCurrentFormateur,
   type Conflit,
   type ConflitCandidate,
-} from "@/lib/scholnexa-store";
+} from "@/lib/istpm-store";
 import {
   SALLES,
   GROUPES,
@@ -38,8 +38,6 @@ import {
   ANNEES_UNIVERSITAIRES,
   ANNEES_ETUDE,
   anneeEtude,
-  bornesAnneeUniversitaire,
-  joursChomes,
   TYPE_SEANCE_LABEL,
   couleurSeance,
   lundiDeLaSemaine,
@@ -52,13 +50,8 @@ import {
   type Niveau,
   type Filiere,
   type Formateur,
-} from "@/lib/scholnexa-data";
-import {
-  VueJour,
-  VueSemaine,
-  VueMois,
-  type VueCalendrier,
-} from "@/components/calendar-views";
+} from "@/lib/istpm-data";
+import { VueJour, VueSemaine, VueMois, type VueCalendrier } from "@/components/calendar-views";
 import {
   softCard,
   primaryPill,
@@ -85,12 +78,7 @@ import {
   SelectField,
   FullWidth,
 } from "@/components/dash-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 const TYPES: TypeSeance[] = ["cours", "td", "tp", "stage"];
@@ -124,16 +112,8 @@ function resumeConflits(conflits: Conflit[]) {
 
 function PlanningPage() {
   const { role } = useAuth();
-  const {
-    seances,
-    formateurs,
-    addSeance,
-    updateSeance,
-    deleteSeance,
-    moveSeance,
-    conflitsSeance,
-    creneaux,
-  } = useEssor();
+  const { seances, formateurs, addSeance, updateSeance, deleteSeance, moveSeance, conflitsSeance } =
+    useIstpm();
 
   // La direction et le responsable des affaires estudiantines organisent les
   // séances ; l'enseignant consulte uniquement son propre planning.
@@ -142,25 +122,7 @@ function PlanningPage() {
   const moiFormateur = useCurrentFormateur();
 
   const [vue, setVue] = useState<VueCalendrier>("semaine");
-  // L'année scolaire court de septembre à juin : juillet et août sont hors
-  // calendrier et ne doivent jamais s'afficher.
-  const bornes = useMemo(() => bornesAnneeUniversitaire(), []);
-  // Fêtes nationales, fêtes religieuses et vacances scolaires : jours sans cours.
-  const chomes = useMemo(() => joursChomes(), []);
-  const jourChome = useCallback(
-    (iso: string) => chomes.get(iso) ?? null,
-    [chomes],
-  );
-  /**
-   * Position d'ouverture : aujourd'hui pendant l'année scolaire, la rentrée
-   * sinon — en juillet ou en août, s'ouvrir sur « aujourd'hui » ne montrerait
-   * qu'une période vide.
-   */
-  const positionDouverture = () => {
-    const today = new Date();
-    return today >= bornes.debut && today <= bornes.fin ? today : bornes.debut;
-  };
-  const [curseur, setCurseur] = useState(positionDouverture);
+  const [curseur, setCurseur] = useState(() => new Date());
 
   const [search, setSearch] = useState("");
   const [prof, setProf] = useState<string>(ALL);
@@ -168,38 +130,27 @@ function PlanningPage() {
   const [salle, setSalle] = useState<string>(ALL);
   const [module, setModule] = useState<string>(ALL);
   const [annee, setAnnee] = useState<string>(ALL);
-  const [anneeScolaire, setAnneeScolaire] = useState<string>(ALL);
 
   const [detail, setDetail] = useState<Seance | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Seance | null>(null);
-  const [prefill, setPrefill] = useState<{ date: string; debut: string } | null>(
-    null,
-  );
+  const [prefill, setPrefill] = useState<{ date: string; debut: string } | null>(null);
   const [toDelete, setToDelete] = useState<Seance | null>(null);
-const [importOpen, setImportOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
 
   const nomProf = useMemo(() => {
-    const map = new Map(
-      formateurs.map((f) => [f.id, `${f.prenom} ${f.nom}`] as const),
-    );
+    const map = new Map(formateurs.map((f) => [f.id, `${f.prenom} ${f.nom}`] as const));
     return (id: string) => map.get(id) ?? " ";
   }, [formateurs]);
 
   /** L'enseignant ne voit que ses propres séances. */
   const moiId = moiFormateur?.id ?? DEMO_FORMATEUR_ID;
   const visibles = useMemo(
-    () =>
-      estEnseignant
-        ? seances.filter((s) => s.professeurId === moiId)
-        : seances,
+    () => (estEnseignant ? seances.filter((s) => s.professeurId === moiId) : seances),
     [seances, estEnseignant, moiId],
   );
 
-  const modules = useMemo(
-    () => [...new Set(visibles.map((s) => s.module))].sort(),
-    [visibles],
-  );
+  const modules = useMemo(() => [...new Set(visibles.map((s) => s.module))].sort(), [visibles]);
   const profs = useMemo(() => {
     const ids = new Set(visibles.map((s) => s.professeurId));
     return formateurs
@@ -216,41 +167,31 @@ const [importOpen, setImportOpen] = useState(false);
       if (salle !== ALL && s.salle !== salle) return false;
       if (module !== ALL && s.module !== module) return false;
       if (annee !== ALL && anneeEtude(s.semestre) !== annee) return false;
-      if (anneeScolaire !== ALL && s.anneeUniversitaire !== anneeScolaire)
-        return false;
       if (!q) return true;
       return `${s.module} ${s.groupe} ${s.salle} ${nomProf(s.professeurId)} ${s.notes ?? ""}`
         .toLowerCase()
         .includes(q);
     });
-  }, [visibles, search, prof, groupe, salle, module, annee, anneeScolaire, nomProf]);
+  }, [visibles, search, prof, groupe, salle, module, annee, nomProf]);
 
   /* --------------- Navigation temporelle --------------- */
 
   const joursSemaine = useMemo(() => {
     const lundi = lundiDeLaSemaine(curseur);
-    // Semaine de 6 jours : pas de cours le dimanche. La semaine à cheval sur
-    // la fin de l'année scolaire est tronquée — le 1er juillet n'appartient
-    // pas au calendrier.
+    // Semaine de 6 jours : pas de cours le dimanche.
     return Array.from({ length: 6 }, (_, i) => {
       const d = new Date(lundi);
       d.setDate(lundi.getDate() + i);
       return d;
-    }).filter((d) => d >= bornes.debut && d <= bornes.fin);
-  }, [curseur, bornes]);
+    });
+  }, [curseur]);
 
-  /** Date visée par un déplacement, ou `null` si elle sort de l'année scolaire. */
-  const cible = (sens: -1 | 1): Date | null => {
+  const decaler = (sens: -1 | 1) => {
     const d = new Date(curseur);
     if (vue === "jour") d.setDate(d.getDate() + sens);
     else if (vue === "semaine") d.setDate(d.getDate() + sens * 7);
     else d.setMonth(d.getMonth() + sens);
-    return d < bornes.debut || d > bornes.fin ? null : d;
-  };
-
-  const decaler = (sens: -1 | 1) => {
-    const d = cible(sens);
-    if (d) setCurseur(d);
+    setCurseur(d);
   };
 
   const titrePeriode = useMemo(() => {
@@ -283,18 +224,11 @@ const [importOpen, setImportOpen] = useState(false);
   const handleDrop = (id: string, date: string, debut: string) => {
     const s = seances.find((x) => x.id === id);
     if (!s) return;
-    // Un jour chômé n'accueille pas de séance : le dépôt est refusé, pas
-    // seulement signalé.
-    const chome = chomes.get(date);
-    if (chome) {
-      toast.error(`${fmtDate(date)} est un jour chômé (${chome.nom})`);
-      return;
-    }
     const duree = minutesDepuisMinuit(s.fin) - minutesDepuisMinuit(s.debut);
     const fin = ajouterMinutes(debut, duree);
 
-    // Le déplacement est appliqué puis signalé : on n'empêche pas le
-    // responsable de poser une séance en conflit, on l'en avertit.
+    // Double séance interdite : un déplacement qui mettrait le professeur, la
+    // salle ou le groupe en chevauchement avec une autre séance est refusé.
     const conflits = conflitsSeance(
       {
         date,
@@ -307,37 +241,20 @@ const [importOpen, setImportOpen] = useState(false);
       id,
     );
 
-    moveSeance(id, date, debut);
-
     if (conflits.length) {
-      toast.warning(
-        `Séance déplacée   ${conflits.length} conflit(s) : ${resumeConflits(conflits)}`,
-      );
-    } else {
-      toast.success(`Séance déplacée au ${fmtDate(date)} à ${debut}`);
+      toast.error(`Déplacement refusé — ${resumeConflits(conflits)} déjà occupé(e) à cet horaire`);
+      return;
     }
+
+    moveSeance(id, date, debut);
+    toast.success(`Séance déplacée au ${fmtDate(date)} à ${debut}`);
   };
 
-  // Séances en conflit parmi celles affichées, avec le détail de chaque
-  // chevauchement — le compteur du bandeau et la modale s'appuient dessus.
-  const seancesEnConflit = useMemo(
-    () =>
-      filtrees
-        .map((s) => ({ seance: s, conflits: conflitsSeance(s, s.id) }))
-        .filter((x) => x.conflits.length)
-        .sort((a, b) =>
-          a.seance.date === b.seance.date
-            ? a.seance.debut < b.seance.debut
-              ? -1
-              : 1
-            : a.seance.date < b.seance.date
-              ? -1
-              : 1,
-        ),
+  const conflictIds = useMemo(
+    () => new Set(filtrees.filter((s) => conflitsSeance(s, s.id).length).map((s) => s.id)),
     [filtrees, conflitsSeance],
   );
-  const nbConflits = seancesEnConflit.length;
-  const [conflitsOpen, setConflitsOpen] = useState(false);
+  const nbConflits = conflictIds.size;
 
   /** Exporte l'emploi du temps affiché (séances filtrées) au format CSV. */
   const exportCsv = () => {
@@ -384,7 +301,7 @@ const [importOpen, setImportOpen] = useState(false);
     });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "emploi-du-temps-essor.csv";
+    a.download = "emploi-du-temps-istpm.csv";
     a.click();
     URL.revokeObjectURL(a.href);
     toast.success(`${filtrees.length} séance(s) exportée(s)`);
@@ -394,19 +311,43 @@ const [importOpen, setImportOpen] = useState(false);
   const exportExempleCsv = () => {
     const entetes = [...COLONNES_IMPORT];
     const exemples = [
-      ["2025-10-06", "08:30", "10:00", "Soins infirmiers en médecine", "Infirmier polyvalent", "Cours", "S5-G1", "Amphi A", "Yassine El Amrani", "S5", "2025/2026", "Séance d'ouverture"],
-      ["2025-10-06", "10:15", "11:45", "Réanimation et soins intensifs", "Infirmier polyvalent", "TP", "S5-G2", "Labo simulation 2", "Salma Benali", "S5", "2025/2026", ""],
+      [
+        "2025-10-06",
+        "08:30",
+        "10:00",
+        "Soins infirmiers en médecine",
+        "Infirmier polyvalent",
+        "Cours",
+        "S5-G1",
+        "Amphi A",
+        "Yassine El Amrani",
+        "S5",
+        "2025/2026",
+        "Séance d'ouverture",
+      ],
+      [
+        "2025-10-06",
+        "10:15",
+        "11:45",
+        "Réanimation et soins intensifs",
+        "Infirmier polyvalent",
+        "TP",
+        "S5-G2",
+        "Labo simulation 2",
+        "Salma Benali",
+        "S5",
+        "2025/2026",
+        "",
+      ],
     ];
     const csv = [
       entetes.join(","),
-      ...exemples.map((r) =>
-        r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","),
-      ),
+      ...exemples.map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")),
     ].join("\n");
     const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "modele-emploi-du-temps-essor.csv";
+    a.download = "modele-emploi-du-temps-istpm.csv";
     a.click();
     URL.revokeObjectURL(a.href);
     toast.success("Modèle CSV d'exemple téléchargé");
@@ -420,18 +361,12 @@ const [importOpen, setImportOpen] = useState(false);
         actions={
           <>
             {canEdit ? (
-              <button
-                className={cn(ghostPill, "gap-1.5")}
-                onClick={() => setImportOpen(true)}
-              >
+              <button className={cn(ghostPill, "gap-1.5")} onClick={() => setImportOpen(true)}>
                 <Upload className="h-3.5 w-3.5" /> Importer CSV
               </button>
             ) : null}
             {canEdit ? (
-              <button
-                className={cn(ghostPill, "gap-1.5")}
-                onClick={exportExempleCsv}
-              >
+              <button className={cn(ghostPill, "gap-1.5")} onClick={exportExempleCsv}>
                 <FileUp className="h-3.5 w-3.5" /> Exemple CSV
               </button>
             ) : null}
@@ -497,37 +432,22 @@ const [importOpen, setImportOpen] = useState(false);
           },
           {
             id: "annee",
-            label: "Niveau",
+            label: "Année",
             value: annee,
             onChange: setAnnee,
             options: ANNEES_ETUDE,
-            allLabel: "Tous les niveaux",
-          },
-          {
-            id: "anneeScolaire",
-            label: "Année scolaire",
-            value: anneeScolaire,
-            onChange: setAnneeScolaire,
-            options: ANNEES_UNIVERSITAIRES,
             allLabel: "Toutes les années",
           },
         ]}
         summary={
           <>
-            <strong className="font-semibold text-foreground">
-              {filtrees.length}
-            </strong>{" "}
-            séance(s) affichée(s)
+            <strong className="font-semibold text-foreground">{filtrees.length}</strong> séance(s)
+            affichée(s)
             {nbConflits ? (
-              <button
-                type="button"
-                onClick={() => setConflitsOpen(true)}
-                title="Voir le détail des conflits"
-                className="ms-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-semibold text-alert underline decoration-dotted underline-offset-2 transition-colors hover:bg-alert/10 hover:decoration-solid focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-alert/40"
-              >
+              <span className="ms-2 inline-flex items-center gap-1 font-semibold text-alert">
                 <AlertTriangle className="h-3 w-3" />
                 {nbConflits} en conflit
-              </button>
+              </span>
             ) : null}
           </>
         }
@@ -537,31 +457,23 @@ const [importOpen, setImportOpen] = useState(false);
         {/* Barre de navigation du calendrier */}
         <div className="flex flex-wrap items-center gap-3 border-b border-brand/12 bg-muted/50 px-4 py-3">
           <div className="flex items-center gap-1">
-            {/* Bornes de l'année scolaire : on ne navigue pas vers juillet
-                ni vers août, il ne s'y tient aucun cours. */}
             <button
-              className={cn(iconButton, "disabled:opacity-35 disabled:pointer-events-none")}
+              className={iconButton}
               aria-label="Période précédente"
-              disabled={!cible(-1)}
               onClick={() => decaler(-1)}
             >
               <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
             </button>
-            <button
-              className={cn(iconButton, "disabled:opacity-35 disabled:pointer-events-none")}
-              aria-label="Période suivante"
-              disabled={!cible(1)}
-              onClick={() => decaler(1)}
-            >
+            <button className={iconButton} aria-label="Période suivante" onClick={() => decaler(1)}>
               <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </button>
           </div>
 
           <button
             className={cn(ghostPill, "h-9 px-3 py-0 text-xs")}
-            onClick={() => setCurseur(positionDouverture())}
+            onClick={() => setCurseur(new Date())}
           >
-            Aujourd&rsquo;hui
+            Aujourd'hui
           </button>
 
           <p className="min-w-0 flex-1 truncate font-display text-base font-bold capitalize tracking-tight text-foreground">
@@ -583,7 +495,7 @@ const [importOpen, setImportOpen] = useState(false);
                 className={cn(
                   "rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200",
                   vue === v
-                    ? "bg-brand text-white shadow-[0_8px_18px_-10px_rgb(var(--essor-shadow)/0.9)]"
+                    ? "bg-brand text-white shadow-[0_8px_18px_-10px_rgb(var(--istpm-shadow)/0.9)]"
                     : "text-muted-foreground hover:bg-brand/10 hover:text-brand-dk",
                 )}
               >
@@ -595,8 +507,7 @@ const [importOpen, setImportOpen] = useState(false);
 
         {canEdit ? (
           <p className="border-b border-brand/8 bg-brand/5 px-4 py-1.5 text-[11px] text-brand-dk">
-            Glissez une séance pour la déplacer · cliquez sur une ligne horaire
-            pour en créer une
+            Glissez une séance pour la déplacer · cliquez sur une ligne horaire pour en créer une
           </p>
         ) : null}
 
@@ -606,35 +517,31 @@ const [importOpen, setImportOpen] = useState(false);
               date={curseur}
               seances={filtrees}
               nomProf={nomProf}
+              conflictIds={conflictIds}
               canDrag={canEdit}
               onOpen={setDetail}
               onDrop={handleDrop}
               onCreneauVide={canEdit ? ouvrirCreation : undefined}
-              jourChome={jourChome}
-              creneaux={creneaux}
             />
           ) : vue === "semaine" ? (
             <VueSemaine
               jours={joursSemaine}
               seances={filtrees}
               nomProf={nomProf}
+              conflictIds={conflictIds}
               canDrag={canEdit}
               onOpen={setDetail}
               onDrop={handleDrop}
               onCreneauVide={canEdit ? ouvrirCreation : undefined}
-              jourChome={jourChome}
-              creneaux={creneaux}
             />
           ) : (
             <VueMois
               mois={curseur}
               seances={filtrees}
               nomProf={nomProf}
+              conflictIds={conflictIds}
               onOpen={setDetail}
-              jourChome={jourChome}
-              horsCalendrier={(d) => d < bornes.debut || d > bornes.fin}
               onJour={(d) => {
-                if (d < bornes.debut || d > bornes.fin) return;
                 setCurseur(d);
                 setVue("jour");
               }}
@@ -642,66 +549,6 @@ const [importOpen, setImportOpen] = useState(false);
           )}
         </div>
       </section>
-
-      {/* Détail des conflits (depuis le compteur « N en conflit ») */}
-      <Dialog open={conflitsOpen} onOpenChange={setConflitsOpen}>
-        <DialogContent className={dialogSurface}>
-          <DialogTitle className="sr-only">Détail des conflits</DialogTitle>
-          <DialogDescription className="sr-only">
-            Liste des séances en conflit parmi celles affichées
-          </DialogDescription>
-          <DetailShell
-            icon={<AlertTriangle className="h-5 w-5" />}
-            title="Séances en conflit"
-            subtitle={`${nbConflits} séance(s) sur ${filtrees.length} affichée(s)`}
-          >
-            <DetailSection title="Chevauchements détectés">
-              {nbConflits ? (
-                <ul className="space-y-2">
-                  {seancesEnConflit.map(({ seance: s, conflits }) => (
-                    <li key={s.id}>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          // On bascule directement sur la fiche de la séance
-                          // fautive : c'est de là qu'on la corrige.
-                          setConflitsOpen(false);
-                          setDetail(s);
-                        }}
-                        className="w-full rounded-2xl bg-alert/8 px-4 py-3 text-left transition-colors hover:bg-alert/15"
-                      >
-                        <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                          <span className="text-sm font-semibold text-foreground">
-                            {s.module}
-                          </span>
-                          <span className={toneBadge("red")}>
-                            {conflits.length} conflit(s)
-                          </span>
-                        </span>
-                        <span className="mt-0.5 block text-xs text-muted-foreground">
-                          {fmtDate(s.date)} · {s.debut}–{s.fin} · {s.salle} ·{" "}
-                          {s.groupe} · {nomProf(s.professeurId)}
-                        </span>
-                        <ul className="mt-1.5 space-y-0.5 text-xs text-alert-dk">
-                          {conflits.map((cf, i) => (
-                            <li key={i}>
-                              {LIBELLE_CONFLIT[cf.type]} — {cf.seance.module} (
-                              {cf.seance.debut}–{cf.seance.fin},{" "}
-                              {cf.seance.salle})
-                            </li>
-                          ))}
-                        </ul>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <DetailEmpty>Aucun conflit détecté.</DetailEmpty>
-              )}
-            </DetailSection>
-          </DetailShell>
-        </DialogContent>
-      </Dialog>
 
       {/* Fiche d'une séance */}
       <Dialog open={!!detail} onOpenChange={(o) => !o && setDetail(null)}>
@@ -817,19 +664,14 @@ function SeanceDetail({
           </span>
           <span className={toneBadge("blue")}>{seance.semestre}</span>
           {conflits.length ? (
-            <span className={toneBadge("red")}>
-              {conflits.length} conflit(s)
-            </span>
+            <span className={toneBadge("red")}>{conflits.length} conflit(s)</span>
           ) : null}
         </>
       }
       footer={
         canEdit && (
           <div className="flex items-center justify-end gap-2">
-            <button
-              className={cn(ghostPill, "gap-1.5")}
-              onClick={() => onEdit(seance)}
-            >
+            <button className={cn(ghostPill, "gap-1.5")} onClick={() => onEdit(seance)}>
               <Pencil className="h-3.5 w-3.5" /> Modifier
             </button>
             <button
@@ -850,8 +692,8 @@ function SeanceDetail({
           <ul className="space-y-1 text-xs text-alert-dk">
             {conflits.map((cf, i) => (
               <li key={i}>
-                {LIBELLE_CONFLIT[cf.type]}   {cf.seance.module} (
-                {cf.seance.debut}–{cf.seance.fin}, {cf.seance.salle})
+                {LIBELLE_CONFLIT[cf.type]} {cf.seance.module} ({cf.seance.debut}–{cf.seance.fin},{" "}
+                {cf.seance.salle})
               </li>
             ))}
           </ul>
@@ -898,17 +740,12 @@ function SeanceDetail({
           />
           <DetailField label="Filière" value={seance.filiere} full />
           <DetailField label="Semestre" value={seance.semestre} />
-          <DetailField
-            label="Année universitaire"
-            value={seance.anneeUniversitaire}
-          />
+          <DetailField label="Année universitaire" value={seance.anneeUniversitaire} />
         </DetailGrid>
       </DetailSection>
 
       <DetailSection title="Notes">
-        <DetailEmpty>
-          {seance.notes ?? "Aucune note pour cette séance."}
-        </DetailEmpty>
+        <DetailEmpty>{seance.notes ?? "Aucune note pour cette séance."}</DetailEmpty>
       </DetailSection>
     </DetailShell>
   );
@@ -990,6 +827,15 @@ function SeanceForm({
       return;
     }
 
+    // Double séance interdite : on refuse l'enregistrement tant qu'un
+    // chevauchement (professeur / salle / groupe) subsiste.
+    if (conflits.length) {
+      toast.error(
+        `Enregistrement bloqué — ${resumeConflits(conflits)} déjà occupé(e) à cet horaire`,
+      );
+      return;
+    }
+
     onSubmit({
       module: f.module.trim(),
       professeurId: f.professeurId,
@@ -1013,17 +859,10 @@ function SeanceForm({
       wide
       title={initial ? "Modifier la séance" : "Nouvelle séance"}
       subtitle={
-        initial
-          ? `${initial.module}   ${fmtDate(initial.date)}`
-          : "Planifier un enseignement"
+        initial ? `${initial.module}   ${fmtDate(initial.date)}` : "Planifier un enseignement"
       }
-      submitLabel={
-        conflits.length
-          ? "Enregistrer malgré le conflit"
-          : initial
-            ? "Enregistrer"
-            : "Créer la séance"
-      }
+      submitLabel={initial ? "Enregistrer" : "Créer la séance"}
+      submitDisabled={conflits.length > 0}
       onSubmit={submit}
     >
       {conflits.length ? (
@@ -1031,14 +870,13 @@ function SeanceForm({
           <div className="space-y-1.5 rounded-2xl bg-alert/10 px-4 py-3">
             <p className="flex items-center gap-1.5 text-sm font-semibold text-alert">
               <AlertTriangle className="h-4 w-4" />
-              {conflits.length} conflit(s) détecté(s)
+              {conflits.length} conflit(s) — enregistrement bloqué
             </p>
             <ul className="space-y-0.5 text-xs text-alert-dk">
               {conflits.map((c, i) => (
                 <li key={i}>
-                  {LIBELLE_CONFLIT[c.type]}   {c.seance.module} (
-                  {c.seance.debut}–{c.seance.fin}, {c.seance.salle},{" "}
-                  {nomProf(c.seance.professeurId)})
+                  {LIBELLE_CONFLIT[c.type]} {c.seance.module} ({c.seance.debut}–{c.seance.fin},{" "}
+                  {c.seance.salle}, {nomProf(c.seance.professeurId)})
                 </li>
               ))}
             </ul>
@@ -1269,7 +1107,10 @@ function detecterDelimiteur(entetes: string[]): string {
 }
 
 function parseCell(v: string): string {
-  return v.replace(/^"(.*)"$/, "$1").replace(/""/g, '"').trim();
+  return v
+    .replace(/^"(.*)"$/, "$1")
+    .replace(/""/g, '"')
+    .trim();
 }
 
 type LigneImport = Record<string, string>;
@@ -1277,7 +1118,10 @@ type LigneImport = Record<string, string>;
 function autoMapper(entetes: string[]): Map<string, string> {
   const map = new Map<string, string>();
   for (const h of entetes) {
-    const key = h.toLowerCase().trim().replace(/[_\s-]+/g, " ");
+    const key = h
+      .toLowerCase()
+      .trim()
+      .replace(/[_\s-]+/g, " ");
     const target = AUTO_MAP[key];
     if (target) {
       map.set(target, h);
@@ -1292,10 +1136,7 @@ function autoMapper(entetes: string[]): Map<string, string> {
   return map;
 }
 
-function trouverFormateurId(
-  nom: string,
-  formateurs: Formateur[],
-): string | null {
+function trouverFormateurId(nom: string, formateurs: Formateur[]): string | null {
   const q = nom.toLowerCase().trim();
   const parts = q.split(/\s+/);
   const initial = parts[0]?.replace(/\.$/, "") ?? "";
@@ -1469,7 +1310,9 @@ function ImportCsvDialog({
       const clean = text.replace(/^\uFEFF/, "");
       const toutes = parseCsv(clean);
       if (toutes.length < 2) {
-        toast.error("Le fichier doit contenir au moins une ligne d'en-tête et une ligne de données");
+        toast.error(
+          "Le fichier doit contenir au moins une ligne d'en-tête et une ligne de données",
+        );
         return;
       }
       const ent = toutes[0].map((h) => h.trim());
@@ -1521,7 +1364,13 @@ function ImportCsvDialog({
   const lignesApercu = lignes.slice(0, 5);
 
   return (
-    <Dialog open={open} onOpenChange={(o) => { if (!o) reset(); onOpenChange(o); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) reset();
+        onOpenChange(o);
+      }}
+    >
       <DialogContent className={cn(dialogSurface, "max-w-4xl")}>
         <DialogTitle className="sr-only">Importer un CSV</DialogTitle>
         <DialogDescription className="sr-only">
@@ -1594,7 +1443,10 @@ function ImportCsvDialog({
                       {lignesApercu.map((l, i) => (
                         <tr key={i} className="border-t border-brand/8">
                           {entetes.map((h) => (
-                            <td key={h} className="max-w-40 truncate px-3 py-1.5 text-muted-foreground">
+                            <td
+                              key={h}
+                              className="max-w-40 truncate px-3 py-1.5 text-muted-foreground"
+                            >
                               {l[h] || ""}
                             </td>
                           ))}
@@ -1635,7 +1487,7 @@ function ImportCsvDialog({
                           mapping.get(col) ? "" : "border-alert/40 text-alert",
                         )}
                       >
-                        <option value="">  Non mappé  </option>
+                        <option value=""> Non mappé </option>
                         {colonneDispo.map((h) => (
                           <option key={h} value={h}>
                             {h}
@@ -1663,7 +1515,10 @@ function ImportCsvDialog({
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => { reset(); onOpenChange(false); }}
+                    onClick={() => {
+                      reset();
+                      onOpenChange(false);
+                    }}
                     className={cn(ghostPill, "h-8 px-3 text-xs")}
                   >
                     Annuler
@@ -1680,18 +1535,14 @@ function ImportCsvDialog({
               </div>
 
               {/* Fichier actuel */}
-              <p className="text-[11px] text-muted-foreground">
-                Fichier : {fichier}
-              </p>
+              <p className="text-[11px] text-muted-foreground">Fichier : {fichier}</p>
             </>
           )}
 
           {etape === "resultat" && (
             <>
               <div className="space-y-2">
-                <p className="text-sm font-semibold text-foreground">
-                  Résultat de l'importation
-                </p>
+                <p className="text-sm font-semibold text-foreground">Résultat de l'importation</p>
                 <div className="flex items-center gap-4 text-xs">
                   <span className="inline-flex items-center gap-1 font-semibold text-teal-600">
                     <CheckCircle2 className="h-3.5 w-3.5" />
@@ -1712,12 +1563,8 @@ function ImportCsvDialog({
                   {resultats.map((r, i) =>
                     r.ok ? null : (
                       <div key={i} className="flex gap-2 text-xs">
-                        <span className="shrink-0 font-semibold text-alert">
-                          Ligne {i + 2}:
-                        </span>
-                        <span className="text-muted-foreground">
-                          {r.erreurs.join(" · ")}
-                        </span>
+                        <span className="shrink-0 font-semibold text-alert">Ligne {i + 2}:</span>
+                        <span className="text-muted-foreground">{r.erreurs.join(" · ")}</span>
                       </div>
                     ),
                   )}
@@ -1726,7 +1573,10 @@ function ImportCsvDialog({
 
               <div className="flex justify-end gap-2">
                 <button
-                  onClick={() => { reset(); onOpenChange(false); }}
+                  onClick={() => {
+                    reset();
+                    onOpenChange(false);
+                  }}
                   className={cn(ghostPill, "h-8 px-3 text-xs")}
                 >
                   Fermer

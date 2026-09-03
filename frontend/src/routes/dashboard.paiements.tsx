@@ -1,10 +1,24 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Plus, BellRing, Eye, Receipt, PenLine, CalendarDays, Search, Check, Clock, AlertTriangle, Ban, Save, Download } from "lucide-react";
+import {
+  Plus,
+  BellRing,
+  Eye,
+  Receipt,
+  PenLine,
+  CalendarDays,
+  Search,
+  Check,
+  Clock,
+  AlertTriangle,
+  Ban,
+  Save,
+  Download,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
-import { useEssor } from "@/lib/scholnexa-store";
+import { useIstpm } from "@/lib/istpm-store";
 import { makePaiementDocPdf } from "@/lib/branded-doc";
 import {
   ANNEES_UNIVERSITAIRES,
@@ -22,7 +36,7 @@ import {
   type Etudiant,
   type PaiementMensuel,
   type StatutPaiement,
-} from "@/lib/scholnexa-data";
+} from "@/lib/istpm-data";
 import {
   softCard,
   primaryPill,
@@ -50,20 +64,15 @@ import {
   ALL,
 } from "@/components/dash-page";
 import { usePagination, TablePagination } from "@/components/table-pagination";
+import { FormDialog, TextField, NumberField, SelectField, FullWidth } from "@/components/dash-form";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import {
-  FormDialog,
-  TextField,
-  NumberField,
-  SelectField,
-  FullWidth,
-} from "@/components/dash-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { softSelectTrigger, softSelectContent } from "@/lib/dash-ui";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -86,9 +95,7 @@ function deriveStatutPaiement(records: PaiementMensuel[]): StatutPaiement {
 }
 
 function totalPaye(records: PaiementMensuel[]): number {
-  return records
-    .filter((r) => r.statut === "paye")
-    .reduce((s, r) => s + r.montantPaye, 0);
+  return records.filter((r) => r.statut === "paye").reduce((s, r) => s + r.montantPaye, 0);
 }
 
 function resteDu(records: PaiementMensuel[]): number {
@@ -97,14 +104,13 @@ function resteDu(records: PaiementMensuel[]): number {
 
 function PaiementsPage() {
   const { role } = useAuth();
-  const { etudiants, financier, aRelancer, payerMois, updatePaiementMensuel } = useEssor();
+  const { etudiants, financier, aRelancer, payerMois, updatePaiementMensuel } = useIstpm();
   const canEdit = role === "directeur" || role === "responsable";
 
   const [search, setSearch] = useState("");
   const [filiere, setFiliere] = useState<string>(ALL);
   const [semestre, setSemestre] = useState<string>(ALL);
   const [annee, setAnnee] = useState<string>(ALL);
-  const [anneeScolaire, setAnneeScolaire] = useState<string>(ALL);
   const [statut, setStatut] = useState<string>(ALL);
   const [mois, setMois] = useState<string>(ALL);
 
@@ -124,7 +130,6 @@ function PaiementsPage() {
         if (filiere !== ALL && e.filiere !== filiere) return false;
         if (semestre !== ALL && e.niveau !== semestre) return false;
         if (annee !== ALL && anneeEtude(e.niveau) !== annee) return false;
-        if (anneeScolaire !== ALL && e.annee !== anneeScolaire) return false;
         const statutE = deriveStatutPaiement(e.paiementsMensuelsRecords);
         if (statut !== ALL && STATUT_PAIEMENT_LABEL[statutE] !== statut) return false;
         if (mois !== ALL) {
@@ -144,13 +149,20 @@ function PaiementsPage() {
         const statutE = deriveStatutPaiement(records);
         const moisNonPayes = records.filter((r) => r.statut !== "paye").length;
         const moisRetard = records.filter((r) => r.statut === "retard").length;
-        return { etudiant: e, statut: statutE, totalPaye: total, resteDu: reste, moisNonPayes, moisRetard };
+        return {
+          etudiant: e,
+          statut: statutE,
+          totalPaye: total,
+          resteDu: reste,
+          moisNonPayes,
+          moisRetard,
+        };
       });
-  }, [etudiants, search, filiere, semestre, annee, anneeScolaire, statut, mois]);
+  }, [etudiants, search, filiere, semestre, annee, statut, mois]);
 
   const pager = usePagination(
     parEtudiant,
-    `${search}|${filiere}|${semestre}|${annee}|${anneeScolaire}|${statut}|${mois}`,
+    `${search}|${filiere}|${semestre}|${annee}|${statut}|${mois}`,
   );
 
   const kpis = [
@@ -169,10 +181,7 @@ function PaiementsPage() {
         actions={
           <>
             {canEdit ? (
-              <button
-                className={cn(ghostPill, "gap-1.5")}
-                onClick={() => setRelanceOpen(true)}
-              >
+              <button className={cn(ghostPill, "gap-1.5")} onClick={() => setRelanceOpen(true)}>
                 <BellRing className="h-3.5 w-3.5" /> Relances ({aRelancer.length})
               </button>
             ) : null}
@@ -214,30 +223,44 @@ function PaiementsPage() {
         placeholder="Rechercher par CNE, étudiant, reçu…"
         filters={[
           {
-            id: "filiere", label: "Filière", value: filiere, onChange: setFiliere,
-            options: FILIERES, allLabel: "Toutes les filières",
+            id: "filiere",
+            label: "Filière",
+            value: filiere,
+            onChange: setFiliere,
+            options: FILIERES,
+            allLabel: "Toutes les filières",
           },
           {
-            id: "semestre", label: "Semestre", value: semestre, onChange: setSemestre,
-            options: NIVEAUX, allLabel: "Tous les semestres",
+            id: "semestre",
+            label: "Semestre",
+            value: semestre,
+            onChange: setSemestre,
+            options: NIVEAUX,
+            allLabel: "Tous les semestres",
           },
           {
-            // Libellé « Niveau » comme sur les autres pages : c'est l'année
-            // d'étude (1ère/2ème/3ème), à ne pas confondre avec l'année scolaire.
-            id: "annee", label: "Niveau", value: annee, onChange: setAnnee,
-            options: ANNEES_ETUDE, allLabel: "Tous les niveaux",
+            id: "annee",
+            label: "Année",
+            value: annee,
+            onChange: setAnnee,
+            options: ANNEES_ETUDE,
+            allLabel: "Toutes les années",
           },
           {
-            id: "anneeScolaire", label: "Année scolaire", value: anneeScolaire, onChange: setAnneeScolaire,
-            options: ANNEES_UNIVERSITAIRES, allLabel: "Toutes les années",
+            id: "statut",
+            label: "Statut",
+            value: statut,
+            onChange: setStatut,
+            options: STATUTS.map((s) => STATUT_PAIEMENT_LABEL[s]),
+            allLabel: "Tous les statuts",
           },
           {
-            id: "statut", label: "Statut", value: statut, onChange: setStatut,
-            options: STATUTS.map((s) => STATUT_PAIEMENT_LABEL[s]), allLabel: "Tous les statuts",
-          },
-          {
-            id: "mois", label: "Mois", value: mois, onChange: setMois,
-            options: moisOptions, allLabel: "Tous les mois",
+            id: "mois",
+            label: "Mois",
+            value: mois,
+            onChange: setMois,
+            options: moisOptions,
+            allLabel: "Tous les mois",
           },
         ]}
       />
@@ -285,15 +308,9 @@ function PaiementsPage() {
             >
               {r.etudiant.prenom} {r.etudiant.nom}
             </td>
-            <td className={cn("text-muted-foreground", cellTruncate)}>
-              {r.etudiant.filiere}
-            </td>
-            <td className="text-center tabular-nums text-muted-foreground">
-              {r.etudiant.niveau}
-            </td>
-            <td className="text-muted-foreground">
-              {anneeEtude(r.etudiant.niveau)}
-            </td>
+            <td className={cn("text-muted-foreground", cellTruncate)}>{r.etudiant.filiere}</td>
+            <td className="text-center tabular-nums text-muted-foreground">{r.etudiant.niveau}</td>
+            <td className="text-muted-foreground">{anneeEtude(r.etudiant.niveau)}</td>
             <td className="text-right font-semibold tabular-nums text-brand-dk">
               {fmtMAD(r.totalPaye)}
             </td>
@@ -460,8 +477,27 @@ function EditPaiementDialog({
   etudiant: Etudiant | null;
   etudiants?: Etudiant[];
   onClose: () => void;
-  onSave: (mois: string[], details: { montant: number; mode: "Espèces" | "Virement" | "Carte" | "Chèque"; date: string; recu?: string; notes?: string }) => void;
-  onNewPayment?: (etudiantId: string, mois: string[], details: { montant: number; mode: "Espèces" | "Virement" | "Carte" | "Chèque"; date: string; recu?: string; notes?: string }) => void;
+  onSave: (
+    mois: string[],
+    details: {
+      montant: number;
+      mode: "Espèces" | "Virement" | "Carte" | "Chèque";
+      date: string;
+      recu?: string;
+      notes?: string;
+    },
+  ) => void;
+  onNewPayment?: (
+    etudiantId: string,
+    mois: string[],
+    details: {
+      montant: number;
+      mode: "Espèces" | "Virement" | "Carte" | "Chèque";
+      date: string;
+      recu?: string;
+      notes?: string;
+    },
+  ) => void;
   isNew?: boolean;
 }) {
   const academicYear = getCurrentAcademicYear();
@@ -476,9 +512,7 @@ function EditPaiementDialog({
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const currentEtudiant = isNew
-    ? etudiants?.find((e) => e.id === selectedId)
-    : etudiant;
+  const currentEtudiant = isNew ? etudiants?.find((e) => e.id === selectedId) : etudiant;
 
   const records = currentEtudiant?.paiementsMensuelsRecords ?? [];
   const monthlyFee = currentEtudiant?.fraisMensuels ?? 0;
@@ -552,8 +586,7 @@ function EditPaiementDialog({
       {currentEtudiant ? (
         <FullWidth>
           <div className="rounded-2xl bg-muted px-4 py-3 text-xs text-muted-foreground">
-            Frais mensuels&nbsp;:{" "}
-            <strong className="text-brand-dk">{fmtMAD(monthlyFee)}</strong>
+            Frais mensuels&nbsp;: <strong className="text-brand-dk">{fmtMAD(monthlyFee)}</strong>
           </div>
         </FullWidth>
       ) : null}
@@ -625,11 +658,7 @@ function EditPaiementDialog({
         error={errors.date}
       />
 
-      <TextField
-        label="Notes"
-        value={notes}
-        onChange={(v) => setNotes(v)}
-      />
+      <TextField label="Notes" value={notes} onChange={(v) => setNotes(v)} />
     </FormDialog>
   );
 }
@@ -645,7 +674,7 @@ function HistoriquePaiementsDialog({
   etudiant: Etudiant;
   onClose: () => void;
 }) {
-  const { updatePaiementMensuel } = useEssor();
+  const { updatePaiementMensuel } = useIstpm();
   const academicYear = getCurrentAcademicYear();
   const months = useMemo(() => getAcademicYearMonths(academicYear), [academicYear]);
   const canEdit = useAuth().role === "directeur" || useAuth().role === "responsable";
@@ -674,7 +703,7 @@ function HistoriquePaiementsDialog({
   const [editingMois, setEditingMois] = useState<string | null>(null);
   const [editStatut, setEditStatut] = useState<StatutPaiement>("paye");
 
-  const saveStatut = (record: typeof monthData[0]) => {
+  const saveStatut = (record: (typeof monthData)[0]) => {
     const existing = records.find((r) => r.mois === record.mois);
     if (existing) {
       updatePaiementMensuel(existing.id, etudiant.id, { statut: editStatut });
@@ -705,15 +734,8 @@ function HistoriquePaiementsDialog({
               <DetailField label="Semestre" value={etudiant.niveau} />
               <DetailField label="Année" value={anneeEtude(etudiant.niveau)} />
               <DetailField label="Groupe" value={etudiant.groupe} />
-              <DetailField
-                label="Frais mensuels"
-                value={fmtMAD(etudiant.fraisMensuels)}
-              />
-              <DetailField
-                label="Total réglé"
-                value={fmtMAD(totalPayeE)}
-                tone="positive"
-              />
+              <DetailField label="Frais mensuels" value={fmtMAD(etudiant.fraisMensuels)} />
+              <DetailField label="Total réglé" value={fmtMAD(totalPayeE)} tone="positive" />
               <DetailField
                 label="Reste dû"
                 value={resteDuE > 0 ? fmtMAD(resteDuE) : "—"}
@@ -722,9 +744,7 @@ function HistoriquePaiementsDialog({
             </DetailGrid>
           </DetailSection>
 
-          <DetailSection
-            title={`Suivi mensuel (${nbPaye}/${months.length} réglés)`}
-          >
+          <DetailSection title={`Suivi mensuel (${nbPaye}/${months.length} réglés)`}>
             <DetailTable
               head={
                 <>
@@ -742,9 +762,7 @@ function HistoriquePaiementsDialog({
                 const reste = m.montantDu - m.montantPaye;
                 return (
                   <tr key={m.mois}>
-                    <td className="whitespace-nowrap px-3 py-2 font-medium capitalize">
-                      {m.mois}
-                    </td>
+                    <td className="whitespace-nowrap px-3 py-2 font-medium capitalize">{m.mois}</td>
                     <td className="px-3 py-2 text-right font-semibold tabular-nums">
                       {fmtMAD(m.montantDu)}
                     </td>
@@ -840,7 +858,9 @@ function HistoriquePaiementsDialog({
                           <Download className="h-3 w-3" />
                           Télécharger
                         </button>
-                      ) : "—"}
+                      ) : (
+                        "—"
+                      )}
                     </td>
                   </tr>
                 );
@@ -878,9 +898,7 @@ function StudentSearchField({
   const q = query.trim().toLowerCase();
   const matches = useMemo(() => {
     const base = q
-      ? students.filter((s) =>
-          `${s.prenom} ${s.nom} ${s.cne}`.toLowerCase().includes(q),
-        )
+      ? students.filter((s) => `${s.prenom} ${s.nom} ${s.cne}`.toLowerCase().includes(q))
       : students;
     return base.slice(0, 8);
   }, [students, q]);
@@ -888,8 +906,7 @@ function StudentSearchField({
   useEffect(() => {
     if (!open) return;
     const onDoc = (e: MouseEvent) => {
-      if (boxRef.current && !boxRef.current.contains(e.target as Node))
-        setOpen(false);
+      if (boxRef.current && !boxRef.current.contains(e.target as Node)) setOpen(false);
     };
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
@@ -951,9 +968,7 @@ function StudentSearchField({
                 </li>
               ))
             ) : (
-              <li className="px-3 py-2 text-sm text-muted-foreground">
-                Aucun étudiant trouvé.
-              </li>
+              <li className="px-3 py-2 text-sm text-muted-foreground">Aucun étudiant trouvé.</li>
             )}
           </ul>
         ) : null}

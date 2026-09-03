@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Stockage local des sujets d'examen déposés.
  *
  * Les fichiers vivent dans **IndexedDB**, pas dans le localStorage : celui-ci
@@ -11,7 +11,7 @@
  * sort du navigateur : aucun backend n'est appelé.
  */
 
-const DB_NAME = "essor-docs";
+const DB_NAME = "istpm-docs";
 const STORE = "documents";
 const DB_VERSION = 1;
 
@@ -160,8 +160,7 @@ export function makePlaceholderPdf(lines: string[]): Blob {
     pdf += `${String(off).padStart(10, "0")} 00000 n \n`;
   }
   pdf +=
-    `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\n` +
-    `startxref\n${xrefStart}\n%%EOF\n`;
+    `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\n` + `startxref\n${xrefStart}\n%%EOF\n`;
 
   return new Blob([pdf], { type: "application/pdf" });
 }
@@ -207,9 +206,7 @@ async function fetchSeedSujet(docId: string): Promise<Blob | null> {
  * déjà présents (y compris ceux déposés par l'utilisateur) ne sont jamais
  * écrasés.
  */
-export async function ensureSeedDocuments(
-  exams: SeedExam[],
-): Promise<Record<string, number>> {
+export async function ensureSeedDocuments(exams: SeedExam[]): Promise<Record<string, number>> {
   // Taille réelle de chaque fichier écrit, renvoyée pour que les métadonnées
   // affichées correspondent exactement au fichier téléchargé.
   const sizes: Record<string, number> = {};
@@ -226,7 +223,7 @@ export async function ensureSeedDocuments(
       const blob =
         (await fetchSeedSujet(doc.id)) ??
         makePlaceholderPdf([
-          "Essor - Etablissement de formation",
+          "Essor - Institut specialise des techniques paramedicales",
           "",
           exam.titre,
           "",

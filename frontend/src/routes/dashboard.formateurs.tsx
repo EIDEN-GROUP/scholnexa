@@ -1,11 +1,11 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Plus, Pencil, Eye, Trash2, Upload, Archive, Download, FileUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
-import { useEssor, type NouveauFormateur } from "@/lib/scholnexa-store";
-import { createUser } from "@/lib/scholnexa-api";
+import { useIstpm, type NouveauFormateur } from "@/lib/istpm-store";
+import { createUser } from "@/lib/istpm-api";
 import { ImportCsvDialog, type ImportColumn } from "@/components/import-csv";
 import {
   FILIERES,
@@ -16,7 +16,7 @@ import {
   type Filiere,
   type GradeFormateur,
   type StatutFormateur,
-} from "@/lib/scholnexa-data";
+} from "@/lib/istpm-data";
 import {
   primaryPill,
   ghostPill,
@@ -38,7 +38,6 @@ import {
   DetailGrid,
   DetailField,
   DetailEmpty,
-
   DetailShell,
   ALL,
 } from "@/components/dash-page";
@@ -53,15 +52,8 @@ import {
   FullWidth,
   parseList,
 } from "@/components/dash-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-
-
 
 /** Configuration d'un groupe encadré par un formateur (effectif rattaché). */
 type GroupConfig = { name: string; studentCount: number };
@@ -71,8 +63,7 @@ const STATUTS: StatutFormateur[] = ["permanent", "vacataire", "en_conge"];
 
 function FormateursPage() {
   const { role } = useAuth();
-  const { formateurs, modules, addFormateur, updateFormateur, deleteFormateur } =
-    useEssor();
+  const { formateurs, modules, addFormateur, updateFormateur, deleteFormateur } = useIstpm();
   const canEdit = role === "directeur" || role === "responsable";
 
   /** Options du sélecteur : registre des modules (Paramètres › Modules),
@@ -80,12 +71,7 @@ function FormateursPage() {
    *  aucune valeur existante. */
   const modulesDisponibles = useMemo(
     () =>
-      [
-        ...new Set([
-          ...modules.map((m) => m.nom),
-          ...formateurs.flatMap((f) => f.modules),
-        ]),
-      ].sort(),
+      [...new Set([...modules.map((m) => m.nom), ...formateurs.flatMap((f) => f.modules)])].sort(),
     [modules, formateurs],
   );
 
@@ -163,7 +149,9 @@ function FormateursPage() {
     let compteur = 0;
     for (const r of rows) {
       const grade = matchLabelFormateur(r.grade, GRADE_VALUES, GRADE_LABEL) ?? "PES";
-      const statut = matchLabelFormateur(r.statut, STATUT_FORMATEUR_VALUES, STATUT_FORMATEUR_LABEL) ?? "permanent";
+      const statut =
+        matchLabelFormateur(r.statut, STATUT_FORMATEUR_VALUES, STATUT_FORMATEUR_LABEL) ??
+        "permanent";
       const nouveau: NouveauFormateur = {
         matricule: r.matricule,
         cin: r.cin,
@@ -171,8 +159,16 @@ function FormateursPage() {
         nom: r.nom,
         grade,
         departement: r.departement as Filiere,
-        modules: r.modules.split(",").map((m) => m.trim()).filter(Boolean),
-        groupes: r.groupes ? r.groupes.split(",").map((g) => g.trim()).filter(Boolean) : [],
+        modules: r.modules
+          .split(",")
+          .map((m) => m.trim())
+          .filter(Boolean),
+        groupes: r.groupes
+          ? r.groupes
+              .split(",")
+              .map((g) => g.trim())
+              .filter(Boolean)
+          : [],
         statut,
         telephone: r.telephone ?? "",
         email: r.email ?? "",
@@ -185,15 +181,10 @@ function FormateursPage() {
 
   /** Sérialise une liste de lignes (déjà ordonnées comme `colonnesImportFormateurs`)
    *  en CSV, avec BOM pour qu'Excel lise correctement les accents. */
-  const telechargerCsvFormateurs = (
-    lignes: (string | number)[][],
-    fichier: string,
-  ) => {
+  const telechargerCsvFormateurs = (lignes: (string | number)[][], fichier: string) => {
     const entetes = colonnesImportFormateurs.map((c) => c.label);
     const csv = [entetes, ...lignes]
-      .map((r) =>
-        r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","),
-      )
+      .map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(","))
       .join("\n");
     const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
     const a = document.createElement("a");
@@ -230,8 +221,32 @@ function FormateursPage() {
   /** Télécharge un modèle CSV d'exemple (entêtes + lignes types) pour l'import. */
   const exportExempleFormateursCsv = () => {
     const exemples: (string | number)[][] = [
-      ["PR-2025-001", "AB123456", "Yassine", "El Amrani", "PES", FILIERES[0], "Anatomie, Physiologie", "S3-G1, S3-G2", "Permanent", "0612345678", "y.elamrani@demo.essor.ma"],
-      ["PR-2025-002", "CD789012", "Salma", "Benali", "Vacataire", FILIERES[0], "Pharmacologie", "S5-G1", "Vacataire", "0698765432", "s.benali@demo.essor.ma"],
+      [
+        "PR-2025-001",
+        "AB123456",
+        "Yassine",
+        "El Amrani",
+        "PES",
+        FILIERES[0],
+        "Anatomie, Physiologie",
+        "S3-G1, S3-G2",
+        "Permanent",
+        "0612345678",
+        "y.elamrani@istpm.ma",
+      ],
+      [
+        "PR-2025-002",
+        "CD789012",
+        "Salma",
+        "Benali",
+        "Vacataire",
+        FILIERES[0],
+        "Pharmacologie",
+        "S5-G1",
+        "Vacataire",
+        "0698765432",
+        "s.benali@istpm.ma",
+      ],
     ];
     telechargerCsvFormateurs(exemples, "formateurs-import-exemple.csv");
     toast.success("Modèle CSV d'exemple téléchargé");
@@ -320,29 +335,20 @@ function FormateursPage() {
             <td className="font-medium tabular-nums">{f.matricule}</td>
             <td>
               <span className="flex items-center gap-2.5">
-                <span className={avatarChip}>
-                  {initials(`${f.prenom} ${f.nom}`)}
-                </span>
+                <span className={avatarChip}>{initials(`${f.prenom} ${f.nom}`)}</span>
                 <span className={cn("font-medium", cellTruncate)}>
                   {f.prenom} {f.nom}
                 </span>
               </span>
             </td>
-            <td className={cn("text-muted-foreground", cellTruncate)}>
-              {f.departement}
-            </td>
-            <td className="text-center font-medium tabular-nums">
-              {f.modules.length}
-            </td>
+            <td className={cn("text-muted-foreground", cellTruncate)}>{f.departement}</td>
+            <td className="text-center font-medium tabular-nums">{f.modules.length}</td>
             <td>
               <span className={toneBadge(STATUT_FORMATEUR_TONE[f.statut])}>
                 {STATUT_FORMATEUR_LABEL[f.statut]}
               </span>
             </td>
-            <td
-              className="text-center"
-              onClick={(ev) => ev.stopPropagation()}
-            >
+            <td className="text-center" onClick={(ev) => ev.stopPropagation()}>
               <div className={rowActions}>
                 <button
                   className={iconButton}
@@ -381,9 +387,7 @@ function FormateursPage() {
       <Dialog open={!!detail} onOpenChange={(o) => !o && setDetail(null)}>
         <DialogContent className={dialogSurface}>
           <DialogTitle className="sr-only">Fiche formateur</DialogTitle>
-          <DialogDescription className="sr-only">
-            Détail du formateur sélectionné
-          </DialogDescription>
+          <DialogDescription className="sr-only">Détail du formateur sélectionné</DialogDescription>
           {detail
             ? (() => {
                 const f = formateurs.find((x) => x.id === detail.id) ?? detail;
@@ -394,17 +398,11 @@ function FormateursPage() {
                     subtitle={`${f.matricule} · ${f.departement}`}
                     badges={
                       <>
-                        <span
-                          className={toneBadge(STATUT_FORMATEUR_TONE[f.statut])}
-                        >
+                        <span className={toneBadge(STATUT_FORMATEUR_TONE[f.statut])}>
                           {STATUT_FORMATEUR_LABEL[f.statut]}
                         </span>
-                        <span className={toneBadge("neutral")}>
-                          {GRADE_LABEL[f.grade]}
-                        </span>
-                        <span className={toneBadge("blue")}>
-                          {f.notesSaisies} notes saisies
-                        </span>
+                        <span className={toneBadge("neutral")}>{GRADE_LABEL[f.grade]}</span>
+                        <span className={toneBadge("blue")}>{f.notesSaisies} notes saisies</span>
                       </>
                     }
                   >
@@ -412,14 +410,8 @@ function FormateursPage() {
                       <DetailGrid>
                         <DetailField label="Matricule" value={f.matricule} />
                         <DetailField label="CIN" value={f.cin} />
-                        <DetailField
-                          label="Grade"
-                          value={GRADE_LABEL[f.grade]}
-                        />
-                        <DetailField
-                          label="Département / filière"
-                          value={f.departement}
-                        />
+                        <DetailField label="Grade" value={GRADE_LABEL[f.grade]} />
+                        <DetailField label="Département / filière" value={f.departement} />
                       </DetailGrid>
                     </DetailSection>
 
@@ -430,9 +422,7 @@ function FormateursPage() {
                       </DetailGrid>
                     </DetailSection>
 
-                    <DetailSection
-                      title={`Modules enseignés (${f.modules.length})`}
-                    >
+                    <DetailSection title={`Modules enseignés (${f.modules.length})`}>
                       {f.modules.length ? (
                         <ul className="grid gap-1.5 sm:grid-cols-2">
                           {f.modules.map((m) => (
@@ -478,24 +468,24 @@ function FormateursPage() {
           initial={editing}
           modulesDisponibles={modulesDisponibles}
           onCancel={() => setFormOpen(false)}
-    onSubmit={(data) => {
-      if (editing) {
-        updateFormateur(editing.id, data);
-        toast.success(`Fiche mise à jour   ${data.prenom} ${data.nom}`);
-      } else {
-        if (data.password && data.email) {
-          createUser({
-            email: data.email,
-            password: data.password,
-            name: `${data.prenom} ${data.nom}`,
-            role: "enseignant",
-          }).catch(() => {});
-        }
-        addFormateur(data);
-        toast.success(`Formateur ajouté   ${data.prenom} ${data.nom}`);
-      }
-      setFormOpen(false);
-    }}
+          onSubmit={(data) => {
+            if (editing) {
+              updateFormateur(editing.id, data);
+              toast.success(`Fiche mise à jour   ${data.prenom} ${data.nom}`);
+            } else {
+              if (data.password && data.email) {
+                createUser({
+                  email: data.email,
+                  password: data.password,
+                  name: `${data.prenom} ${data.nom}`,
+                  role: "enseignant",
+                }).catch(() => {});
+              }
+              addFormateur(data);
+              toast.success(`Formateur ajouté   ${data.prenom} ${data.nom}`);
+            }
+            setFormOpen(false);
+          }}
         />
       ) : null}
 
@@ -511,9 +501,7 @@ function FormateursPage() {
         onConfirm={() => {
           if (!toDelete) return;
           deleteFormateur(toDelete.id);
-          toast.success(
-            `Formateur supprimé   ${toDelete.prenom} ${toDelete.nom}`,
-          );
+          toast.success(`Formateur supprimé   ${toDelete.prenom} ${toDelete.nom}`);
           setToDelete(null);
         }}
       />
@@ -558,9 +546,7 @@ function FormateurForm({
   modulesDisponibles: string[];
 }) {
   const [f, setF] = useState(() => ({
-    matricule:
-      initial?.matricule ??
-      `ENS-${String(Math.floor(Math.random() * 900) + 100)}`,
+    matricule: initial?.matricule ?? `ENS-${String(Math.floor(Math.random() * 900) + 100)}`,
     cin: initial?.cin ?? "",
     prenom: initial?.prenom ?? "",
     nom: initial?.nom ?? "",
@@ -591,8 +577,7 @@ function FormateurForm({
     if (!f.password.trim()) next.password = "Mot de passe requis";
     if (f.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email))
       next.email = "Adresse e-mail invalide";
-    if (!parseList(f.modules).length)
-      next.modules = "Au moins un module est requis";
+    if (!parseList(f.modules).length) next.modules = "Au moins un module est requis";
 
     if (Object.keys(next).length) {
       setErrors(next);
@@ -630,11 +615,7 @@ function FormateurForm({
       submitLabel={initial ? "Enregistrer les modifications" : "Ajouter"}
       onSubmit={submit}
     >
-      <TextField
-        label="Matricule"
-        value={f.matricule}
-        onChange={(v) => set("matricule", v)}
-      />
+      <TextField label="Matricule" value={f.matricule} onChange={(v) => set("matricule", v)} />
       <TextField
         label="CIN"
         required
@@ -756,8 +737,7 @@ function ArchiveFormateurDialog({
 
   const reassign = formateur.groupes.length > 0;
 
-  const allAssigned = () =>
-    formateur.groupes.every((g) => reassignments[g]?.trim());
+  const allAssigned = () => formateur.groupes.every((g) => reassignments[g]?.trim());
 
   const handleConfirm = () => {
     const groupReassignments = formateur.groupes
@@ -816,58 +796,58 @@ function ArchiveFormateurDialog({
           }
         >
           <div className="space-y-4">
-          {formateur.groupes.map((g) => {
-            const config = groupConfigs.find((c) => c.name === g);
-            return (
-              <div key={g} className="space-y-1.5">
-                <label className="block text-xs font-medium text-foreground">
-                  Groupe <strong>{g}</strong>
-                  {config && config.studentCount > 0 ? (
-                    <span className="ml-1 text-muted-foreground">
-                      ({config.studentCount} étud.)
-                    </span>
-                  ) : null}
-                </label>
-                <select
-                  value={reassignments[g]}
-                  onChange={(e) =>
-                    setReassignments((prev) => ({
-                      ...prev,
-                      [g]: e.target.value,
-                    }))
-                  }
-                  className={selectClass}
-                >
-                  <option value="">
-                    {reassign ? "Choisir un formateur…" : "Aucun groupe à réaffecter"}
-                  </option>
-                  {formateurs.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.prenom} {f.nom}
+            {formateur.groupes.map((g) => {
+              const config = groupConfigs.find((c) => c.name === g);
+              return (
+                <div key={g} className="space-y-1.5">
+                  <label className="block text-xs font-medium text-foreground">
+                    Groupe <strong>{g}</strong>
+                    {config && config.studentCount > 0 ? (
+                      <span className="ml-1 text-muted-foreground">
+                        ({config.studentCount} étud.)
+                      </span>
+                    ) : null}
+                  </label>
+                  <select
+                    value={reassignments[g]}
+                    onChange={(e) =>
+                      setReassignments((prev) => ({
+                        ...prev,
+                        [g]: e.target.value,
+                      }))
+                    }
+                    className={selectClass}
+                  >
+                    <option value="">
+                      {reassign ? "Choisir un formateur…" : "Aucun groupe à réaffecter"}
                     </option>
-                  ))}
-                </select>
-              </div>
-            );
-          })}
+                    {formateurs.map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.prenom} {f.nom}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              );
+            })}
 
-          <div className="space-y-1.5">
-            <label className="block text-xs font-medium text-foreground">
-              Filière <strong>{formateur.departement}</strong>
-            </label>
-            <select
-              value={filiereTarget}
-              onChange={(e) => setFiliereTarget(e.target.value)}
-              className={selectClass}
-            >
-              <option value="">Ne pas réaffecter</option>
-              {formateurs.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.prenom} {f.nom}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className="space-y-1.5">
+              <label className="block text-xs font-medium text-foreground">
+                Filière <strong>{formateur.departement}</strong>
+              </label>
+              <select
+                value={filiereTarget}
+                onChange={(e) => setFiliereTarget(e.target.value)}
+                className={selectClass}
+              >
+                <option value="">Ne pas réaffecter</option>
+                {formateurs.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.prenom} {f.nom}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </DetailShell>
       </DialogContent>

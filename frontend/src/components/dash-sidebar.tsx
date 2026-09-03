@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Sidebar application shell.
  *
  * Replaces the previous horizontal top-nav. Layout:
@@ -12,7 +12,14 @@
  * right without a second set of styles.
  */
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   ChevronDown,
@@ -25,24 +32,15 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { ROLES, ROLE_META, useAuth } from "@/lib/auth";
-import { BRAND } from "@/lib/brand";
 import { useDashboardI18n } from "@/lib/dashboard-i18n";
-import { useEssor } from "@/lib/scholnexa-store";
+import { useIstpm } from "@/lib/istpm-store";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { AiChatFloating } from "@/components/ai-chat";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { EssorLockup, EssorMark } from "@/components/landing/brand";
 
 /* ------------------------------------------------------------------ */
 /*  Types de navigation                                                */
@@ -75,8 +73,7 @@ export function isNavGroup(entry: NavEntry): entry is NavGroup {
  * exactly, or it would light up on every child route.
  */
 function isActive(pathname: string, to: string) {
-  if (to === "/dashboard")
-    return pathname === "/dashboard" || pathname === "/dashboard/";
+  if (to === "/dashboard") return pathname === "/dashboard" || pathname === "/dashboard/";
   return pathname === to || pathname.startsWith(`${to}/`);
 }
 
@@ -84,10 +81,9 @@ function isActive(pathname: string, to: string) {
 /*  Réglage : rail replié                                              */
 /* ------------------------------------------------------------------ */
 
-const COLLAPSE_KEY = "essor-sidebar-collapsed";
+const COLLAPSE_KEY = "istpm-sidebar-collapsed";
 
-// Note: the lg+ rail is now icon-only (see IconRail); useCollapsed is retained
-// only for potential reuse and is no longer wired into the shell.
+/** Persisted collapsed/expanded state for the lg+ sidebar. */
 function useCollapsed() {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -102,7 +98,12 @@ function useCollapsed() {
     });
   }, []);
 
-  return { collapsed, toggle };
+  const expand = useCallback(() => {
+    window.localStorage.setItem(COLLAPSE_KEY, "0");
+    setCollapsed(false);
+  }, []);
+
+  return { collapsed, toggle, expand };
 }
 
 /* ------------------------------------------------------------------ */
@@ -111,6 +112,21 @@ function useCollapsed() {
 
 const ROW_BASE =
   "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-brand-lt/60";
+
+/** Couleur d'icône par destination — l'icône au repos porte sa teinte, l'actif
+    reste blanc sur la tuile navy. */
+const ICON_TEINTE: Record<string, string> = {
+  "/dashboard": "var(--blue)",
+  "/dashboard/calendar": "var(--lavender)",
+  "/dashboard/etudiants": "var(--sky)",
+  "/dashboard/examens": "var(--coral)",
+  "/dashboard/bulletins": "var(--accent2)",
+  "/dashboard/formateurs": "var(--blue)",
+  "/dashboard/stages": "var(--sky)",
+  "/dashboard/paiements": "var(--coral)",
+  "/dashboard/settings": "var(--ink-soft)",
+};
+const teinteIcone = (to?: string) => (to && ICON_TEINTE[to]) || "var(--blue)";
 
 /**
  * Light navigation rail surface (reference dashboard). A clean white panel that
@@ -145,16 +161,17 @@ function NavRow({
         ROW_BASE,
         collapsed ? "justify-center px-0" : nested && "ps-9",
         active
-          ? "bg-gradient-to-b from-med to-med-dk text-white shadow-[0_10px_22px_-10px_rgb(var(--essor-shadow)/0.55)]"
+          ? "bg-gradient-to-b from-med to-med-dk text-white shadow-[0_10px_22px_-10px_rgb(var(--istpm-shadow)/0.55)]"
           : "text-muted-foreground hover:bg-brand/8 hover:text-brand-dk",
       )}
     >
       <Icon
         className={cn(
           "h-[18px] w-[18px] shrink-0 transition-transform duration-200",
-          active ? "text-white" : "text-muted-foreground/70 group-hover:scale-110 group-hover:text-brand-dk",
+          active ? "text-white" : "group-hover:scale-110",
         )}
-        strokeWidth={active ? 2.25 : 1.75}
+        style={active ? undefined : { color: teinteIcone(item.to) }}
+        strokeWidth={active ? 2.25 : 1.9}
       />
       {/* Label is unmounted (not just hidden) when collapsed so it cannot be
           reached by keyboard or read out while invisible. */}
@@ -205,7 +222,11 @@ function NavGroupBlock({
             : "text-muted-foreground hover:bg-brand/8 hover:text-brand-dk",
         )}
       >
-        <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.75} />
+        <Icon
+          className="h-[18px] w-[18px] shrink-0"
+          style={{ color: "var(--accent2)" }}
+          strokeWidth={1.9}
+        />
       </button>
     );
   }
@@ -224,13 +245,14 @@ function NavGroupBlock({
             : "text-muted-foreground hover:bg-brand/8 hover:text-brand-dk",
         )}
       >
-        <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.75} />
+        <Icon
+          className="h-[18px] w-[18px] shrink-0"
+          style={{ color: "var(--accent2)" }}
+          strokeWidth={1.9}
+        />
         <span className="flex-1 truncate text-start">{group.label}</span>
         <ChevronDown
-          className={cn(
-            "h-4 w-4 shrink-0 transition-transform duration-300",
-            open && "rotate-180",
-          )}
+          className={cn("h-4 w-4 shrink-0 transition-transform duration-300", open && "rotate-180")}
         />
       </button>
 
@@ -270,7 +292,7 @@ function NavGroupBlock({
 
 function RoleSwitcher({ collapsed }: { collapsed?: boolean }) {
   const { role, setRole, selectedFormateurId, setSelectedFormateurId } = useAuth();
-  const { formateurs } = useEssor();
+  const { formateurs } = useIstpm();
   const navigate = useNavigate();
   const [pickerOpen, setPickerOpen] = useState(false);
 
@@ -331,9 +353,7 @@ function RoleSwitcher({ collapsed }: { collapsed?: boolean }) {
       {/* Formateur picker dialog */}
       <Dialog open={pickerOpen} onOpenChange={setPickerOpen}>
         <DialogContent className="w-full max-h-[80vh] overflow-y-auto">
-          <DialogTitle className="text-lg font-medium">
-            Sélectionner un formateur
-          </DialogTitle>
+          <DialogTitle className="text-lg font-medium">Sélectionner un formateur</DialogTitle>
           <div className="py-4 space-y-2">
             {formateurs.map((f) => (
               <button
@@ -350,17 +370,20 @@ function RoleSwitcher({ collapsed }: { collapsed?: boolean }) {
                 }}
                 className={cn(
                   "w-full text-left py-2 px-3 rounded border border-brand/10 hover:bg-brand/5",
-                  selectedFormateurId === f.id ? "bg-brand/20" : ""
+                  selectedFormateurId === f.id ? "bg-brand/20" : "",
                 )}
               >
                 <div className="flex items-center gap-2">
                   <div className="flex-shrink-0">
                     <div className="h-6 w-6 rounded bg-brand/20 flex items-center justify-center text-sm font-medium">
-                      {f.prenom[0]}{f.nom[0]}
+                      {f.prenom[0]}
+                      {f.nom[0]}
                     </div>
                   </div>
                   <div>
-                    <div className="font-medium">{f.prenom} {f.nom}</div>
+                    <div className="font-medium">
+                      {f.prenom} {f.nom}
+                    </div>
                     <div className="text-xs text-muted-foreground">
                       {f.departement} • {f.groupes.join(", ")}
                     </div>
@@ -416,28 +439,8 @@ function SidebarBody({
           collapsed ? "h-16 justify-center px-0" : "h-16",
         )}
       >
-        <Link
-          to="/dashboard"
-          onClick={onNavigate}
-          className="flex min-w-0 items-center gap-2.5"
-        >
-          <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-xl bg-white ring-1 ring-brand/12">
-            <img
-              src={BRAND.logoMarkPath}
-              alt={`${brand} logo`}
-              className="h-9 w-9 rounded-lg object-contain"
-            />
-          </span>
-          {collapsed ? null : (
-            <span className="min-w-0">
-              <span className="block truncate font-display text-sm font-bold leading-tight tracking-tight text-foreground">
-                {brand}
-              </span>
-              <span className="block truncate text-[10px] leading-tight text-muted-foreground">
-                Techniques paramédicales
-              </span>
-            </span>
-          )}
+        <Link to="/dashboard" onClick={onNavigate} className="flex min-w-0 items-center gap-2.5">
+          {collapsed ? <EssorMark className="h-7" /> : <EssorLockup className="h-6" />}
         </Link>
         {showCollapseToggle && !collapsed ? (
           <button
@@ -543,9 +546,8 @@ const RAIL_TILE =
   "grid h-11 w-11 place-items-center rounded-2xl outline-none transition-all duration-200 focus-visible:ring-2 focus-visible:ring-brand/50";
 /** Active tile   filled medical-green squircle with a white glyph. */
 const RAIL_TILE_ACTIVE =
-  "bg-gradient-to-b from-med to-med-dk text-white shadow-[0_12px_24px_-12px_rgb(var(--essor-shadow)/0.7)]";
-const RAIL_TILE_IDLE =
-  "text-muted-foreground/75 hover:bg-ink/[0.05] hover:text-foreground";
+  "bg-gradient-to-b from-med to-med-dk text-white shadow-[0_12px_24px_-12px_rgb(var(--istpm-shadow)/0.7)]";
+const RAIL_TILE_IDLE = "text-muted-foreground/75 hover:bg-ink/[0.05] hover:text-foreground";
 
 /** Small floating pill revealed to the right of a rail icon on hover. */
 function FlyoutPill({ children }: { children: ReactNode }) {
@@ -655,15 +657,7 @@ function RailGroup({
   );
 }
 
-function IconRail({
-  brand,
-  nav,
-  pathname,
-}: {
-  brand: string;
-  nav: NavEntry[];
-  pathname: string;
-}) {
+function IconRail({ brand, nav, pathname }: { brand: string; nav: NavEntry[]; pathname: string }) {
   const { user, logout } = useAuth();
   const { t } = useDashboardI18n();
   const navigate = useNavigate();
@@ -675,11 +669,7 @@ function IconRail({
         aria-label={brand}
         className="grid h-18 w-18 shrink-0 place-items-center"
       >
-        <img
-        src={BRAND.logoMarkPath}
-        alt={`${brand} logo`}
-        className="h-15 w-15 object-contain"
-        />
+        <img src="/brand/essor-mark.png" alt={`${brand} logo`} className="h-15 w-15" />
       </Link>
 
       <nav
@@ -690,11 +680,7 @@ function IconRail({
           isNavGroup(entry) ? (
             <RailGroup key={entry.id} group={entry} pathname={pathname} />
           ) : (
-            <RailLink
-              key={entry.to}
-              item={entry}
-              active={isActive(pathname, entry.to)}
-            />
+            <RailLink key={entry.to} item={entry} active={isActive(pathname, entry.to)} />
           ),
         )}
       </nav>
@@ -709,7 +695,12 @@ function IconRail({
               navigate({ to: "/login" });
             }}
             aria-label={t.shell.logoutAria}
-            className={cn(RAIL_TILE, "h-10 w-10", RAIL_TILE_IDLE, "hover:bg-alert/10 hover:text-alert-dk")}
+            className={cn(
+              RAIL_TILE,
+              "h-10 w-10",
+              RAIL_TILE_IDLE,
+              "hover:bg-alert/10 hover:text-alert-dk",
+            )}
           >
             <LogOut className="h-[18px] w-[18px]" />
           </button>
@@ -746,6 +737,7 @@ export function DashSidebarShell({
 }) {
   const loc = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { collapsed, toggle, expand } = useCollapsed();
 
   // Route change closes the mobile drawer.
   useEffect(() => setDrawerOpen(false), [loc.pathname]);
@@ -765,9 +757,22 @@ export function DashSidebarShell({
 
   return (
     <div dir={dir} className="app-canvas flex h-dvh min-h-0 overflow-hidden">
-      {/* Rail compact permanent (lg+)   icônes seules, fond blanc, style « reference ». */}
-      <aside className="hidden w-[5.25rem] shrink-0 border-e border-brand/10 bg-card rounded-tr-4xl lg:block">
-        <IconRail brand={brand} nav={nav} pathname={loc.pathname} />
+      {/* Rail latéral (lg+) — repliable en icônes seules, état mémorisé. */}
+      <aside
+        className={cn(
+          "hidden shrink-0 border-e border-brand/10 bg-card rounded-tr-4xl transition-[width] duration-300 ease-out lg:block",
+          collapsed ? "w-[5.25rem]" : "w-64",
+        )}
+      >
+        <SidebarBody
+          brand={brand}
+          nav={nav}
+          collapsed={collapsed}
+          pathname={loc.pathname}
+          onToggleCollapse={toggle}
+          onExpandRail={expand}
+          showCollapseToggle
+        />
       </aside>
 
       {/* Tiroir mobile */}
@@ -791,9 +796,7 @@ export function DashSidebarShell({
           aria-label="Menu"
           className={cn(
             "absolute inset-y-0 start-0 w-[17rem] max-w-[85vw] shadow-2xl transition-transform duration-300 ease-out",
-            drawerOpen
-              ? "translate-x-0"
-              : "-translate-x-full rtl:translate-x-full",
+            drawerOpen ? "translate-x-0" : "-translate-x-full rtl:translate-x-full",
           )}
         >
           <button
@@ -828,14 +831,7 @@ export function DashSidebarShell({
             <Menu className="h-4 w-4" />
           </button>
           <Link to="/dashboard" className="flex min-w-0 items-center gap-2">
-            <img
-              src={BRAND.logoMarkPath}
-              alt={`${brand} logo`}
-              className="h-10 w-10 shrink-0 object-contain"
-            />
-            <span className="min-w-0 truncate font-display text-sm font-bold tracking-tight text-foreground">
-              {brand}
-            </span>
+            <EssorLockup className="h-6" />
           </Link>
         </header>
 

@@ -1,18 +1,25 @@
-﻿import {
-  Children,
-  cloneElement,
-  isValidElement,
-  type ReactNode,
-  type ReactElement,
-} from "react";
+import { Children, cloneElement, isValidElement, type ReactNode, type ReactElement } from "react";
 import { Search, X, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   softCard,
   softInput,
-  softSelectContent, softSelectTrigger, eyebrowClass, tableWrap, tableEl, tableHead, tableBody, } from "@/lib/dash-ui";
+  softSelectContent,
+  softSelectTrigger,
+  eyebrowClass,
+  tableWrap,
+  tableEl,
+  tableHead,
+  tableBody,
+} from "@/lib/dash-ui";
 import { cn } from "@/lib/utils";
 
 export function PageHeader({
@@ -37,9 +44,7 @@ export function PageHeader({
           {title}
         </h1>
       </div>
-      {actions ? (
-        <div className="flex flex-wrap items-center gap-2">{actions}</div>
-      ) : null}
+      {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
     </motion.header>
   );
 }
@@ -177,10 +182,7 @@ export function FilterPanel({
                 >
                   {f.label}
                   {isActive ? (
-                    <span
-                      aria-hidden
-                      className="h-1.5 w-1.5 rounded-full bg-brand"
-                    />
+                    <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brand" />
                   ) : null}
                 </label>
                 <Select value={f.value} onValueChange={f.onChange}>
@@ -211,9 +213,7 @@ export function FilterPanel({
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-brand/12 bg-muted/60 px-4 py-3 md:px-5">
         {summary ? (
-          <span className="text-xs font-medium text-muted-foreground">
-            {summary}
-          </span>
+          <span className="text-xs font-medium text-muted-foreground">{summary}</span>
         ) : null}
 
         {activeCount ? (
@@ -221,10 +221,7 @@ export function FilterPanel({
             <span className="hidden h-4 w-px bg-brand/15 sm:block" />
             <div className="flex flex-wrap items-center gap-1.5">
               {hasSearch ? (
-                <FilterChip
-                  label={`« ${search.trim()} »`}
-                  onClear={() => onSearch("")}
-                />
+                <FilterChip label={`« ${search.trim()} »`} onClear={() => onSearch("")} />
               ) : null}
               {active.map((f) => (
                 <FilterChip
@@ -263,9 +260,7 @@ function FilterChip({
 }) {
   return (
     <span className="inline-flex max-w-[16rem] items-center gap-1 rounded-full bg-brand/12 py-1 ps-2.5 pe-1 text-xs font-medium text-brand-dk">
-      {title ? (
-        <span className="text-brand-dk/60">{title} :</span>
-      ) : null}
+      {title ? <span className="text-brand-dk/60">{title} :</span> : null}
       <span className="truncate">{label}</span>
       <button
         type="button"
@@ -284,8 +279,7 @@ function nodeText(node: ReactNode): string {
   if (node == null || typeof node === "boolean") return "";
   if (typeof node === "string" || typeof node === "number") return String(node);
   if (Array.isArray(node)) return node.map(nodeText).join("");
-  if (isValidElement(node))
-    return nodeText((node.props as { children?: ReactNode }).children);
+  if (isValidElement(node)) return nodeText((node.props as { children?: ReactNode }).children);
   return "";
 }
 
@@ -294,9 +288,7 @@ function headerLabels(head: ReactNode): string[] {
   const ths = isValidElement(head)
     ? Children.toArray((head.props as { children?: ReactNode }).children)
     : Children.toArray(head);
-  return ths.map((th) =>
-    isValidElement(th) ? nodeText(th).replace(/\s+/g, " ").trim() : "",
-  );
+  return ths.map((th) => (isValidElement(th) ? nodeText(th).replace(/\s+/g, " ").trim() : ""));
 }
 
 /**
@@ -401,7 +393,7 @@ export function DetailShell({
       <header className="shrink-0 border-b border-brand/12 bg-brand-wash px-6 py-5">
         <div className="flex items-start gap-3.5">
           {icon ? (
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand text-sm font-bold text-white shadow-[0_10px_22px_-12px_rgb(var(--essor-shadow)/0.9)]">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand text-sm font-bold text-white shadow-[0_10px_22px_-12px_rgb(var(--istpm-shadow)/0.9)]">
               {icon}
             </span>
           ) : null}
@@ -410,15 +402,11 @@ export function DetailShell({
               {title}
             </h2>
             {subtitle ? (
-              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                {subtitle}
-              </p>
+              <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{subtitle}</p>
             ) : null}
           </div>
         </div>
-        {badges ? (
-          <div className="mt-3.5 flex flex-wrap gap-1.5">{badges}</div>
-        ) : null}
+        {badges ? <div className="mt-3.5 flex flex-wrap gap-1.5">{badges}</div> : null}
       </header>
 
       <div className="scroll-touch min-h-0 flex-1 space-y-6 overflow-y-auto px-6 py-5">
@@ -460,20 +448,9 @@ export function DetailSection({
   );
 }
 
-export function DetailGrid({
-  children,
-  single,
-}: {
-  children: ReactNode;
-  single?: boolean;
-}) {
+export function DetailGrid({ children, single }: { children: ReactNode; single?: boolean }) {
   return (
-    <div
-      className={cn(
-        "grid gap-x-4 gap-y-3.5",
-        single ? "grid-cols-1" : "sm:grid-cols-2",
-      )}
-    >
+    <div className={cn("grid gap-x-4 gap-y-3.5", single ? "grid-cols-1" : "sm:grid-cols-2")}>
       {children}
     </div>
   );
@@ -528,10 +505,7 @@ export function DetailRow({
     <div className="flex items-center justify-between gap-4 border-b border-brand/8 py-2 last:border-0">
       <span className="text-xs text-muted-foreground">{label}</span>
       <span
-        className={cn(
-          "text-right text-sm text-foreground",
-          strong ? "font-bold" : "font-medium",
-        )}
+        className={cn("text-right text-sm text-foreground", strong ? "font-bold" : "font-medium")}
       >
         {value}
       </span>
@@ -539,13 +513,7 @@ export function DetailRow({
   );
 }
 
-export function DetailTable({
-  head,
-  children,
-}: {
-  head: ReactNode;
-  children: ReactNode;
-}) {
+export function DetailTable({ head, children }: { head: ReactNode; children: ReactNode }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-brand/12">
       <div className="overflow-x-auto">
@@ -573,9 +541,7 @@ export function DetailEmpty({
     <p
       className={cn(
         "rounded-2xl px-4 py-3 text-sm",
-        tone === "warn"
-          ? "bg-warn-pale text-warn"
-          : "bg-muted text-muted-foreground",
+        tone === "warn" ? "bg-warn-pale text-warn" : "bg-muted text-muted-foreground",
       )}
     >
       {children}

@@ -1,13 +1,6 @@
-﻿import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import {
-  Users,
-  Shuffle,
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  RotateCcw,
-} from "lucide-react";
+import { Users, Shuffle, ArrowLeft, ArrowRight, Check, RotateCcw } from "lucide-react";
 import {
   ANNEES_ETUDE,
   FILIERES,
@@ -17,13 +10,8 @@ import {
   type StructureAccueil,
   type AnneeEtude,
   type Filiere,
-} from "@/lib/scholnexa-data";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/lib/istpm-data";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { DetailShell } from "@/components/dash-page";
 import { SelectField } from "@/components/dash-form";
 import {
@@ -71,10 +59,7 @@ export function AffectationStagesDialog({
   onConfirm: (affectations: Affectation[]) => void;
 }) {
   const structs = useMemo(
-    () =>
-      structuresAccueil.map((s) =>
-        typeof s === "string" ? { nom: s, capacite: 5 } : s,
-      ),
+    () => structuresAccueil.map((s) => (typeof s === "string" ? { nom: s, capacite: 5 } : s)),
     [structuresAccueil],
   );
 
@@ -87,10 +72,7 @@ export function AffectationStagesDialog({
 
   // Un étudiant est « déjà affecté » s'il a un stage non clôturé (statut ≠ validé).
   const idsAvecStage = useMemo(
-    () =>
-      new Set(
-        stages.filter((s) => s.statut !== "valide").map((s) => s.etudiantId),
-      ),
+    () => new Set(stages.filter((s) => s.statut !== "valide").map((s) => s.etudiantId)),
     [stages],
   );
 
@@ -133,8 +115,7 @@ export function AffectationStagesDialog({
   /** Places restantes d'une structure, en tenant compte des choix en cours
    *  (hors l'étudiant courant, dont on veut conserver l'option sélectionnée). */
   const placesRestantes = (structure: string, exceptId?: string) => {
-    const cap =
-      structs.find((s) => s.nom === structure)?.capacite ?? 0;
+    const cap = structs.find((s) => s.nom === structure)?.capacite ?? 0;
     const enCours = Object.entries(assign).filter(
       ([id, str]) => str === structure && id !== exceptId,
     ).length;
@@ -203,10 +184,7 @@ export function AffectationStagesDialog({
     [...occupationBase.values()].reduce((s, n) => s + n, 0) -
     Object.values(assign).filter(Boolean).length;
 
-  const peutSuivant =
-    (step === 0 && annee) ||
-    (step === 1 && filiere) ||
-    (step === 2 && groupe);
+  const peutSuivant = (step === 0 && annee) || (step === 1 && filiere) || (step === 2 && groupe);
 
   const titres = [
     "Choisir l'année",
@@ -224,7 +202,7 @@ export function AffectationStagesDialog({
         </DialogDescription>
         <DetailShell
           icon={<Users className="h-5 w-5" />}
-          title="Affectation"
+          title="Affecter les étudiants"
           subtitle={`Étape ${step + 1}/4 · ${titres[step]}`}
           badges={
             <>
@@ -364,9 +342,7 @@ export function AffectationStagesDialog({
                       <span className="w-full sm:w-64">
                         <Select
                           value={assign[e.id] || undefined}
-                          onValueChange={(v) =>
-                            setAssign((prev) => ({ ...prev, [e.id]: v }))
-                          }
+                          onValueChange={(v) => setAssign((prev) => ({ ...prev, [e.id]: v }))}
                         >
                           <SelectTrigger
                             className={cn(softSelectTrigger, "w-full")}

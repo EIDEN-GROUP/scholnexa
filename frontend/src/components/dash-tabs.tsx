@@ -44,9 +44,7 @@ export function DashTabs({
             className={cn(
               "relative flex items-center justify-center gap-2 whitespace-nowrap px-4 py-3 text-sm font-medium transition-colors duration-200",
               "outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-inset",
-              isActive
-                ? "text-foreground"
-                : "text-muted-foreground hover:text-foreground",
+              isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",
             )}
           >
             {Icon ? (
@@ -65,9 +63,7 @@ export function DashTabs({
               <span
                 className={cn(
                   "inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full px-1.5 text-[10px] font-bold leading-none",
-                  isActive
-                    ? "bg-brand text-white"
-                    : "bg-muted-foreground/15 text-muted-foreground",
+                  isActive ? "bg-brand text-white" : "bg-muted-foreground/15 text-muted-foreground",
                 )}
               >
                 {t.badge > 99 ? "99+" : t.badge}

@@ -1,18 +1,61 @@
-import { Outlet, createFileRoute, redirect, useLocation } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { useEffect, type ReactNode } from "react";
+import { Outlet, createFileRoute, useLocation, useNavigate } from "@tanstack/react-router";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { DashSidebarShell } from "@/components/dash-sidebar";
-import { useDashboardI18n, useDashboardNav } from "@/lib/dashboard-i18n";
-import { getStoredRole, useAuth } from "@/lib/auth";
+import { AppLoadingGate, BrandLoader } from "@/components/brand-loader";
+import { AuthProvider, useAuth } from "@/lib/auth";
+import { DashboardI18nProvider, useDashboardI18n, useDashboardNav } from "@/lib/dashboard-i18n";
+import { IstpmProvider } from "@/lib/istpm-store";
 
+/**
+ * Dashboard subtree. Rendered client-only (`ssr: false`): the store reads
+ * localStorage during init, framer-motion / canvas / IndexedDB are used
+ * throughout, and the 1.2 MB seed must stay out of the SSR bundle. The landing
+ * page at `/` is unaffected and keeps its SSR.
+ *
+ * The provider stack lived in the source app's `main.tsx`; here it wraps only
+ * this route. `QueryClientProvider` already exists in `__root.tsx` — reused.
+ */
+// Login is enforced: `/dashboard/*` requires an authenticated session. Visitors
+// without one are bounced to `/login`.
 export const Route = createFileRoute("/dashboard")({
-  // UI-only gate: no token, no network   just "has a role been picked yet?".
-  beforeLoad: ({ location }) => {
-    if (!getStoredRole()) {
-      throw redirect({ to: "/login", search: { redirect: location.href } });
-    }
-  },
-  component: DashboardLayout,
+  ssr: false,
+  component: DashboardRoot,
 });
+
+function DashboardRoot() {
+  return (
+    <AuthProvider>
+      <DashboardI18nProvider>
+        <AuthGate>
+          <IstpmProvider>
+            <AppLoadingGate>
+              <MotionConfig
+                reducedMotion="user"
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <DashboardLayout />
+              </MotionConfig>
+            </AppLoadingGate>
+          </IstpmProvider>
+        </AuthGate>
+      </DashboardI18nProvider>
+    </AuthProvider>
+  );
+}
+
+/** Blocks the dashboard subtree until a session exists; redirects to `/login`. */
+function AuthGate({ children }: { children: ReactNode }) {
+  const { role, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !role) navigate({ to: "/login", replace: true });
+  }, [loading, role, navigate]);
+
+  if (loading || !role) return <BrandLoader />;
+  return <>{children}</>;
+}
 
 function DashboardLayout() {
   const { dir } = useDashboardI18n();
@@ -22,20 +65,17 @@ function DashboardLayout() {
 
   return (
     <DashSidebarShell brand={brand} nav={nav} dir={dir}>
-      {/* Transition de page : à chaque changement de route, le contenu entre en
-          fondu + léger glissement. Pas d'AnimatePresence ici : le `<Outlet />`
-          est « vivant » (il se re-rend avec le match courant), donc une sortie
-          en mode="wait" pouvait rester bloquée et laisser l'écran vide au
-          retour (ex. Planning → Tableau de bord) jusqu'à une nouvelle
-          navigation. La remontée seule est fiable. */}
-      <motion.div
-        key={pathname}
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <Outlet />
-      </motion.div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={pathname}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Outlet />
+        </motion.div>
+      </AnimatePresence>
     </DashSidebarShell>
   );
 }

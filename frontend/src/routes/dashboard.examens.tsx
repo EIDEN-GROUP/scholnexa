@@ -1,4 +1,4 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   Plus,
@@ -16,8 +16,8 @@ import {
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth, DEMO_FORMATEUR_ID } from "@/lib/auth";
-import { deleteNote } from "@/lib/scholnexa-api";
-import { useEssor, useCurrentFormateur, moyennePonderee } from "@/lib/scholnexa-store";
+import { deleteNote } from "@/lib/istpm-api";
+import { useIstpm, useCurrentFormateur, moyennePonderee } from "@/lib/istpm-store";
 import {
   FILIERES,
   NIVEAUX,
@@ -37,12 +37,8 @@ import {
   type TypeExamen,
   type StatutExamen,
   type Formateur,
-} from "@/lib/scholnexa-data";
-import {
-  ACCEPTED_DOC_TYPES,
-  downloadDoc,
-  previewUrl,
-} from "@/lib/doc-store";
+} from "@/lib/istpm-data";
+import { ACCEPTED_DOC_TYPES, downloadDoc, previewUrl } from "@/lib/doc-store";
 import {
   softCard,
   primaryPill,
@@ -82,12 +78,7 @@ import {
   FullWidth,
   parseList,
 } from "@/components/dash-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { DashTabs } from "@/components/dash-tabs";
 import { cn } from "@/lib/utils";
@@ -164,13 +155,7 @@ function DocumentActions({
  * l'URL objet n'est disponible qu'après un `await`, moment où le geste
  * utilisateur est perdu et où les bloqueurs de fenêtres interviennent.
  */
-function DocumentPreview({
-  examen,
-  onClose,
-}: {
-  examen: Examen | null;
-  onClose: () => void;
-}) {
+function DocumentPreview({ examen, onClose }: { examen: Examen | null; onClose: () => void }) {
   const [url, setUrl] = useState<string | null>(null);
   const [state, setState] = useState<"loading" | "ready" | "missing">("loading");
   const doc = examen?.document;
@@ -210,9 +195,7 @@ function DocumentPreview({
     <Dialog open={!!examen} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className={dialogSurfaceWide}>
         <DialogTitle className="sr-only">Aperçu du sujet</DialogTitle>
-        <DialogDescription className="sr-only">
-          Document d'examen déposé
-        </DialogDescription>
+        <DialogDescription className="sr-only">Document d'examen déposé</DialogDescription>
         {examen && doc ? (
           <DetailShell
             title={doc.nom}
@@ -239,12 +222,10 @@ function DocumentPreview({
             ) : state === "missing" ? (
               <div className="flex flex-col items-center gap-2 py-10 text-center">
                 <FileWarning className="h-8 w-8 text-warn" />
-                <p className="text-sm font-medium text-foreground">
-                  Fichier indisponible
-                </p>
+                <p className="text-sm font-medium text-foreground">Fichier indisponible</p>
                 <p className="max-w-sm text-xs text-muted-foreground">
-                  Les fichiers sont stockés dans ce navigateur. Ce document a
-                  été déposé depuis un autre appareil ou son stockage a été vidé.
+                  Les fichiers sont stockés dans ce navigateur. Ce document a été déposé depuis un
+                  autre appareil ou son stockage a été vidé.
                 </p>
               </div>
             ) : isPdf && url ? (
@@ -260,8 +241,7 @@ function DocumentPreview({
                   Aperçu indisponible pour ce format
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Les documents Word ne s'affichent pas dans le navigateur  
-                  utilisez « Télécharger ».
+                  Les documents Word ne s'affichent pas dans le navigateur utilisez « Télécharger ».
                 </p>
               </div>
             )}
@@ -273,13 +253,7 @@ function DocumentPreview({
 }
 
 /** Fiche descriptive commune aux deux espaces. */
-function InfosExamen({
-  examen,
-  formateurs,
-}: {
-  examen: Examen;
-  formateurs: Formateur[];
-}) {
+function InfosExamen({ examen, formateurs }: { examen: Examen; formateurs: Formateur[] }) {
   return (
     <>
       <DetailSection title="Épreuve">
@@ -288,10 +262,7 @@ function InfosExamen({
           <DetailField label="Filière" value={examen.filiere} full />
           <DetailField label="Groupe" value={examen.classe} />
           <DetailField label="Semestre" value={examen.niveau} />
-          <DetailField
-            label="Année universitaire"
-            value={examen.anneeUniversitaire}
-          />
+          <DetailField label="Année universitaire" value={examen.anneeUniversitaire} />
           <DetailField label="Type" value={TYPE_EXAMEN_LABEL[examen.type]} />
         </DetailGrid>
       </DetailSection>
@@ -302,19 +273,9 @@ function InfosExamen({
           <DetailField label="Heure" value={examen.heure} />
           <DetailField label="Durée" value={fmtDuree(examen.duree)} />
           <DetailField label="Salle" value={examen.salle} />
-          <DetailField
-            label="Effectif convoqué"
-            value={examen.etudiantsConvoques}
-          />
-          <DetailField
-            label="Créé par"
-            value={nomFormateur(formateurs, examen.createdBy)}
-          />
-          <DetailField
-            label="Surveillant(s)"
-            value={examen.surveillants.join(", ")}
-            full
-          />
+          <DetailField label="Effectif convoqué" value={examen.etudiantsConvoques} />
+          <DetailField label="Créé par" value={nomFormateur(formateurs, examen.createdBy)} />
+          <DetailField label="Surveillant(s)" value={examen.surveillants.join(", ")} full />
         </DetailGrid>
       </DetailSection>
 
@@ -329,9 +290,7 @@ function InfosExamen({
           <div className="flex items-center gap-3 rounded-2xl border border-brand/15 bg-brand/5 px-4 py-3">
             <FileText className="h-5 w-5 shrink-0 text-brand" />
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-foreground">
-                {examen.document.nom}
-              </p>
+              <p className="truncate text-sm font-medium text-foreground">{examen.document.nom}</p>
               <p className="mt-0.5 text-[11px] text-muted-foreground">
                 {fmtTaille(examen.document.taille)} · déposé le{" "}
                 {fmtDate(examen.document.uploadedAt)}
@@ -339,9 +298,7 @@ function InfosExamen({
             </div>
           </div>
         ) : (
-          <DetailEmpty tone="warn">
-            Aucun sujet déposé pour cet examen.
-          </DetailEmpty>
+          <DetailEmpty tone="warn">Aucun sujet déposé pour cet examen.</DetailEmpty>
         )}
       </DetailSection>
     </>
@@ -370,7 +327,7 @@ function EspaceFormateur() {
     deleteExamen,
     attachDocument,
     removeDocument,
-  } = useEssor();
+  } = useIstpm();
 
   // Le formateur connecté : ses examens seulement. Résolu depuis le profil
   // sélectionné (référentiel hydraté), avec repli sur le formateur de démo.
@@ -390,10 +347,7 @@ function EspaceFormateur() {
   // 0 = liste des examens · 1 = saisie des notes
   const [tab, setTab] = useState(0);
 
-  const mesExamens = useMemo(
-    () => examens.filter((x) => x.createdBy === moiId),
-    [examens, moiId],
-  );
+  const mesExamens = useMemo(() => examens.filter((x) => x.createdBy === moiId), [examens, moiId]);
 
   const aNoter = useMemo(
     () => mesExamens.filter((x) => x.statut !== "notes_saisies").length,
@@ -407,9 +361,7 @@ function EspaceFormateur() {
       if (niveau !== ALL && x.niveau !== niveau) return false;
       if (sujet !== ALL && (sujet === "Déposé") !== !!x.document) return false;
       if (!q) return true;
-      return `${x.titre} ${x.module} ${x.classe} ${x.salle}`
-        .toLowerCase()
-        .includes(q);
+      return `${x.titre} ${x.module} ${x.classe} ${x.salle}`.toLowerCase().includes(q);
     });
   }, [mesExamens, search, type, niveau, sujet]);
 
@@ -463,133 +415,126 @@ function EspaceFormateur() {
       />
 
       {tab === 0 ? (
-      <>
-      <FilterPanel
-        search={search}
-        onSearch={setSearch}
-        placeholder="Rechercher par titre, module, groupe, salle…"
-        filters={[
-          {
-            id: "type",
-            label: "Type d'examen",
-            value: type,
-            onChange: setType,
-            options: TYPES.map((t) => TYPE_EXAMEN_LABEL[t]),
-            allLabel: "Tous les types",
-          },
-          {
-            id: "semestre",
-            label: "Semestre",
-            value: niveau,
-            onChange: setNiveau,
-            options: NIVEAUX,
-            allLabel: "Tous les semestres",
-          },
-          {
-            id: "sujet",
-            label: "Sujet déposé",
-            value: sujet,
-            onChange: setSujet,
-            options: ETAT_SUJET,
-            allLabel: "Tous les sujets",
-          },
-        ]}
-        summary={
-          <>
-            <strong className="font-semibold text-foreground">
-              {filtered.length}
-            </strong>{" "}
-            examen(s) sur {mesExamens.length} créé(s)
-          </>
-        }
-      />
-
-      <DataTable
-        minWidth="min-w-[1100px]"
-        isEmpty={filtered.length === 0}
-        empty={
-          mesExamens.length === 0
-            ? "Vous n'avez pas encore créé d'examen."
-            : "Aucun examen ne correspond à ces critères."
-        }
-        footer={
-          <TablePagination
-            page={pager.page}
-            pageCount={pager.pageCount}
-            total={pager.total}
-            pageSize={pager.pageSize}
-            onPage={pager.setPage}
-            label="examens"
+        <>
+          <FilterPanel
+            search={search}
+            onSearch={setSearch}
+            placeholder="Rechercher par titre, module, groupe, salle…"
+            filters={[
+              {
+                id: "type",
+                label: "Type d'examen",
+                value: type,
+                onChange: setType,
+                options: TYPES.map((t) => TYPE_EXAMEN_LABEL[t]),
+                allLabel: "Tous les types",
+              },
+              {
+                id: "semestre",
+                label: "Semestre",
+                value: niveau,
+                onChange: setNiveau,
+                options: NIVEAUX,
+                allLabel: "Tous les semestres",
+              },
+              {
+                id: "sujet",
+                label: "Sujet déposé",
+                value: sujet,
+                onChange: setSujet,
+                options: ETAT_SUJET,
+                allLabel: "Tous les sujets",
+              },
+            ]}
+            summary={
+              <>
+                <strong className="font-semibold text-foreground">{filtered.length}</strong>{" "}
+                examen(s) sur {mesExamens.length} créé(s)
+              </>
+            }
           />
-        }
-        head={
-          <>
-            <th>Examen</th>
-            <th>Groupe</th>
-            <th>Type</th>
-            <th>Date</th>
-            <th>Niveau</th>
-            <th>Statut</th>
-            <th className="w-32 text-center">Actions</th>
-          </>
-        }
-      >
-        {pager.pageItems.map((x, i) => (
-          <motion.tr
-            key={x.id}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.25, delay: i * 0.03, ease: "easeOut" }}
-            onClick={() => setDetail(x)}
-            className={tableRow}
+
+          <DataTable
+            minWidth="min-w-[1100px]"
+            isEmpty={filtered.length === 0}
+            empty={
+              mesExamens.length === 0
+                ? "Vous n'avez pas encore créé d'examen."
+                : "Aucun examen ne correspond à ces critères."
+            }
+            footer={
+              <TablePagination
+                page={pager.page}
+                pageCount={pager.pageCount}
+                total={pager.total}
+                pageSize={pager.pageSize}
+                onPage={pager.setPage}
+                label="examens"
+              />
+            }
+            head={
+              <>
+                <th>Examen</th>
+                <th>Groupe</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Année</th>
+                <th>Statut</th>
+                <th className="w-32 text-center">Actions</th>
+              </>
+            }
           >
-            <td className={cn("font-medium", cellTruncate)}>{x.titre}</td>
-            <td className="text-muted-foreground">{x.classe}</td>
-            <td className="text-muted-foreground">
-              {TYPE_EXAMEN_LABEL[x.type]}
-            </td>
-            <td>{fmtDate(x.date)}</td>
-            <td>{anneeEtude(x.niveau)}</td>
-            <td>
-              <span className={toneBadge(STATUT_EXAMEN_TONE[x.statut])}>
-                {STATUT_EXAMEN_LABEL[x.statut]}
-              </span>
-            </td>
-            <td
-              className="text-center"
-              onClick={(ev) => ev.stopPropagation()}
-            >
-              <div className={rowActions}>
-                <button
-                  className={iconButton}
-                  aria-label="Voir le détail"
-                  onClick={() => setDetail(x)}
-                >
-                  <Eye className="h-3.5 w-3.5" />
-                </button>
-                <button
-                  className={iconButton}
-                  aria-label="Modifier"
-                  onClick={() => {
-                    setEditing(x);
-                    setFormOpen(true);
-                  }}
-                >
-                  <Pencil className="h-3.5 w-3.5" />
-                </button>
-                <button
-                  className={iconButtonDanger}
-                  aria-label="Supprimer"
-                  onClick={() => setToDelete(x)}
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            </td>
-          </motion.tr>
-        ))}
-      </DataTable>
-      </>
+            {pager.pageItems.map((x, i) => (
+              <motion.tr
+                key={x.id}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.25, delay: i * 0.03, ease: "easeOut" }}
+                onClick={() => setDetail(x)}
+                className={tableRow}
+              >
+                <td className={cn("font-medium", cellTruncate)}>{x.titre}</td>
+                <td className="text-muted-foreground">{x.classe}</td>
+                <td className="text-muted-foreground">{TYPE_EXAMEN_LABEL[x.type]}</td>
+                <td>{fmtDate(x.date)}</td>
+                <td>{anneeEtude(x.niveau)}</td>
+                <td>
+                  <span className={toneBadge(STATUT_EXAMEN_TONE[x.statut])}>
+                    {STATUT_EXAMEN_LABEL[x.statut]}
+                  </span>
+                </td>
+                <td className="text-center" onClick={(ev) => ev.stopPropagation()}>
+                  <div className={rowActions}>
+                    <button
+                      className={iconButton}
+                      aria-label="Voir le détail"
+                      onClick={() => setDetail(x)}
+                    >
+                      <Eye className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      className={iconButton}
+                      aria-label="Modifier"
+                      onClick={() => {
+                        setEditing(x);
+                        setFormOpen(true);
+                      }}
+                    >
+                      <Pencil className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      className={iconButtonDanger}
+                      aria-label="Supprimer"
+                      onClick={() => setToDelete(x)}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </td>
+              </motion.tr>
+            ))}
+          </DataTable>
+        </>
       ) : (
         <SaisieNotesPanel examens={mesExamens} />
       )}
@@ -635,17 +580,13 @@ function EspaceFormateur() {
               try {
                 await attachDocument(cible, file);
               } catch (err) {
-                toast.error(
-                  err instanceof Error ? err.message : "Échec du dépôt",
-                );
+                toast.error(err instanceof Error ? err.message : "Échec du dépôt");
                 setFormOpen(false);
                 return;
               }
             }
             toast.success(
-              editing
-                ? `Examen mis à jour   ${data.titre}`
-                : `Examen créé   ${data.titre}`,
+              editing ? `Examen mis à jour   ${data.titre}` : `Examen créé   ${data.titre}`,
             );
             setFormOpen(false);
           }}
@@ -677,7 +618,7 @@ function EspaceFormateur() {
 /* ------------------------------------------------------------------ */
 
 function EspaceDirecteur() {
-  const { examens, formateurs } = useEssor();
+  const { examens, formateurs } = useIstpm();
 
   const [search, setSearch] = useState("");
   const [prof, setProf] = useState<string>(ALL);
@@ -685,20 +626,13 @@ function EspaceDirecteur() {
   const [classe, setClasse] = useState<string>(ALL);
   const [semestre, setSemestre] = useState<string>(ALL);
   const [annee, setAnnee] = useState<string>(ALL);
-  const [anneeScolaire, setAnneeScolaire] = useState<string>(ALL);
 
   const [detail, setDetail] = useState<Examen | null>(null);
   const [preview, setPreview] = useState<Examen | null>(null);
 
   // Listes de filtres dérivées des examens réellement présents.
-  const modules = useMemo(
-    () => [...new Set(examens.map((x) => x.module))].sort(),
-    [examens],
-  );
-  const classes = useMemo(
-    () => [...new Set(examens.map((x) => x.classe))].sort(),
-    [examens],
-  );
+  const modules = useMemo(() => [...new Set(examens.map((x) => x.module))].sort(), [examens]);
+  const classes = useMemo(() => [...new Set(examens.map((x) => x.classe))].sort(), [examens]);
   const profs = useMemo(() => {
     const ids = new Set(examens.map((x) => x.createdBy));
     return formateurs
@@ -710,25 +644,22 @@ function EspaceDirecteur() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return examens.filter((x) => {
-      if (prof !== ALL && nomFormateur(formateurs, x.createdBy) !== prof)
-        return false;
+      if (prof !== ALL && nomFormateur(formateurs, x.createdBy) !== prof) return false;
       if (module !== ALL && x.module !== module) return false;
       if (classe !== ALL && x.classe !== classe) return false;
       if (semestre !== ALL && x.niveau !== semestre) return false;
       if (annee !== ALL && anneeEtude(x.niveau) !== annee) return false;
-      if (anneeScolaire !== ALL && x.anneeUniversitaire !== anneeScolaire)
-        return false;
       if (!q) return true;
       const auteur = nomFormateur(formateurs, x.createdBy);
       return `${x.titre} ${x.module} ${x.classe} ${x.salle} ${auteur} ${x.document?.nom ?? ""}`
         .toLowerCase()
         .includes(q);
     });
-  }, [examens, formateurs, search, prof, module, classe, semestre, annee, anneeScolaire]);
+  }, [examens, formateurs, search, prof, module, classe, semestre, annee]);
 
   const pager = usePagination(
     filtered,
-    `${search}|${prof}|${module}|${classe}|${semestre}|${annee}|${anneeScolaire}`,
+    `${search}|${prof}|${module}|${classe}|${semestre}|${annee}`,
   );
 
   const avecSujet = filtered.filter((x) => x.document).length;
@@ -784,27 +715,17 @@ function EspaceDirecteur() {
           },
           {
             id: "annee",
-            label: "Niveau",
+            label: "Année",
             value: annee,
             onChange: setAnnee,
             options: ANNEES_ETUDE,
-            allLabel: "Tous les niveaux",
-          },
-          {
-            id: "anneeScolaire",
-            label: "Année scolaire",
-            value: anneeScolaire,
-            onChange: setAnneeScolaire,
-            options: ANNEES_UNIVERSITAIRES,
             allLabel: "Toutes les années",
           },
         ]}
         summary={
           <>
-            <strong className="font-semibold text-foreground">
-              {filtered.length}
-            </strong>{" "}
-            examen(s) sur {examens.length} · {avecSujet} avec sujet déposé
+            <strong className="font-semibold text-foreground">{filtered.length}</strong> examen(s)
+            sur {examens.length} · {avecSujet} avec sujet déposé
           </>
         }
       />
@@ -830,7 +751,7 @@ function EspaceDirecteur() {
             <th>Groupe</th>
             <th>Type</th>
             <th>Date</th>
-            <th>Niveau</th>
+            <th>Année</th>
             <th>Formateur</th>
             <th>Statut</th>
             <th className="w-24 text-center">Actions</th>
@@ -847,27 +768,18 @@ function EspaceDirecteur() {
             className={tableRow}
           >
             <td className={cn("font-medium", cellTruncate)}>{x.titre}</td>
-            <td className={cn("text-muted-foreground", cellTruncate)}>
-              {x.module}
-            </td>
+            <td className={cn("text-muted-foreground", cellTruncate)}>{x.module}</td>
             <td className="text-muted-foreground">{x.classe}</td>
-            <td className="text-muted-foreground">
-              {TYPE_EXAMEN_LABEL[x.type]}
-            </td>
+            <td className="text-muted-foreground">{TYPE_EXAMEN_LABEL[x.type]}</td>
             <td>{fmtDate(x.date)}</td>
             <td>{anneeEtude(x.niveau)}</td>
-            <td className={cellTruncate}>
-              {nomFormateur(formateurs, x.createdBy)}
-            </td>
+            <td className={cellTruncate}>{nomFormateur(formateurs, x.createdBy)}</td>
             <td>
               <span className={toneBadge(STATUT_EXAMEN_TONE[x.statut])}>
                 {STATUT_EXAMEN_LABEL[x.statut]}
               </span>
             </td>
-            <td
-              className="text-center"
-              onClick={(ev) => ev.stopPropagation()}
-            >
+            <td className="text-center" onClick={(ev) => ev.stopPropagation()}>
               <DocumentActions examen={x} onPreview={setPreview} />
             </td>
           </motion.tr>
@@ -913,7 +825,7 @@ function ExamenDetailFormateur({
   onPreview: (e: Examen) => void;
   onClose?: () => void;
 }) {
-  const { formateurs } = useEssor();
+  const { formateurs } = useIstpm();
 
   return (
     <DetailShell
@@ -935,10 +847,7 @@ function ExamenDetailFormateur({
             La saisie des notes se fait dans « Saisie des notes ».
           </span>
           {examen.document ? (
-            <button
-              className={cn(ghostPill, "gap-1.5")}
-              onClick={() => onPreview(examen)}
-            >
+            <button className={cn(ghostPill, "gap-1.5")} onClick={() => onPreview(examen)}>
               <Eye className="h-3.5 w-3.5" /> Sujet
             </button>
           ) : null}
@@ -977,8 +886,7 @@ function ExamenForm({
     classe: initial?.classe ?? "",
     anneeUniversitaire: initial?.anneeUniversitaire ?? "2025/2026",
     type: (initial?.type ?? "examen_theorique") as TypeExamen,
-    composante: (initial?.composante ??
-      "Théorique + Pratique") as Examen["composante"],
+    composante: (initial?.composante ?? "Théorique + Pratique") as Examen["composante"],
     date: initial?.date ?? "",
     heure: initial?.heure ?? "09:00",
     duree: String(initial?.duree ?? 120),
@@ -994,7 +902,7 @@ function ExamenForm({
 
   /* Référentiel des modules (Paramètres › Modules) : chaque module connaît sa
      filière, ce qui permet de la pré-remplir à la sélection. */
-  const { modules: modulesReg } = useEssor();
+  const { modules: modulesReg } = useIstpm();
 
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => {
     setF((prev) => ({ ...prev, [k]: v }));
@@ -1016,7 +924,7 @@ function ExamenForm({
     setF((prev) => ({
       ...prev,
       module: nom,
-      filiere: (found ? (found.filiere as Filiere) : prev.filiere),
+      filiere: found ? (found.filiere as Filiere) : prev.filiere,
     }));
     setErrors((prev) => ({ ...prev, module: undefined, filiere: undefined }));
   };
@@ -1069,11 +977,7 @@ function ExamenForm({
       onOpenChange={(o) => !o && onCancel()}
       wide
       title={initial ? "Modifier l'examen" : "Nouvel examen"}
-      subtitle={
-        initial
-          ? initial.titre
-          : "Renseigner l'épreuve et déposer le sujet"
-      }
+      subtitle={initial ? initial.titre : "Renseigner l'épreuve et déposer le sujet"}
       submitLabel={initial ? "Enregistrer les modifications" : "Créer l'examen"}
       onSubmit={submit}
     >
@@ -1238,7 +1142,7 @@ function ExamenForm({
  * en dessous et peuvent être retirées.
  */
 function SaisieNotesPanel({ examens }: { examens: Examen[] }) {
-  const { etudiants, addNote, updateExamen, updateEtudiant } = useEssor();
+  const { etudiants, addNote, updateExamen, updateEtudiant } = useIstpm();
   const [examenId, setExamenId] = useState("");
   const [notes, setNotes] = useState<Record<string, string>>({});
 
@@ -1249,9 +1153,7 @@ function SaisieNotesPanel({ examens }: { examens: Examen[] }) {
     () =>
       examen
         ? etudiants.filter(
-            (e) =>
-              `${e.niveau}-${e.groupe}` === examen.classe &&
-              e.statut !== "abandon",
+            (e) => `${e.niveau}-${e.groupe}` === examen.classe && e.statut !== "abandon",
           )
         : [],
     [etudiants, examen],
@@ -1261,10 +1163,7 @@ function SaisieNotesPanel({ examens }: { examens: Examen[] }) {
     setExamenId(id);
     const ex = examens.find((x) => x.id === id);
     const roster = ex
-      ? etudiants.filter(
-          (e) =>
-            `${e.niveau}-${e.groupe}` === ex.classe && e.statut !== "abandon",
-        )
+      ? etudiants.filter((e) => `${e.niveau}-${e.groupe}` === ex.classe && e.statut !== "abandon")
       : [];
     // Pré-remplit avec les notes déjà attribuées pour ce module.
     const seed: Record<string, string> = {};
@@ -1275,8 +1174,7 @@ function SaisieNotesPanel({ examens }: { examens: Examen[] }) {
     setNotes(seed);
   };
 
-  const setNote = (id: string, v: string) =>
-    setNotes((p) => ({ ...p, [id]: v }));
+  const setNote = (id: string, v: string) => setNotes((p) => ({ ...p, [id]: v }));
 
   const saisis = Object.values(notes).filter((v) => v.trim() !== "").length;
 
@@ -1310,9 +1208,7 @@ function SaisieNotesPanel({ examens }: { examens: Examen[] }) {
       });
     }
     updateExamen(examen.id, { statut: "notes_saisies" });
-    toast.success(
-      `Notes enregistrées pour ${valides.length} étudiant(s)   ${examen.module}`,
-    );
+    toast.success(`Notes enregistrées pour ${valides.length} étudiant(s)   ${examen.module}`);
   };
 
   const notesSaisies = useMemo(() => {
@@ -1366,8 +1262,8 @@ function SaisieNotesPanel({ examens }: { examens: Examen[] }) {
       className="space-y-4"
     >
       <p className="text-sm text-muted-foreground">
-        Choisissez l'un de vos examens, puis saisissez une note pour chaque
-        étudiant de la classe concernée.
+        Choisissez l'un de vos examens, puis saisissez une note pour chaque étudiant de la classe
+        concernée.
       </p>
 
       {/* Saisie par examen / classe */}
@@ -1390,11 +1286,8 @@ function SaisieNotesPanel({ examens }: { examens: Examen[] }) {
         {examen ? (
           <>
             <p className="text-xs text-muted-foreground">
-              <strong className="font-semibold text-foreground">
-                {examen.module}
-              </strong>{" "}
-              · classe {examen.classe} · {convoques.length} étudiant(s) ·{" "}
-              {saisis} saisi(s)
+              <strong className="font-semibold text-foreground">{examen.module}</strong> · classe{" "}
+              {examen.classe} · {convoques.length} étudiant(s) · {saisis} saisi(s)
             </p>
             {convoques.length ? (
               <>
@@ -1409,9 +1302,7 @@ function SaisieNotesPanel({ examens }: { examens: Examen[] }) {
                 >
                   {convoques.map((e) => (
                     <tr key={e.id}>
-                      <td className="px-3 py-2 tabular-nums text-muted-foreground">
-                        {e.cne}
-                      </td>
+                      <td className="px-3 py-2 tabular-nums text-muted-foreground">{e.cne}</td>
                       <td className="px-3 py-2 font-medium">
                         {e.prenom} {e.nom}
                       </td>
@@ -1436,15 +1327,11 @@ function SaisieNotesPanel({ examens }: { examens: Examen[] }) {
                 </div>
               </>
             ) : (
-              <DetailEmpty>
-                Aucun étudiant dans la classe {examen.classe}.
-              </DetailEmpty>
+              <DetailEmpty>Aucun étudiant dans la classe {examen.classe}.</DetailEmpty>
             )}
           </>
         ) : (
-          <DetailEmpty>
-            Sélectionnez un examen pour saisir les notes de sa classe.
-          </DetailEmpty>
+          <DetailEmpty>Sélectionnez un examen pour saisir les notes de sa classe.</DetailEmpty>
         )}
       </div>
 

@@ -1,0 +1,462 @@
+ce dont votre école a besoin.
+
+9 modules intégrés conçus pour les réalités d'une école paramédicale. En ligne en 48h. Formation incluse. Aucun développeur requis.
+
+Tableau de bord
+
+VOTRE ÉCOLE ENTIÈRE EN UN REGARD
+
+Dès l'ouverture de Scholnexa, vous voyez l'essentiel : étudiants inscrits, examens à venir, paiements encaissés et stages en cours. Aucun rapport à générer.
+
+VOIR DANS LA DÉMO →
+
+Planning & emplois du temps
+
+UNE GRILLE HEBDOMADAIRE SANS CONFLITS
+
+Créneaux de 08h30 à 19h00, séances par groupe et par salle, jours fériés et vacances : planifiez sans conflit et exportez vos emplois du temps en CSV.
+
+VOIR DANS LA DÉMO →
+
+Étudiants
+
+FINI LES DOSSIERS ÉPARPILLÉS
+
+CNE, filière, niveau, statut et situation de paiement : importez vos listes en CSV et retrouvez chaque dossier — même archivé — en moins de 10 secondes.
+
+VOIR DANS LA DÉMO →
+
+Examens & Bulletins
+
+DES RÉSULTATS PUBLIÉS À TEMPS
+
+Sujets déposés, statuts suivis, moyennes, mentions et décisions calculées automatiquement : publiez les bulletins en un clic, ils partent aux familles à temps.
+
+VOIR DANS LA DÉMO →
+
+Formateurs
+
+VOTRE ÉQUIPE SOUS CONTRÔLE
+
+Matricule, département, modules enseignés et statut de chaque formateur : importez, exportez et gérez votre corps enseignant sans tableur.
+
+VOIR DANS LA DÉMO →
+
+Stages cliniques
+
+LE SUIVI DES STAGES SOUS CONTRÔLE
+
+Affectations au CHR, au CHU et dans les cliniques conventionnées, conventions, suivi de présence et évaluations des stagiaires : chaque stage est tracé du départ jusqu'à la validation.
+
+VOIR DANS LA DÉMO →
+
+Paiements & recouvrement
+
+ZÉRO IMPAYÉ QUI PASSE ENTRE LES MAILLES
+
+Scholnexa génère les reçus, suit les échéances de chaque étudiant et envoie les relances automatiques. Vous ne courez plus après les frais de scolarité.
+
+VOIR DANS LA DÉMO →
+
+Rapports
+
+DES DÉCISIONS BASÉES SUR DES CHIFFRES À JOUR
+
+Statistiques de recouvrement, répartitions par filière et par niveau, taux de réussite : la direction pilote avec des indicateurs fiables, exportables en CSV.
+
+VOIR DANS LA DÉMO →
+
+Paramètres & Export
+
+VOTRE ÉCOLE, À VOTRE IMAGE
+
+Filières, semestres, groupes, salles, utilisateurs et rôles : configurez Scholnexa pour coller exactement à votre établissement. Vos données restent exportables à tout moment.
+
+VOIR DANS LA DÉMO →
+
+Explorer tous les modules en démo
+DÉMO INTERACTIVE SANS COMPTE REQUIS
+Explorez Scholnexa dès maintenant.
+
+Cliquez sur chaque module pour découvrir son fonctionnement, comme si vous utilisiez le vrai tableau de bord de votre école.
+
+Tableau de bord
+
+vue d'ensemble
+
+Planning
+
+planning
+
+Étudiants
+
+scolarité
+
+Examens
+
+examens
+
+→
+
+Bulletins
+
+résultats
+
+Formateurs
+
+équipe
+
+Stages cliniques
+
+stages
+
+Paiements
+
+finances
+
+Paramètres & Export
+
+configuration
+
+MODULE 1 / 9
+VUE D'ENSEMBLE
+Les indicateurs clés de votre école en temps réel
+
+Étudiants actifs, formateurs, examens à venir, bulletins à publier et taux de réussite par filière : tout s'affiche dès l'ouverture, sans rapport à générer.
+
+←
+→
+scholnexa.eiden-group.com · examens
+Démo live
+
+Scholnexa
+
+ÉCOLE PARAMÉDICALE
+
+A
+Admin · Direction
+Tableau de bord
+Planning
+Étudiants
+Examens
+Bulletins
+Formateurs
+Stages
+Paiements
+Paramètres
+
+DIRECTION
+
+Examens
+
+Nouvel examen
+Rechercher par titre, module, formateur…
+
+24 examen(s) sur 31 · 27 avec sujet déposé
+
+EXAMEN	GROUPE	TYPE	DATE	FORMATEUR	STATUT
+
+Anatomie dentaire
+Anatomie dentaire
+	S1-A	Contrôle continu	02 sept.	N. Tazi	PLANIFIÉ
+
+Réanimation et soins intensifs
+Soins intensifs
+	S5-G2	Évaluation pratique (TP)	28 août	R. Benjelloun	PLANIFIÉ
+
+Scanner et IRM
+Imagerie médicale
+	S5-G1	Évaluation pratique (TP)	26 août	M. Amrani	NOTES SAISIES
+
+Rééducation fonctionnelle
+Rééducation
+	S3-G1	Examen théorique	25 août	S. Bennis	NOTES SAISIES
+
+Biologie médicale
+Biochimie
+	S2-A	Contrôle continu	22 août	Y. Idrissi	EN COURS
+
+1–5 sur 5 examens
+
+‹
+Page 1 / 1
+›
+
+Convaincu ? Réservez une démo de 20 minutes : nous vous montrons Scholnexa avec vos propres données.
+
+Réserver ma démo gratuite
+AVIS VÉRIFIÉS
+Ce que disent nos directions.
+
+Des écoles paramédicales partout au Maroc utilisent Scholnexa au quotidien.
+
+10+
+
+ÉCOLES ACTIVES
+
+4.9 / 5
+
+NOTE MOYENNE
+
+< 48h
+
+MISE EN SERVICE
+
+100%
+
+RECOMMANDENT SCHOLNEXA
+
+Il y a 2 semaines
+ZÉRO EXCEL DEPUIS 3 MOIS
+“Avant Scholnexa, je passais mes lundis matin à rapprocher trois fichiers Excel. Aujourd'hui, tout est là en temps réel : effectifs, présences, encaissements. Je me concentre sur la pédagogie, plus sur l'administratif.”
+FB
+
+Fatima Benali
+
+Directrice · Institut Atlas Santé
+
+Casablanca
+
+Il y a 1 mois
+−40 % D'IMPAYÉS EN 2 MOIS
+“Le module paiements a tout changé : échéanciers par étudiant, relances automatiques, reçus numérotés. Nous avons réduit les retards de scolarité de 40 % et gagné une demi-journée par mois.”
+KM
+
+Karim Mounir
+
+Secrétaire général · Groupe Santé Al Manar
+
+Rabat
+
+Il y a 3 semaines
+EMPLOIS DU TEMPS ENFIN STABLES
+“Planifier les filières infirmiers et kinésithérapeutes demandait des journées entières. Avec le module Planning, les emplois du temps se construisent en quelques heures et les conflits de salles ont disparu.”
+SR
+
+Samira Raji
+
+Responsable pédagogique · Institut Ibn Sina Santé
+
+Marrakech
+
+Il y a 5 jours
+ZÉRO INSCRIPTION PERDUE DEPUIS L'ADOPTION
+“Avant, une préinscription notée sur un post-it se perdait. Maintenant, chaque candidature est suivie jusqu'à l'inscription, et chaque étudiant est réinscrit en un clic.”
+YF
+
+Youssef El Fassi
+
+Directeur · Institut Nour Paramédical
+
+Fès
+
+Il y a 2 mois
+SUPPORT RÉACTIF ET FORMATION INCLUSE
+“L'équipe Scholnexa nous a accompagnées pas à pas. La formation était incluse, le paramétrage fait avec nous. Je recommande à toutes les écoles qui veulent moderniser leur administration sans prise de tête.”
+HA
+
+Houda Alaoui
+
+Secrétaire générale · Institut Rayane Santé
+
+Agadir
+
+Il y a 3 mois
+ACCESSIBLE DEPUIS N'IMPORTE QUEL APPAREIL
+“Je suis mes indicateurs depuis mon téléphone en déplacement. Le tableau de bord s'affiche parfaitement sur mobile : effectifs, encaissements, stages en cours. C'est devenu indispensable.”
+AC
+
+Anas Chraibi
+
+Directeur · Institut Al Amal Santé
+
+Tanger
+
+Il y a 6 semaines
+BULLETINS GÉNÉRÉS EN QUELQUES SECONDES
+“Moyennes, appréciations, taux de présence : tout est déjà dans le système. Les bulletins partent aux familles à temps, et mon équipe ne me demande plus où trouver une information.”
+NB
+
+Nadia Berrada
+
+Responsable pédagogique · Institut Soleil Santé
+
+Meknès
+
+Il y a 1 mois
+EXCELLENT RAPPORT QUALITÉ/PRIX
+“Pour ce prix, on dispose d'un outil qui rivalise avec ce qui se fait à l'étranger. Et tout est pensé pour le Maroc : les montants en dirhams, le contexte local, le support en français et en arabe.”
+OT
+
+Omar Tahir
+
+Fondateur · Institut Wafa Santé
+
+Oujda
+
+←
+→
+
+Votre école pourrait être la prochaine. 5 créneaux disponibles cette semaine.
+
+Réserver ma démo gratuite
+TARIFS
+Des formules claires et transparentes.
+
+Des prix de départ transparents ; ajustement possible si votre école a des besoins spécifiques, après un appel de 20 min.
+
+MENSUEL
+ANNUEL
+−2 MOIS
+
+FACTURATION ANNUELLE · 2 MOIS OFFERTS
+
+NOMBRE D'ÉTUDIANTS
+
+100
+250
+500
+
+jusqu'à 250 étudiants
+
+Essentiel
+
+Un seul administrateur. Parfait pour démarrer.
+
+18.000
+
+MAD/ AN HT
+
+21.600MAD/ an HT−2 MOIS
+
+jusqu'à 250 étudiants
+
+Soit environ 1.800 MAD/ mois ramené sur 10 mois
+
+Dossiers étudiants & inscriptions
+Comptes formateurs dédiés
+Agenda & emploi du temps
+Rapports de base
+Support par email
+CHOISIR ESSENTIEL
+POPULAIRE
+Pro
+
+Pour les écoles actives : équipe multi-rôles et pilotage renforcé.
+
+36.000
+
+MAD/ AN HT
+
+43.200MAD/ an HT−2 MOIS
+
+jusqu'à 250 étudiants
+
+Soit environ 3.600 MAD/ mois ramené sur 10 mois
+
+Onboarding offert jusqu'au 30 juin
+Tout Essentiel
+Comptes formateurs dédiés
+Paiements & relances automatiques
+Examens, bulletins & relevés de notes
+Suivi des stages cliniques
+Exports & tableaux avancés
+Support prioritaire
+✓ Onboarding + Formation + Support inclus
+CHOISIR PRO — LE PLUS CHOISI
+Réseau
+
+Multi-campus, groupes et besoins sur mesure.
+
+Sur mesure
+SLA dédié
+Intégrations & API
+Formation des équipes
+Accompagnement au déploiement
+PARLER À UN EXPERT
+
+Le prix évolue-t-il avec mon effectif ?
+
+Oui — choisissez votre nombre d'étudiants et le prix s'ajuste par tranche de 100. Vous changez de palier à tout moment, sans perdre vos données.
+
+Puis-je payer mensuellement ?
+
+Oui, les deux options sont disponibles. L'engagement annuel vous offre 2 mois offerts.
+
+Y a-t-il des frais cachés ?
+
+Non. Le prix affiché inclut l'onboarding, la formation et le support. Aucune surprise.
+
+FAQ
+Questions fréquentes
+
+Ce qu'il faut savoir avant de nous contacter.
+
+Ma secrétaire peut-elle utiliser Scholnexa sans formation ?
+Puis-je exporter mes données si je quitte Scholnexa ?
+Combien d'étudiants la plateforme peut-elle gérer ?
+Y a-t-il une application mobile ?
+Scholnexa fonctionne-t-il en arabe ?
+Comment sont protégées mes données (RGPD / Maroc) ?
+DÉMO GRATUITE
+20 minutes. Votre école dans Scholnexa. En direct.
+
+Choisissez une date et laissez-nous vos coordonnées : nous vous montrons Scholnexa avec vos cas concrets, sans engagement.
+
+eiden-group.com
+contact@eiden-group.com
+Agadir Bay, Technopole 1 Bloc B, Agadir 80000
+
+APPEL DIRECT
+
+Scannez pour nous appeler
+
+07 77 77 74 28 Maroc
+Présentation personnalisée selon votre type d'école
+Réponse garantie sous 2h ouvrées
+Aucun engagement requis
+Les créneaux partent vite - réservez le vôtre
+
+Réservez votre démo
+
+NOM DE L'ÉCOLE *
+EMAIL *
+TÉLÉPHONE *
+DATE SOUHAITÉE *
+Choisir une date
+MESSAGE (OPTIONNEL)
+Réserver ma démo →
+
+Données sécurisées · Réponse sous 2h · Sans engagement
+
+La plateforme de gestion tout-en-un pour écoles paramédicales. Étudiants · Bulletins · Stages · Paiements.
+
+NAVIGATION
+
+Modules
+Démo interactive
+Tarifs
+FAQ
+Contact
+
+CONTACT
+
+contact@eiden-group.com
+Agadir Bay, Technopole 1 Bloc B, Agadir 80000
+07 77 77 74 28 (Maroc)
+eiden-group.com
+RÉSERVER UNE DÉMO
+© 2026 Scholnexa · Tous droits réservés
+
+CHARGEMENT
+
+Accueil
+
+Chargement de la page Accueil
+FR
+AR
+العربية
+
+Scholnexa
+
+PLATEFORME DE GESTION SCOLAIRE
