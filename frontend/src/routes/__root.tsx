@@ -159,14 +159,20 @@ const ORG_JSONLD = JSON.stringify({
 });
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
+  head: ({ match }) => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: SITE_TITLE },
       { name: "description", content: SITE_DESCRIPTION },
       { name: "author", content: "Eiden Group" },
-      { name: "robots", content: "index, follow, max-image-preview:large" },
+      {
+        name: "robots",
+        content:
+          match.pathname.startsWith("/dashboard") || match.pathname === "/login"
+            ? "noindex, nofollow"
+            : "index, follow, max-image-preview:large",
+      },
       { name: "language", content: "fr" },
       { property: "og:site_name", content: "Essor" },
       { property: "og:locale", content: "fr_FR" },
