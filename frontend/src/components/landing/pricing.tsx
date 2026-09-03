@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Building2, Check, Sparkles, Star } from "lucide-react";
 import { Overline } from "./brand";
@@ -106,6 +106,32 @@ export type PricingChoice = { plan: string; yearly: boolean; students: number };
 export function Pricing({ onChoose }: { onChoose?: (c: PricingChoice) => void }) {
   const [students, setStudents] = useState<number>(DEFAULT_STUDENTS);
   const [yearly, setYearly] = useState(true);
+  const seenRef = useRef(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  // Emit Pricing Viewed the first time the section scrolls into view (20%).
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && !seenRef.current) {
+            seenRef.current = true;
+            track("Pricing Viewed", {
+              billing: yearly ? "annual" : "monthly",
+              students: DEFAULT_STUDENTS,
+            });
+            observer.disconnect();
+            break;
+          }
+        }
+      },
+      { threshold: 0.2 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [yearly]);
 
   const choose = (planId: string) => {
     track("Pricing Plan Selected", {
@@ -119,7 +145,7 @@ export function Pricing({ onChoose }: { onChoose?: (c: PricingChoice) => void })
   };
 
   return (
-    <section id="tarifs" className="relative overflow-hidden bg-background py-14 sm:py-20">
+    <section ref={sectionRef} id="tarifs" className="relative overflow-hidden bg-background py-14 sm:py-20">
       <img
         src="/brand/decor/hero-blob-secondary.png"
         alt=""
