@@ -5,8 +5,12 @@
   "cleanUrls": true,
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "redirects": [
-    { "source": "https://essor.eiden-group.com", "destination": "https://essor.eiden-group.com/", "permanent": true },
-    { "source": "https://www.essor.eiden-group.com/(.*)", "destination": "https://essor.eiden-group.com/$1", "permanent": true }
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.essor.eiden-group.com" }],
+      "destination": "https://essor.eiden-group.com/$1",
+      "permanent": true
+    }
   ],
   "headers": [
     {
